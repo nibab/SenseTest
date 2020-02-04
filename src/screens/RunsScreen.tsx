@@ -15,7 +15,8 @@ const RunsScreen = ({ history }: RunsScreenProps) => {
   useEffect(() => {
     RunsClient.getRunsForProjectId("1").then((response) => {
       console.log("Response is " + response)
-      setRuns(response.data.Items)
+      const completedRuns = response.data.Items.filter((run: Run) => run.dateCompleted !== undefined)
+      setRuns(completedRuns)
       setIsLoading(false)
     })
   }, []);
