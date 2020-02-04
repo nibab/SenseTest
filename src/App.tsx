@@ -145,7 +145,7 @@ class App extends Component<{}, AppState> {
           {this.renderRouter(isLoggedIn, isLoading)}
         </Content>
         
-        <Footer style={{ textAlign: 'center', marginTop: '100px' }}>Pepe + Babs Design ©2020</Footer>
+        <Footer style={{ textAlign: 'center', marginTop: '100px' }}>Isengard LLC ©2020</Footer>
       </Layout>
       
     );  

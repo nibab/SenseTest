@@ -61,14 +61,14 @@ export const CreateRun = ({onCreateRunComplete}: CreateRunTypes) => {
         }
         setCreateRunRequestInProgress(true)
         RunsClient.createRun(newRun).then(() => {
-          TestCaseExecutionsClient.createTestCaseExecutionBatch(selectedTestCases, newRun.runId)
+          return TestCaseExecutionsClient.createTestCaseExecutionBatch(selectedTestCases, newRun.runId)
         }).then(() => {
-          ProjectsClient.setActiveRunIdForProject(newRun.runId)
+          return ProjectsClient.setActiveRunIdForProject(newRun.runId)
         }).catch((error) => {
           setCreateRunRequestInProgress(false)
         }).then(() => {
-          onCreateRunComplete(newRun)
           setCreateRunRequestInProgress(false)
+          onCreateRunComplete(newRun)
         })
         handleCloseRunModal();
     }

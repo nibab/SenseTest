@@ -6,8 +6,8 @@ import CardDeck from 'react-bootstrap/CardDeck';
 import ZeplinAuth from '../utils/ZeplinAuth';
 
 const UserProfile = {
-  name: 'Will',
-  email: 'wrfry95@gmail.com',
+  name: 'John Appleseed',
+  email: 'johnappleseed@gmail.com',
   role: 'Admin'
 }
 
