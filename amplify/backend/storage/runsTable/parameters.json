@@ -1,0 +1,5 @@
+{
+    "tableName": "runsTable",
+    "partitionKeyName": "runId",
+    "partitionKeyType": "S"
+}

@@ -1,0 +1,69 @@
+{
+  "name": "snaptest",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "@types/jest": "^24.0.24",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
+    "@types/react-bootstrap-table": "^4.3.7",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-router-dom": "^5.1.3",
+    "@types/uuid": "*",
+    "antd": "^3.26.3",
+    "aws-amplify": "^2.2.0",
+    "aws-amplify-react": "^3.1.1",
+    "axios": "^0.19.0",
+    "bootstrap": "^4.4.1",
+    "query-string": "^6.9.0",
+    "react": "^16.12.0",
+    "react-bootstrap": "^1.0.0-beta.16",
+    "react-bootstrap-table": "^4.3.1",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.3.0",
+    "typescript": "~3.7.2",
+    "uuid": "*"
+  },
+  "scripts": {
+    "start": "PORT=9090 react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-react": "^7.7.4",
+    "@babel/preset-typescript": "^7.7.7",
+    "babel-jest": "^24.9.0",
+    "eslint-plugin-jest": "^23.1.1",
+    "jest": "^24.9.0"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/?!(react-icons)"
+    ]
+  }
+}

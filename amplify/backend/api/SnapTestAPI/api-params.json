@@ -1,0 +1,107 @@
+{
+    "paths": [
+        {
+            "name": "/runs",
+            "lambdaFunction": "runs",
+            "privacy": {
+                "open": true
+            }
+        },
+        {
+            "name": "/testCases",
+            "lambdaFunction": "testCases",
+            "privacy": {
+                "open": true
+            }
+        },
+        {
+            "name": "/testCaseExecutions",
+            "lambdaFunction": "testCaseExecutions",
+            "privacy": {
+                "open": true
+            }
+        },
+        {
+            "name": "/projects",
+            "lambdaFunction": "projects",
+            "privacy": {
+                "open": true
+            }
+        },
+        {
+            "name": "/integrations",
+            "lambdaFunction": "integrationsLambda",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "SnapTestAPI",
+    "apiName": "SnapTestAPI",
+    "functionArns": [
+        {
+            "lambdaFunction": "runs"
+        },
+        {
+            "lambdaFunction": "testCases"
+        },
+        {
+            "lambdaFunction": "testCaseExecutions"
+        },
+        {
+            "lambdaFunction": "projects"
+        },
+        {
+            "lambdaFunction": "integrationsLambda"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-snaptest-devprime-162244-authRole",
+        "unAuthRoleName": "amplify-snaptest-devprime-162244-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "runs",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        },
+        {
+            "category": "function",
+            "resourceName": "testCases",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        },
+        {
+            "category": "function",
+            "resourceName": "testCaseExecutions",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        },
+        {
+            "category": "function",
+            "resourceName": "projects",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        },
+        {
+            "category": "function",
+            "resourceName": "integrationsLambda",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ],
+    "uuid": "07208c1d"
+}

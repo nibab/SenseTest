@@ -1,0 +1,7 @@
+{
+    "tableName": "integrationsTable",
+    "partitionKeyName": "projectId",
+    "partitionKeyType": "S",
+    "sortKeyName": "integration",
+    "sortKeyType": "S"
+}
