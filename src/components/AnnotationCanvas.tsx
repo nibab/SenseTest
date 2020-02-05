@@ -7,9 +7,8 @@ import { ProjectsClient } from "../clients/ProjectsClient";
 import uuidv1 from 'uuid';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
 import TestsScreen from "../screens/TestsScreen";
-import { Card } from 'antd';
+import { Card, Button } from 'antd';
 import { DateUtils } from "../utils/DateUtils";
 import { LoadingScreen } from '../screens/LoadingScreen';
 
@@ -17,6 +16,7 @@ type AnnotationCanvasType = {
     backgroundImage: string
     width: number
     height: number
+    onPublishButtonClick: (base64Image: string | null) => void
 }
 
 type Coordinate = {
@@ -24,7 +24,7 @@ type Coordinate = {
     y: number
 }
 
-export const AnnotationCanvas = ({backgroundImage, width, height}: AnnotationCanvasType) => {
+export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButtonClick}: AnnotationCanvasType) => {
     const [showRunModal, setShowRunModal] = useState(false);
     const [isPainting, setIsPainting] = useState(false);
     const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(undefined);
@@ -44,6 +44,7 @@ export const AnnotationCanvas = ({backgroundImage, width, height}: AnnotationCan
         
         const background = new Image()
         background.src = backgroundImage
+        background.crossOrigin = 'anonymous'
         
         background.onload = () => {    
             context?.drawImage(background, 0, 0, width, height)
@@ -143,13 +144,31 @@ export const AnnotationCanvas = ({backgroundImage, width, height}: AnnotationCan
         };
     }, [exitPaint]);
 
-    
+    const storeCanvasImage = (): string | null => {
+        if (!canvasRef.current) {
+            return null
+        }
+        const canvas: HTMLCanvasElement = canvasRef.current;
+        const context = canvas.getContext('2d');
+        if (context) {
+            var dataURL = canvas.toDataURL("image/png");
+            const base64Image = dataURL.replace(/^data:image\/(png|jpg);base64,/, "")
+            //localStorage.setItem("imgData", base64Image);
+            return base64Image
+        } else {
+            return null
+        }
+    }
 
     return (
         <div style={{ width: `${width}px`, marginLeft: '20px'}}> 
             <canvas ref={canvasRef} onLoad={() => console.log('blea')} height={height} width={width} />
             {/* <Card style={{ width: `${width}px`, height: `${height}px` }} cover={<img src={backgroundImage} />} /> */}
-            {/* <Button style={ styles.button }>Hello</Button> */}
+            <Button style={{marginTop: '5px', float: 'right'}} onClick={() => {
+                const canvasImage = storeCanvasImage()
+                console.log(canvasImage)
+                onPublishButtonClick(canvasImage)
+            }}>Publish</Button>
         </div>
     )
 }

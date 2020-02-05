@@ -1,61 +1,77 @@
-import React from 'react';
+import React, { Fragment, useState, useEffect, useRef, useCallback } from "react"
 import { RouteComponentProps, useHistory } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button'
 import TestExecution from '../components/TestExecution';
 import { TestCaseExecutionsClient, TestCaseExecution } from '../clients/TestCaseExecutionsClient';
 import { UploadFile } from 'antd/lib/upload/interface';
-import { Card } from 'antd';
+import { Card, Button } from 'antd';
 import { StyleSheet }  from '../../src/GlobalTypes'
 import { AnnotationCanvas } from '../components/AnnotationCanvas';
 
-class AnnotationScreen extends React.Component<RouteComponentProps, {}> {
-  constructor(props: RouteComponentProps) {
-    super(props)
-  }
+const HEIGHT = 544
 
-  renderAppetizeScreen = () => {
+export const AnnotationScreen =  ({}) => {
+    const [annotationMessageSectionImg, setAnnotationMessageSectionImg] = useState('');
+    const [annotationCanvasHidden, setAnnotationCanvasHidden] = useState(true)
+
+    const onAnnotateScreenshotClick = () => {
+        setAnnotationCanvasHidden(false)
+    }
+
+  const renderAppetizeScreen = () => {
     return (
         <div style={{ width: '250px'}}> 
-            <Card style={{ width: '250px', height: '444px' }} cover={<img src="zeplin.png" />} />
-            <Button style={ styles.button }>Hello</Button>
+            <img style={{ width: '250px', height: `${HEIGHT}px` }} src="newsScreenshot.png" />
+            <Button style={ styles.button } onClick={
+                () => setAnnotationCanvasHidden(false)
+            }>Annotate Screenshot</Button>
         </div>
     )
   }
 
-  renderAnnotationCanvas = () => {
-    return (
-        <div style={{ width: '250px', marginLeft: '20px'}}> 
-            <Card style={{ width: '250px', height: '444px' }} cover={<img src="zeplin.png" />} />
-            <Button style={ styles.button }>Hello</Button>
-        </div>
-    )
+  const renderAnnotationCanvas = () => {
+    if (!annotationCanvasHidden) {
+        return (
+            <AnnotationCanvas 
+                backgroundImage={"newsScreenshot.png"} 
+                width={250} 
+                height={544} 
+                onPublishButtonClick={(base64Image) => {
+                    console.log("WAGWAN")
+                    setAnnotationMessageSectionImg("data:image/png;base64," + base64Image)
+                    setAnnotationCanvasHidden(true)
+                }
+            }/>
+        )
+    }
+    
   }
 
-  renderAnnotationMessageColumn = () => {
+  const renderAnnotationMessageColumn = () => {
     return (
-        <div style={{ marginLeft: '20px', height: '444px', backgroundColor: 'green', flex: '1'}}> 
+        <div style={{ marginLeft: '20px', height: `${HEIGHT}px`, backgroundColor: 'green', flex: '1'}}> 
+            <Card style={{ width: '250px', height: `${HEIGHT}px` }} cover={<img src={annotationMessageSectionImg} />} />
             <div>ABC</div>
         </div>
     )
   }
 
-  render() {
+ 
     return (
-      <Container style={{ paddingTop: 30 }}>
-          <h3>Annotation </h3>
+        <Container style={{ paddingTop: 30 }}>
+            <h3>Annotation </h3>
         <div style={{ display: 'flex', width: '100%' }}>
-          
-        {this.renderAppetizeScreen()}
-        <AnnotationCanvas backgroundImage={"https://www.kindpng.com/picc/m/9-96661_drawing-iphone-telephone-smartphone-sketch-iphone-svg-hd.png"} width={250} height={444} />
-        {this.renderAnnotationMessageColumn()}
+            
+        {renderAppetizeScreen()}
+        {renderAnnotationCanvas()}
+        {renderAnnotationMessageColumn()}
         {/* <Card style={{ width: '250px', height: '444px' }} cover={<img src="zeplin.png" />} />
         <Button style={{ float: 'right', marginTop: '10px' }}>Hello</Button> */}            
-          
+            
         </div>
-      </Container>
+        </Container>
     )
-  }
+  
 }
 
 const styles: StyleSheet = {
