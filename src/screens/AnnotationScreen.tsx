@@ -7,6 +7,7 @@ import { TestCaseExecutionsClient, TestCaseExecution } from '../clients/TestCase
 import { UploadFile } from 'antd/lib/upload/interface';
 import { Card } from 'antd';
 import { StyleSheet }  from '../../src/GlobalTypes'
+import { AnnotationCanvas } from '../components/AnnotationCanvas';
 
 class AnnotationScreen extends React.Component<RouteComponentProps, {}> {
   constructor(props: RouteComponentProps) {
@@ -46,7 +47,7 @@ class AnnotationScreen extends React.Component<RouteComponentProps, {}> {
         <div style={{ display: 'flex', width: '100%' }}>
           
         {this.renderAppetizeScreen()}
-        {this.renderAnnotationCanvas()}
+        <AnnotationCanvas backgroundImage={"https://www.kindpng.com/picc/m/9-96661_drawing-iphone-telephone-smartphone-sketch-iphone-svg-hd.png"} width={250} height={444} />
         {this.renderAnnotationMessageColumn()}
         {/* <Card style={{ width: '250px', height: '444px' }} cover={<img src="zeplin.png" />} />
         <Button style={{ float: 'right', marginTop: '10px' }}>Hello</Button> */}            
