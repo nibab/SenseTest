@@ -78,67 +78,89 @@ class App extends Component<{}, AppState> {
     this.setState({ authState: { isLoggedIn: true, isLoading: false } });
   };
 
+  renderContent = (isLoggedIn: boolean, isLoading: boolean) => {
+    return (
+      <Switch>
+        <Route path='/login' render={(props) => (
+          <AuthForm onUserSignIn={this.handleUserSignIn} history={props.history}/>
+        )}/>
+        <ProtectedRoute
+          path='/annotate'
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
+          component={AnnotationScreen}
+        ></ProtectedRoute>
+        <ProtectedRoute
+          path='/run/:runId/executions' // TODO: If the user navigates directly to this URL, the navigation context will be lost (won't have the TestExecutions loaded).
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
+          component={TestExecutionScreen}
+        ></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path='/tests'
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
+          component={TestsScreen}
+        />
+        <ProtectedRoute
+        path='/run/:runId'
+        isLoggedIn={isLoggedIn}
+        isLoading={isLoading}
+        component={RunScreen}
+        />
+        <ProtectedRoute
+          exact
+          path='/runs'
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
+          component={RunsScreen}
+        ></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path='/settings'
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
+          component={SettingsScreen}
+        ></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path='/onboarding'
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
+          component={OnboardingScreen}
+        ></ProtectedRoute>          
+        <Route path='/'>
+          {isLoggedIn || isLoading ?
+            (<HomeScreen/>) :
+            (<LandingScreen/>)
+          }
+        </Route>
+      </Switch>
+    )
+  }
+
   renderRouter = (isLoggedIn: boolean, isLoading: boolean) => {
     return (
       <Router>
-        <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/>
-        <Switch>
-          <Route path='/login' render={(props) => (
-            <AuthForm onUserSignIn={this.handleUserSignIn} history={props.history}/>
-          )}/>
-          <ProtectedRoute
-            path='/annotate'
-            isLoggedIn={isLoggedIn}
-            isLoading={isLoading}
-            component={AnnotationScreen}
-          ></ProtectedRoute>
-          <ProtectedRoute
-            path='/run/:runId/executions' // TODO: If the user navigates directly to this URL, the navigation context will be lost (won't have the TestExecutions loaded).
-            isLoggedIn={isLoggedIn}
-            isLoading={isLoading}
-            component={TestExecutionScreen}
-          ></ProtectedRoute>
-          <ProtectedRoute
-            exact
-            path='/tests'
-            isLoggedIn={isLoggedIn}
-            isLoading={isLoading}
-            component={TestsScreen}
-          />
-          <ProtectedRoute
-          path='/run/:runId'
-          isLoggedIn={isLoggedIn}
-          isLoading={isLoading}
-          component={RunScreen}
-          />
-          <ProtectedRoute
-            exact
-            path='/runs'
-            isLoggedIn={isLoggedIn}
-            isLoading={isLoading}
-            component={RunsScreen}
-          ></ProtectedRoute>
-          <ProtectedRoute
-            exact
-            path='/settings'
-            isLoggedIn={isLoggedIn}
-            isLoading={isLoading}
-            component={SettingsScreen}
-          ></ProtectedRoute>
-          <ProtectedRoute
-            exact
-            path='/onboarding'
-            isLoggedIn={isLoggedIn}
-            isLoading={isLoading}
-            component={OnboardingScreen}
-          ></ProtectedRoute>          
-          <Route path='/'>
-            {isLoggedIn || isLoading ?
-              (<HomeScreen/>) :
-              (<LandingScreen/>)
-            }
-          </Route>
-        </Switch>
+        <Layout>
+          <Sider width={256}>
+            <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/>
+          </Sider>
+          <Layout>
+            <Header>
+              {/* <div style={{padding: "24px", backgroundColor: "#001529"}} /> */}   
+            </Header>
+            <Content style={{
+              padding: 24,
+              margin: 0,
+              minHeight: 280,
+            }}>
+              {this.renderContent(isLoggedIn, isLoading)}
+            </Content>
+            <Footer style={{ textAlign: 'center', marginTop: '100px' }}>Isengard LLC ©2020</Footer>
+          </Layout>
+        </Layout>  
       </Router>
     )
   }
@@ -147,26 +169,9 @@ class App extends Component<{}, AppState> {
 
     const { isLoggedIn, isLoading } = this.state.authState;
     return (
-      <Layout>
-        <Sider width={256}>
-          {/* <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/> */}
-        </Sider>
-        <Layout>
-          <Header>
-            {/* <div style={{padding: "24px", backgroundColor: "#001529"}} /> */}
-            
-          </Header>
-          <Content style={{
-            padding: 24,
-            margin: 0,
-            minHeight: 280,
-          }}>
-            {this.renderRouter(isLoggedIn, isLoading)}
-          </Content>
-          
-          <Footer style={{ textAlign: 'center', marginTop: '100px' }}>Isengard LLC ©2020</Footer>
-        </Layout>
-      </Layout>
+      <div>
+        {this.renderRouter(isLoggedIn, isLoading)}
+      </div>
       
     );  
   }
