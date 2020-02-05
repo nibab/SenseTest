@@ -26,6 +26,9 @@ const NavBar = ({ isLoggedIn, signOut }: NavBarProps) => {
   const renderMenu = () => {
     return (
       <Menu style={{backgroundColor: style.backgroundColor}} theme="dark" onClick={(e) => handleClick(e)} selectedKeys={[current]} mode="horizontal">
+      <Menu.Item key="annotate" >
+        <Link to={{pathname: `/annotate`}} style={{}}><Icon type="edit" />Annotate</Link>
+      </Menu.Item>
       <Menu.Item key="tests" >
         <Link to={{pathname: `/tests`}} style={{}}><Icon type="experiment" />Tests</Link>
       </Menu.Item>

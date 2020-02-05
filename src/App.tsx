@@ -22,6 +22,7 @@ import AuthForm from './components/AuthForm';
 import { bool } from 'aws-sdk/clients/signer';
 import ZeplinAuth from './utils/ZeplinAuth';
 import { Layout } from 'antd';
+import AnnotationScreen from './screens/AnnotationScreen';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -85,6 +86,12 @@ class App extends Component<{}, AppState> {
           <Route path='/login' render={(props) => (
             <AuthForm onUserSignIn={this.handleUserSignIn} history={props.history}/>
           )}/>
+          <ProtectedRoute
+            path='/annotate'
+            isLoggedIn={isLoggedIn}
+            isLoading={isLoading}
+            component={AnnotationScreen}
+          ></ProtectedRoute>
           <ProtectedRoute
             path='/run/:runId/executions' // TODO: If the user navigates directly to this URL, the navigation context will be lost (won't have the TestExecutions loaded).
             isLoggedIn={isLoggedIn}
