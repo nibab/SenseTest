@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import TestExecution from '../components/TestExecution';
 import { TestCaseExecutionsClient, TestCaseExecution } from '../clients/TestCaseExecutionsClient';
 import { UploadFile } from 'antd/lib/upload/interface';
-import { Card, Button } from 'antd';
+import { Card, Button, List, Icon } from 'antd';
 import { StyleSheet }  from '../../src/GlobalTypes'
 import { AnnotationCanvas } from '../components/AnnotationCanvas';
 import Meta from "antd/lib/card/Meta";
@@ -13,7 +13,8 @@ const HEIGHT = 544
 
 type AnnotationMessage = {
     img: string
-    message: string
+    text: string
+    title: string
 }
 
 export const AnnotationScreen =  ({}) => {
@@ -49,8 +50,11 @@ export const AnnotationScreen =  ({}) => {
                     //setAnnotationMessageSectionImg("data:image/png;base64," + base64Image)
                     setAnnotationCanvasHidden(true)
                     const currentMessages = annotationMessages
-                    currentMessages.push({img: "data:image/png;base64," + base64Image,
-                message: "The font is not correct." })
+                    currentMessages.push({
+                        img: "data:image/png;base64," + base64Image,
+                        text: "The font is not correct." ,
+                        title: "Font"
+                    })
                     setAnnotationMessages(currentMessages)
                 }
             }/>
@@ -59,24 +63,78 @@ export const AnnotationScreen =  ({}) => {
     
   }
 
+  type IconProps = {
+      type: string
+      text: string
+  }
+
+  const IconText = ({ type, text }: IconProps) => (
+    <span>
+      <Icon type={type} style={{ marginRight: 8 }} />
+      {text}
+    </span>
+  );
+
   const renderAnnotationMessageColumn = () => {
     return (
         <div style={{ marginLeft: '20px', height: `${HEIGHT}px`, backgroundColor: 'white', flex: '1'}}> 
-            {/* <Card style={{ width: '250px', height: `${HEIGHT}px` }} cover={<img src={annotationMessageSectionImg} />} /> */}
+            <List
+                itemLayout="vertical"
+                size="large"
+                style={{padding: '10px'}}
+                pagination={{
+                    onChange: page => {
+                        console.log(page);
+                    },
+                    pageSize: 3,
+                }}
+                dataSource={annotationMessages}
+                footer={
+                    <div>
+                        <b>ant design</b> footer part
+                    </div>
+                }
+                renderItem={item => (
+                <List.Item
+                    key={item.title}
+                    style={{padding: '5px'}}
+                    extra={
+                        <img
+                            height={272}
+                            alt="logo"
+                            src={item.img}
+                        />
+                    }
+                >
+                    <List.Item.Meta title={<a>{item.title}</a>}/>
+                    {item.text}
+                    <div style={{bottom: 10, position: 'absolute'}}>
+                        <IconText type="star-o" text="156" key="list-vertical-star-o" /> | 
+                        <IconText type="like-o" text="156" key="list-vertical-like-o" /> | 
+                        <IconText type="message" text="2" key="list-vertical-message" />
+                    </div>
+                </List.Item>
+                )}
+            />
+        </div>    
+
+
+        // <div style={{ marginLeft: '20px', height: `${HEIGHT}px`, backgroundColor: 'white', flex: '1'}}> 
+        //     {/* <Card style={{ width: '250px', height: `${HEIGHT}px` }} cover={<img src={annotationMessageSectionImg} />} /> */}
             
-            {annotationMessages.map((message: AnnotationMessage) => (
-                <div>
-                    <Card
-                        hoverable
-                        style={{ width: 120, height: 'auto' }}
-                        cover={<img alt="example" src={message.img} />}
-                    >
-                        <Meta title={message.message} description="@cezbabin" />
-                    </Card>
-                </div>
+        //     {annotationMessages.map((message: AnnotationMessage) => (
+        //         <div>
+        //             <Card
+        //                 hoverable
+        //                 style={{ width: 120, height: 'auto' }}
+        //                 cover={<img alt="example" src={message.img} />}
+        //             >
+        //                 <Meta title={message.message} description="@cezbabin" />
+        //             </Card>
+        //         </div>
                 
-            ))}
-        </div>
+        //     ))}
+        // </div>
     )
   }
 
