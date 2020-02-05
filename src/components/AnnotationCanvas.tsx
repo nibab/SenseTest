@@ -8,9 +8,10 @@ import uuidv1 from 'uuid';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import TestsScreen from "../screens/TestsScreen";
-import { Card, Button } from 'antd';
+import { Card, Button, Drawer, Modal } from 'antd';
 import { DateUtils } from "../utils/DateUtils";
 import { LoadingScreen } from '../screens/LoadingScreen';
+import TextArea from "antd/lib/input/TextArea";
 
 type AnnotationCanvasType = {
     backgroundImage: string
@@ -28,6 +29,7 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
     const [showRunModal, setShowRunModal] = useState(false);
     const [isPainting, setIsPainting] = useState(false);
     const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(undefined);
+    const [drawerVisible, setDrawerVisible] = useState(false)
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -160,14 +162,31 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
         }
     }
 
+
+
     return (
-        <div style={{ width: `${width}px`, marginLeft: '20px'}}> 
+        <div style={{ width: `${width}px`, marginLeft: '20px', overflow: 'hidden'}}> 
+            
             <canvas ref={canvasRef} onLoad={() => console.log('blea')} height={height} width={width} />
+            
+            <Modal
+                title="Comment"
+                visible={drawerVisible}
+                onOk={() => {
+                    const canvasImage = storeCanvasImage()
+                    console.log(canvasImage)
+                    onPublishButtonClick(canvasImage)
+                }}
+                onCancel={() => {}}
+                >
+                <TextArea rows={4} />
+            </Modal>
+                
             {/* <Card style={{ width: `${width}px`, height: `${height}px` }} cover={<img src={backgroundImage} />} /> */}
             <Button style={{marginTop: '5px', float: 'right'}} onClick={() => {
-                const canvasImage = storeCanvasImage()
-                console.log(canvasImage)
-                onPublishButtonClick(canvasImage)
+                
+                setDrawerVisible(true)
+                //onPublishButtonClick(canvasImage)
             }}>Publish</Button>
         </div>
     )

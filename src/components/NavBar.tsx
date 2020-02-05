@@ -65,7 +65,7 @@ const NavBar = ({ isLoggedIn, signOut }: NavBarProps) => {
 
   return (
     <div style={{padding: "24px", backgroundColor: style.backgroundColor}}>
-      <Navbar.Brand as={Link} onClick={() => setCurrent("")} to='/'>SNAP<b>TEST</b></Navbar.Brand>
+      <Navbar.Brand as={Link} onClick={() => setCurrent("")} to='/'>SENSE<b>TEST</b></Navbar.Brand>
       <div style={{float: "right"}}>
         {isLoggedIn ? renderSignedIn() : renderSignedOut()}
       </div>

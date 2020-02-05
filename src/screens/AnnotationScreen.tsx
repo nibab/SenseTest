@@ -7,12 +7,20 @@ import { UploadFile } from 'antd/lib/upload/interface';
 import { Card, Button } from 'antd';
 import { StyleSheet }  from '../../src/GlobalTypes'
 import { AnnotationCanvas } from '../components/AnnotationCanvas';
+import Meta from "antd/lib/card/Meta";
 
 const HEIGHT = 544
+
+type AnnotationMessage = {
+    img: string
+    message: string
+}
 
 export const AnnotationScreen =  ({}) => {
     const [annotationMessageSectionImg, setAnnotationMessageSectionImg] = useState('');
     const [annotationCanvasHidden, setAnnotationCanvasHidden] = useState(true)
+    const [annotationMessages, setAnnotationMessages] = useState<AnnotationMessage[]>([
+    ])
 
     const onAnnotateScreenshotClick = () => {
         setAnnotationCanvasHidden(false)
@@ -38,8 +46,12 @@ export const AnnotationScreen =  ({}) => {
                 height={544} 
                 onPublishButtonClick={(base64Image) => {
                     console.log("WAGWAN")
-                    setAnnotationMessageSectionImg("data:image/png;base64," + base64Image)
+                    //setAnnotationMessageSectionImg("data:image/png;base64," + base64Image)
                     setAnnotationCanvasHidden(true)
+                    const currentMessages = annotationMessages
+                    currentMessages.push({img: "data:image/png;base64," + base64Image,
+                message: "The font is not correct." })
+                    setAnnotationMessages(currentMessages)
                 }
             }/>
         )
@@ -49,9 +61,21 @@ export const AnnotationScreen =  ({}) => {
 
   const renderAnnotationMessageColumn = () => {
     return (
-        <div style={{ marginLeft: '20px', height: `${HEIGHT}px`, backgroundColor: 'green', flex: '1'}}> 
-            <Card style={{ width: '250px', height: `${HEIGHT}px` }} cover={<img src={annotationMessageSectionImg} />} />
-            <div>ABC</div>
+        <div style={{ marginLeft: '20px', height: `${HEIGHT}px`, backgroundColor: 'white', flex: '1'}}> 
+            {/* <Card style={{ width: '250px', height: `${HEIGHT}px` }} cover={<img src={annotationMessageSectionImg} />} /> */}
+            
+            {annotationMessages.map((message: AnnotationMessage) => (
+                <div>
+                    <Card
+                        hoverable
+                        style={{ width: 120, height: 'auto' }}
+                        cover={<img alt="example" src={message.img} />}
+                    >
+                        <Meta title={message.message} description="@cezbabin" />
+                    </Card>
+                </div>
+                
+            ))}
         </div>
     )
   }

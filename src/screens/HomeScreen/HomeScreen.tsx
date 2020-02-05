@@ -59,7 +59,7 @@ const HomeScreen = () => {
       <Container>
         <Row>
           <Col style={{ textAlign: 'left', display: 'flex' }}>
-            <h3>Welcome to SnapTest!</h3>
+            <h3>Welcome to SenseTest!</h3>
           </Col>
         </Row>
         {renderRunSection()}
