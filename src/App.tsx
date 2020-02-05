@@ -81,7 +81,7 @@ class App extends Component<{}, AppState> {
   renderRouter = (isLoggedIn: boolean, isLoading: boolean) => {
     return (
       <Router>
-        <NavBar isLoggedIn={isLoggedIn} signOut={this.signOut}/>
+        <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/>
         <Switch>
           <Route path='/login' render={(props) => (
             <AuthForm onUserSignIn={this.handleUserSignIn} history={props.history}/>
@@ -148,11 +148,24 @@ class App extends Component<{}, AppState> {
     const { isLoggedIn, isLoading } = this.state.authState;
     return (
       <Layout>
-        <Content>
-          {this.renderRouter(isLoggedIn, isLoading)}
-        </Content>
-        
-        <Footer style={{ textAlign: 'center', marginTop: '100px' }}>Isengard LLC ©2020</Footer>
+        <Sider width={256}>
+          {/* <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/> */}
+        </Sider>
+        <Layout>
+          <Header>
+            {/* <div style={{padding: "24px", backgroundColor: "#001529"}} /> */}
+            
+          </Header>
+          <Content style={{
+            padding: 24,
+            margin: 0,
+            minHeight: 280,
+          }}>
+            {this.renderRouter(isLoggedIn, isLoading)}
+          </Content>
+          
+          <Footer style={{ textAlign: 'center', marginTop: '100px' }}>Isengard LLC ©2020</Footer>
+        </Layout>
       </Layout>
       
     );  

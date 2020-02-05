@@ -82,8 +82,9 @@ export const AnnotationScreen =  ({}) => {
 
  
     return (
-        <Container style={{ paddingTop: 30 }}>
-            <h3>Annotation </h3>
+        //<Container style={{ paddingTop: 30 }}>
+        <div>
+<h3>Annotation </h3>
         <div style={{ display: 'flex', width: '100%' }}>
             
         {renderAppetizeScreen()}
@@ -93,7 +94,9 @@ export const AnnotationScreen =  ({}) => {
         <Button style={{ float: 'right', marginTop: '10px' }}>Hello</Button> */}            
             
         </div>
-        </Container>
+        </div>
+            
+        //</Container>
     )
   
 }
