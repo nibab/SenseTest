@@ -4,10 +4,14 @@ import Container from 'react-bootstrap/Container';
 import TestExecution from '../components/TestExecution';
 import { TestCaseExecutionsClient, TestCaseExecution } from '../clients/TestCaseExecutionsClient';
 import { UploadFile } from 'antd/lib/upload/interface';
-import { Card, Button, List, Icon } from 'antd';
+import { Card, Button, List, Icon, Row, Col } from 'antd';
 import { StyleSheet }  from '../../src/GlobalTypes'
 import { AnnotationCanvas } from '../components/AnnotationCanvas';
+import { EditableTagGroup } from '../components/EditableTagGroup'
 import Meta from "antd/lib/card/Meta";
+import { Typography } from 'antd';
+
+const { Title } = Typography;
 
 const HEIGHT = 544
 
@@ -29,11 +33,11 @@ export const AnnotationScreen =  ({}) => {
 
   const renderAppetizeScreen = () => {
     return (
-        <div style={{ width: '250px'}}> 
+        <div style={{ width: '250px', textAlign: 'center'}}> 
             <img style={{ width: '250px', height: `${HEIGHT}px` }} src="newsScreenshot.png" />
             <Button style={ styles.button } onClick={
                 () => setAnnotationCanvasHidden(false)
-            }>Annotate Screenshot</Button>
+            }>Annotate</Button>
         </div>
     )
   }
@@ -75,66 +79,83 @@ export const AnnotationScreen =  ({}) => {
     </span>
   );
 
+    const renderTags = () => {
+
+    }
+
+    type AnnotationCardType = {
+        img: string,
+        title: string,
+        description: string,
+        tags: string[]
+    }
+
+    const AnnotationCard = ({img, title, description, tags}: AnnotationCardType) => {
+        return (
+            <Card hoverable={true} title={<EditableTagGroup/>} style={{marginBottom: '7px'}} bordered={false} actions={[
+                <IconText type="like-o" text="156" key="list-vertical-like-o" />,
+                <Icon type="edit" key="edit" />,
+                <Icon type="ellipsis" key="ellipsis" />,
+            ]}>
+                <div style={{ flex: 1, display: 'flex', overflow: 'hidden', margin: '-10px'}}>
+                    <img
+                        alt="logo"
+                        src={img}
+                        style={{ flex: 0.4, height: '272px', width: 'auto', objectFit:'contain'}}
+                    />
+                    <div style={{flex: 0.6, marginLeft: '10px'}}>
+                        <Title level={4}>{title}</Title>
+                        {description}
+                    </div>
+                </div>
+            </Card>
+        )
+    }
+
   const renderAnnotationMessageColumn = () => {
+    // Introducing a constraint of maximum 6 cards per page. The rest of the cards will be displayed on the other pages.
+    if (annotationMessages.length === 0) {
+        return
+    }
+    var nrOfRows = Math.ceil(annotationMessages.length / 2)
+    if (nrOfRows > 3) {
+        // Create multiple pages
+        nrOfRows = 3
+    }
+    const items = []
+    for (let i = 0; i < nrOfRows; i++) {
+        if (annotationMessages.length - (i + 1) * 2 < 0) {
+            const annotationMessage = annotationMessages[i * 2]
+            items.push(
+                <Row gutter={8}>
+                    <Col span={12}>
+                        <AnnotationCard img={annotationMessage.img} title={annotationMessage.title} tags={[]} description={annotationMessage.text}/>
+                    </Col>
+                </Row>
+            )
+        } else {
+            const annotationMessage1 = annotationMessages[i * 2]
+            const annotationMessage2 = annotationMessages[i * 2 + 1]
+            items.push(
+                <Row gutter={8}>
+                    <Col span={12}>
+                        <AnnotationCard img={annotationMessage1.img} title={annotationMessage1.title} tags={[]} description={annotationMessage1.text}/>
+                    </Col>
+                    <Col span={12}>
+                        <AnnotationCard img={annotationMessage2.img} title={annotationMessage2.title} tags={[]} description={annotationMessage2.text}/>
+                    </Col>
+                </Row>
+            ) 
+        }
+        
+    }
+
+
+
     return (
-        <div style={{ marginLeft: '20px', height: `${HEIGHT}px`, backgroundColor: 'white', flex: '1'}}> 
-            <List
-                itemLayout="vertical"
-                size="large"
-                style={{padding: '10px'}}
-                pagination={{
-                    onChange: page => {
-                        console.log(page);
-                    },
-                    pageSize: 3,
-                }}
-                dataSource={annotationMessages}
-                footer={
-                    <div>
-                        <b>ant design</b> footer part
-                    </div>
-                }
-                renderItem={item => (
-                <List.Item
-                    key={item.title}
-                    style={{padding: '5px'}}
-                    extra={
-                        <img
-                            height={272}
-                            alt="logo"
-                            src={item.img}
-                        />
-                    }
-                >
-                    <List.Item.Meta title={<a>{item.title}</a>}/>
-                    {item.text}
-                    <div style={{bottom: 10, position: 'absolute'}}>
-                        <IconText type="star-o" text="156" key="list-vertical-star-o" /> | 
-                        <IconText type="like-o" text="156" key="list-vertical-like-o" /> | 
-                        <IconText type="message" text="2" key="list-vertical-message" />
-                    </div>
-                </List.Item>
-                )}
-            />
+        <div style={{ marginLeft: '20px', flex: '1'}}> 
+            { items }
         </div>    
-
-
-        // <div style={{ marginLeft: '20px', height: `${HEIGHT}px`, backgroundColor: 'white', flex: '1'}}> 
-        //     {/* <Card style={{ width: '250px', height: `${HEIGHT}px` }} cover={<img src={annotationMessageSectionImg} />} /> */}
-            
-        //     {annotationMessages.map((message: AnnotationMessage) => (
-        //         <div>
-        //             <Card
-        //                 hoverable
-        //                 style={{ width: 120, height: 'auto' }}
-        //                 cover={<img alt="example" src={message.img} />}
-        //             >
-        //                 <Meta title={message.message} description="@cezbabin" />
-        //             </Card>
-        //         </div>
-                
-        //     ))}
-        // </div>
     )
   }
 
@@ -142,7 +163,7 @@ export const AnnotationScreen =  ({}) => {
     return (
         //<Container style={{ paddingTop: 30 }}>
         <div>
-<h3>Annotation </h3>
+        <h4>Annotation </h4>
         <div style={{ display: 'flex', width: '100%' }}>
             
         {renderAppetizeScreen()}
