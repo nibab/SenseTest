@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import TestExecution from '../components/TestExecution';
 import { TestCaseExecutionsClient, TestCaseExecution } from '../clients/TestCaseExecutionsClient';
 import { UploadFile } from 'antd/lib/upload/interface';
-import { Card, Button, List, Icon, Row, Col } from 'antd';
+import { Card, Button, List, Icon, Row, Col, Modal } from 'antd';
 import { StyleSheet }  from '../../src/GlobalTypes'
 import { AnnotationCanvas } from '../components/AnnotationCanvas';
 import { EditableTagGroup } from '../components/EditableTagGroup'
@@ -45,11 +45,11 @@ export const AnnotationScreen =  ({}) => {
   const renderAnnotationCanvas = () => {
     if (!annotationCanvasHidden) {
         return (
-            <AnnotationCanvas 
-                backgroundImage={"newsScreenshot.png"} 
-                width={250} 
-                height={544} 
-                onPublishButtonClick={(base64Image) => {
+            <Modal
+                visible={true}
+                centered={true}
+                footer={null}
+                onOk={(base64Image) => {
                     console.log("WAGWAN")
                     //setAnnotationMessageSectionImg("data:image/png;base64," + base64Image)
                     setAnnotationCanvasHidden(true)
@@ -60,8 +60,30 @@ export const AnnotationScreen =  ({}) => {
                         title: "Font"
                     })
                     setAnnotationMessages(currentMessages)
-                }
-            }/>
+                }}
+                onCancel={() => {
+                    setAnnotationCanvasHidden(true)
+                }}
+            >
+                <AnnotationCanvas 
+                    backgroundImage={"newsScreenshot.png"} 
+                    width={250} 
+                    height={544} 
+                    onPublishButtonClick={(base64Image) => {
+                        console.log("WAGWAN")
+                        //setAnnotationMessageSectionImg("data:image/png;base64," + base64Image)
+                        setAnnotationCanvasHidden(true)
+                        const currentMessages = annotationMessages
+                        currentMessages.push({
+                            img: "data:image/png;base64," + base64Image,
+                            text: "The font is not correct." ,
+                            title: "Font"
+                        })
+                        setAnnotationMessages(currentMessages)
+                    }
+                }/>
+            </Modal>
+            
         )
     }
     

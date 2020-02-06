@@ -59,9 +59,11 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
         }
     
         const canvas: HTMLCanvasElement = canvasRef.current;
+        const parentOffsetY = (window.innerHeight - (canvas.offsetParent as any)?.offsetHeight)/2
+        const parentOffsetX = (window.innerWidth - (canvas.offsetParent as any)?.offsetWidth)/2
         const coordinate: Coordinate = {
-            x: event.pageX - canvas.offsetLeft,
-            y: event.pageY - canvas.offsetTop
+            x: event.clientX - canvas.offsetLeft - parentOffsetX ,
+            y: event.clientY - canvas.offsetTop/2 - parentOffsetY
         }
         return coordinate
     };
@@ -165,7 +167,7 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
 
 
     return (
-        <div style={{ width: `${width}px`, marginLeft: '20px', overflow: 'hidden'}}> 
+        <div style={{ width: `${width}px`, overflow: 'hidden'}}> 
             
             <canvas ref={canvasRef} onLoad={() => console.log('blea')} height={height} width={width} />
             
