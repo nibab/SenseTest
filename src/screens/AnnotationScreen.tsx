@@ -1,14 +1,8 @@
-import React, { Fragment, useState, useEffect, useRef, useCallback } from "react"
-import { RouteComponentProps, useHistory } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
-import TestExecution from '../components/TestExecution';
-import { TestCaseExecutionsClient, TestCaseExecution } from '../clients/TestCaseExecutionsClient';
-import { UploadFile } from 'antd/lib/upload/interface';
+import React, { useState } from "react"
 import { Card, Button, List, Icon, Row, Col, Modal } from 'antd';
 import { StyleSheet }  from '../../src/GlobalTypes'
 import { AnnotationCanvas } from '../components/AnnotationCanvas';
 import { EditableTagGroup } from '../components/EditableTagGroup'
-import Meta from "antd/lib/card/Meta";
 import { Typography } from 'antd';
 
 const { Title } = Typography;
@@ -22,10 +16,10 @@ type AnnotationMessage = {
 }
 
 export const AnnotationScreen =  ({}) => {
-    const [annotationMessageSectionImg, setAnnotationMessageSectionImg] = useState('');
     const [annotationCanvasHidden, setAnnotationCanvasHidden] = useState(true)
     const [annotationMessages, setAnnotationMessages] = useState<AnnotationMessage[]>([
     ])
+    const [annotationCardModalHidden, setAnnotationCardModalHidden] = useState(true)
 
     const onAnnotateScreenshotClick = () => {
         setAnnotationCanvasHidden(false)
@@ -51,7 +45,6 @@ export const AnnotationScreen =  ({}) => {
                 footer={null}
                 onOk={(base64Image) => {
                     console.log("WAGWAN")
-                    //setAnnotationMessageSectionImg("data:image/png;base64," + base64Image)
                     setAnnotationCanvasHidden(true)
                     const currentMessages = annotationMessages
                     currentMessages.push({
@@ -69,14 +62,12 @@ export const AnnotationScreen =  ({}) => {
                     backgroundImage={"newsScreenshot.png"} 
                     width={250} 
                     height={544} 
-                    onPublishButtonClick={(base64Image) => {
-                        console.log("WAGWAN")
-                        //setAnnotationMessageSectionImg("data:image/png;base64," + base64Image)
+                    onPublishButtonClick={(data) => {
                         setAnnotationCanvasHidden(true)
                         const currentMessages = annotationMessages
                         currentMessages.push({
-                            img: "data:image/png;base64," + base64Image,
-                            text: "The font is not correct." ,
+                            img: "data:image/png;base64," + data.img,
+                            text: data.text,
                             title: "Font"
                         })
                         setAnnotationMessages(currentMessages)
@@ -112,13 +103,46 @@ export const AnnotationScreen =  ({}) => {
         tags: string[]
     }
 
+    const renderAnnotationCardModal = () => {
+        return(
+            <Modal
+                visible={!annotationCardModalHidden}
+                centered={true}
+                footer={null}
+                onOk={(base64Image) => {
+                    console.log("WAGWAN")
+                    //setAnnotationMessageSectionImg("data:image/png;base64," + base64Image)
+                    setAnnotationCanvasHidden(true)
+                    const currentMessages = annotationMessages
+                    currentMessages.push({
+                        img: "data:image/png;base64," + base64Image,
+                        text: "The font is not correct." ,
+                        title: "Font"
+                    })
+                    setAnnotationMessages(currentMessages)
+                }}
+                onCancel={() => {
+                    setAnnotationCardModalHidden(true)
+                }}
+            >
+            </Modal>
+        )
+    }
+
     const AnnotationCard = ({img, title, description, tags}: AnnotationCardType) => {
         return (
-            <Card hoverable={true} title={<EditableTagGroup/>} style={{marginBottom: '7px'}} bordered={false} actions={[
-                <IconText type="like-o" text="156" key="list-vertical-like-o" />,
-                <Icon type="edit" key="edit" />,
-                <Icon type="ellipsis" key="ellipsis" />,
-            ]}>
+            <Card hoverable={true} 
+                onClick={() => setAnnotationCardModalHidden(false)} 
+                title={<EditableTagGroup/>} 
+                style={{marginBottom: '7px'}} 
+                bordered={false}
+                // TODO: For now, actions propagate touch events to the parents. Need another way to construct these buttons.
+                // actions={[
+                //     <IconText type="like-o" text="156" key="list-vertical-like-o" />,
+                //     <Icon type="edit" key="edit" />,
+                //     <Icon type="ellipsis" key="ellipsis" />,
+                // ]}
+            >
                 <div style={{ flex: 1, display: 'flex', overflow: 'hidden', margin: '-10px'}}>
                     <img
                         alt="logo"
@@ -191,6 +215,7 @@ export const AnnotationScreen =  ({}) => {
         {renderAppetizeScreen()}
         {renderAnnotationCanvas()}
         {renderAnnotationMessageColumn()}
+        {renderAnnotationCardModal()}
         {/* <Card style={{ width: '250px', height: '444px' }} cover={<img src="zeplin.png" />} />
         <Button style={{ float: 'right', marginTop: '10px' }}>Hello</Button> */}            
             

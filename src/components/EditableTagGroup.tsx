@@ -92,11 +92,9 @@ export class EditableTagGroup extends React.Component {
     }
     
     return (
-      <div>
-        <div>
+        <div onClick={(e) => e.stopPropagation()}>
             {tagChild}
         </div>
-      </div>
     );
   }
 }          

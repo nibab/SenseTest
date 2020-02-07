@@ -1,23 +1,17 @@
-import React, { Fragment, useState, useEffect, useRef, useCallback } from "react"
-import { TestCasesClient, TestCase } from "../clients/TestCasesClient";
-import { RunsClient, Run } from "../clients/RunsClient";
-import { TestCaseExecutionsClient } from "../clients/TestCaseExecutionsClient";
-import { CreateRunModal } from "./CreateRunModal"
-import { ProjectsClient } from "../clients/ProjectsClient";
-import uuidv1 from 'uuid';
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import TestsScreen from "../screens/TestsScreen";
-import { Card, Button, Drawer, Modal } from 'antd';
-import { DateUtils } from "../utils/DateUtils";
-import { LoadingScreen } from '../screens/LoadingScreen';
+import React, { useState, useEffect, useRef, useCallback } from "react"
+import { Button } from 'antd';
 import TextArea from "antd/lib/input/TextArea";
 
 type AnnotationCanvasType = {
     backgroundImage: string
     width: number
     height: number
-    onPublishButtonClick: (base64Image: string | null) => void
+    onPublishButtonClick: (data: AnnotationCanvasData) => void
+}
+
+type AnnotationCanvasData = {
+    img: string | null,
+    text: string
 }
 
 type Coordinate = {
@@ -26,11 +20,10 @@ type Coordinate = {
 }
 
 export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButtonClick}: AnnotationCanvasType) => {
-    const [showRunModal, setShowRunModal] = useState(false);
     const [isPainting, setIsPainting] = useState(false);
     const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(undefined);
-    const [drawerVisible, setDrawerVisible] = useState(false)
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const textAreaRef= useRef<TextArea>(null);
 
     useEffect(() => {
         drawBackground()
@@ -164,32 +157,20 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
         }
     }
 
-
-
     return (
-        <div style={{ width: `${width}px`, overflow: 'hidden'}}> 
-            
-            <canvas ref={canvasRef} onLoad={() => console.log('blea')} height={height} width={width} />
-            
-            <Modal
-                title="Comment"
-                visible={drawerVisible}
-                onOk={() => {
+        <div style={{ display: 'flex'}}> 
+            <div style={{ flex: 0.5 }}>
+                <canvas ref={canvasRef} onLoad={() => console.log('blea')} height={height} width={width} />
+            </div>
+            <div style={{ flex: 0.5 }}>
+                <TextArea ref={textAreaRef} rows={4} />
+                <Button style={{marginTop: '5px', float: 'right'}} onClick={() => {
                     const canvasImage = storeCanvasImage()
-                    console.log(canvasImage)
-                    onPublishButtonClick(canvasImage)
-                }}
-                onCancel={() => {}}
-                >
-                <TextArea rows={4} />
-            </Modal>
-                
-            {/* <Card style={{ width: `${width}px`, height: `${height}px` }} cover={<img src={backgroundImage} />} /> */}
-            <Button style={{marginTop: '5px', float: 'right'}} onClick={() => {
-                
-                setDrawerVisible(true)
-                //onPublishButtonClick(canvasImage)
-            }}>Publish</Button>
+                    const text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
+                    onPublishButtonClick({img: canvasImage, text: text})
+                    console.log()
+                }}>Publish</Button>
+            </div>
         </div>
     )
 }
