@@ -26,72 +26,71 @@ export const AnnotationScreen =  ({}) => {
         setAnnotationCanvasHidden(false)
     }
 
-  const renderAppetizeScreen = () => {
-    return (
-        <div> 
-            <AppetizeMock />
-            <Button style={ styles.button } onClick={
-                () => setAnnotationCanvasHidden(false)
-            }>Annotate</Button>
-        </div>
-    )
-  }
-
-  const renderAnnotationCanvas = () => {
-    if (!annotationCanvasHidden) {
+    const renderAppetizeScreen = () => {
         return (
-            <Modal
-                visible={true}
-                centered={true}
-                footer={null}
-                onOk={(base64Image) => {
-                    console.log("WAGWAN")
-                    setAnnotationCanvasHidden(true)
-                    const currentMessages = annotationMessages
-                    currentMessages.push({
-                        img: "data:image/png;base64," + base64Image,
-                        text: "The font is not correct." ,
-                        title: "Font"
-                    })
-                    setAnnotationMessages(currentMessages)
-                }}
-                onCancel={() => {
-                    setAnnotationCanvasHidden(true)
-                }}
-            >
-                <AnnotationCanvas 
-                    backgroundImage={"newsScreenshot.png"} 
-                    width={250} 
-                    height={544} 
-                    onPublishButtonClick={(data) => {
+            <div> 
+                <AppetizeMock />
+                <Button style={ styles.button } onClick={
+                    () => setAnnotationCanvasHidden(false)
+                }>Annotate</Button>
+            </div>
+        )
+    }
+
+    const renderAnnotationCanvas = () => {
+        if (!annotationCanvasHidden) {
+            return (
+                <Modal
+                    visible={true}
+                    centered={true}
+                    footer={null}
+                    onOk={(base64Image) => {
+                        console.log("WAGWAN")
                         setAnnotationCanvasHidden(true)
                         const currentMessages = annotationMessages
                         currentMessages.push({
-                            img: "data:image/png;base64," + data.img,
-                            text: data.text,
+                            img: "data:image/png;base64," + base64Image,
+                            text: "The font is not correct." ,
                             title: "Font"
                         })
                         setAnnotationMessages(currentMessages)
-                    }
-                }/>
-            </Modal>
-            
-        )
+                    }}
+                    onCancel={() => {
+                        setAnnotationCanvasHidden(true)
+                    }}
+                >
+                    <AnnotationCanvas 
+                        backgroundImage={"newsScreenshot.png"} 
+                        width={250} 
+                        height={544} 
+                        onPublishButtonClick={(data) => {
+                            setAnnotationCanvasHidden(true)
+                            const currentMessages = annotationMessages
+                            currentMessages.push({
+                                img: "data:image/png;base64," + data.img,
+                                text: data.text,
+                                title: "Font"
+                            })
+                            setAnnotationMessages(currentMessages)
+                        }
+                    }/>
+                </Modal>
+                
+            )
+        }
     }
-    
-  }
 
-  type IconProps = {
-      type: string
-      text: string
-  }
+    type IconProps = {
+        type: string
+        text: string
+    }
 
-  const IconText = ({ type, text }: IconProps) => (
-    <span>
-      <Icon type={type} style={{ marginRight: 8 }} />
-      {text}
-    </span>
-  );
+    const IconText = ({ type, text }: IconProps) => (
+        <span>
+            <Icon type={type} style={{ marginRight: 8 }} />
+        {text}
+        </span>
+    );
 
     const renderTags = () => {
 
@@ -159,73 +158,64 @@ export const AnnotationScreen =  ({}) => {
         )
     }
 
-  const renderAnnotationMessageColumn = () => {
-    // Introducing a constraint of maximum 6 cards per page. The rest of the cards will be displayed on the other pages.
-    if (annotationMessages.length === 0) {
-        return
-    }
-    var nrOfRows = Math.ceil(annotationMessages.length / 2)
-    if (nrOfRows > 3) {
-        // Create multiple pages
-        nrOfRows = 3
-    }
-    const items = []
-    for (let i = 0; i < nrOfRows; i++) {
-        if (annotationMessages.length - (i + 1) * 2 < 0) {
-            const annotationMessage = annotationMessages[i * 2]
-            items.push(
-                <Row gutter={8}>
-                    <Col span={12}>
-                        <AnnotationCard img={annotationMessage.img} title={annotationMessage.title} tags={[]} description={annotationMessage.text}/>
-                    </Col>
-                </Row>
-            )
-        } else {
-            const annotationMessage1 = annotationMessages[i * 2]
-            const annotationMessage2 = annotationMessages[i * 2 + 1]
-            items.push(
-                <Row gutter={8}>
-                    <Col span={12}>
-                        <AnnotationCard img={annotationMessage1.img} title={annotationMessage1.title} tags={[]} description={annotationMessage1.text}/>
-                    </Col>
-                    <Col span={12}>
-                        <AnnotationCard img={annotationMessage2.img} title={annotationMessage2.title} tags={[]} description={annotationMessage2.text}/>
-                    </Col>
-                </Row>
-            ) 
+    const renderAnnotationMessageColumn = () => {
+        // Introducing a constraint of maximum 6 cards per page. The rest of the cards will be displayed on the other pages.
+        if (annotationMessages.length === 0) {
+            return
         }
+        var nrOfRows = Math.ceil(annotationMessages.length / 2)
+        if (nrOfRows > 3) {
+            // Create multiple pages
+            nrOfRows = 3
+        }
+        const items = []
+        for (let i = 0; i < nrOfRows; i++) {
+            if (annotationMessages.length - (i + 1) * 2 < 0) {
+                const annotationMessage = annotationMessages[i * 2]
+                items.push(
+                    <Row gutter={8}>
+                        <Col span={12}>
+                            <AnnotationCard img={annotationMessage.img} title={annotationMessage.title} tags={[]} description={annotationMessage.text}/>
+                        </Col>
+                    </Row>
+                )
+            } else {
+                const annotationMessage1 = annotationMessages[i * 2]
+                const annotationMessage2 = annotationMessages[i * 2 + 1]
+                items.push(
+                    <Row gutter={8}>
+                        <Col span={12}>
+                            <AnnotationCard img={annotationMessage1.img} title={annotationMessage1.title} tags={[]} description={annotationMessage1.text}/>
+                        </Col>
+                        <Col span={12}>
+                            <AnnotationCard img={annotationMessage2.img} title={annotationMessage2.title} tags={[]} description={annotationMessage2.text}/>
+                        </Col>
+                    </Row>
+                ) 
+            }
         
+        }
+
+
+
+        return (
+            <div style={{ marginLeft: '20px', flex: '1'}}> 
+                { items }
+            </div>    
+        )
     }
 
-
-
     return (
-        <div style={{ marginLeft: '20px', flex: '1'}}> 
-            { items }
-        </div>    
-    )
-  }
-
- 
-    return (
-        //<Container style={{ paddingTop: 30 }}>
         <div>
-        <h4>Annotation </h4>
-        <div style={{ display: 'flex', width: '100%' }}>
-            
-        {renderAppetizeScreen()}
-        {renderAnnotationCanvas()}
-        {renderAnnotationMessageColumn()}
-        {renderAnnotationCardModal()}
-        {/* <Card style={{ width: '250px', height: '444px' }} cover={<img src="zeplin.png" />} />
-        <Button style={{ float: 'right', marginTop: '10px' }}>Hello</Button> */}            
-            
+            <h4>Annotation </h4>
+            <div style={{ display: 'flex', width: '100%' }}>
+                {renderAppetizeScreen()}
+                {renderAnnotationCanvas()}
+                {renderAnnotationMessageColumn()}
+                {renderAnnotationCardModal()}     
+            </div>
         </div>
-        </div>
-            
-        //</Container>
     )
-  
 }
 
 const styles: StyleSheet = {
