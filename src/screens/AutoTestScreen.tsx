@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { Card, Button, List, Icon, Row, Col, Modal } from 'antd';
 import { StyleSheet }  from '../../src/GlobalTypes'
 import { AnnotationCanvas } from '../components/AnnotationCanvas';
@@ -6,18 +6,26 @@ import { EditableTagGroup } from '../components/EditableTagGroup'
 import { Typography } from 'antd';
 import { AppetizeMock } from "../components/AppetizeMock";
 
-const { Title } = Typography;
+const { Title } = Typography
+
+interface AppetizeContextProps {
+    img: string
+}
+
+export const AppetizeContext = React.createContext({} as AppetizeContextProps)
 
 export const AutoTestScreen =  ({}) => {
     const [autoTestCasesList, setAutoTestCasesList] = useState<AutoTestCaseData[]>([])
 
-    return (<div>
-        <AppetizeMock />
-        <TestCaseList testCases={autoTestCasesList} />
-        <CreateAutoTestCaseModal onFinish={(autoTestCaseData) => {
+    return (
+        <AppetizeContext.Provider value={{img: ""}}>
+            <AppetizeMock />
+            <TestCaseList testCases={autoTestCasesList} />
+            <CreateAutoTestCaseModal onFinish={(autoTestCaseData) => {
 
-        }} />
-    </div>)
+            }} />
+        </AppetizeContext.Provider>
+    )
 }
 
 type TestCaseListProps = {
@@ -37,5 +45,7 @@ type CreateAutoTestCaseModalProps = {
 }
 
 const CreateAutoTestCaseModal = ({onFinish}: CreateAutoTestCaseModalProps) => {
+    const appetizeContext = useContext(AppetizeContext)
+    console.log("CreateAutoTestCaseModal: " + appetizeContext)
     return (<div></div>)
 }
