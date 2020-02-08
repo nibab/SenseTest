@@ -13,11 +13,11 @@ export const AppetizeMock = () => {
         <div style={{ width: '250px', textAlign: 'center'}}> 
             <img style={{ width: '250px', height: `${HEIGHT}px` }} src="newsScreenshot.png" />
             {/* // for testing the context sharing */}
-            <TextArea ref={textAreaRef} onClick={() => {
+            {/* <TextArea ref={textAreaRef} onClick={() => {
                 const text = textAreaRef.current?.state === undefined ? "" : textAreaRef.current.state.value
                 debugger
                 appetizeContext.img = text
-            }}></TextArea>
+            }}></TextArea> */}
         </div>
     )
 }
