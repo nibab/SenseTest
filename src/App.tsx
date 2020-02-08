@@ -23,6 +23,7 @@ import { bool } from 'aws-sdk/clients/signer';
 import ZeplinAuth from './utils/ZeplinAuth';
 import { Layout } from 'antd';
 import AnnotationScreen from './screens/AnnotationScreen';
+import { AutoTestScreen } from './screens/AutoTestScreen';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -89,6 +90,12 @@ class App extends Component<{}, AppState> {
           isLoggedIn={isLoggedIn}
           isLoading={isLoading}
           component={AnnotationScreen}
+        ></ProtectedRoute>
+        <ProtectedRoute
+          path='/autoTest'
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
+          component={AutoTestScreen}
         ></ProtectedRoute>
         <ProtectedRoute
           path='/run/:runId/executions' // TODO: If the user navigates directly to this URL, the navigation context will be lost (won't have the TestExecutions loaded).

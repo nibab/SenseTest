@@ -1,8 +1,9 @@
 import React, { useState } from "react"
 import { Card, Button, List, Icon, Row, Col, Modal } from 'antd';
 import { StyleSheet }  from '../../src/GlobalTypes'
-import { AnnotationCanvas } from '../components/AnnotationCanvas';
+import { AnnotationCanvas } from '../components/AnnotationCanvas'
 import { EditableTagGroup } from '../components/EditableTagGroup'
+import { AppetizeMock } from '../components/AppetizeMock'
 import { Typography } from 'antd';
 
 const { Title } = Typography;
@@ -27,8 +28,8 @@ export const AnnotationScreen =  ({}) => {
 
   const renderAppetizeScreen = () => {
     return (
-        <div style={{ width: '250px', textAlign: 'center'}}> 
-            <img style={{ width: '250px', height: `${HEIGHT}px` }} src="newsScreenshot.png" />
+        <div> 
+            <AppetizeMock />
             <Button style={ styles.button } onClick={
                 () => setAnnotationCanvasHidden(false)
             }>Annotate</Button>

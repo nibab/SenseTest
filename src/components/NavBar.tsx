@@ -34,12 +34,15 @@ const NavBar = ({ isLoggedIn, signOut, width }: NavBarProps) => {
         <Menu.Item key="annotate">
           <Link to={{pathname: `/annotate`}}><Icon type="edit" />Annotate</Link>
         </Menu.Item>
-        <Menu.Item key="tests" >
+        <Menu.Item key="autoTest">
+          <Link to={{pathname: `/autoTest`}}><Icon type="test" />Auto Test</Link>
+        </Menu.Item>
+        {/* <Menu.Item key="tests" >
           <Link to={{pathname: `/tests`}} style={{}}><Icon type="experiment" />Tests</Link>
         </Menu.Item>
         <Menu.Item key="app">
           <Link to={{pathname: `/runs`}}><Icon type="right-square" />Past Runs</Link>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="settings">
           <Link to={{pathname: `/settings`}}><Icon type="setting" />Settings</Link>
         </Menu.Item>
