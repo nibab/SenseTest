@@ -1,60 +1,54 @@
 
-import React from 'react';
+import React, { Props, useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import { Tag, Input, Icon } from 'antd';
 
-export class EditableTagGroup extends React.Component {
-    input: any
+type EditableTagGroupProps = {
+  tags?: string[]
+}
 
-    constructor(props: any) {
-        super(props)
-        this.input = "s"
-    }
+type EditableTagGroupState = {
+  tags: string[],
+  inputVisible: boolean,
+  inputValue: string
+}
 
-  state = {
-    tags: ['Tag 1', 'Tag 2', 'Tag 3'],
-    inputVisible: false,
-    inputValue: '',
-  };  
+export const EditableTagGroup = ({tags}: EditableTagGroupProps) => {
+  const [inputVisible, setInputVisible] = useState(false)
+  const [inputValue, setInputValue] = useState("")
+  const [tagsList, setTagsList] = useState(tags !== undefined ? tags : [])
+  const inputRef = useRef<Input>(null);
 
-  handleClose = (removedTag: string) => {
-    const tags = this.state.tags.filter(tag => tag !== removedTag);
+  const handleClose = (removedTag: string) => {
+    const tags = tagsList.filter(tag => tag !== removedTag);
     console.log(tags);
-    this.setState({ tags });
+    setTagsList(tags)
   };
+  
+  const showInput = () => {
+    setInputVisible(true)
+  }
 
-  showInput = () => {
-    this.setState({ inputVisible: true }, () => this.input.focus());
-  };
+  const handleInputChange = (e: any) => {
+    setInputValue(e.target.value)
+  }
 
-  handleInputChange = (e: any) => {
-    this.setState({ inputValue: e.target.value });
-  };
-
-  handleInputConfirm = () => {
-    const { inputValue } = this.state;
-    let { tags } = this.state;
-    if (inputValue && tags.indexOf(inputValue) === -1) {
-      tags = [...tags, inputValue];
+  const handleInputConfirm = () => {
+    if (inputValue && tagsList.indexOf(inputValue) === -1) {
+      setTagsList([...tagsList, inputValue])
     }
-    console.log(tags);
-    this.setState({
-      tags,
-      inputVisible: false,
-      inputValue: '',
-    });
-  };
+    setInputVisible(false)
+    setInputValue("")
+  }
 
-  saveInputRef = (input: any) => (this.input = input);
-
-  forMap = (tag: any) => {
+  const forMap = (tag: any) => {
     const tagElem = (
       <Tag
         closable
         onClose={(e: any) => {
           e.preventDefault();
-          this.handleClose(tag);
+          handleClose(tag);
         }}
       >
         {tag}
@@ -66,35 +60,32 @@ export class EditableTagGroup extends React.Component {
       </span>
     );
   };
-
-  render() {
-    const { tags, inputVisible, inputValue } = this.state;
-    const tagChild = tags.map(this.forMap);
-    if (!inputVisible) {
-        tagChild.push(
-            <Tag onClick={this.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
-                <Icon type="plus" /> New Tag
-            </Tag>
-        )
-    } else {
-        tagChild.push(
-            <Input
-                ref={this.saveInputRef}
-                type="text"
-                size="small"
-                style={{ width: 78 }}
-                value={inputValue}
-                onChange={this.handleInputChange}
-                onBlur={this.handleInputConfirm}
-                onPressEnter={this.handleInputConfirm}
-            />
-        )
-    }
-    
-    return (
-        <div onClick={(e) => e.stopPropagation()}>
-            {tagChild}
-        </div>
-    );
+  
+  const tagChild = tagsList.map(forMap);
+  if (!inputVisible) {
+      tagChild.push(
+        <Tag onClick={showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
+            <Icon type="plus" /> New Tag
+        </Tag>
+      )
+  } else {
+    tagChild.push(
+      <Input
+          ref={inputRef}
+          type="text"
+          size="small"
+          style={{ width: 78 }}
+          value={inputValue}
+          onChange={handleInputChange}
+          onBlur={handleInputConfirm}
+          onPressEnter={handleInputConfirm}
+      />
+    )
   }
+  
+  return (
+    <div onClick={(e) => e.stopPropagation()}>
+        {tagChild}
+    </div>
+  )
 }          

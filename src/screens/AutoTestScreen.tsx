@@ -2,8 +2,9 @@ import React, { useState, useContext } from "react"
 import { Card, Button, List, Icon, Row, Col, Modal } from 'antd';
 import { Typography } from 'antd';
 import { AppetizeMock } from "../components/AppetizeMock";
-import Rekognition from "aws-sdk/clients/rekognition"
+import Rekognition, { TextDetectionList } from "aws-sdk/clients/rekognition"
 import AWS from "aws-sdk"
+import { EditableTagGroup } from "../components/EditableTagGroup";
 
 const { Title } = Typography
 
@@ -16,18 +17,34 @@ export const AppetizeContext = React.createContext({} as AppetizeContextProps)
 export const AutoTestScreen =  ({}) => {
     const [autoTestCasesList, setAutoTestCasesList] = useState<AutoTestCaseData[]>([])
     const [createTestModalVisible, setCreateTestModalVisible] = useState(false)
+    const [detectedWords, setDetectedWords] = useState<string[]>([])
 
     return (
         <AppetizeContext.Provider value={{img: ""}}>
-            <AppetizeMock />
-            <TestCaseList testCases={autoTestCasesList} />
+            <div style={{ flex: 1, display: 'flex', overflow: 'hidden', margin: '-10px'}}>
+                <div style={{ flex: 0.2, width: 'auto', objectFit:'contain'}}>
+                    <AppetizeMock />
+                    <Button onClick={async () => {
+                        //setCreateTestModalVisible(true)
+                        const textDetections = await callRekognition()
+                        const textListToDisplay: string[] = []
+                        textDetections.flat().forEach((textDetection) => {
+                            textListToDisplay.push(textDetection.DetectedText)
+                        })
+                        console.log(textListToDisplay)
+                        setDetectedWords(textListToDisplay)
+                    }}>Call Rekognition</Button>
+                </div>
+                <div style={{flex: 0.8, marginLeft: '10px'}}>
+                    <EditableTagGroup tags={detectedWords} />
+                    {/* <TestCaseList testCases={autoTestCasesList} /> */}
+                </div>
+            </div>
+            
             <CreateAutoTestCaseModal visible={createTestModalVisible} onFinish={(autoTestCaseData) => {
                 setCreateTestModalVisible(false)
             }} />
-            <Button onClick={() => {
-                //setCreateTestModalVisible(true)
-                callRekognition()
-            }}>Call Rekognition</Button>
+            
         </AppetizeContext.Provider>
     )
 }
@@ -37,7 +54,7 @@ type TestCaseListProps = {
 }
 
 const TestCaseList = ({testCases}: TestCaseListProps) => {
-    return (<div></div>)
+    return (<div>WAGWANA</div>)
 }
 
 type AutoTestCaseData = {
@@ -55,27 +72,29 @@ const CreateAutoTestCaseModal = ({onFinish, visible}: CreateAutoTestCaseModalPro
     return (<Modal visible={visible} onOk={() => onFinish({})} onCancel={() => onFinish({})}></Modal>)
 }
 
-const callRekognition = async () => {
-    const initAWSClient = () => {
-        AWS.config.region = 'us-east-1'; // Region
-        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-            IdentityPoolId: 'us-east-1:530e7faf-f51a-4cd1-992c-b4a034295254'
-        });
-    }
-
-    initAWSClient()
-    const imageBytes = await getBytesFromImage("newsScreenshot.png")
-    //Call Rekognition  
-    const params: Rekognition.DetectTextRequest = {
-        Image: {
-          Bytes: imageBytes
+const callRekognition = async (): Promise<TextDetectionList> => {
+    return new Promise(async (resolve, reject) => {
+        const initAWSClient = () => {
+            AWS.config.region = 'us-east-1'; // Region
+            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+                IdentityPoolId: 'us-east-1:530e7faf-f51a-4cd1-992c-b4a034295254'
+            });
         }
-    };
-    const rekognitionClient = new Rekognition()
-    const recognitionRequest = rekognitionClient.detectText(params, (err, data) => {
-        debugger
+    
+        initAWSClient()
+        const imageBytes = await getBytesFromImage("newsScreenshot.png")
+        //Call Rekognition  
+        const params: Rekognition.DetectTextRequest = {
+            Image: {
+              Bytes: imageBytes
+            }
+        };
+        const rekognitionClient = new Rekognition()
+        const recognitionRequest = rekognitionClient.detectText(params, (err, data) => {
+            resolve(data.TextDetections)
+        })
+        recognitionRequest.send()
     })
-    recognitionRequest.send()
 }
 
 const getBytesFromImage = (url: string): Promise<Uint8Array> => {

@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Card, Button, List, Icon, Row, Col, Modal } from 'antd';
-import { StyleSheet }  from '../../src/GlobalTypes'
+import { StyleSheet } from '../../src/GlobalTypes'
 import { AnnotationCanvas } from '../components/AnnotationCanvas'
 import { EditableTagGroup } from '../components/EditableTagGroup'
 import { AppetizeMock } from '../components/AppetizeMock'
@@ -16,7 +16,7 @@ type AnnotationMessage = {
     title: string
 }
 
-export const AnnotationScreen =  ({}) => {
+export const AnnotationScreen = ({ }) => {
     const [annotationCanvasHidden, setAnnotationCanvasHidden] = useState(true)
     const [annotationMessages, setAnnotationMessages] = useState<AnnotationMessage[]>([
     ])
@@ -28,9 +28,9 @@ export const AnnotationScreen =  ({}) => {
 
     const renderAppetizeScreen = () => {
         return (
-            <div> 
+            <div>
                 <AppetizeMock />
-                <Button style={ styles.button } onClick={
+                <Button style={styles.button} onClick={
                     () => setAnnotationCanvasHidden(false)
                 }>Annotate</Button>
             </div>
@@ -50,7 +50,7 @@ export const AnnotationScreen =  ({}) => {
                         const currentMessages = annotationMessages
                         currentMessages.push({
                             img: "data:image/png;base64," + base64Image,
-                            text: "The font is not correct." ,
+                            text: "The font is not correct.",
                             title: "Font"
                         })
                         setAnnotationMessages(currentMessages)
@@ -59,10 +59,10 @@ export const AnnotationScreen =  ({}) => {
                         setAnnotationCanvasHidden(true)
                     }}
                 >
-                    <AnnotationCanvas 
-                        backgroundImage={"newsScreenshot.png"} 
-                        width={250} 
-                        height={544} 
+                    <AnnotationCanvas
+                        backgroundImage={"newsScreenshot.png"}
+                        width={250}
+                        height={544}
                         onPublishButtonClick={(data) => {
                             setAnnotationCanvasHidden(true)
                             const currentMessages = annotationMessages
@@ -73,9 +73,9 @@ export const AnnotationScreen =  ({}) => {
                             })
                             setAnnotationMessages(currentMessages)
                         }
-                    }/>
+                        } />
                 </Modal>
-                
+
             )
         }
     }
@@ -88,7 +88,7 @@ export const AnnotationScreen =  ({}) => {
     const IconText = ({ type, text }: IconProps) => (
         <span>
             <Icon type={type} style={{ marginRight: 8 }} />
-        {text}
+            {text}
         </span>
     );
 
@@ -104,7 +104,7 @@ export const AnnotationScreen =  ({}) => {
     }
 
     const renderAnnotationCardModal = () => {
-        return(
+        return (
             <Modal
                 visible={!annotationCardModalHidden}
                 centered={true}
@@ -116,7 +116,7 @@ export const AnnotationScreen =  ({}) => {
                     const currentMessages = annotationMessages
                     currentMessages.push({
                         img: "data:image/png;base64," + base64Image,
-                        text: "The font is not correct." ,
+                        text: "The font is not correct.",
                         title: "Font"
                     })
                     setAnnotationMessages(currentMessages)
@@ -129,27 +129,27 @@ export const AnnotationScreen =  ({}) => {
         )
     }
 
-    const AnnotationCard = ({img, title, description, tags}: AnnotationCardType) => {
+    const AnnotationCard = ({ img, title, description, tags }: AnnotationCardType) => {
         return (
-            <Card hoverable={true} 
-                onClick={() => setAnnotationCardModalHidden(false)} 
-                title={<EditableTagGroup/>} 
-                style={{marginBottom: '7px'}} 
+            <Card hoverable={true}
+                onClick={() => setAnnotationCardModalHidden(false)}
+                title={<EditableTagGroup />}
+                style={{ marginBottom: '7px' }}
                 bordered={false}
-                // TODO: For now, actions propagate touch events to the parents. Need another way to construct these buttons.
-                // actions={[
-                //     <IconText type="like-o" text="156" key="list-vertical-like-o" />,
-                //     <Icon type="edit" key="edit" />,
-                //     <Icon type="ellipsis" key="ellipsis" />,
-                // ]}
+            // TODO: For now, actions propagate touch events to the parents. Need another way to construct these buttons.
+            // actions={[
+            //     <IconText type="like-o" text="156" key="list-vertical-like-o" />,
+            //     <Icon type="edit" key="edit" />,
+            //     <Icon type="ellipsis" key="ellipsis" />,
+            // ]}
             >
-                <div style={{ flex: 1, display: 'flex', overflow: 'hidden', margin: '-10px'}}>
+                <div style={{ flex: 1, display: 'flex', overflow: 'hidden', margin: '-10px' }}>
                     <img
                         alt="logo"
                         src={img}
-                        style={{ flex: 0.4, height: '272px', width: 'auto', objectFit:'contain'}}
+                        style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
                     />
-                    <div style={{flex: 0.6, marginLeft: '10px'}}>
+                    <div style={{ flex: 0.6, marginLeft: '10px' }}>
                         <Title level={4}>{title}</Title>
                         {description}
                     </div>
@@ -175,7 +175,7 @@ export const AnnotationScreen =  ({}) => {
                 items.push(
                     <Row gutter={8}>
                         <Col span={12}>
-                            <AnnotationCard img={annotationMessage.img} title={annotationMessage.title} tags={[]} description={annotationMessage.text}/>
+                            <AnnotationCard img={annotationMessage.img} title={annotationMessage.title} tags={[]} description={annotationMessage.text} />
                         </Col>
                     </Row>
                 )
@@ -185,23 +185,21 @@ export const AnnotationScreen =  ({}) => {
                 items.push(
                     <Row gutter={8}>
                         <Col span={12}>
-                            <AnnotationCard img={annotationMessage1.img} title={annotationMessage1.title} tags={[]} description={annotationMessage1.text}/>
+                            <AnnotationCard img={annotationMessage1.img} title={annotationMessage1.title} tags={[]} description={annotationMessage1.text} />
                         </Col>
                         <Col span={12}>
-                            <AnnotationCard img={annotationMessage2.img} title={annotationMessage2.title} tags={[]} description={annotationMessage2.text}/>
+                            <AnnotationCard img={annotationMessage2.img} title={annotationMessage2.title} tags={[]} description={annotationMessage2.text} />
                         </Col>
                     </Row>
-                ) 
+                )
             }
-        
+
         }
 
-
-
         return (
-            <div style={{ marginLeft: '20px', flex: '1'}}> 
-                { items }
-            </div>    
+            <div style={{ marginLeft: '20px', flex: '1' }}>
+                {items}
+            </div>
         )
     }
 
@@ -212,7 +210,7 @@ export const AnnotationScreen =  ({}) => {
                 {renderAppetizeScreen()}
                 {renderAnnotationCanvas()}
                 {renderAnnotationMessageColumn()}
-                {renderAnnotationCardModal()}     
+                {renderAnnotationCardModal()}
             </div>
         </div>
     )
@@ -220,8 +218,8 @@ export const AnnotationScreen =  ({}) => {
 
 const styles: StyleSheet = {
     button: {
-        float: 'right', 
-        marginTop: '10px', 
+        float: 'right',
+        marginTop: '10px',
         marginRight: '3px',
         marginBottom: '3px'
     }
