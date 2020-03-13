@@ -27,7 +27,7 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
 
     useEffect(() => {
         drawBackground()
-    }, []);
+    }, [backgroundImage]);
 
     const drawBackground = () => {
         if (!canvasRef.current) {
