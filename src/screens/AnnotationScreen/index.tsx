@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { Card, Button, List, Icon, Row, Col, Modal } from 'antd';
 import { StyleSheet } from '../../../src/GlobalTypes'
 import { AnnotationCanvas } from '../../components/AnnotationCanvas'
@@ -24,6 +24,7 @@ export const AnnotationScreen = ({ }) => {
     ])
     const [annotationCardDetailViewHidden, setAnnotationCardDetailViewHidden] = useState(true)
     const [annotationCardDetailViewId, setAnnotationCardDetailViewId] = useState<number | null>()
+    const [imageToAnnotate, setImageToAnnotate] = useState("newsScreenshot.png")
 
     const onAnnotateScreenshotClick = () => {
         setCreateAnnotationModalHidden(false)
@@ -33,9 +34,10 @@ export const AnnotationScreen = ({ }) => {
         return (
             <div>
                 <AppetizeMock />
-                <Button style={styles.button} onClick={
-                    () => setCreateAnnotationModalHidden(false)
-                }>Annotate</Button>
+                <Button style={styles.button} onClick={() => {
+                    setCreateAnnotationModalHidden(false)
+                    setImageToAnnotate("newsScreenshot.png")
+                }}>Annotate</Button>
             </div>
         )
     }
@@ -47,11 +49,12 @@ export const AnnotationScreen = ({ }) => {
                 centered={true}
                 footer={null}
                 onCancel={() => {
+                    setImageToAnnotate("")
                     setCreateAnnotationModalHidden(true)
                 }}
             >
                 <AnnotationCanvas
-                    backgroundImage={"newsScreenshot.png"}
+                    backgroundImage={imageToAnnotate}
                     width={250}
                     height={544}
                     onPublishButtonClick={(data) => {
@@ -64,6 +67,7 @@ export const AnnotationScreen = ({ }) => {
                             tags: []
                         })
                         setAnnotations(currentAnnotations)
+                        setImageToAnnotate("")
                     }
                     } />
             </Modal>
