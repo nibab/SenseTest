@@ -1,10 +1,11 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { Card, Button, List, Icon, Row, Col, Modal } from 'antd';
 import { StyleSheet } from '../../../src/GlobalTypes'
 import { AnnotationCanvas } from '../../components/AnnotationCanvas'
 import { EditableTagGroup } from '../../components/EditableTagGroup'
 import { AppetizeMock } from '../../components/AppetizeMock'
 import { Typography } from 'antd';
+import TextArea from "antd/lib/input/TextArea";
 
 const { Title } = Typography;
 
@@ -12,8 +13,9 @@ const HEIGHT = 544
 
 type Annotation = {
     img: string
-    text: string
+    description: string
     title: string
+    tags: string[]
 }
 
 export const AnnotationScreen = ({ }) => {
@@ -21,7 +23,7 @@ export const AnnotationScreen = ({ }) => {
     const [annotations, setAnnotations] = useState<Annotation[]>([
     ])
     const [annotationCardDetailViewHidden, setAnnotationCardDetailViewHidden] = useState(true)
-    const [annotationCardDetailViewId, setAnnotationCardDetailViewId] = useState<string | null>()
+    const [annotationCardDetailViewId, setAnnotationCardDetailViewId] = useState<number | null>()
 
     const onAnnotateScreenshotClick = () => {
         setCreateAnnotationModalHidden(false)
@@ -57,8 +59,9 @@ export const AnnotationScreen = ({ }) => {
                         const currentAnnotations = annotations
                         currentAnnotations.push({
                             img: "data:image/png;base64," + data.img,
-                            text: "The font is not correct.",
-                            title: "Font"
+                            description: "The font is not correct.",
+                            title: "Font",
+                            tags: []
                         })
                         setAnnotations(currentAnnotations)
                     }
@@ -67,40 +70,48 @@ export const AnnotationScreen = ({ }) => {
         )
     }
 
-    type IconProps = {
-        type: string
-        text: string
-    }
-
-    type AnnotationCardType = {
-        img: string,
-        title: string,
-        description: string,
-        tags: string[]
-    }
-
     const renderAnnotationCardDetailView = () => {
-        return (
-            <Modal
-                visible={!annotationCardDetailViewHidden}
-                centered={true}
-                footer={null}
-                onOk={(base64Image) => {
-                    
-                }}
-                onCancel={() => {
-                    setAnnotationCardDetailViewHidden(true)
-                }}
-            >
-                Bonjour
-            </Modal>
-        )
+        if (annotationCardDetailViewId === undefined || annotationCardDetailViewId === null) {
+            // This is an error. A detail view should never have to display a non-existent annotation.
+            return (<div></div>)
+        } else {
+            return (
+                <Modal
+                    // Make sure that there is an annotationCardDetailViewId to display, because once the modal
+                    // becomes visible, it needs an Annotation (and id) to display.
+                    visible={!annotationCardDetailViewHidden && annotationCardDetailViewId !== null}
+                    centered={true}
+                    footer={null}
+                    onOk={(base64Image) => {
+                        
+                    }}
+                    onCancel={() => {
+                        setAnnotationCardDetailViewHidden(true)
+                    }}
+                >
+                    <AnnotationDiscussion 
+                        annotation={annotations[annotationCardDetailViewId]}
+                        width={250}
+                        height={544}
+                    />
+                </Modal>
+            )
+        }
+        
     }
 
-    const AnnotationCard = ({ img, title, description, tags }: AnnotationCardType) => {
+    type AnnotationCardProps = {
+        annotation: Annotation,
+        annotationIndex: number
+    }
+
+    const AnnotationCard = ({annotation, annotationIndex}: AnnotationCardProps) => {
         return (
             <Card hoverable={true}
-                onClick={() => setAnnotationCardDetailViewHidden(false)}
+                onClick={() => {
+                    setAnnotationCardDetailViewHidden(false)
+                    setAnnotationCardDetailViewId(annotationIndex)
+                }}
                 title={<EditableTagGroup />}
                 style={{ marginBottom: '7px' }}
                 bordered={false}
@@ -108,12 +119,12 @@ export const AnnotationScreen = ({ }) => {
                 <div style={{ flex: 1, display: 'flex', overflow: 'hidden', margin: '-10px' }}>
                     <img
                         alt="logo"
-                        src={img}
+                        src={annotation.img}
                         style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
                     />
                     <div style={{ flex: 0.6, marginLeft: '10px' }}>
-                        <Title level={4}>{title}</Title>
-                        {description}
+                        <Title level={4}>{annotation.title}</Title>
+                        {annotation.description}
                     </div>
                 </div>
             </Card>
@@ -133,24 +144,22 @@ export const AnnotationScreen = ({ }) => {
         const items = []
         for (let i = 0; i < nrOfRows; i++) {
             if (annotations.length - (i + 1) * 2 < 0) {
-                const annotationMessage = annotations[i * 2]
+               
                 items.push(
                     <Row gutter={8}>
                         <Col span={12}>
-                            <AnnotationCard img={annotationMessage.img} title={annotationMessage.title} tags={[]} description={annotationMessage.text} />
+                            <AnnotationCard annotation={annotations[i * 2]} annotationIndex={i * 2}/>
                         </Col>
                     </Row>
                 )
             } else {
-                const annotationMessage1 = annotations[i * 2]
-                const annotationMessage2 = annotations[i * 2 + 1]
                 items.push(
                     <Row gutter={8}>
                         <Col span={12}>
-                            <AnnotationCard img={annotationMessage1.img} title={annotationMessage1.title} tags={[]} description={annotationMessage1.text} />
+                            <AnnotationCard annotation={annotations[i * 2]} annotationIndex={i * 2} />
                         </Col>
                         <Col span={12}>
-                            <AnnotationCard img={annotationMessage2.img} title={annotationMessage2.title} tags={[]} description={annotationMessage2.text} />
+                            <AnnotationCard annotation={annotations[i * 2 + 1]} annotationIndex={i * 2 + 1} />
                         </Col>
                     </Row>
                 )
@@ -188,3 +197,29 @@ const styles: StyleSheet = {
 }
 
 export default AnnotationScreen;
+
+type AnnotationDiscussionProps = {
+    annotation: Annotation
+    height: number
+    width: number
+}
+
+const AnnotationDiscussion = ({annotation, width, height}: AnnotationDiscussionProps) => {    
+    const textAreaRef= useRef<TextArea>(null);
+
+    return (
+        <div style={{ display: 'flex'}}> 
+            <div style={{ flex: 0.5 }}>
+                <img src={annotation.img} height={height} width={width} />
+            </div>
+            <div style={{ flex: 0.5 }}>
+                <TextArea ref={textAreaRef} rows={4} />
+                <Button style={{marginTop: '5px', float: 'right'}} onClick={() => {
+                    const text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
+                    // TODO: Make sure that comment is published.
+                    console.log()
+                }}>Publish</Button>
+            </div>
+        </div>
+    )
+}
