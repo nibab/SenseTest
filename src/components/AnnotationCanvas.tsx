@@ -34,8 +34,12 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
             return;
         }
         
-        const canvas: HTMLCanvasElement = canvasRef.current;
-        const context = canvas.getContext('2d');
+        const canvas: HTMLCanvasElement = canvasRef.current
+        const context = canvas.getContext('2d')
+
+        if (context !== null) {
+            context.clearRect(0, 0, canvas.width, canvas.height)
+        }
         
         const background = new Image()
         background.src = backgroundImage

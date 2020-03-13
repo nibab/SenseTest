@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react"
 import { Card, Button, List, Icon, Row, Col, Modal } from 'antd';
-import { StyleSheet } from '../../../src/GlobalTypes'
 import { AnnotationCanvas } from '../../components/AnnotationCanvas'
 import { EditableTagGroup } from '../../components/EditableTagGroup'
 import { AppetizeMock } from '../../components/AppetizeMock'
@@ -33,11 +32,11 @@ export const AnnotationScreen = ({ }) => {
     const renderAppetizeScreen = () => {
         return (
             <div>
-                <AppetizeMock />
-                <Button style={styles.button} onClick={() => {
+                <AppetizeMock onScreenshot={(imageSrc) => {
                     setCreateAnnotationModalHidden(false)
-                    setImageToAnnotate("newsScreenshot.png")
-                }}>Annotate</Button>
+                    setImageToAnnotate(imageSrc)
+                }} />
+                
             </div>
         )
     }
@@ -189,15 +188,6 @@ export const AnnotationScreen = ({ }) => {
             </div>
         </div>
     )
-}
-
-const styles: StyleSheet = {
-    button: {
-        float: 'right',
-        marginTop: '10px',
-        marginRight: '3px',
-        marginBottom: '3px'
-    }
 }
 
 export default AnnotationScreen;
