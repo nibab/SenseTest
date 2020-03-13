@@ -17,7 +17,7 @@ type EditableTagGroupState = {
 export const EditableTagGroup = ({tags}: EditableTagGroupProps) => {
   const [inputVisible, setInputVisible] = useState(false)
   const [inputValue, setInputValue] = useState("")
-  const [tagsList, setTagsList] = useState(tags !== undefined ? tags : [])
+  const [tagsList, setTagsList] = useState<string[]>([])
   const inputRef = useRef<Input>(null);
 
   const handleClose = (removedTag: string) => {
@@ -25,7 +25,7 @@ export const EditableTagGroup = ({tags}: EditableTagGroupProps) => {
     console.log(tags);
     setTagsList(tags)
   };
-  
+
   const showInput = () => {
     setInputVisible(true)
   }
@@ -61,7 +61,8 @@ export const EditableTagGroup = ({tags}: EditableTagGroupProps) => {
     );
   };
   
-  const tagChild = tagsList.map(forMap);
+  var tagChild = (tags !== undefined ? tags.map(forMap) : [])
+  tagChild.push(...tagsList.map(forMap))
   if (!inputVisible) {
       tagChild.push(
         <Tag onClick={showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
