@@ -13,6 +13,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.1.3",
     "@types/uuid": "*",
+    "@types/request": "*",
     "antd": "^3.26.3",
     "aws-amplify": "^2.2.0",
     "aws-amplify-react": "^3.1.1",
@@ -27,7 +28,8 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
     "typescript": "~3.7.2",
-    "uuid": "*"
+    "uuid": "*",
+    "request": "*"
   },
   "scripts": {
     "start": "PORT=9090 react-scripts start",
