@@ -200,12 +200,13 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
                     const text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
                     const uuid = uuidv4()
 
-                    const presignedUrlFields = await AssetStorageClient.createUploadUrl(uuid, '1')
-                    getBlobFromCanvas().then((blob) => {
-                        AssetStorageClient.uploadDataToUrl(blob, presignedUrlFields).then(() => {                            
+                    const presignedUrlFields = await AssetStorageClient.getDownloadUrl("123")
+                    console.log("Presigned url for get " + presignedUrlFields)
+                    // getBlobFromCanvas().then((blob) => {
+                    //     AssetStorageClient.uploadDataToUrl(blob, presignedUrlFields).then(() => {                            
                             
-                        })
-                    })
+                    //     })
+                    // })
 
                     onPublishButtonClick({img: canvasImageInBase64, text: text})
                     console.log()

@@ -24,9 +24,11 @@ export class AssetStorageClient {
                 }
                 
                 request.get(requestOptions, (error, response, body) => {
-                    //debugger
-                    //JSON.parse(body)
-                    resolve("test")
+                    if (response.statusCode === 200) {
+                        resolve(JSON.parse(JSON.parse(response.body))['url'])
+                    } else {
+                        reject()
+                    }
                 })
             })
         })
