@@ -34,6 +34,13 @@
             "privacy": {
                 "open": true
             }
+        },
+        {
+            "name": "/posts",
+            "lambdaFunction": "postsFunction",
+            "privacy": {
+                "open": true
+            }
         }
     ],
     "resourceName": "SnapTestAPI",
@@ -53,6 +60,9 @@
         },
         {
             "lambdaFunction": "integrationsLambda"
+        },
+        {
+            "lambdaFunction": "postsFunction"
         }
     ],
     "privacy": {
@@ -101,7 +111,15 @@
                 "Name",
                 "Arn"
             ]
+        },
+        {
+            "category": "function",
+            "resourceName": "postsFunction",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
         }
     ],
-    "uuid": "07208c1d"
+    "uuid": "87079b01"
 }

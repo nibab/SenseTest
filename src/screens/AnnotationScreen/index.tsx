@@ -5,6 +5,7 @@ import { EditableTagGroup } from '../../components/EditableTagGroup'
 import { AppetizeMock } from '../../components/AppetizeMock'
 import { Typography } from 'antd';
 import TextArea from "antd/lib/input/TextArea";
+import { PostsClient } from '../../clients/PostsClient'
 
 const { Title } = Typography;
 
@@ -24,10 +25,25 @@ export const AnnotationScreen = ({ }) => {
     const [annotationCardDetailViewHidden, setAnnotationCardDetailViewHidden] = useState(true)
     const [annotationCardDetailViewId, setAnnotationCardDetailViewId] = useState<number | null>()
     const [imageToAnnotate, setImageToAnnotate] = useState("newsScreenshot.png")
+    // Posts
+    const [getPostsFetchInProgress, setGetPostsFetchInProgress] = useState(false)
 
     const onAnnotateScreenshotClick = () => {
         setCreateAnnotationModalHidden(false)
     }
+
+    const getPosts = () => {
+        setGetPostsFetchInProgress(true)
+        PostsClient.getPostsForProject('1').then((response) => {
+            const data = response['data']
+        }).catch((err) => {
+            //debugger
+        })
+    }
+
+    useEffect(() => {
+        getPosts()
+    }, [])
 
     const renderAppetizeScreen = () => {
         return (
