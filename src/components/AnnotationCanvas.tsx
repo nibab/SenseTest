@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from "react"
 import { Button } from 'antd';
 import TextArea from "antd/lib/input/TextArea";
+import { AssetStorageClient } from "../clients/AssetStorageClient";
+import { v4 as uuidv4 } from "uuid"
 
 type AnnotationCanvasType = {
     backgroundImage: string
@@ -145,7 +147,7 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
         };
     }, [exitPaint]);
 
-    const storeCanvasImage = (): string | null => {
+    const getBase64ImageOfCanvas = (): string | null => {
         if (!canvasRef.current) {
             return null
         }
@@ -153,12 +155,32 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
         const context = canvas.getContext('2d');
         if (context) {
             var dataURL = canvas.toDataURL("image/png");
-            const base64Image = dataURL.replace(/^data:image\/(png|jpg);base64,/, "")
             //localStorage.setItem("imgData", base64Image);
-            return base64Image
+            return dataURL
         } else {
             return null
         }
+    }
+
+    const getBlobFromCanvas = (): Promise<Blob> => {
+        return new Promise((resolve, reject) => {
+            const currentCanvas = canvasRef.current
+            if (currentCanvas !== undefined && currentCanvas !== null) {
+                const context = currentCanvas.getContext('2d');
+                if (context) {
+                    currentCanvas.toBlob((blob) => {
+                        if (blob !== null) {
+                            resolve(blob)
+                        }
+                        reject()
+                    }, "image/png");                    
+                } else {
+                    reject()
+                }
+            } else {
+                reject()
+            }
+        })
     }
 
     return (
@@ -168,10 +190,24 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
             </div>
             <div style={{ flex: 0.5 }}>
                 <TextArea ref={textAreaRef} rows={4} />
-                <Button style={{marginTop: '5px', float: 'right'}} onClick={() => {
-                    const canvasImage = storeCanvasImage()
+                <Button style={{marginTop: '5px', float: 'right'}} onClick={async () => {
+                    const canvasImage = getBase64ImageOfCanvas()
+                    if (canvasImage === null) {
+                        return
+                    }
+
+                    const canvasImageInBase64 = canvasImage.replace(/^data:image\/(png|jpg);base64,/, "")
                     const text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
-                    onPublishButtonClick({img: canvasImage, text: text})
+                    const uuid = uuidv4()
+
+                    const presignedUrlFields = await AssetStorageClient.createUploadUrl(uuid, '1')
+                    getBlobFromCanvas().then((blob) => {
+                        AssetStorageClient.uploadDataToUrl(blob, presignedUrlFields).then(() => {                            
+                            
+                        })
+                    })
+
+                    onPublishButtonClick({img: canvasImageInBase64, text: text})
                     console.log()
                 }}>Publish</Button>
             </div>
