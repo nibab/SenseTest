@@ -159,14 +159,6 @@
                 },
                 {
                     "category": "function",
-                    "resourceName": "projects",
-                    "attributes": [
-                        "Name",
-                        "Arn"
-                    ]
-                },
-                {
-                    "category": "function",
                     "resourceName": "integrationsLambda",
                     "attributes": [
                         "Name",
@@ -176,6 +168,14 @@
                 {
                     "category": "function",
                     "resourceName": "postsFunction",
+                    "attributes": [
+                        "Name",
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "function",
+                    "resourceName": "projects",
                     "attributes": [
                         "Name",
                         "Arn"

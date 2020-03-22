@@ -22,13 +22,6 @@
             }
         },
         {
-            "name": "/projects",
-            "lambdaFunction": "projects",
-            "privacy": {
-                "open": true
-            }
-        },
-        {
             "name": "/integrations",
             "lambdaFunction": "integrationsLambda",
             "privacy": {
@@ -40,6 +33,17 @@
             "lambdaFunction": "postsFunction",
             "privacy": {
                 "open": true
+            }
+        },
+        {
+            "name": "/projects",
+            "lambdaFunction": "projects",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET"
+                ]
             }
         }
     ],
@@ -56,17 +60,17 @@
             "lambdaFunction": "testCaseExecutions"
         },
         {
-            "lambdaFunction": "projects"
-        },
-        {
             "lambdaFunction": "integrationsLambda"
         },
         {
             "lambdaFunction": "postsFunction"
+        },
+        {
+            "lambdaFunction": "projects"
         }
     ],
     "privacy": {
-        "auth": 0,
+        "auth": 1,
         "unauth": 0,
         "authRoleName": "amplify-snaptest-devprime-162244-authRole",
         "unAuthRoleName": "amplify-snaptest-devprime-162244-unauthRole"
@@ -98,14 +102,6 @@
         },
         {
             "category": "function",
-            "resourceName": "projects",
-            "attributes": [
-                "Name",
-                "Arn"
-            ]
-        },
-        {
-            "category": "function",
             "resourceName": "integrationsLambda",
             "attributes": [
                 "Name",
@@ -119,7 +115,15 @@
                 "Name",
                 "Arn"
             ]
+        },
+        {
+            "category": "function",
+            "resourceName": "projects",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
         }
     ],
-    "uuid": "87079b01"
+    "uuid": "37b79ac7"
 }
