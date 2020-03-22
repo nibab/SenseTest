@@ -385,6 +385,9 @@
                   }
                 },
                 "x-amazon-apigateway-any-method": {
+                  "security" : [ {
+                    "cognitoAuthorizer" : [ ]
+                  } ],
                   "consumes": [
                     "application/json"
                   ],
@@ -484,6 +487,9 @@
                   }
                 },
                 "x-amazon-apigateway-any-method": {
+                  "security" : [ {
+                    "cognitoAuthorizer" : [ ]
+                  } ],
                   "consumes": [
                     "application/json"
                   ],
@@ -584,6 +590,9 @@
                   }
                 },
                 "x-amazon-apigateway-any-method": {
+                  "security" : [ {
+                    "cognitoAuthorizer" : [ ]
+                  } ],
                   "consumes": [
                     "application/json"
                   ],
@@ -683,6 +692,9 @@
                   }
                 },
                 "x-amazon-apigateway-any-method": {
+                  "security" : [ {
+                    "cognitoAuthorizer" : [ ]
+                  } ],
                   "consumes": [
                     "application/json"
                   ],
@@ -742,6 +754,9 @@
               
               "/testCaseExecutions": {
                 "options": {
+                  "security" : [ {
+                    "cognitoAuthorizer" : [ ]
+                  } ],
                   "consumes": [
                     "application/json"
                   ],
@@ -783,6 +798,9 @@
                   }
                 },
                 "x-amazon-apigateway-any-method": {
+                  "security" : [ {
+                    "cognitoAuthorizer" : [ ]
+                  } ],
                   "consumes": [
                     "application/json"
                   ],
@@ -882,6 +900,9 @@
                   }
                 },
                 "x-amazon-apigateway-any-method": {
+                  "security" : [ {
+                    "cognitoAuthorizer" : [ ]
+                  } ],
                   "consumes": [
                     "application/json"
                   ],
@@ -982,6 +1003,9 @@
                   }
                 },
                 "x-amazon-apigateway-any-method": {
+                  "security" : [ {
+                    "cognitoAuthorizer" : [ ]
+                  } ],
                   "consumes": [
                     "application/json"
                   ],
@@ -1081,6 +1105,9 @@
                   }
                 },
                 "x-amazon-apigateway-any-method": {
+                  "security" : [ {
+                    "cognitoAuthorizer" : [ ]
+                  } ],
                   "consumes": [
                     "application/json"
                   ],
@@ -1181,6 +1208,9 @@
                   }
                 },
                 "x-amazon-apigateway-any-method": {
+                  "security" : [ {
+                    "cognitoAuthorizer" : [ ]
+                  } ],
                   "consumes": [
                     "application/json"
                   ],
@@ -1280,6 +1310,9 @@
                   }
                 },
                 "x-amazon-apigateway-any-method": {
+                  "security" : [ {
+                    "cognitoAuthorizer" : [ ]
+                  } ],
                   "consumes": [
                     "application/json"
                   ],
@@ -1380,6 +1413,9 @@
                   }
                 },
                 "x-amazon-apigateway-any-method": {
+                  "security" : [ {
+                    "cognitoAuthorizer" : [ ]
+                  } ],
                   "consumes": [
                     "application/json"
                   ],
@@ -1404,13 +1440,6 @@
                       }
                     }
                   },
-                          
-                    "security": [
-                        {
-                          "sigv4": []
-                        }
-                      ],
-                  
                   "x-amazon-apigateway-integration": {
                     "responses": {
                       "default": {
@@ -1485,6 +1514,9 @@
                   }
                 },
                 "x-amazon-apigateway-any-method": {
+                  "security" : [ {
+                    "cognitoAuthorizer" : [ ]
+                  } ],
                   "consumes": [
                     "application/json"
                   ],
@@ -1509,13 +1541,6 @@
                       }
                     }
                   },
-                          
-                    "security": [
-                        {
-                          "sigv4": []
-                        }
-                      ],
-                  
                   "x-amazon-apigateway-integration": {
                     "responses": {
                       "default": {
@@ -1550,11 +1575,17 @@
               
             },
             "securityDefinitions": {
-              "sigv4": {
+              "cognitoAuthorizer": {
                 "type": "apiKey",
                 "name": "Authorization",
                 "in": "header",
-                "x-amazon-apigateway-authtype": "awsSigv4"
+                "x-amazon-apigateway-authtype": "cognito_user_pools",
+                "x-amazon-apigateway-authorizer": {
+                  "type": "cognito_user_pools",
+                  "providerARNs": [
+                    "arn:aws:cognito-idp:us-east-1:051794589936:userpool/us-east-1_SzfcdYoJy"
+                  ]
+                }
               }
             },
             "definitions": {
@@ -1803,7 +1834,7 @@
             "RestApiId" : {
               "Ref": "SnapTestAPI"
             },
-            "Type" : "String"
+            "Type" : "COGNITO_USER_POOLS"
           }
       },  
         
