@@ -1,0 +1,20 @@
+type Project @model {
+  id: ID!
+  name: String!
+  posts: [Post] @connection(keyName: "byProject", fields: ["id"])
+}
+type Post @model 
+  @key(name: "byProject", fields:["projectId", "title"]) {
+  id: ID!
+  title: String!
+  imageId: ID!
+  projectId: ID!
+  text: String!
+  dateCreated: String!
+  comments: [Comment] @connection(name: "PostComments")
+}
+type Comment @model {
+  id: ID!
+  content: String
+  post: Post @connection(name: "PostComments")
+}

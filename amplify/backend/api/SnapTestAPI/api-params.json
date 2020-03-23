@@ -1,41 +1,6 @@
 {
     "paths": [
         {
-            "name": "/runs",
-            "lambdaFunction": "runs",
-            "privacy": {
-                "open": true
-            }
-        },
-        {
-            "name": "/testCases",
-            "lambdaFunction": "testCases",
-            "privacy": {
-                "open": true
-            }
-        },
-        {
-            "name": "/testCaseExecutions",
-            "lambdaFunction": "testCaseExecutions",
-            "privacy": {
-                "open": true
-            }
-        },
-        {
-            "name": "/integrations",
-            "lambdaFunction": "integrationsLambda",
-            "privacy": {
-                "open": true
-            }
-        },
-        {
-            "name": "/posts",
-            "lambdaFunction": "postsFunction",
-            "privacy": {
-                "open": true
-            }
-        },
-        {
             "name": "/projects",
             "lambdaFunction": "projects",
             "privacy": {
@@ -51,21 +16,6 @@
     "apiName": "SnapTestAPI",
     "functionArns": [
         {
-            "lambdaFunction": "runs"
-        },
-        {
-            "lambdaFunction": "testCases"
-        },
-        {
-            "lambdaFunction": "testCaseExecutions"
-        },
-        {
-            "lambdaFunction": "integrationsLambda"
-        },
-        {
-            "lambdaFunction": "postsFunction"
-        },
-        {
             "lambdaFunction": "projects"
         }
     ],
@@ -78,46 +28,6 @@
     "dependsOn": [
         {
             "category": "function",
-            "resourceName": "runs",
-            "attributes": [
-                "Name",
-                "Arn"
-            ]
-        },
-        {
-            "category": "function",
-            "resourceName": "testCases",
-            "attributes": [
-                "Name",
-                "Arn"
-            ]
-        },
-        {
-            "category": "function",
-            "resourceName": "testCaseExecutions",
-            "attributes": [
-                "Name",
-                "Arn"
-            ]
-        },
-        {
-            "category": "function",
-            "resourceName": "integrationsLambda",
-            "attributes": [
-                "Name",
-                "Arn"
-            ]
-        },
-        {
-            "category": "function",
-            "resourceName": "postsFunction",
-            "attributes": [
-                "Name",
-                "Arn"
-            ]
-        },
-        {
-            "category": "function",
             "resourceName": "projects",
             "attributes": [
                 "Name",
@@ -125,5 +35,5 @@
             ]
         }
     ],
-    "uuid": "37b79ac7"
+    "uuid": "1f781efe"
 }
