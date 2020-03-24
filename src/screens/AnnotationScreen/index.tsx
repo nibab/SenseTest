@@ -7,6 +7,8 @@ import { Typography } from 'antd';
 import TextArea from "antd/lib/input/TextArea";
 import { PostsClient } from '../../clients/PostsClient'
 import { v4 as uuidv4 } from "uuid"
+import { Post } from "../../types";
+import { useSelector } from "../../store";
 
 const { Title } = Typography;
 
@@ -23,6 +25,7 @@ export const AnnotationScreen = ({ }) => {
     const [createAnnotationModalHidden, setCreateAnnotationModalHidden] = useState(true)
     const [annotations, setAnnotations] = useState<Annotation[]>([
     ])
+    const postsSelector = useSelector(state => state.post)
     const [annotationCardDetailViewHidden, setAnnotationCardDetailViewHidden] = useState(true)
     const [annotationCardDetailViewId, setAnnotationCardDetailViewId] = useState<number | null>()
     const [imageToAnnotate, setImageToAnnotate] = useState("newsScreenshot.png")
@@ -75,15 +78,15 @@ export const AnnotationScreen = ({ }) => {
                     height={544}
                     onPublishButtonClick={(data) => {
                         setCreateAnnotationModalHidden(true)
-                        const currentAnnotations = annotations
-                        currentAnnotations.push({
-                            img: "data:image/png;base64," + data.img,
-                            description: "The font is not correct.",
-                            title: "Font",
-                            tags: []
-                        })
-                        setAnnotations(currentAnnotations)
-                        setImageToAnnotate("")
+                        // const currentAnnotations = annotations
+                        // currentAnnotations.push({
+                        //     img: "data:image/png;base64," + data.img,
+                        //     description: "The font is not correct.",
+                        //     title: "Font",
+                        //     tags: []
+                        // })
+                        // setAnnotations(currentAnnotations)
+                        // setImageToAnnotate("")
                     }
                     } />
             </Modal>
@@ -120,12 +123,12 @@ export const AnnotationScreen = ({ }) => {
         
     }
 
-    type AnnotationCardProps = {
-        annotation: Annotation,
+    type PostCardProps = {
+        post: Post,
         annotationIndex: number
     }
 
-    const AnnotationCard = ({annotation, annotationIndex}: AnnotationCardProps) => {
+    const PostCard = ({post, annotationIndex}: PostCardProps) => {
         return (
             <Card 
                 key={uuidv4()}
@@ -141,12 +144,12 @@ export const AnnotationScreen = ({ }) => {
                 <div style={{ flex: 1, display: 'flex', overflow: 'hidden', margin: '-10px' }}>
                     <img
                         alt="logo"
-                        src={annotation.img}
+                        src={post.image}
                         style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
                     />
                     <div style={{ flex: 0.6, marginLeft: '10px' }}>
-                        <Title level={4}>{annotation.title}</Title>
-                        {annotation.description}
+                        <Title level={4}>{post.title}</Title>
+                        {post.text}
                     </div>
                 </div>
             </Card>
@@ -154,23 +157,24 @@ export const AnnotationScreen = ({ }) => {
     }
 
     const renderAnnotationMessageColumn = () => {
+        const posts = postsSelector.posts
         // Introducing a constraint of maximum 6 cards per page. The rest of the cards will be displayed on the other pages.
-        if (annotations.length === 0) {
+        if (posts.length === 0) {
             return
         }
-        var nrOfRows = Math.ceil(annotations.length / 2)
+        var nrOfRows = Math.ceil(posts.length / 2)
         if (nrOfRows > 3) {
             // Create multiple pages
             nrOfRows = 3
-        }
+        } 
         const items = []
         for (let i = 0; i < nrOfRows; i++) {
-            if (annotations.length - (i + 1) * 2 < 0) {
+            if (posts.length - (i + 1) * 2 < 0) {
                
                 items.push(
                     <Row key={uuidv4()} gutter={8}>
                         <Col span={12}>
-                            <AnnotationCard annotation={annotations[i * 2]} annotationIndex={i * 2}/>
+                            <PostCard post={posts[i * 2]} annotationIndex={i * 2}/>
                         </Col>
                     </Row>
                 )
@@ -178,10 +182,10 @@ export const AnnotationScreen = ({ }) => {
                 items.push(
                     <Row gutter={8}>
                         <Col span={12}>
-                            <AnnotationCard annotation={annotations[i * 2]} annotationIndex={i * 2} />
+                            <PostCard post={posts[i * 2]} annotationIndex={i * 2} />
                         </Col>
                         <Col span={12}>
-                            <AnnotationCard annotation={annotations[i * 2 + 1]} annotationIndex={i * 2 + 1} />
+                            <PostCard post={posts[i * 2 + 1]} annotationIndex={i * 2 + 1} />
                         </Col>
                     </Row>
                 )

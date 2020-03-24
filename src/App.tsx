@@ -24,12 +24,18 @@ import ZeplinAuth from './utils/ZeplinAuth';
 import { Layout } from 'antd';
 import AnnotationScreen from './screens/AnnotationScreen';
 import { AutoTestScreen } from './screens/AutoTestScreen';
+import { createStore } from 'redux'
+import { rootReducer } from './store'
+import { Provider } from 'react-redux'
 
 const { Header, Content, Footer, Sider } = Layout;
 
 export const currentAuthConfig = Amplify.configure(awsconfig);
 export const SNAPTEST_API_NAME = "SnapTestAPI";
 ZeplinAuth.configure('1') // Hardcoding project id for now.
+
+// STORE
+let store = createStore(rootReducer)
 
 interface ProtectedRouteProps extends RouteProps {
   isLoggedIn: boolean,
@@ -158,14 +164,17 @@ class App extends Component<{}, AppState> {
             <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/>
           </Sider> */}
           <Layout>
-            <Content style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-            }}>
-              {this.renderContent(isLoggedIn, isLoading)}
-            </Content>
-            <Footer style={{ textAlign: 'center' }}>Isengard LLC ©2020</Footer>
+            <Provider store={store}>
+              <Content style={{
+                padding: 24,
+                margin: 0,
+                minHeight: 280,
+              }}>
+                {this.renderContent(isLoggedIn, isLoading)}
+              </Content>
+              <Footer style={{ textAlign: 'center' }}>Isengard LLC ©2020</Footer>
+            </Provider>
+            
           </Layout>
         </Layout>  
       </Router>

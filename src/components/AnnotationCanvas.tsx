@@ -3,6 +3,10 @@ import { Button } from 'antd';
 import TextArea from "antd/lib/input/TextArea";
 import { AssetStorageClient } from "../clients/AssetStorageClient";
 import { v4 as uuidv4 } from "uuid"
+import { Post } from "../types";
+import { useSelector as useReduxSelector, TypedUseSelectorHook, useDispatch } from "react-redux";
+import { addPost } from '../store/post/actions'
+import { RootState, useSelector } from '../store'
 
 type AnnotationCanvasType = {
     backgroundImage: string
@@ -26,6 +30,7 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
     const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(undefined);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const textAreaRef= useRef<TextArea>(null);
+    const dispatch = useDispatch()
 
     useEffect(() => {
         drawBackground()
@@ -215,7 +220,15 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
                     //     })
                     // })
 
-                    onPublishButtonClick({img: image, text: text})
+                    const newPost: Post = {
+                        id: 'yo',
+                        image: "data:image/png;base64," + image,
+                        projectId: '1',
+                        text: text
+                    }
+
+                    dispatch(addPost(newPost))
+                    onPublishButtonClick({img: "image", text: "text"})
                     console.log()
                 }}>Publish</Button>
             </div>
