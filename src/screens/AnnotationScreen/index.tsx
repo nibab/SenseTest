@@ -23,11 +23,9 @@ type Annotation = {
 
 export const AnnotationScreen = ({ }) => {
     const [createAnnotationModalHidden, setCreateAnnotationModalHidden] = useState(true)
-    const [annotations, setAnnotations] = useState<Annotation[]>([
-    ])
     const postsSelector = useSelector(state => state.post)
     const [annotationCardDetailViewHidden, setAnnotationCardDetailViewHidden] = useState(true)
-    const [annotationCardDetailViewId, setAnnotationCardDetailViewId] = useState<number | null>()
+    const [annotationCardDetailViewId, setAnnotationCardDetailViewId] = useState<string | null>()
     const [imageToAnnotate, setImageToAnnotate] = useState("newsScreenshot.png")
     // Posts
     const [getPostsFetchInProgress, setGetPostsFetchInProgress] = useState(false)
@@ -76,19 +74,10 @@ export const AnnotationScreen = ({ }) => {
                     backgroundImage={imageToAnnotate}
                     width={250}
                     height={544}
-                    onPublishButtonClick={(data) => {
+                    onPublishButtonClick={() => {
+                        setImageToAnnotate("")
                         setCreateAnnotationModalHidden(true)
-                        // const currentAnnotations = annotations
-                        // currentAnnotations.push({
-                        //     img: "data:image/png;base64," + data.img,
-                        //     description: "The font is not correct.",
-                        //     title: "Font",
-                        //     tags: []
-                        // })
-                        // setAnnotations(currentAnnotations)
-                        // setImageToAnnotate("")
-                    }
-                    } />
+                }}/>
             </Modal>
         )
     }
@@ -112,8 +101,8 @@ export const AnnotationScreen = ({ }) => {
                         setAnnotationCardDetailViewHidden(true)
                     }}
                 >
-                    <AnnotationDiscussion 
-                        annotation={annotations[annotationCardDetailViewId]}
+                    <PostDiscussion 
+                        post={postsSelector.posts.filter((post) => post.id === annotationCardDetailViewId)[0]}
                         width={250}
                         height={544}
                     />
@@ -128,14 +117,14 @@ export const AnnotationScreen = ({ }) => {
         annotationIndex: number
     }
 
-    const PostCard = ({post, annotationIndex}: PostCardProps) => {
+    const PostCard = ({post}: PostCardProps) => {
         return (
             <Card 
                 key={uuidv4()}
                 hoverable={true}
                 onClick={() => {
                     setAnnotationCardDetailViewHidden(false)
-                    setAnnotationCardDetailViewId(annotationIndex)
+                    setAnnotationCardDetailViewId(post.id)
                 }}
                 title={<EditableTagGroup />}
                 style={{ marginBottom: '7px' }}
@@ -180,7 +169,7 @@ export const AnnotationScreen = ({ }) => {
                 )
             } else {
                 items.push(
-                    <Row gutter={8}>
+                    <Row key={uuidv4()} gutter={8}>
                         <Col span={12}>
                             <PostCard post={posts[i * 2]} annotationIndex={i * 2} />
                         </Col>
@@ -190,7 +179,6 @@ export const AnnotationScreen = ({ }) => {
                     </Row>
                 )
             }
-
         }
 
         return (
@@ -215,19 +203,19 @@ export const AnnotationScreen = ({ }) => {
 
 export default AnnotationScreen;
 
-type AnnotationDiscussionProps = {
-    annotation: Annotation
+type PostDiscussionProps = {
+    post: Post
     height: number
     width: number
 }
 
-const AnnotationDiscussion = ({annotation, width, height}: AnnotationDiscussionProps) => {    
+const PostDiscussion = ({post, width, height}: PostDiscussionProps) => {    
     const textAreaRef= useRef<TextArea>(null);
 
     return (
         <div style={{ display: 'flex'}}> 
             <div style={{ flex: 0.5 }}>
-                <img src={annotation.img} height={height} width={width} />
+                <img src={post.image} height={height} width={width} />
             </div>
             <div style={{ flex: 0.5 }}>
                 <TextArea ref={textAreaRef} rows={4} />

@@ -12,7 +12,7 @@ type AnnotationCanvasType = {
     backgroundImage: string
     width: number
     height: number
-    onPublishButtonClick: (data: AnnotationCanvasData) => void
+    onPublishButtonClick: () => void
 }
 
 type AnnotationCanvasData = {
@@ -189,8 +189,6 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
     }
 
     const createNewAnnotationPost = (imageInBase64: string) => {
-        
-
         AssetStorageClient.getDownloadUrl("123").then((presignedUrlFields) => {
             console.log("Presigned url for get " + presignedUrlFields)
         }).catch(() => {
@@ -221,15 +219,14 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
                     // })
 
                     const newPost: Post = {
-                        id: 'yo',
+                        id: uuid,
                         image: "data:image/png;base64," + image,
                         projectId: '1',
                         text: text
                     }
 
                     dispatch(addPost(newPost))
-                    onPublishButtonClick({img: "image", text: "text"})
-                    console.log()
+                    onPublishButtonClick()
                 }}>Publish</Button>
             </div>
         </div>
