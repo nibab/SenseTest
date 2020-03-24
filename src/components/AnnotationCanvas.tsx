@@ -183,6 +183,16 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
         })
     }
 
+    const createNewAnnotationPost = (imageInBase64: string) => {
+        
+
+        AssetStorageClient.getDownloadUrl("123").then((presignedUrlFields) => {
+            console.log("Presigned url for get " + presignedUrlFields)
+        }).catch(() => {
+
+        })
+    }
+
     return (
         <div style={{ display: 'flex'}}> 
             <div style={{ flex: 0.5 }}>
@@ -196,19 +206,16 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
                         return
                     }
 
-                    const canvasImageInBase64 = canvasImage.replace(/^data:image\/(png|jpg);base64,/, "")
+                    const image = canvasImage.replace(/^data:image\/(png|jpg);base64,/, "")
                     const text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
                     const uuid = uuidv4()
-
-                    const presignedUrlFields = await AssetStorageClient.getDownloadUrl("123")
-                    console.log("Presigned url for get " + presignedUrlFields)
+                    
                     // getBlobFromCanvas().then((blob) => {
-                    //     AssetStorageClient.uploadDataToUrl(blob, presignedUrlFields).then(() => {                            
-                            
+                    //     AssetStorageClient.uploadDataToUrl(blob, presignedUrlFields).then(() => {                                 
                     //     })
                     // })
 
-                    onPublishButtonClick({img: canvasImageInBase64, text: text})
+                    onPublishButtonClick({img: image, text: text})
                     console.log()
                 }}>Publish</Button>
             </div>

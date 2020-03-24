@@ -65,7 +65,10 @@ class App extends Component<{}, AppState> {
     }).then((user: object) => {
       console.log(user);
       this.setState({ authState: { isLoggedIn: true, isLoading: false } })
-    }).catch((err: object) => console.log(err));
+    }).catch((err: object) => {
+      console.log(err)
+      this.setState({ authState: { isLoggedIn: false, isLoading: false } })
+    })
   }
 
   signOut = () => {
@@ -83,7 +86,7 @@ class App extends Component<{}, AppState> {
     return (
       <Switch>
         <Route path='/login' render={(props) => (
-          <AuthForm onUserSignIn={this.handleUserSignIn} history={props.history}/>
+          <AuthForm onUserSignIn={this.handleUserSignIn} />
         )}/>
         <ProtectedRoute
           path='/annotate'
@@ -139,8 +142,8 @@ class App extends Component<{}, AppState> {
         ></ProtectedRoute>          
         <Route path='/'>
           {isLoggedIn || isLoading ?
-            (<HomeScreen/>) :
-            (<LandingScreen/>)
+            (<Redirect to='/annotate'/>) :
+            (<AuthForm onUserSignIn={this.handleUserSignIn} />)
           }
         </Route>
       </Switch>
@@ -151,13 +154,10 @@ class App extends Component<{}, AppState> {
     return (
       <Router>
         <Layout>
-          <Sider width={256}>
+          {/* <Sider width={256}>
             <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/>
-          </Sider>
+          </Sider> */}
           <Layout>
-            <Header>
-              {/* <div style={{padding: "24px", backgroundColor: "#001529"}} /> */}   
-            </Header>
             <Content style={{
               padding: 24,
               margin: 0,
@@ -165,7 +165,7 @@ class App extends Component<{}, AppState> {
             }}>
               {this.renderContent(isLoggedIn, isLoading)}
             </Content>
-            <Footer style={{ textAlign: 'center', marginTop: '100px' }}>Isengard LLC ©2020</Footer>
+            <Footer style={{ textAlign: 'center' }}>Isengard LLC ©2020</Footer>
           </Layout>
         </Layout>  
       </Router>

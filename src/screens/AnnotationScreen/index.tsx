@@ -6,6 +6,7 @@ import { AppetizeMock } from '../../components/AppetizeMock'
 import { Typography } from 'antd';
 import TextArea from "antd/lib/input/TextArea";
 import { PostsClient } from '../../clients/PostsClient'
+import { v4 as uuidv4 } from "uuid"
 
 const { Title } = Typography;
 
@@ -126,7 +127,9 @@ export const AnnotationScreen = ({ }) => {
 
     const AnnotationCard = ({annotation, annotationIndex}: AnnotationCardProps) => {
         return (
-            <Card hoverable={true}
+            <Card 
+                key={uuidv4()}
+                hoverable={true}
                 onClick={() => {
                     setAnnotationCardDetailViewHidden(false)
                     setAnnotationCardDetailViewId(annotationIndex)
@@ -165,7 +168,7 @@ export const AnnotationScreen = ({ }) => {
             if (annotations.length - (i + 1) * 2 < 0) {
                
                 items.push(
-                    <Row gutter={8}>
+                    <Row key={uuidv4()} gutter={8}>
                         <Col span={12}>
                             <AnnotationCard annotation={annotations[i * 2]} annotationIndex={i * 2}/>
                         </Col>

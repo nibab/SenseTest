@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Authenticator, SignIn, SignUp, ConfirmSignUp } from 'aws-amplify-react';
 import { UsernameAttributes } from 'aws-amplify-react/lib-esm/Auth/common/types';
 import { History } from 'history';
+import { Redirect } from "react-router-dom"
 
 const signUpConfig = {
   hiddenDefaults: ['username', 'phone_number'],
@@ -29,7 +30,6 @@ const signUpConfig = {
 
 type AuthProps = {
   onUserSignIn: Function,
-  history: History,
 }
 
 type AuthState = {
@@ -51,14 +51,20 @@ class AuthForm extends Component<AuthProps, AuthState> {
       this.props.onUserSignIn();
     }
 
-    if (state === 'signedIn' && previousState === 'signedUp') {
-      // Go to onboarding
-    } else if (state === 'signedIn') {
-      console.log('Navigate to home')
-      this.props.history.push('/')
-    }
+    
   };
+
   render() {
+    if (this.state.currentState === 'signedIn' && this.state.previousState === 'signedUp') {
+      // Go to onboarding
+    } else if (this.state.currentState === 'signedIn') {
+      console.log('Navigate to home')
+      return (
+        <Redirect to="/" />
+      )
+      //this.props.history.push('/')
+    }
+
     return (
       <div>
         <Authenticator hideDefault={true} usernameAttributes={UsernameAttributes.EMAIL}

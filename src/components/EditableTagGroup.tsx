@@ -3,6 +3,7 @@ import React, { Props, useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import { Tag, Input, Icon } from 'antd';
+import { v4 as uuidv4 } from "uuid"
 
 type EditableTagGroupProps = {
   tags?: string[]
@@ -65,7 +66,7 @@ export const EditableTagGroup = ({tags}: EditableTagGroupProps) => {
   tagChild.push(...tagsList.map(forMap))
   if (!inputVisible) {
       tagChild.push(
-        <Tag onClick={showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
+        <Tag key={uuidv4()} onClick={showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
             <Icon type="plus" /> New Tag
         </Tag>
       )
