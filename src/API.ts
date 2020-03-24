@@ -1,4 +1,5 @@
 /* tslint:disable */
+/* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
 export type CreateProjectInput = {
@@ -396,6 +397,31 @@ export type DeleteCommentMutation = {
   } | null,
 };
 
+export type GetPostQueryVariables = {
+  id: string,
+};
+
+export type GetPostQuery = {
+  getPost:  {
+    __typename: "Post",
+    id: string,
+    title: string,
+    imageId: string,
+    projectId: string,
+    text: string,
+    dateCreated: string,
+    comments:  {
+      __typename: "ModelCommentConnection",
+      items:  Array< {
+        __typename: "Comment",
+        id: string,
+        content: string | null,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
+  } | null,
+};
+
 export type GetProjectQueryVariables = {
   id: string,
 };
@@ -440,31 +466,6 @@ export type ListProjectsQuery = {
       } | null,
     } | null > | null,
     nextToken: string | null,
-  } | null,
-};
-
-export type GetPostQueryVariables = {
-  id: string,
-};
-
-export type GetPostQuery = {
-  getPost:  {
-    __typename: "Post",
-    id: string,
-    title: string,
-    imageId: string,
-    projectId: string,
-    text: string,
-    dateCreated: string,
-    comments:  {
-      __typename: "ModelCommentConnection",
-      items:  Array< {
-        __typename: "Comment",
-        id: string,
-        content: string | null,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
   } | null,
 };
 

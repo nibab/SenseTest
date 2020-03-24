@@ -70,7 +70,7 @@
 				"Runtime": "nodejs10.x",
 				"Timeout": "25",
 				"Code": {
-					"S3Bucket": "amplify-snaptest-devprime-162244-deployment",
+					"S3Bucket": "amplify-snaptest-alpha-92806-deployment",
 					"S3Key": "amplify-builds/postsFunction-5646347a6a7273715a6b-build.zip"
 				}
 			}

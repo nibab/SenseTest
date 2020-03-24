@@ -1,119 +1,67 @@
 // tslint:disable
+// eslint-disable
 // this is an auto generated file. This will be overwritten
 
-export const onCreateProject = `subscription OnCreateProject {
-  onCreateProject {
-    id
-    name
-    posts {
-      items {
-        id
-        title
-        imageId
-        projectId
-        text
-        dateCreated
+export const onCreateProject = /* GraphQL */ `
+  subscription OnCreateProject {
+    onCreateProject {
+      id
+      name
+      posts {
+        items {
+          id
+          title
+          imageId
+          projectId
+          text
+          dateCreated
+        }
+        nextToken
       }
-      nextToken
     }
   }
-}
 `;
-export const onUpdateProject = `subscription OnUpdateProject {
-  onUpdateProject {
-    id
-    name
-    posts {
-      items {
-        id
-        title
-        imageId
-        projectId
-        text
-        dateCreated
+export const onUpdateProject = /* GraphQL */ `
+  subscription OnUpdateProject {
+    onUpdateProject {
+      id
+      name
+      posts {
+        items {
+          id
+          title
+          imageId
+          projectId
+          text
+          dateCreated
+        }
+        nextToken
       }
-      nextToken
     }
   }
-}
 `;
-export const onDeleteProject = `subscription OnDeleteProject {
-  onDeleteProject {
-    id
-    name
-    posts {
-      items {
-        id
-        title
-        imageId
-        projectId
-        text
-        dateCreated
+export const onDeleteProject = /* GraphQL */ `
+  subscription OnDeleteProject {
+    onDeleteProject {
+      id
+      name
+      posts {
+        items {
+          id
+          title
+          imageId
+          projectId
+          text
+          dateCreated
+        }
+        nextToken
       }
-      nextToken
     }
   }
-}
 `;
-export const onCreatePost = `subscription OnCreatePost {
-  onCreatePost {
-    id
-    title
-    imageId
-    projectId
-    text
-    dateCreated
-    comments {
-      items {
-        id
-        content
-      }
-      nextToken
-    }
-  }
-}
-`;
-export const onUpdatePost = `subscription OnUpdatePost {
-  onUpdatePost {
-    id
-    title
-    imageId
-    projectId
-    text
-    dateCreated
-    comments {
-      items {
-        id
-        content
-      }
-      nextToken
-    }
-  }
-}
-`;
-export const onDeletePost = `subscription OnDeletePost {
-  onDeletePost {
-    id
-    title
-    imageId
-    projectId
-    text
-    dateCreated
-    comments {
-      items {
-        id
-        content
-      }
-      nextToken
-    }
-  }
-}
-`;
-export const onCreateComment = `subscription OnCreateComment {
-  onCreateComment {
-    id
-    content
-    post {
+export const onCreatePost = /* GraphQL */ `
+  subscription OnCreatePost {
+    onCreatePost {
       id
       title
       imageId
@@ -121,17 +69,18 @@ export const onCreateComment = `subscription OnCreateComment {
       text
       dateCreated
       comments {
+        items {
+          id
+          content
+        }
         nextToken
       }
     }
   }
-}
 `;
-export const onUpdateComment = `subscription OnUpdateComment {
-  onUpdateComment {
-    id
-    content
-    post {
+export const onUpdatePost = /* GraphQL */ `
+  subscription OnUpdatePost {
+    onUpdatePost {
       id
       title
       imageId
@@ -139,17 +88,18 @@ export const onUpdateComment = `subscription OnUpdateComment {
       text
       dateCreated
       comments {
+        items {
+          id
+          content
+        }
         nextToken
       }
     }
   }
-}
 `;
-export const onDeleteComment = `subscription OnDeleteComment {
-  onDeleteComment {
-    id
-    content
-    post {
+export const onDeletePost = /* GraphQL */ `
+  subscription OnDeletePost {
+    onDeletePost {
       id
       title
       imageId
@@ -157,9 +107,69 @@ export const onDeleteComment = `subscription OnDeleteComment {
       text
       dateCreated
       comments {
+        items {
+          id
+          content
+        }
         nextToken
       }
     }
   }
-}
+`;
+export const onCreateComment = /* GraphQL */ `
+  subscription OnCreateComment {
+    onCreateComment {
+      id
+      content
+      post {
+        id
+        title
+        imageId
+        projectId
+        text
+        dateCreated
+        comments {
+          nextToken
+        }
+      }
+    }
+  }
+`;
+export const onUpdateComment = /* GraphQL */ `
+  subscription OnUpdateComment {
+    onUpdateComment {
+      id
+      content
+      post {
+        id
+        title
+        imageId
+        projectId
+        text
+        dateCreated
+        comments {
+          nextToken
+        }
+      }
+    }
+  }
+`;
+export const onDeleteComment = /* GraphQL */ `
+  subscription OnDeleteComment {
+    onDeleteComment {
+      id
+      content
+      post {
+        id
+        title
+        imageId
+        projectId
+        text
+        dateCreated
+        comments {
+          nextToken
+        }
+      }
+    }
+  }
 `;

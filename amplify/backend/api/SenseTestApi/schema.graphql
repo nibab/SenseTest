@@ -1,10 +1,11 @@
-type Project @model {
+type Project @model(queries: {list: "listProjects"}) {
   id: ID!
   name: String!
   posts: [Post] @connection(keyName: "byProject", fields: ["id"])
 }
-type Post @model 
-  @key(name: "byProject", fields:["projectId", "title"]) {
+type Post @model(queries: {list: "listPosts"})  
+  @key(name: "byProject", fields:["projectId", "title"]) 
+  {
   id: ID!
   title: String!
   imageId: ID!
@@ -13,8 +14,12 @@ type Post @model
   dateCreated: String!
   comments: [Comment] @connection(name: "PostComments")
 }
-type Comment @model {
+type Comment @model(queries: {list: "listComments", get: "getComment"}) {
   id: ID!
   content: String
   post: Post @connection(name: "PostComments")
+}
+type Query {
+  getPost(id: ID!): Post
+  getProject(id: ID!): Project
 }

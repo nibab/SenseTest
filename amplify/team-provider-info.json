@@ -1,43 +1,15 @@
 {
-    "dev": {
+    "alpha": {
         "awscloudformation": {
-            "AuthRoleName": "amplify-snaptest-dev-232134-authRole",
-            "UnauthRoleArn": "arn:aws:iam::051794589936:role/amplify-snaptest-dev-232134-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::051794589936:role/amplify-snaptest-dev-232134-authRole",
+            "AuthRoleName": "amplify-snaptest-alpha-92806-authRole",
+            "UnauthRoleArn": "arn:aws:iam::051794589936:role/amplify-snaptest-alpha-92806-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::051794589936:role/amplify-snaptest-alpha-92806-authRole",
             "Region": "us-east-1",
-            "DeploymentBucketName": "amplify-snaptest-dev-232134-deployment",
-            "UnauthRoleName": "amplify-snaptest-dev-232134-unauthRole",
-            "StackName": "amplify-snaptest-dev-232134",
-            "StackId": "arn:aws:cloudformation:us-east-1:051794589936:stack/amplify-snaptest-dev-232134/dfa0f040-1c96-11ea-8fa6-0a54954134e7",
-            "AmplifyAppId": "d1nrwu6bs0d8od"
-        },
-        "categories": {
-            "auth": {
-                "snaptestbd08bf8b": {}
-            }
-        }
-    },
-    "devprime": {
-        "awscloudformation": {
-            "AuthRoleName": "amplify-snaptest-devprime-162244-authRole",
-            "UnauthRoleArn": "arn:aws:iam::051794589936:role/amplify-snaptest-devprime-162244-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::051794589936:role/amplify-snaptest-devprime-162244-authRole",
-            "Region": "us-east-1",
-            "DeploymentBucketName": "amplify-snaptest-devprime-162244-deployment",
-            "UnauthRoleName": "amplify-snaptest-devprime-162244-unauthRole",
-            "StackName": "amplify-snaptest-devprime-162244",
-            "StackId": "arn:aws:cloudformation:us-east-1:051794589936:stack/amplify-snaptest-devprime-162244/dee799b0-1eb7-11ea-9f97-0af60b3b604b",
-            "AmplifyAppId": "d1nrwu6bs0d8od"
-        },
-        "categories": {
-            "auth": {
-                "snaptestbd08bf8b": {}
-            },
-            "function": {
-                "runs": {},
-                "testsTable": {},
-                "runsTable": {}
-            }
+            "DeploymentBucketName": "amplify-snaptest-alpha-92806-deployment",
+            "UnauthRoleName": "amplify-snaptest-alpha-92806-unauthRole",
+            "StackName": "amplify-snaptest-alpha-92806",
+            "StackId": "arn:aws:cloudformation:us-east-1:051794589936:stack/amplify-snaptest-alpha-92806/4c9d3680-6dd3-11ea-b853-0e5e10b6c293",
+            "AmplifyAppId": "d21ntmu20ohz1j"
         }
     }
 }
