@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react"
-import { Card, Button, List, Icon, Row, Col, Modal } from 'antd';
+import { Card, Button, List, Icon, Row, Col, Modal, Progress } from 'antd';
 import { AnnotationCanvas } from '../../components/AnnotationCanvas'
 import { EditableTagGroup } from '../../components/EditableTagGroup'
 import { AppetizeMock } from '../../components/AppetizeMock'
@@ -15,6 +15,7 @@ import { ListPostsQuery, ModelPostFilterInput } from "../../API";
 import { AssetStorageClient } from '../../clients/AssetStorageClient'
 import { useSelector as useReduxSelector, TypedUseSelectorHook, useDispatch } from "react-redux";
 import { addPost } from '../../store/post/actions'
+import { ImgDownloadInProgress } from "../../utils/ImgDownloadInProgress";
 
 
 const { Title } = Typography;
@@ -63,10 +64,9 @@ export const AnnotationScreen = ({ }) => {
                 const posts = response.data.listPosts.items
                 posts?.forEach(async (post) => {
                     if (post !== null) {
-                        const imageBlob = await fetchImageFromUrl(post.imageId)
                         const newPost: Post = {
                             id: post?.id,    
-                            image: imageBlob,
+                            image: fetchImageFromUrl(post?.id),
                             projectId: '1'
                         }
                         dispatch(addPost(newPost))
@@ -79,51 +79,11 @@ export const AnnotationScreen = ({ }) => {
         }
     }
 
-    const fetchImageFromUrl = (imageId: string): Promise<Blob> => {
-        return new Promise(async (resolve, reject) => {
-            const url = await AssetStorageClient.getDownloadUrl(imageId)
-            const response = await fetch(url, {
-                method: 'GET'
-            })
-            if (response.body !== null) {
-                const reader = response.body.getReader();
-
-                // Step 2: get total length
-                const contentLength = response.headers.get('Content-Length');
-
-                if (contentLength === null) {
-                    reject()
-                    return
-                }
-
-                // Step 3: read the data
-                let receivedLength = 0; // received that many bytes at the moment
-                let chunks = []; // array of received binary chunks (comprises the body)
-                while(true) {
-                    const {done, value} = await reader.read();
-
-                    if (done) {
-                        break;
-                    }
-
-                    chunks.push(value);
-                    receivedLength += value.length;
-
-                    console.log(`Received ${receivedLength/parseInt(contentLength)}. `)
-                }
-
-                // Step 4: concatenate chunks into single Uint8Array
-                let chunksAll = new Uint8Array(receivedLength); // (4.1)
-                let position = 0;
-                for(let chunk of chunks) {
-                    chunksAll.set(chunk, position); // (4.2)
-                    position += chunk.length;
-                }
-
-                resolve(new Blob([chunksAll]))
-            }
-            
-            
+    const fetchImageFromUrl = (id: string): ImgDownloadInProgress => {
+        const imgDownload = new ImgDownloadInProgress(id)
+        //imgDownload.image.then((img) => resolve(img))
+        return imgDownload
+                 
             // .then((url) => {
             //     return 
             // }).then((response) => {
@@ -131,7 +91,7 @@ export const AnnotationScreen = ({ }) => {
             // }).catch((error) => {
             //     reject(error)
             // })
-        })
+        //})
     }
 
     useEffect(() => {
@@ -204,12 +164,66 @@ export const AnnotationScreen = ({ }) => {
         
     }
 
-    type PostCardProps = {
-        post: Post,
-        annotationIndex: number
-    }
+    const PostCard = (post: Post) => {
+        const [progress, setProgress] = useState(0)
+        const [downloadDone, setDownloadDone] = useState<Blob | null>(null)
 
-    const PostCard = ({post}: PostCardProps) => {
+        useEffect(() => {
+            if (isImgDownloadInProgress(post.image)) {
+                if (post.image.completed) {
+                    setProgress(1)
+                } else {
+                    post.image.callback = async (progress) => {
+                        setProgress(progress)
+                        console.log(`blea ${post.id} ${progress}`)
+                    }
+                }
+                post.image.image.then((img) => {
+                    setDownloadDone(img)
+                })
+            }
+        },[])
+
+        
+
+        const renderProgess = () => {
+            // if (downloadDone && isImgDownloadInProgress(post.image)) {
+            //     const img = await post.image.image
+            //     return (
+            //         <img
+            //             alt="logo"
+            //             src={window.URL.createObjectURL(img)}
+            //             style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
+            //         />
+            //     )
+            // }
+
+            if (downloadDone === null) {
+                //console.log(`blea ${post.id} ${progress}`)
+                return (
+                    <Progress percent={progress * 100} />
+                )
+            } else {
+                return (
+                    <img
+                        alt="logo"
+                        src={window.URL.createObjectURL(downloadDone)}
+                        style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
+                    />
+                )
+            }        
+        }
+
+        const renderImage = () => {
+            return (
+                <img
+                    alt="logo"
+                    src={window.URL.createObjectURL(post.image)}
+                    style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
+                />
+            )
+        }
+
         return (
             <Card 
                 key={uuidv4()}
@@ -223,11 +237,7 @@ export const AnnotationScreen = ({ }) => {
                 bordered={false}
             >
                 <div style={{ flex: 1, display: 'flex', overflow: 'hidden', margin: '-10px' }}>
-                    <img
-                        alt="logo"
-                        src={window.URL.createObjectURL(post.image)}
-                        style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
-                    />
+                    { isImgDownloadInProgress(post.image) ? renderProgess() : renderImage()}
                     <div style={{ flex: 0.6, marginLeft: '10px' }}>
                         <Title level={4}>{post.title}</Title>
                         {post.text}
@@ -251,11 +261,10 @@ export const AnnotationScreen = ({ }) => {
         const items = []
         for (let i = 0; i < nrOfRows; i++) {
             if (posts.length - (i + 1) * 2 < 0) {
-               
                 items.push(
                     <Row key={uuidv4()} gutter={8}>
                         <Col span={12}>
-                            <PostCard post={posts[i * 2]} annotationIndex={i * 2}/>
+                            <PostCard {...posts[i * 2]} />
                         </Col>
                     </Row>
                 )
@@ -263,10 +272,10 @@ export const AnnotationScreen = ({ }) => {
                 items.push(
                     <Row key={uuidv4()} gutter={8}>
                         <Col span={12}>
-                            <PostCard post={posts[i * 2]} annotationIndex={i * 2} />
+                            <PostCard {...posts[i * 2]} />
                         </Col>
                         <Col span={12}>
-                            <PostCard post={posts[i * 2 + 1]} annotationIndex={i * 2 + 1} />
+                            <PostCard {...posts[i * 2 + 1]} />
                         </Col>
                     </Row>
                 )
@@ -319,4 +328,8 @@ const PostDiscussion = ({post, width, height}: PostDiscussionProps) => {
             </div>
         </div>
     )
+}
+
+function isImgDownloadInProgress(object: any): object is ImgDownloadInProgress{
+    return object.image !== undefined && object.completed !== undefined
 }
