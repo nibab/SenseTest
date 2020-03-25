@@ -3,10 +3,14 @@ import { Button } from 'antd';
 import TextArea from "antd/lib/input/TextArea";
 import { AssetStorageClient } from "../clients/AssetStorageClient";
 import { v4 as uuidv4 } from "uuid"
-import { Post } from "../types";
+import { Post, PostRaw } from "../types";
 import { useSelector as useReduxSelector, TypedUseSelectorHook, useDispatch } from "react-redux";
 import { addPost } from '../store/post/actions'
 import { RootState, useSelector } from '../store'
+import { graphqlOperation, API } from 'aws-amplify'
+import { createPost } from '../graphql/mutations'
+import { CreatePostInput } from "../API";
+
 
 type AnnotationCanvasType = {
     backgroundImage: string
@@ -188,11 +192,27 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
         })
     }
 
-    const createNewAnnotationPost = (imageInBase64: string) => {
-        AssetStorageClient.getDownloadUrl("123").then((presignedUrlFields) => {
+    const createNewAnnotationPost = (imageId: string, imageBlob: Blob, post: Post) => {
+        AssetStorageClient.createUploadUrl(imageId, "1").then((presignedUrlFields) => {
             console.log("Presigned url for get " + presignedUrlFields)
+            return AssetStorageClient.uploadDataToUrl(imageBlob, presignedUrlFields)
+        }).then(async () => {
+            try {
+                const postRequest: CreatePostInput = {
+                    id: post.id,
+                    imageId: imageId,
+                    projectId: "1",
+                    title: "2",
+                    text: "t",
+                    dateCreated: "today"
+                }
+                const result = API.graphql(graphqlOperation(createPost, {input: postRequest}))
+                console.log("Succeded in creating post.")
+            } catch (err) {
+                console.log("There has been an error in createNewAnnotationPost")
+            }
         }).catch(() => {
-
+            
         })
     }
 
@@ -212,11 +232,6 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
                     const image = canvasImage.replace(/^data:image\/(png|jpg);base64,/, "")
                     const text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
                     const uuid = uuidv4()
-                    
-                    // getBlobFromCanvas().then((blob) => {
-                    //     AssetStorageClient.uploadDataToUrl(blob, presignedUrlFields).then(() => {                                 
-                    //     })
-                    // })
 
                     const newPost: Post = {
                         id: uuid,
@@ -224,6 +239,10 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
                         projectId: '1',
                         text: text
                     }
+                    
+                    getBlobFromCanvas().then((blob) => {
+                        createNewAnnotationPost(uuid, blob, newPost)
+                    })
 
                     dispatch(addPost(newPost))
                     onPublishButtonClick()

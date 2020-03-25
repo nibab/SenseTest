@@ -9,6 +9,13 @@ import { PostsClient } from '../../clients/PostsClient'
 import { v4 as uuidv4 } from "uuid"
 import { Post } from "../../types";
 import { useSelector } from "../../store";
+import { API, graphqlOperation } from "aws-amplify";
+import { listPosts } from "../../graphql/queries"
+import { ListPostsQuery, ModelPostFilterInput } from "../../API";
+import { AssetStorageClient } from '../../clients/AssetStorageClient'
+import { useSelector as useReduxSelector, TypedUseSelectorHook, useDispatch } from "react-redux";
+import { addPost } from '../../store/post/actions'
+
 
 const { Title } = Typography;
 
@@ -29,6 +36,7 @@ export const AnnotationScreen = ({ }) => {
     const [imageToAnnotate, setImageToAnnotate] = useState("newsScreenshot.png")
     // Posts
     const [getPostsFetchInProgress, setGetPostsFetchInProgress] = useState(false)
+    const dispatch = useDispatch()
 
     const onAnnotateScreenshotClick = () => {
         setCreateAnnotationModalHidden(false)
@@ -43,8 +51,92 @@ export const AnnotationScreen = ({ }) => {
         })
     }
 
+    const getPostsGraphQl = async () => {
+        const query: ModelPostFilterInput = {
+            projectId: {
+                eq: '1'
+            }
+        }
+        try {
+            const response = await API.graphql(graphqlOperation(listPosts, {filter: query})) as { data: ListPostsQuery }
+            if (response.data.listPosts !== null) {
+                const posts = response.data.listPosts.items
+                posts?.forEach(async (post) => {
+                    if (post !== null) {
+                        const imageBlob = await fetchImageFromUrl(post.imageId)
+                        const newPost: Post = {
+                            id: post?.id,    
+                            image: window.URL.createObjectURL(imageBlob),
+                            projectId: '1'
+                        }
+                        dispatch(addPost(newPost))
+                    }
+                })
+                //debugger
+            }            
+        } catch {
+            console.log("Couldnt get all posts.")
+        }
+    }
+
+    const fetchImageFromUrl = (imageId: string): Promise<Blob> => {
+        return new Promise(async (resolve, reject) => {
+            const url = await AssetStorageClient.getDownloadUrl(imageId)
+            const response = await fetch(url, {
+                method: 'GET'
+            })
+            if (response.body !== null) {
+                const reader = response.body.getReader();
+
+                // Step 2: get total length
+                const contentLength = response.headers.get('Content-Length');
+
+                if (contentLength === null) {
+                    reject()
+                    return
+                }
+
+                // Step 3: read the data
+                let receivedLength = 0; // received that many bytes at the moment
+                let chunks = []; // array of received binary chunks (comprises the body)
+                while(true) {
+                    const {done, value} = await reader.read();
+
+                    if (done) {
+                        break;
+                    }
+
+                    chunks.push(value);
+                    receivedLength += value.length;
+
+                    console.log(`Received ${receivedLength/parseInt(contentLength)}. `)
+                }
+
+                // Step 4: concatenate chunks into single Uint8Array
+                let chunksAll = new Uint8Array(receivedLength); // (4.1)
+                let position = 0;
+                for(let chunk of chunks) {
+                    chunksAll.set(chunk, position); // (4.2)
+                    position += chunk.length;
+                }
+
+                resolve(new Blob([chunksAll]))
+            }
+            
+            
+            // .then((url) => {
+            //     return 
+            // }).then((response) => {
+            //     resolve(response.blob())
+            // }).catch((error) => {
+            //     reject(error)
+            // })
+        })
+    }
+
     useEffect(() => {
         getPosts()
+        getPostsGraphQl()
     }, [])
 
     const renderAppetizeScreen = () => {

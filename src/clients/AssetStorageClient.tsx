@@ -6,7 +6,7 @@ export type PresignedUrlFields = {
   formData: FormData
 }
 
-const ASSET_STORAGE_SERVICE_URL = "https://ko5if6fuv6.execute-api.us-east-1.amazonaws.com/Alpha"
+const ASSET_STORAGE_SERVICE_URL = "https://h88wnwzfrj.execute-api.us-east-1.amazonaws.com/Alpha"
 const CREATE_UPLOAD_URL_PATH = "/createUploadUrl"
 const CREATE_DOWNLOAD_URL_PATH = "/getDownloadUrl"
 
@@ -51,25 +51,25 @@ export class AssetStorageClient {
                     json: true
                 }
                 request.post(requestOptions, (error, response, body) => {
-                    if (response['statusCode'] !== 200) {
+                    if (response === undefined || response['statusCode'] !== 200) {
                         reject()
+                    } else {
+                        const parsedResponse = JSON.parse(body)
+                        var formData = new FormData()
+                        const fields = parsedResponse["url"]["fields"]
+                        Object.keys(fields).forEach((key) => formData.append(key, fields[key]))
+                        
+                        resolve({
+                            formData: formData,
+                            url: parsedResponse["url"]["url"]
+                        })
                     }
-                    
-                    const parsedResponse = JSON.parse(body)
-                    var formData = new FormData()
-                    const fields = parsedResponse["url"]["fields"]
-                    Object.keys(fields).forEach((key) => formData.append(key, fields[key]))
-                    
-                    resolve({
-                        formData: formData,
-                        url: parsedResponse["url"]["url"]
-                    })
                 })
             })
         })
     }
 
-    static uploadDataToUrl(data: Blob, presignedUrlFields: PresignedUrlFields) {
+    static uploadDataToUrl(data: Blob, presignedUrlFields: PresignedUrlFields): Promise<void> {
         return new Promise((resolve, reject) => {
             const formData = presignedUrlFields.formData
             formData.append('file', data)        
