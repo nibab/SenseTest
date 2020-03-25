@@ -235,7 +235,7 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
 
                     const newPost: Post = {
                         id: uuid,
-                        image: "data:image/png;base64," + image,
+                        image: await getBlobFromCanvas(),
                         projectId: '1',
                         text: text
                     }

@@ -66,7 +66,7 @@ export const AnnotationScreen = ({ }) => {
                         const imageBlob = await fetchImageFromUrl(post.imageId)
                         const newPost: Post = {
                             id: post?.id,    
-                            image: window.URL.createObjectURL(imageBlob),
+                            image: imageBlob,
                             projectId: '1'
                         }
                         dispatch(addPost(newPost))
@@ -225,7 +225,7 @@ export const AnnotationScreen = ({ }) => {
                 <div style={{ flex: 1, display: 'flex', overflow: 'hidden', margin: '-10px' }}>
                     <img
                         alt="logo"
-                        src={post.image}
+                        src={window.URL.createObjectURL(post.image)}
                         style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
                     />
                     <div style={{ flex: 0.6, marginLeft: '10px' }}>
@@ -307,7 +307,7 @@ const PostDiscussion = ({post, width, height}: PostDiscussionProps) => {
     return (
         <div style={{ display: 'flex'}}> 
             <div style={{ flex: 0.5 }}>
-                <img src={post.image} height={height} width={width} />
+                <img src={window.URL.createObjectURL(post.image)} height={height} width={width} />
             </div>
             <div style={{ flex: 0.5 }}>
                 <TextArea ref={textAreaRef} rows={4} />
