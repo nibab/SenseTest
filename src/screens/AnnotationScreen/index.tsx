@@ -134,119 +134,6 @@ export const AnnotationScreen = ({ }) => {
         )
     }
 
-    const renderAnnotationCardDetailView = () => {
-        if (annotationCardDetailViewId === undefined || annotationCardDetailViewId === null) {
-            // This is an error. A detail view should never have to display a non-existent annotation.
-            return (<div></div>)
-        } else {
-            return (
-                <Modal
-                    // Make sure that there is an annotationCardDetailViewId to display, because once the modal
-                    // becomes visible, it needs an Annotation (and id) to display.
-                    visible={!annotationCardDetailViewHidden && annotationCardDetailViewId !== null}
-                    centered={true}
-                    footer={null}
-                    onOk={(base64Image) => {
-                        
-                    }}
-                    onCancel={() => {
-                        setAnnotationCardDetailViewHidden(true)
-                    }}
-                >
-                    <PostDiscussion 
-                        post={postsSelector.posts.filter((post) => post.id === annotationCardDetailViewId)[0]}
-                        width={250}
-                        height={544}
-                    />
-                </Modal>
-            )
-        }
-        
-    }
-
-    const PostCard = (post: Post) => {
-        const [progress, setProgress] = useState(0)
-        const [downloadDone, setDownloadDone] = useState<Blob | null>(null)
-
-        useEffect(() => {
-            if (isImgDownloadInProgress(post.image)) {
-                if (post.image.completed) {
-                    setProgress(1)
-                } else {
-                    post.image.callback = async (progress) => {
-                        setProgress(progress)
-                        console.log(`blea ${post.id} ${progress}`)
-                    }
-                }
-                post.image.image.then((img) => {
-                    setDownloadDone(img)
-                })
-            }
-        },[])
-
-        
-
-        const renderProgess = () => {
-            // if (downloadDone && isImgDownloadInProgress(post.image)) {
-            //     const img = await post.image.image
-            //     return (
-            //         <img
-            //             alt="logo"
-            //             src={window.URL.createObjectURL(img)}
-            //             style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
-            //         />
-            //     )
-            // }
-
-            if (downloadDone === null) {
-                //console.log(`blea ${post.id} ${progress}`)
-                return (
-                    <Progress percent={progress * 100} />
-                )
-            } else {
-                return (
-                    <img
-                        alt="logo"
-                        src={window.URL.createObjectURL(downloadDone)}
-                        style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
-                    />
-                )
-            }        
-        }
-
-        const renderImage = () => {
-            return (
-                <img
-                    alt="logo"
-                    src={window.URL.createObjectURL(post.image)}
-                    style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
-                />
-            )
-        }
-
-        return (
-            <Card 
-                key={uuidv4()}
-                hoverable={true}
-                onClick={() => {
-                    setAnnotationCardDetailViewHidden(false)
-                    setAnnotationCardDetailViewId(post.id)
-                }}
-                title={<EditableTagGroup />}
-                style={{ marginBottom: '7px' }}
-                bordered={false}
-            >
-                <div style={{ flex: 1, display: 'flex', overflow: 'hidden', margin: '-10px' }}>
-                    { isImgDownloadInProgress(post.image) ? renderProgess() : renderImage()}
-                    <div style={{ flex: 0.6, marginLeft: '10px' }}>
-                        <Title level={4}>{post.title}</Title>
-                        {post.text}
-                    </div>
-                </div>
-            </Card>
-        )
-    }
-
     const renderAnnotationMessageColumn = () => {
         const posts = postsSelector.posts
         // Introducing a constraint of maximum 6 cards per page. The rest of the cards will be displayed on the other pages.
@@ -264,7 +151,7 @@ export const AnnotationScreen = ({ }) => {
                 items.push(
                     <Row key={uuidv4()} gutter={8}>
                         <Col span={12}>
-                            <PostCard {...posts[i * 2]} />
+                            <PostCard post={posts[i * 2]} />
                         </Col>
                     </Row>
                 )
@@ -272,10 +159,10 @@ export const AnnotationScreen = ({ }) => {
                 items.push(
                     <Row key={uuidv4()} gutter={8}>
                         <Col span={12}>
-                            <PostCard {...posts[i * 2]} />
+                            <PostCard post={posts[i * 2]} />
                         </Col>
                         <Col span={12}>
-                            <PostCard {...posts[i * 2 + 1]} />
+                            <PostCard post={posts[i * 2 + 1]} />
                         </Col>
                     </Row>
                 )
@@ -296,13 +183,129 @@ export const AnnotationScreen = ({ }) => {
                 {renderAppetizeScreen()}
                 {renderCreateAnnotationModal()}
                 {renderAnnotationMessageColumn()}
-                {renderAnnotationCardDetailView()}
+                {/* {renderAnnotationCardDetailView()} */}
             </div>
         </div>
     )
 }
 
 export default AnnotationScreen;
+
+type PostCardProps = {
+    post: Post
+}
+
+const PostCard = ({post}: PostCardProps) => {
+    const [modalVisible, setModalVisible] = useState(false)
+    console.log(`Modal visible ${modalVisible}`)
+    return (
+        <div>
+            <Card 
+                key={uuidv4()}
+                hoverable={true}
+                onClick={() => {
+                    setModalVisible(true)
+                    //setAnnotationCardDetailViewId(post.id)
+                }}
+                title={<EditableTagGroup />}
+                style={{ marginBottom: '7px' }}
+                bordered={false}
+            >
+                <div style={{ flex: 1, display: 'flex', overflow: 'hidden', margin: '-10px' }}>
+                    <PostImage postImage={post.image} />
+                    
+                    <div style={{ flex: 0.6, marginLeft: '10px' }}>
+                        <Title level={4}>{post.title}</Title>
+                        {post.text}
+                    </div>
+                </div>
+            </Card>
+            <Modal
+                // Make sure that there is an annotationCardDetailViewId to display, because once the modal
+                // becomes visible, it needs an Annotation (and id) to display.
+                visible={modalVisible}
+                centered={true}
+                footer={null}
+                onOk={(base64Image) => {
+                    
+                }}
+                onCancel={() => {
+                    setModalVisible(false)
+                    console.log(`blea ${modalVisible}`)
+                }}
+            >
+                <PostDiscussion 
+                    post={post}
+                    width={250}
+                    height={544}
+                />
+            </Modal>
+        </div>
+    )
+}
+
+type PostImageProps = {
+    postImage: Blob | ImgDownloadInProgress
+}
+const PostImage = ({postImage}: PostImageProps) => {
+    const [image, setImage] = useState<Blob | null>(null)
+    const [progress, setProgress] = useState(0)
+    const [downloadDone, setDownloadDone] = useState<Blob | null>(null)
+
+    useEffect(() => {
+        if (isImgDownloadInProgress(postImage)) {
+            postImage.imagePromise.then((img) => {
+                setImage(img)
+            })
+            if (postImage.image !== undefined) {
+                setImage(postImage.image)
+            } else {
+                postImage.callback = async (progress) => {
+                    setProgress(progress)
+                }
+            }
+        } else {
+            setImage(postImage)
+        }
+    },[])
+
+    useEffect(() => {
+    
+    }, [image])
+
+    // Render progress up until the image is fully downloaded, after which show the downloaded image.
+    const renderProgess = () => {
+        if (downloadDone === null) {
+            return (
+                <Progress percent={progress * 100} />
+            )
+        } else {
+            return (
+                <img
+                    alt="logo"
+                    src={window.URL.createObjectURL(image)}
+                    style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
+                />
+            )
+        }        
+    }
+
+    const renderImage = () => {
+        return (
+            <img
+                alt="logo"
+                src={window.URL.createObjectURL(image)}
+                style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
+            />
+        )
+    }
+
+    return (
+        <div>   
+            { image === null ? renderProgess() : renderImage()}
+        </div>
+    )
+}
 
 type PostDiscussionProps = {
     post: Post
@@ -316,7 +319,8 @@ const PostDiscussion = ({post, width, height}: PostDiscussionProps) => {
     return (
         <div style={{ display: 'flex'}}> 
             <div style={{ flex: 0.5 }}>
-                <img src={window.URL.createObjectURL(post.image)} height={height} width={width} />
+                <PostImage postImage={post.image} />
+                {/* <img src={window.URL.createObjectURL(post.image)} height={height} width={width} /> */}
             </div>
             <div style={{ flex: 0.5 }}>
                 <TextArea ref={textAreaRef} rows={4} />
@@ -331,5 +335,5 @@ const PostDiscussion = ({post, width, height}: PostDiscussionProps) => {
 }
 
 function isImgDownloadInProgress(object: any): object is ImgDownloadInProgress{
-    return object.image !== undefined && object.completed !== undefined
+    return object.imagePromise !== undefined && object.completed !== undefined
 }

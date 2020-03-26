@@ -2,14 +2,18 @@ import { AssetStorageClient } from '../clients/AssetStorageClient'
 
 export class ImgDownloadInProgress {
   callback?: (progress: number) => void
-  image: Promise<Blob>
+  imagePromise: Promise<Blob>
   completed: boolean
   id: string
+  image?: Blob
   
   constructor(id: string) {
     this.id = id
-    this.image = AssetStorageClient.getDownloadUrl(id).then((url) => this.download(url))
-    this.image.then(() => this.completed = true).catch(() => this.completed = true)
+    this.imagePromise = AssetStorageClient.getDownloadUrl(id).then((url) => this.download(url))
+    this.imagePromise.then((img) => {
+      this.completed = true
+      this.image = img
+    }).catch(() => this.completed = true)
     this.completed = false
   }
 
