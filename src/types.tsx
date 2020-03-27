@@ -1,9 +1,9 @@
-import { ImgDownloadInProgress } from './utils/ImgDownloadInProgress'
+import { PostImgDownload } from './utils/PostImgDownload'
 
 export type Post = {
   id: string,
   title?: string,
-  image: Blob | ImgDownloadInProgress,
+  image: Blob | PostImgDownload,
   projectId: string,
   text?: string,
   dateCreated?: string

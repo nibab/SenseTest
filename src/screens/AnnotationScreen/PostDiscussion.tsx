@@ -16,7 +16,7 @@ export const PostDiscussion = ({post, width, height}: PostDiscussionProps) => {
   return (
       <div style={{ display: 'flex'}}> 
           <div style={{ flex: 0.5 }}>
-              <PostImage postImage={post.image} />
+              <PostImage postId={post.id} />
               {/* <img src={window.URL.createObjectURL(post.image)} height={height} width={width} /> */}
           </div>
           <div style={{ flex: 0.5 }}>

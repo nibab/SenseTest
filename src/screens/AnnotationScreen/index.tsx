@@ -15,9 +15,10 @@ import { ListPostsQuery, ModelPostFilterInput, CreatePostInput } from "../../API
 import { AssetStorageClient } from '../../clients/AssetStorageClient'
 import { useSelector as useReduxSelector, TypedUseSelectorHook, useDispatch } from "react-redux";
 import { addPost } from '../../store/post/actions'
-import { ImgDownloadInProgress } from "../../utils/ImgDownloadInProgress";
+import { PostImgDownload } from "../../utils/PostImgDownload";
 import { createPost } from "../../graphql/mutations";
 import { PostsGrid } from "./PostsGrid";
+import ProjectForm from "../../components/ProjectForm";
 
 
 const { Title } = Typography;
@@ -65,7 +66,15 @@ export const AnnotationScreen = ({ }) => {
                     if (post !== null) {
                         const newPost: Post = {
                             id: post?.id,    
-                            image: new ImgDownloadInProgress(post?.id),
+                            image: new PostImgDownload(post?.id, (blob) => {
+                                const _post = {
+                                    id: post?.id,
+                                    image: blob,
+                                    projectId: '1'
+                                }
+                                dispatch(addPost(_post))
+                                console.log('blea updated post in store')
+                            }),
                             projectId: '1'
                         }
                         dispatch(addPost(newPost))
@@ -147,11 +156,6 @@ export const AnnotationScreen = ({ }) => {
                     onPublishButtonClick={async (blobPromise, text) => {
                         const uuid = uuidv4()
                         const blob = await blobPromise
-                        
-                        // getBlobFromCanvas().then((blob) => {
-                        //     AssetStorageClient.uploadDataToUrl(blob, presignedUrlFields).then(() => {                                 
-                        //     })
-                        // })
 
                         const newPost: Post = {
                             id: uuid,

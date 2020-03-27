@@ -7,7 +7,7 @@ import { PostCard } from "./PostCard";
 export const PostsGrid = () => {
 	const postsSelector = useSelector(state => state.post)
 
-	const posts = postsSelector.posts
+	const posts = Object.keys(postsSelector.posts)
 	// Introducing a constraint of maximum 6 cards per page. The rest of the cards will be displayed on the other pages.
 	if (posts.length === 0) {
 		return (<div></div>)
@@ -23,7 +23,7 @@ export const PostsGrid = () => {
             items.push(
                 <Row key={uuidv4()} gutter={8}>
                     <Col span={12}>
-                        <PostCard post={posts[i * 2]} />
+                        <PostCard postId={posts[i * 2]} />
                     </Col>
                 </Row>
             )
@@ -31,10 +31,10 @@ export const PostsGrid = () => {
             items.push(
                 <Row key={uuidv4()} gutter={8}>
                     <Col span={12}>
-                        <PostCard post={posts[i * 2]} />
+                        <PostCard postId={posts[i * 2]} />
                     </Col>
                     <Col span={12}>
-                        <PostCard post={posts[i * 2 + 1]} />
+                        <PostCard postId={posts[i * 2 + 1]} />
                     </Col>
                 </Row>
             )

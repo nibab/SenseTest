@@ -1,36 +1,49 @@
 import React, { useState, useRef, useEffect } from "react"
-import { ImgDownloadInProgress } from "../../utils/ImgDownloadInProgress"
+import { PostImgDownload } from "../../utils/PostImgDownload"
 import { Progress } from "antd"
+import { useSelector } from "../../store"
+import { Post } from "../../types"
+import { useDispatch } from "react-redux"
+import { addPost } from "../../store/post/actions"
 
-type PostImageProps = {
-    postImage: Blob | ImgDownloadInProgress
+function useImgDownloadPost(imgDownload: PostImgDownload) {
+    const [post, setPost] = useState<Post | null>(null)
+  
+    useEffect(() => {
+        imgDownload.imagePromise.then((post) => {
+            //useDispatch()(addPost(post))
+            setPost(post)
+        })
+    })
+  
+    return post
 }
 
-export const PostImage = ({postImage}: PostImageProps) => {
+type PostImageProps = {
+    postId: string
+}
+
+export const PostImage = ({postId}: PostImageProps) => {
+    const [post, setPost] = useState<Post>(useSelector(state => state.post).posts[postId])
+    
     const [image, setImage] = useState<Blob | null>(null)
     const [progress, setProgress] = useState(0)
-    const [downloadDone, setDownloadDone] = useState<Blob | null>(null)
+    const [downloadDone, setDownloadDone] = useState<boolean>(false)
 
-    useEffect(() => {
-        if (isImgDownloadInProgress(postImage)) {
-            postImage.imagePromise.then((img) => {
-                setImage(img)
-            })
-            if (postImage.image !== undefined) {
-                setImage(postImage.image)
-            } else {
-                postImage.callback = async (progress) => {
-                    setProgress(progress)
-                }
-            }
-        } else {
-            setImage(postImage)
+    //const postToRender = useImgDownloadPost(post.image)
+
+    if (isPostImgDownload(post.image)) {
+        post.image.imagePromise.then((post) => {
+            setPost(post)
+        })
+        post.image.callback = async (progress) => {
+            setProgress(progress)
         }
-    },[])
+    }
 
     // Render progress up until the image is fully downloaded, after which show the downloaded image.
     const renderProgess = () => {
-        if (downloadDone === null) {
+        if (downloadDone === false) {
             return (
                 <Progress percent={progress * 100} />
             )
@@ -38,7 +51,7 @@ export const PostImage = ({postImage}: PostImageProps) => {
             return (
                 <img
                     alt="logo"
-                    src={window.URL.createObjectURL(image)}
+                    src={window.URL.createObjectURL(post.image)}
                     style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
                 />
             )
@@ -49,7 +62,7 @@ export const PostImage = ({postImage}: PostImageProps) => {
         return (
             <img
                 alt="logo"
-                src={window.URL.createObjectURL(image)}
+                src={window.URL.createObjectURL(post.image)}
                 style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
             />
         )
@@ -57,11 +70,11 @@ export const PostImage = ({postImage}: PostImageProps) => {
 
     return (
         <div>   
-            { image === null ? renderProgess() : renderImage()}
+            { isPostImgDownload(post.image) ? renderProgess() : renderImage()}
         </div>
     )
 }
 
-function isImgDownloadInProgress(object: any): object is ImgDownloadInProgress{
-  return object.imagePromise !== undefined && object.completed !== undefined
+function isPostImgDownload(object: any): object is PostImgDownload {
+  return object.id !== undefined && object.completed !== undefined && object.imagePromise !== undefined
 }

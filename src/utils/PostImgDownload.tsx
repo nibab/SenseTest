@@ -1,23 +1,32 @@
 import { AssetStorageClient } from '../clients/AssetStorageClient'
+import { addPost } from '../store/post/actions'
+import { useDispatch } from "react-redux"
+import { useSelector } from "../store"
+import { Post } from '../types'
 
-export class ImgDownloadInProgress {
+
+export class PostImgDownload {
   callback?: (progress: number) => void
-  imagePromise: Promise<Blob>
+  imagePromise: Promise<Post>
   completed: boolean
   id: string
   image?: Blob
+  private onDone: (blob: Blob) => void
   
-  constructor(id: string) {
+  constructor(id: string, onDone: (blob: Blob) => void) {
+    this.onDone = onDone
     this.id = id
     this.imagePromise = AssetStorageClient.getDownloadUrl(id).then((url) => this.download(url))
     this.imagePromise.then((img) => {
+      this.completed = true      
+      console.log('blea updated the post')
+    }).catch(() => {
       this.completed = true
-      this.image = img
-    }).catch(() => this.completed = true)
+    })
     this.completed = false
   }
 
-  download(url: string): Promise<Blob> {
+  download(url: string): Promise<Post> {
     return new Promise(async (resolve, reject) => {
       const response = await fetch(url, {
         method: 'GET'
@@ -62,8 +71,15 @@ export class ImgDownloadInProgress {
             chunksAll.set(chunk, position); // (4.2)
             position += chunk.length;
         }
-  
-        resolve(new Blob([chunksAll]))
+
+        const blob = new Blob([chunksAll])
+        this.onDone(blob)
+
+        resolve({
+          id: this.id,
+          image: blob,
+          projectId: '1'
+        })
       }
     }) 
   }

@@ -4,7 +4,7 @@ export const ADD_POST = "ADD_POST"
 export const REMOVE_POST = "REMOVE_POST"
 
 export type PostState = {
-  posts: Post[]
+  posts: Record<string, Post>
 }
 
 interface AddPostAction {
