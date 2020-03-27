@@ -15,6 +15,7 @@
     "@types/uuid": "*",
     "@types/request": "*",
     "@types/react-redux": "*",
+    "@types/debug": "*",
     "antd": "^3.26.3",
     "aws-amplify": "^2.2.0",
     "aws-amplify-react": "^3.1.1",
@@ -31,7 +32,8 @@
     "typescript": "~3.7.2",
     "uuid": "*",
     "request": "*",
-    "react-redux": "*"
+    "react-redux": "*",
+    "debug": "*"
   },
   "scripts": {
     "start": "PORT=9090 react-scripts start",

@@ -45,7 +45,14 @@ export const PostImage = ({postId}: PostImageProps) => {
     const renderProgess = () => {
         if (downloadDone === false) {
             return (
-                <Progress percent={progress * 100} />
+                <div>
+                    <Progress percent={progress * 100} style={{ position: 'absolute'}}/>
+                    <img
+                        alt="logo"
+                        src={'downloadInProgress.png'}
+                        style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
+                    />
+                </div>
             )
         } else {
             return (

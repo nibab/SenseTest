@@ -37,6 +37,11 @@ ZeplinAuth.configure('1') // Hardcoding project id for now.
 // STORE
 let store = createStore(rootReducer)
 
+// LOGGING
+if (process.env.NODE_ENV !== 'production') {
+  localStorage.setItem('debug', 'prerelease-react-app:*');
+}
+
 interface ProtectedRouteProps extends RouteProps {
   isLoggedIn: boolean,
   isLoading: boolean,

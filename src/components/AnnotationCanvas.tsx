@@ -10,6 +10,7 @@ import { graphqlOperation, API } from 'aws-amplify'
 import { createPost } from '../graphql/mutations'
 import { CreatePostInput } from "../API";
 import 'antd/dist/antd.css';
+import Log from "../utils/Log";
 
 type AnnotationCanvasType = {
     backgroundImage: string
@@ -228,7 +229,7 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
                         hasFeedback
                         //help="The information is being validated..."
                     >
-                        <Input.TextArea autoSize={{ minRows: 4, maxRows: 6 }} placeholder="Description" id="validating" />
+                        <Input.TextArea ref={textAreaRef} autoSize={{ minRows: 4, maxRows: 6 }} placeholder="Description" id="validating" />
                     </Form.Item>
                 </Form>
                 <Button style={{marginTop: '5px', float: 'right'}} onClick={async () => {
@@ -237,6 +238,7 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
                         return
                     }
                     const text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
+                    Log.info(`AnnotationCanvas text from form ${text}`, 'AnnotationCanvas')
                     onPublishButtonClick(getBlobFromCanvas(), text)
                 }}>Publish</Button>
             </div>

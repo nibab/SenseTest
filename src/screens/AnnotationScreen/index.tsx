@@ -9,67 +9,63 @@ import { addPost } from '../../store/post/actions'
 import { PostImgDownload } from "../../utils/PostImgDownload";
 import { PostsGrid } from "./PostsGrid";
 import { AppetizeScreen } from './AppetizeScreen'
+import Log from "../../utils/Log";
+import { Loading } from "aws-amplify-react";
 
 export const AnnotationScreen = ({ }) => {
     // Posts
     const [getPostsFetchInProgress, setGetPostsFetchInProgress] = useState(false)
     const dispatch = useDispatch()
-
-    const getPosts = () => {
-        setGetPostsFetchInProgress(true)
-        PostsClient.getPostsForProject('1').then((response) => {
-            const data = response['data']
-        }).catch((err) => {
-            //debugger
-        })
-    }
-
-    const getPostsGraphQl = async () => {
+    
+    const getPostsGraphQl = async (projectId: string) => {
         const query: ModelPostFilterInput = {
             projectId: {
-                eq: '1'
+                eq: projectId
             }
         }
         try {
+            setGetPostsFetchInProgress(true)
             const response = await API.graphql(graphqlOperation(listPosts, {filter: query})) as { data: ListPostsQuery }
+            setGetPostsFetchInProgress(false)
             if (response.data.listPosts !== null) {
                 const posts = response.data.listPosts.items
                 posts?.forEach(async (post) => {
                     if (post !== null) {
+                        // We want to make sure that after a post image is fully downloaded, it's updated in the redux store.
                         const newPost: Post = {
                             id: post?.id,    
                             image: new PostImgDownload(post?.id, (blob) => {
                                 const _post = {
                                     id: post?.id,
                                     image: blob,
-                                    projectId: '1'
+                                    projectId: projectId
                                 }
                                 dispatch(addPost(_post))
-                                console.log('blea updated post in store')
+                                Log.info(`Updated post ${JSON.stringify(_post)} in redux store.`)
                             }),
-                            projectId: '1'
+                            projectId: projectId,
+                            text: post.text
                         }
                         dispatch(addPost(newPost))
                     }
                 })
             }            
         } catch {
-            console.log("Couldnt get all posts.")
+            setGetPostsFetchInProgress(false)
+            Log.error("There was an issue getting all posts.", "AnnotationScreen")
         }
     }
 
     useEffect(() => {
-        getPosts()
-        getPostsGraphQl()
+        getPostsGraphQl('1')
     }, [])
 
-    return (
+    return getPostsFetchInProgress ? <Loading /> : (
         <div>
             <h4>Annotation </h4>
             <div style={{ display: 'flex', width: '100%' }}>
                 <AppetizeScreen />
                 <PostsGrid />
-                {/* {renderAnnotationCardDetailView()} */}
             </div>
         </div>
     )
