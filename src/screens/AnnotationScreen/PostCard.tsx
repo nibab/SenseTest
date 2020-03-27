@@ -12,13 +12,12 @@ const { Title } = Typography;
 
 type PostCardProps = {
     postId: string
+    onClick: () => void
 }
 
-export const PostCard = ({postId}: PostCardProps) => {
+export const PostCard = ({postId, onClick}: PostCardProps) => {
     const postsSelector = useSelector(state => state.post)
-    const [modalVisible, setModalVisible] = useState(false)
 
-    console.log(`Modal visible ${modalVisible}`)
     const post = postsSelector.posts[postId]
     return (
         <div>
@@ -26,10 +25,8 @@ export const PostCard = ({postId}: PostCardProps) => {
                 key={uuidv4()}
                 hoverable={true}
                 onClick={() => {
-                    setModalVisible(true)
-                    //setAnnotationCardDetailViewId(post.id)
+                    onClick()
                 }}
-                //title={<EditableTagGroup />}
                 style={{ marginBottom: '7px' }}
                 bordered={false}
             >
@@ -42,27 +39,6 @@ export const PostCard = ({postId}: PostCardProps) => {
                     </div>
                 </div>
             </Card>
-            <Modal
-                // Make sure that there is an annotationCardDetailViewId to display, because once the modal
-                // becomes visible, it needs an Annotation (and id) to display.
-                visible={modalVisible}
-                centered={true}
-                footer={null}
-                title={"Discuss"}
-                onOk={(base64Image) => {
-                    
-                }}
-                onCancel={() => {
-                    setModalVisible(false)
-                    console.log(`blea ${modalVisible}`)
-                }}
-            >
-                <PostDiscussion 
-                    post={post}
-                    width={250}
-                    height={544}
-                />
-            </Modal>
         </div>
     )
 }
