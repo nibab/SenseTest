@@ -1,22 +1,21 @@
 import React, { useState, useEffect, useRef, useCallback } from "react"
-import { Button } from 'antd';
+import { Input, Form, Modal, Button } from 'antd';
 import TextArea from "antd/lib/input/TextArea";
 import { AssetStorageClient } from "../clients/AssetStorageClient";
 import { v4 as uuidv4 } from "uuid"
-import { Post, PostRaw } from "../types";
-import { useSelector as useReduxSelector, TypedUseSelectorHook, useDispatch } from "react-redux";
+import { Post } from "../types";
+import { useDispatch } from "react-redux";
 import { addPost } from '../store/post/actions'
-import { RootState, useSelector } from '../store'
 import { graphqlOperation, API } from 'aws-amplify'
 import { createPost } from '../graphql/mutations'
 import { CreatePostInput } from "../API";
-
+import 'antd/dist/antd.css';
 
 type AnnotationCanvasType = {
     backgroundImage: string
-    width: number
-    height: number
-    onPublishButtonClick: () => void
+    onPublishButtonClick: (blobPromise: Promise<Blob>, text: string) => void
+    onCancel: () => void
+    visible: boolean
 }
 
 type AnnotationCanvasData = {
@@ -29,7 +28,7 @@ type Coordinate = {
     y: number
 }
 
-export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButtonClick}: AnnotationCanvasType) => {
+export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCancel, visible}: AnnotationCanvasType) => {
     const [isPainting, setIsPainting] = useState(false);
     const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(undefined);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -42,12 +41,18 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
 
     const drawBackground = () => {
         if (!canvasRef.current) {
-            return;
+            return
         }
         
         const canvas: HTMLCanvasElement = canvasRef.current
         const context = canvas.getContext('2d')
 
+        canvas.style.width ='100%';
+        canvas.style.height='100%';
+        // ...then set the internal size to match
+        canvas.width  = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        
         if (context !== null) {
             context.clearRect(0, 0, canvas.width, canvas.height)
         }
@@ -55,10 +60,24 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
         const background = new Image()
         background.src = backgroundImage
         background.crossOrigin = 'anonymous'
-        
-        background.onload = () => {    
-            context?.drawImage(background, 0, 0, width, height)
+
+        var wrh = background.width / background.height;
+        var newWidth = canvas.width;
+        var newHeight = newWidth / wrh;
+        if (newHeight > canvas.height) {
+            newHeight = canvas.height;
+            newWidth = newHeight * wrh;
         }
+        background.onload = () => {  
+            context?.drawImage(background, 0, 0, newWidth, newHeight)
+        }
+
+        window.addEventListener('resize', (event) => {
+            const context = canvas.getContext('2d')
+            canvas.width  = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            context?.drawImage(background, 0, 0, newWidth, newHeight)
+        })
     }
 
     const getCoordinates = (event: MouseEvent): Coordinate | undefined => {
@@ -66,12 +85,11 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
             return;
         }
     
-        const canvas: HTMLCanvasElement = canvasRef.current;
-        const parentOffsetY = (window.innerHeight - (canvas.offsetParent as any)?.offsetHeight)/2
-        const parentOffsetX = (window.innerWidth - (canvas.offsetParent as any)?.offsetWidth)/2
+        const canvasCoordinateX = (canvasRef.current.parentNode! as Element).getBoundingClientRect().x
+        const canvasCoordinateY = (canvasRef.current.parentNode! as Element).getBoundingClientRect().y
         const coordinate: Coordinate = {
-            x: event.clientX - canvas.offsetLeft - parentOffsetX ,
-            y: event.clientY - canvas.offsetTop/2 - parentOffsetY
+            x: event.clientX - canvasCoordinateX,
+            y: event.clientY - canvasCoordinateY
         }
         return coordinate
     };
@@ -99,7 +117,6 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
             context.moveTo(originalMousePosition.x, originalMousePosition.y);
             context.lineTo(newMousePosition.x, newMousePosition.y);
             context.closePath();
-
             context.stroke();
         }
     };
@@ -164,7 +181,6 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
         const context = canvas.getContext('2d');
         if (context) {
             var dataURL = canvas.toDataURL("image/png");
-            //localStorage.setItem("imgData", base64Image);
             return dataURL
         } else {
             return null
@@ -192,60 +208,36 @@ export const AnnotationCanvas = ({backgroundImage, width, height, onPublishButto
         })
     }
 
-    const createNewAnnotationPost = (imageId: string, imageBlob: Blob, post: Post) => {
-        AssetStorageClient.createUploadUrl(imageId, "1").then((presignedUrlFields) => {
-            console.log("Presigned url for get " + presignedUrlFields)
-            return AssetStorageClient.uploadDataToUrl(imageBlob, presignedUrlFields)
-        }).then(async () => {
-            try {
-                const postRequest: CreatePostInput = {
-                    id: post.id,
-                    imageId: imageId,
-                    projectId: "1",
-                    title: "2",
-                    text: "t",
-                    dateCreated: "today"
-                }
-                const result = API.graphql(graphqlOperation(createPost, {input: postRequest}))
-                console.log("Succeded in creating post.")
-            } catch (err) {
-                console.log("There has been an error in createNewAnnotationPost")
-            }
-        }).catch(() => {
-            
-        })
-    }
-
     return (
-        <div style={{ display: 'flex'}}> 
-            <div style={{ flex: 0.5 }}>
-                <canvas ref={canvasRef} onLoad={() => console.log('blea')} height={height} width={width} />
+        <div style={{ display: 'flex', height: '70vh'}} onLoad={() => console.log('blea canvasref')}> 
+            <div style={{ flex: 0.35, alignContent: 'right'}}>
+                <canvas ref={canvasRef} height={'480'} width={'100%'} />
             </div>
-            <div style={{ flex: 0.5 }}>
-                <TextArea ref={textAreaRef} rows={4} />
+            <div style={{ flex: 0.6, paddingLeft: '30px' }}>
+                <Form layout='vertical'>
+                    <Form.Item
+                        label="Title"
+                        validateStatus="success"
+                        //help="Cannot be empty."
+                    >
+                        <Input placeholder="New Issue When Loading" id="error" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Description"
+                        hasFeedback
+                        //help="The information is being validated..."
+                    >
+                        <Input.TextArea autoSize={{ minRows: 4, maxRows: 6 }} placeholder="Description" id="validating" />
+                    </Form.Item>
+                </Form>
                 <Button style={{marginTop: '5px', float: 'right'}} onClick={async () => {
                     const canvasImage = getBase64ImageOfCanvas()
                     if (canvasImage === null) {
                         return
                     }
-
-                    const image = canvasImage.replace(/^data:image\/(png|jpg);base64,/, "")
                     const text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
-                    const uuid = uuidv4()
-
-                    const newPost: Post = {
-                        id: uuid,
-                        image: await getBlobFromCanvas(),
-                        projectId: '1',
-                        text: text
-                    }
-                    
-                    getBlobFromCanvas().then((blob) => {
-                        createNewAnnotationPost(uuid, blob, newPost)
-                    })
-
-                    dispatch(addPost(newPost))
-                    onPublishButtonClick()
+                    onPublishButtonClick(getBlobFromCanvas(), text)
                 }}>Publish</Button>
             </div>
         </div>

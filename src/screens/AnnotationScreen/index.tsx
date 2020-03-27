@@ -11,11 +11,13 @@ import { Post } from "../../types";
 import { useSelector } from "../../store";
 import { API, graphqlOperation } from "aws-amplify";
 import { listPosts } from "../../graphql/queries"
-import { ListPostsQuery, ModelPostFilterInput } from "../../API";
+import { ListPostsQuery, ModelPostFilterInput, CreatePostInput } from "../../API";
 import { AssetStorageClient } from '../../clients/AssetStorageClient'
 import { useSelector as useReduxSelector, TypedUseSelectorHook, useDispatch } from "react-redux";
 import { addPost } from '../../store/post/actions'
 import { ImgDownloadInProgress } from "../../utils/ImgDownloadInProgress";
+import { createPost } from "../../graphql/mutations";
+import { PostsGrid } from "./PostsGrid";
 
 
 const { Title } = Typography;
@@ -31,9 +33,6 @@ type Annotation = {
 
 export const AnnotationScreen = ({ }) => {
     const [createAnnotationModalHidden, setCreateAnnotationModalHidden] = useState(true)
-    const postsSelector = useSelector(state => state.post)
-    const [annotationCardDetailViewHidden, setAnnotationCardDetailViewHidden] = useState(true)
-    const [annotationCardDetailViewId, setAnnotationCardDetailViewId] = useState<string | null>()
     const [imageToAnnotate, setImageToAnnotate] = useState("newsScreenshot.png")
     // Posts
     const [getPostsFetchInProgress, setGetPostsFetchInProgress] = useState(false)
@@ -66,32 +65,16 @@ export const AnnotationScreen = ({ }) => {
                     if (post !== null) {
                         const newPost: Post = {
                             id: post?.id,    
-                            image: fetchImageFromUrl(post?.id),
+                            image: new ImgDownloadInProgress(post?.id),
                             projectId: '1'
                         }
                         dispatch(addPost(newPost))
                     }
                 })
-                //debugger
             }            
         } catch {
             console.log("Couldnt get all posts.")
         }
-    }
-
-    const fetchImageFromUrl = (id: string): ImgDownloadInProgress => {
-        const imgDownload = new ImgDownloadInProgress(id)
-        //imgDownload.image.then((img) => resolve(img))
-        return imgDownload
-                 
-            // .then((url) => {
-            //     return 
-            // }).then((response) => {
-            //     resolve(response.blob())
-            // }).catch((error) => {
-            //     reject(error)
-            // })
-        //})
     }
 
     useEffect(() => {
@@ -111,70 +94,87 @@ export const AnnotationScreen = ({ }) => {
         )
     }
 
+    const createNewAnnotationPost = (imageId: string, imageBlob: Blob, post: Post) => {
+        AssetStorageClient.createUploadUrl(imageId, "1").then((presignedUrlFields) => {
+            console.log("Presigned url for get " + presignedUrlFields)
+            return AssetStorageClient.uploadDataToUrl(imageBlob, presignedUrlFields)
+        }).then(async () => {
+            try {
+                const postRequest: CreatePostInput = {
+                    id: post.id,
+                    imageId: imageId,
+                    projectId: "1",
+                    title: "2",
+                    text: "t",
+                    dateCreated: "today"
+                }
+                API.graphql(graphqlOperation(createPost, {input: postRequest}))
+                console.log("Succeded in creating post.")
+            } catch (err) {
+                console.log("There has been an error in createNewAnnotationPost")
+            }
+        }).catch(() => {
+            
+        })
+    }
+
     const renderCreateAnnotationModal = () => {
         return (
             <Modal
+                title={"Create New Post"}
                 visible={!createAnnotationModalHidden}
                 centered={true}
-                footer={null}
                 onCancel={() => {
+                    //onCancel()
                     setImageToAnnotate("")
                     setCreateAnnotationModalHidden(true)
                 }}
+                footer={null}
+                width={'50%'}
+                style={{
+                    minWidth: '650px'
+                }}
+                bodyStyle={{
+                    minHeight: '50vh', 
+                    maxHeight: '75vh',
+                    overflow: "auto",
+                    
+                }}
             >
                 <AnnotationCanvas
+                    visible={!createAnnotationModalHidden}
                     backgroundImage={imageToAnnotate}
-                    width={250}
-                    height={544}
-                    onPublishButtonClick={() => {
+                    onPublishButtonClick={async (blobPromise, text) => {
+                        const uuid = uuidv4()
+                        const blob = await blobPromise
+                        
+                        // getBlobFromCanvas().then((blob) => {
+                        //     AssetStorageClient.uploadDataToUrl(blob, presignedUrlFields).then(() => {                                 
+                        //     })
+                        // })
+
+                        const newPost: Post = {
+                            id: uuid,
+                            image: blob,
+                            projectId: '1',
+                            text: text
+                        }
+
+                        dispatch(addPost(newPost))
                         setImageToAnnotate("")
+                        createNewAnnotationPost(uuid, blob, newPost)
                         setCreateAnnotationModalHidden(true)
-                }}/>
+                    }}
+                    onCancel={() => {
+                        console.log('blea cancel')
+                        setCreateAnnotationModalHidden(true)
+                    }}
+                />
             </Modal>
         )
     }
 
-    const renderAnnotationMessageColumn = () => {
-        const posts = postsSelector.posts
-        // Introducing a constraint of maximum 6 cards per page. The rest of the cards will be displayed on the other pages.
-        if (posts.length === 0) {
-            return
-        }
-        var nrOfRows = Math.ceil(posts.length / 2)
-        if (nrOfRows > 3) {
-            // Create multiple pages
-            nrOfRows = 3
-        } 
-        const items = []
-        for (let i = 0; i < nrOfRows; i++) {
-            if (posts.length - (i + 1) * 2 < 0) {
-                items.push(
-                    <Row key={uuidv4()} gutter={8}>
-                        <Col span={12}>
-                            <PostCard post={posts[i * 2]} />
-                        </Col>
-                    </Row>
-                )
-            } else {
-                items.push(
-                    <Row key={uuidv4()} gutter={8}>
-                        <Col span={12}>
-                            <PostCard post={posts[i * 2]} />
-                        </Col>
-                        <Col span={12}>
-                            <PostCard post={posts[i * 2 + 1]} />
-                        </Col>
-                    </Row>
-                )
-            }
-        }
-
-        return (
-            <div style={{ marginLeft: '20px', flex: '1' }}>
-                {items}
-            </div>
-        )
-    }
+    
 
     return (
         <div>
@@ -182,7 +182,7 @@ export const AnnotationScreen = ({ }) => {
             <div style={{ display: 'flex', width: '100%' }}>
                 {renderAppetizeScreen()}
                 {renderCreateAnnotationModal()}
-                {renderAnnotationMessageColumn()}
+                <PostsGrid />
                 {/* {renderAnnotationCardDetailView()} */}
             </div>
         </div>
@@ -191,149 +191,7 @@ export const AnnotationScreen = ({ }) => {
 
 export default AnnotationScreen;
 
-type PostCardProps = {
-    post: Post
-}
 
-const PostCard = ({post}: PostCardProps) => {
-    const [modalVisible, setModalVisible] = useState(false)
-    console.log(`Modal visible ${modalVisible}`)
-    return (
-        <div>
-            <Card 
-                key={uuidv4()}
-                hoverable={true}
-                onClick={() => {
-                    setModalVisible(true)
-                    //setAnnotationCardDetailViewId(post.id)
-                }}
-                title={<EditableTagGroup />}
-                style={{ marginBottom: '7px' }}
-                bordered={false}
-            >
-                <div style={{ flex: 1, display: 'flex', overflow: 'hidden', margin: '-10px' }}>
-                    <PostImage postImage={post.image} />
-                    
-                    <div style={{ flex: 0.6, marginLeft: '10px' }}>
-                        <Title level={4}>{post.title}</Title>
-                        {post.text}
-                    </div>
-                </div>
-            </Card>
-            <Modal
-                // Make sure that there is an annotationCardDetailViewId to display, because once the modal
-                // becomes visible, it needs an Annotation (and id) to display.
-                visible={modalVisible}
-                centered={true}
-                footer={null}
-                onOk={(base64Image) => {
-                    
-                }}
-                onCancel={() => {
-                    setModalVisible(false)
-                    console.log(`blea ${modalVisible}`)
-                }}
-            >
-                <PostDiscussion 
-                    post={post}
-                    width={250}
-                    height={544}
-                />
-            </Modal>
-        </div>
-    )
-}
 
-type PostImageProps = {
-    postImage: Blob | ImgDownloadInProgress
-}
-const PostImage = ({postImage}: PostImageProps) => {
-    const [image, setImage] = useState<Blob | null>(null)
-    const [progress, setProgress] = useState(0)
-    const [downloadDone, setDownloadDone] = useState<Blob | null>(null)
 
-    useEffect(() => {
-        if (isImgDownloadInProgress(postImage)) {
-            postImage.imagePromise.then((img) => {
-                setImage(img)
-            })
-            if (postImage.image !== undefined) {
-                setImage(postImage.image)
-            } else {
-                postImage.callback = async (progress) => {
-                    setProgress(progress)
-                }
-            }
-        } else {
-            setImage(postImage)
-        }
-    },[])
 
-    useEffect(() => {
-    
-    }, [image])
-
-    // Render progress up until the image is fully downloaded, after which show the downloaded image.
-    const renderProgess = () => {
-        if (downloadDone === null) {
-            return (
-                <Progress percent={progress * 100} />
-            )
-        } else {
-            return (
-                <img
-                    alt="logo"
-                    src={window.URL.createObjectURL(image)}
-                    style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
-                />
-            )
-        }        
-    }
-
-    const renderImage = () => {
-        return (
-            <img
-                alt="logo"
-                src={window.URL.createObjectURL(image)}
-                style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
-            />
-        )
-    }
-
-    return (
-        <div>   
-            { image === null ? renderProgess() : renderImage()}
-        </div>
-    )
-}
-
-type PostDiscussionProps = {
-    post: Post
-    height: number
-    width: number
-}
-
-const PostDiscussion = ({post, width, height}: PostDiscussionProps) => {    
-    const textAreaRef= useRef<TextArea>(null);
-
-    return (
-        <div style={{ display: 'flex'}}> 
-            <div style={{ flex: 0.5 }}>
-                <PostImage postImage={post.image} />
-                {/* <img src={window.URL.createObjectURL(post.image)} height={height} width={width} /> */}
-            </div>
-            <div style={{ flex: 0.5 }}>
-                <TextArea ref={textAreaRef} rows={4} />
-                <Button style={{marginTop: '5px', float: 'right'}} onClick={() => {
-                    const text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
-                    // TODO: Make sure that comment is published.
-                    console.log()
-                }}>Publish</Button>
-            </div>
-        </div>
-    )
-}
-
-function isImgDownloadInProgress(object: any): object is ImgDownloadInProgress{
-    return object.imagePromise !== undefined && object.completed !== undefined
-}
