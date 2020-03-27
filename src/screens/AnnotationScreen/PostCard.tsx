@@ -6,6 +6,7 @@ import { PostImage } from "./PostImage"
 import { PostDiscussion } from "./PostDiscussion"
 import { Typography } from 'antd'
 import { useSelector } from "../../store"
+import Meta from "antd/lib/card/Meta"
 
 
 const { Title } = Typography;
@@ -27,17 +28,17 @@ export const PostCard = ({postId, onClick}: PostCardProps) => {
                 onClick={() => {
                     onClick()
                 }}
-                style={{ marginBottom: '7px' }}
-                bordered={false}
+                cover={<PostImage postId={postId} height={100} width={150}/>}
+                bordered={true}
+                style={{ maxWidth: '150px', height: '400px'}}
             >
-                <div style={{ flex: 1, display: 'flex', overflow: 'hidden', margin: '-10px' }}>
-                    <PostImage postId={postId} />
-                    
+                <Meta title={"TestTitle"}></Meta>
+                {/* <div style={{ flex: 1, display: 'flex', overflow: 'hidden', margin: '-10px' }}>                    
                     <div style={{ flex: 0.6, marginLeft: '10px' }}>
                         <Title level={4}>{post.title}</Title>
                         {post.text}
                     </div>
-                </div>
+                </div> */}
             </Card>
         </div>
     )

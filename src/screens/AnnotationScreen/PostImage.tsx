@@ -5,6 +5,7 @@ import { useSelector } from "../../store"
 import { Post } from "../../types"
 import { useDispatch } from "react-redux"
 import { addPost } from "../../store/post/actions"
+import { StyleSheet } from "../../GlobalTypes"
 
 function useImgDownloadPost(imgDownload: PostImgDownload) {
     const [post, setPost] = useState<Post | null>(null)
@@ -20,10 +21,12 @@ function useImgDownloadPost(imgDownload: PostImgDownload) {
 }
 
 type PostImageProps = {
-    postId: string
+    postId: string,
+    height: number,
+    width: number
 }
 
-export const PostImage = ({postId}: PostImageProps) => {
+export const PostImage = ({postId, height, width}: PostImageProps) => {
     const [post, setPost] = useState<Post>(useSelector(state => state.post).posts[postId])
     
     const [image, setImage] = useState<Blob | null>(null)
@@ -46,32 +49,20 @@ export const PostImage = ({postId}: PostImageProps) => {
         if (downloadDone === false) {
             return (
                 <div>
-                    <Progress percent={progress * 100} style={{ position: 'absolute'}}/>
-                    <img
-                        alt="logo"
-                        src={'downloadInProgress.png'}
-                        style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
-                    />
+                    {/* <Progress percent={progress * 100} style={{ position: 'absolute'}}/> */}
+                    <img src={'downloadInProgress.png'} style={styles.img} />
                 </div>
             )
         } else {
             return (
-                <img
-                    alt="logo"
-                    src={window.URL.createObjectURL(post.image)}
-                    style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
-                />
+                <img src={window.URL.createObjectURL(post.image)} style={styles.img}/>
             )
         }        
     }
 
     const renderImage = () => {
         return (
-            <img
-                alt="logo"
-                src={window.URL.createObjectURL(post.image)}
-                style={{ flex: 0.4, height: '272px', width: 'auto', objectFit: 'contain' }}
-            />
+            <img src={window.URL.createObjectURL(post.image)} style={styles.img}/>
         )
     }
 
@@ -84,4 +75,12 @@ export const PostImage = ({postId}: PostImageProps) => {
 
 function isPostImgDownload(object: any): object is PostImgDownload {
   return object.id !== undefined && object.completed !== undefined && object.imagePromise !== undefined
+}
+
+const styles: StyleSheet = {
+    img: {
+        objectFit: 'contain',
+        maxWidth: '100%',
+        height: 'auto'
+    }
 }
