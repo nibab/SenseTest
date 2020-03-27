@@ -39,10 +39,12 @@
     "uuid": "*"
   },
   "scripts": {
-    "start": "PORT=9090 react-scripts start",
-    "build": "react-scripts build",
+    "start": "PORT=9090 react-scripts start && npm run watch:css",
+    "build": "npm run build:css && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:css": "postcss assets/tailwind.css -o public/assets/main.css",
+    "watch:css": "postcss assets/tailwind.css -o public/assets/main.css"
   },
   "eslintConfig": {
     "extends": "react-app"
