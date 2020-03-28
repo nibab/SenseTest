@@ -16,6 +16,8 @@ export const AnnotationScreen = ({ }) => {
     // Posts
     const [getPostsFetchInProgress, setGetPostsFetchInProgress] = useState(false)
     const dispatch = useDispatch()
+
+
     
     const getPostsGraphQl = async (projectId: string) => {
         const query: ModelPostFilterInput = {
@@ -31,21 +33,23 @@ export const AnnotationScreen = ({ }) => {
                 const posts = response.data.listPosts.items
                 posts?.forEach(async (post) => {
                     if (post !== null) {
+                        const postImgDownload = new PostImgDownload(post?.id, (blob) => {
+                            const _post = {
+                                id: post?.id,
+                                image: blob,
+                                projectId: projectId
+                            }
+                            //dispatch(addPost(_post))
+                            Log.info(`Updated post ${JSON.stringify(_post)} in redux store.`)
+                        })
+                        const newPost = await postImgDownload.imagePromise
                         // We want to make sure that after a post image is fully downloaded, it's updated in the redux store.
-                        const newPost: Post = {
-                            id: post?.id,    
-                            image: new PostImgDownload(post?.id, (blob) => {
-                                const _post = {
-                                    id: post?.id,
-                                    image: blob,
-                                    projectId: projectId
-                                }
-                                dispatch(addPost(_post))
-                                Log.info(`Updated post ${JSON.stringify(_post)} in redux store.`)
-                            }),
-                            projectId: projectId,
-                            text: post.text
-                        }
+                        // const newPost: Post = {
+                        //     id: post?.id,    
+                        //     image: ,
+                        //     projectId: projectId,
+                        //     text: post.text
+                        // }
                         dispatch(addPost(newPost))
                     }
                 })
