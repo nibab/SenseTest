@@ -29,8 +29,7 @@ export const AppetizeScreen = () => {
                     imageId: imageId,
                     projectId: "1",
                     title: "2",
-                    text: post.text !== undefined ? post.text : '',
-                    dateCreated: "today"
+                    text: post.text !== undefined ? post.text : ''
                 }
                 API.graphql(graphqlOperation(createPost, {input: postRequest}))
                 console.log("Succeded in creating post.")

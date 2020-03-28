@@ -10,7 +10,6 @@ export const getPost = /* GraphQL */ `
       imageId
       projectId
       text
-      dateCreated
       comments {
         items {
           id
@@ -33,7 +32,6 @@ export const getProject = /* GraphQL */ `
           imageId
           projectId
           text
-          dateCreated
         }
         nextToken
       }
@@ -71,7 +69,6 @@ export const listPosts = /* GraphQL */ `
         imageId
         projectId
         text
-        dateCreated
         comments {
           nextToken
         }
@@ -91,7 +88,6 @@ export const getComment = /* GraphQL */ `
         imageId
         projectId
         text
-        dateCreated
         comments {
           nextToken
         }
@@ -115,7 +111,6 @@ export const listComments = /* GraphQL */ `
           imageId
           projectId
           text
-          dateCreated
         }
       }
       nextToken

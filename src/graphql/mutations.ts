@@ -17,7 +17,6 @@ export const createProject = /* GraphQL */ `
           imageId
           projectId
           text
-          dateCreated
         }
         nextToken
       }
@@ -39,7 +38,6 @@ export const updateProject = /* GraphQL */ `
           imageId
           projectId
           text
-          dateCreated
         }
         nextToken
       }
@@ -61,7 +59,6 @@ export const deleteProject = /* GraphQL */ `
           imageId
           projectId
           text
-          dateCreated
         }
         nextToken
       }
@@ -79,7 +76,6 @@ export const createPost = /* GraphQL */ `
       imageId
       projectId
       text
-      dateCreated
       comments {
         items {
           id
@@ -101,7 +97,6 @@ export const updatePost = /* GraphQL */ `
       imageId
       projectId
       text
-      dateCreated
       comments {
         items {
           id
@@ -123,7 +118,6 @@ export const deletePost = /* GraphQL */ `
       imageId
       projectId
       text
-      dateCreated
       comments {
         items {
           id
@@ -148,7 +142,6 @@ export const createComment = /* GraphQL */ `
         imageId
         projectId
         text
-        dateCreated
         comments {
           nextToken
         }
@@ -170,7 +163,6 @@ export const updateComment = /* GraphQL */ `
         imageId
         projectId
         text
-        dateCreated
         comments {
           nextToken
         }
@@ -192,7 +184,6 @@ export const deleteComment = /* GraphQL */ `
         imageId
         projectId
         text
-        dateCreated
         comments {
           nextToken
         }

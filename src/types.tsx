@@ -9,11 +9,13 @@ export type Post = {
   dateCreated?: string
 }
 
+// This is basically the raw type that we get from AppSync.
 export type FetchedPost = {
   id: string,
   title: string,
   imageId: string,
   projectId: string,
   text: string,
-  dateCreated?: string
+  createdAt?: string, // This is introduced by Amplify at the resolver level.
+  updatedAt?: string // This is introduced by Amplify at the resolver level.
 }
