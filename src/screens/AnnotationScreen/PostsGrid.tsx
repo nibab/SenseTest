@@ -39,14 +39,26 @@ export const PostsGrid = () => {
             const postId = posts[i * 2]
             const postId2 = posts[i * 2 + 1]
             items.push(
-                <Row key={uuidv4()} gutter={8}>
-                    <Col span={12}>
+                <Row key={uuidv4()} gutter={8} style={{ marginBottom: 8 }}>
+                    <Col span={6}>
                         <PostCard postId={postId} onClick={() => {
                             setPostDiscussionToDisplay(postsSelector.posts[postId])
                             setModalVisible(true)
                         }} />
                     </Col>
-                    <Col span={12}>
+                    <Col span={6}>
+                        <PostCard postId={postId} onClick={() => {
+                            setPostDiscussionToDisplay(postsSelector.posts[postId])
+                            setModalVisible(true)
+                        }} />
+                    </Col>
+                    <Col span={6}>
+                        <PostCard postId={postId} onClick={() => {
+                            setPostDiscussionToDisplay(postsSelector.posts[postId])
+                            setModalVisible(true)
+                        }} />
+                    </Col>
+                    <Col span={6}>
                         <PostCard postId={postId2} onClick={() => {
                             setPostDiscussionToDisplay(postsSelector.posts[postId2])
                             setModalVisible(true)
