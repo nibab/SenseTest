@@ -2,21 +2,21 @@ import { AssetStorageClient } from '../clients/AssetStorageClient'
 import { addPost } from '../store/post/actions'
 import { useDispatch } from "react-redux"
 import { useSelector } from "../store"
-import { FetchedPost, Post } from '../types'
+import { PostGraphQl, Post } from '../types'
 
 
 export class PostImgDownload {
   callback?: (progress: number) => void
   imagePromise: Promise<Post>
   completed: boolean
-  fetchedPost: FetchedPost
+  fetchedPost: PostGraphQl
   image?: Blob
   private onDone: (blob: Blob) => void
   
-  constructor(fetchedPost: FetchedPost, onDone: (blob: Blob) => void) {
+  constructor(fetchedPost: PostGraphQl, onDone: (blob: Blob) => void) {
     this.onDone = onDone
     this.fetchedPost = fetchedPost
-    this.imagePromise = AssetStorageClient.getDownloadUrl(fetchedPost.id).then((url) => this.download(url))
+    this.imagePromise = AssetStorageClient.getDownloadUrl(fetchedPost.imageId).then((url) => this.download(url))
     this.imagePromise.then((img) => {
       this.completed = true      
       console.log('blea updated the post')
@@ -80,7 +80,8 @@ export class PostImgDownload {
           image: blob,
           projectId: this.fetchedPost.projectId,
           text: this.fetchedPost.text,
-          title: this.fetchedPost.title
+          title: this.fetchedPost.title,
+          dateCreated: this.fetchedPost.createdAt
         })
       }
     }) 

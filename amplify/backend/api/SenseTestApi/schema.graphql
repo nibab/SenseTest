@@ -11,6 +11,8 @@ type Post @model(queries: {list: "listPosts"})
   imageId: ID!
   projectId: ID!
   text: String!
+  createdAt: String
+  updatedAt: String
   comments: [Comment] @connection(name: "PostComments")
 }
 type Comment @model(queries: {list: "listComments", get: "getComment"}) {

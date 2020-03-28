@@ -2,14 +2,15 @@ import React, { useState, useRef, useEffect } from "react"
 import { Card, Button, List, Icon, Row, Col, Modal, Progress } from 'antd'
 import { AnnotationCanvas } from '../../components/AnnotationCanvas'
 import { v4 as uuidv4 } from "uuid"
-import { Post } from "../../types"
+import { Post, PostGraphQl } from "../../types"
 import { addPost } from '../../store/post/actions'
 import { useSelector as useReduxSelector, TypedUseSelectorHook, useDispatch } from "react-redux"
 import { AssetStorageClient } from "../../clients/AssetStorageClient"
-import { CreatePostInput } from "../../API"
+import { CreatePostInput, CreatePostMutation } from "../../API"
 import { API, graphqlOperation } from "aws-amplify"
 import { createPost } from "../../graphql/mutations"
 import { AppetizeMock } from '../../components/AppetizeMock'
+import Log from "../../utils/Log"
 
 
 
@@ -18,27 +19,34 @@ export const AppetizeScreen = () => {
 	const [imageToAnnotate, setImageToAnnotate] = useState("newsScreenshot.png")
 	const dispatch = useDispatch()
 	
-	const createNewAnnotationPost = (imageId: string, imageBlob: Blob, post: Post) => {
-        AssetStorageClient.createUploadUrl(imageId, "1").then((presignedUrlFields) => {
-            console.log("Presigned url for get " + presignedUrlFields)
-            return AssetStorageClient.uploadDataToUrl(imageBlob, presignedUrlFields)
-        }).then(async () => {
-            try {
-                const postRequest: CreatePostInput = {
-                    id: post.id,
-                    imageId: imageId,
-                    projectId: "1",
-                    title: "2",
-                    text: post.text !== undefined ? post.text : ''
-                }
-                API.graphql(graphqlOperation(createPost, {input: postRequest}))
-                console.log("Succeded in creating post.")
-            } catch (err) {
-                console.log("There has been an error in createNewAnnotationPost")
-            }
-        }).catch(() => {
-            
-        })
+	const createNewAnnotationPost = (imageBlob: Blob, createPostInput: CreatePostInput): Promise<Post> => {
+		return new Promise((resolve, reject) => {
+			AssetStorageClient.createUploadUrl(createPostInput.imageId, createPostInput.projectId).then((presignedUrlFields) => {
+				console.log("Presigned url for get " + presignedUrlFields)
+				return AssetStorageClient.uploadDataToUrl(imageBlob, presignedUrlFields)
+			}).then(async () => {
+				try {
+					const createNewAnnotationResult = (await API.graphql(graphqlOperation(createPost, {input: createPostInput}))) as { data: CreatePostMutation }
+					const newPost = createNewAnnotationResult.data.createPost!
+					// Create post that can be displayed in the app.
+					const _newPost: Post = {
+						id: newPost.id,
+						title: newPost.title,
+						image: imageBlob,
+						projectId: newPost.projectId,
+						text: newPost.text,
+						dateCreated: newPost.createdAt
+					}
+					Log.info("Succeeded in creating post.", "AppetizeScreen")
+					resolve(_newPost)
+				} catch (err) {
+					console.log("There has been an error in createNewAnnotationPost")
+				}
+			}).catch(() => {
+				
+			})
+		})
+        
     }
 
 	const renderCreateAnnotationModal = () => {
@@ -68,7 +76,6 @@ export const AppetizeScreen = () => {
                     visible={!createAnnotationModalHidden}
                     backgroundImage={imageToAnnotate}
                     onPublishButtonClick={async (blobPromise, text) => {
-                        const uuid = uuidv4()
 						const blob = await blobPromise
 						
 						// Validate that there is text.
@@ -76,18 +83,17 @@ export const AppetizeScreen = () => {
 							text = 'Test'
 						}
 
-                        const newPost: Post = {
-                            id: uuid,
-                            image: blob,
+                        const createPostInput: CreatePostInput = {
+                            id: uuidv4(),
+                            imageId: uuidv4(),
                             projectId: '1',
 							text: text,
 							title: 'TestTitle'
                         }
-
-                        dispatch(addPost(newPost))
-                        setImageToAnnotate("")
-                        createNewAnnotationPost(uuid, blob, newPost)
-                        setCreateAnnotationModalHidden(true)
+						const newPost = await createNewAnnotationPost(blob, createPostInput)
+						dispatch(addPost(newPost))
+						setCreateAnnotationModalHidden(true)
+						setImageToAnnotate("")
                     }}
                     onCancel={() => {
                         console.log('blea cancel')

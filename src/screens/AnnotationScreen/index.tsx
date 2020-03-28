@@ -33,16 +33,7 @@ export const AnnotationScreen = ({ }) => {
                 const posts = response.data.listPosts.items
                 posts?.forEach(async (post) => {
                     if (post !== null) {
-                        const postImgDownload = new PostImgDownload(post, (blob) => {
-                            const _post = {
-                                id: post?.id,
-                                image: blob,
-                                projectId: projectId,
-                                text: post?.text
-                            }
-                            //dispatch(addPost(_post))
-                            Log.info(`Updated post ${JSON.stringify(_post)} in redux store.`)
-                        })
+                        const postImgDownload = new PostImgDownload(post, (blob) => {})
                         const newPost = await postImgDownload.imagePromise
                         // We want to make sure that after a post image is fully downloaded, it's updated in the redux store.
                         // const newPost: Post = {

@@ -69,6 +69,8 @@ export type CreatePostInput = {
   imageId: string,
   projectId: string,
   text: string,
+  createdAt?: string | null,
+  updatedAt?: string | null,
 };
 
 export type ModelPostConditionInput = {
@@ -76,6 +78,8 @@ export type ModelPostConditionInput = {
   imageId?: ModelIDInput | null,
   projectId?: ModelIDInput | null,
   text?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelPostConditionInput | null > | null,
   or?: Array< ModelPostConditionInput | null > | null,
   not?: ModelPostConditionInput | null,
@@ -103,6 +107,8 @@ export type UpdatePostInput = {
   imageId?: string | null,
   projectId?: string | null,
   text?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
 };
 
 export type DeletePostInput = {
@@ -146,6 +152,8 @@ export type ModelPostFilterInput = {
   imageId?: ModelIDInput | null,
   projectId?: ModelIDInput | null,
   text?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelPostFilterInput | null > | null,
   or?: Array< ModelPostFilterInput | null > | null,
   not?: ModelPostFilterInput | null,
@@ -178,6 +186,8 @@ export type CreateProjectMutation = {
         imageId: string,
         projectId: string,
         text: string,
+        createdAt: string | null,
+        updatedAt: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -203,6 +213,8 @@ export type UpdateProjectMutation = {
         imageId: string,
         projectId: string,
         text: string,
+        createdAt: string | null,
+        updatedAt: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -228,6 +240,8 @@ export type DeleteProjectMutation = {
         imageId: string,
         projectId: string,
         text: string,
+        createdAt: string | null,
+        updatedAt: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -247,6 +261,8 @@ export type CreatePostMutation = {
     imageId: string,
     projectId: string,
     text: string,
+    createdAt: string | null,
+    updatedAt: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
       items:  Array< {
@@ -272,6 +288,8 @@ export type UpdatePostMutation = {
     imageId: string,
     projectId: string,
     text: string,
+    createdAt: string | null,
+    updatedAt: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
       items:  Array< {
@@ -297,6 +315,8 @@ export type DeletePostMutation = {
     imageId: string,
     projectId: string,
     text: string,
+    createdAt: string | null,
+    updatedAt: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
       items:  Array< {
@@ -326,6 +346,8 @@ export type CreateCommentMutation = {
       imageId: string,
       projectId: string,
       text: string,
+      createdAt: string | null,
+      updatedAt: string | null,
       comments:  {
         __typename: "ModelCommentConnection",
         nextToken: string | null,
@@ -351,6 +373,8 @@ export type UpdateCommentMutation = {
       imageId: string,
       projectId: string,
       text: string,
+      createdAt: string | null,
+      updatedAt: string | null,
       comments:  {
         __typename: "ModelCommentConnection",
         nextToken: string | null,
@@ -376,6 +400,8 @@ export type DeleteCommentMutation = {
       imageId: string,
       projectId: string,
       text: string,
+      createdAt: string | null,
+      updatedAt: string | null,
       comments:  {
         __typename: "ModelCommentConnection",
         nextToken: string | null,
@@ -396,6 +422,8 @@ export type GetPostQuery = {
     imageId: string,
     projectId: string,
     text: string,
+    createdAt: string | null,
+    updatedAt: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
       items:  Array< {
@@ -426,6 +454,8 @@ export type GetProjectQuery = {
         imageId: string,
         projectId: string,
         text: string,
+        createdAt: string | null,
+        updatedAt: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -470,6 +500,8 @@ export type ListPostsQuery = {
       imageId: string,
       projectId: string,
       text: string,
+      createdAt: string | null,
+      updatedAt: string | null,
       comments:  {
         __typename: "ModelCommentConnection",
         nextToken: string | null,
@@ -495,6 +527,8 @@ export type GetCommentQuery = {
       imageId: string,
       projectId: string,
       text: string,
+      createdAt: string | null,
+      updatedAt: string | null,
       comments:  {
         __typename: "ModelCommentConnection",
         nextToken: string | null,
@@ -523,6 +557,8 @@ export type ListCommentsQuery = {
         imageId: string,
         projectId: string,
         text: string,
+        createdAt: string | null,
+        updatedAt: string | null,
       } | null,
     } | null > | null,
     nextToken: string | null,
@@ -543,6 +579,8 @@ export type OnCreateProjectSubscription = {
         imageId: string,
         projectId: string,
         text: string,
+        createdAt: string | null,
+        updatedAt: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -563,6 +601,8 @@ export type OnUpdateProjectSubscription = {
         imageId: string,
         projectId: string,
         text: string,
+        createdAt: string | null,
+        updatedAt: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -583,6 +623,8 @@ export type OnDeleteProjectSubscription = {
         imageId: string,
         projectId: string,
         text: string,
+        createdAt: string | null,
+        updatedAt: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -597,6 +639,8 @@ export type OnCreatePostSubscription = {
     imageId: string,
     projectId: string,
     text: string,
+    createdAt: string | null,
+    updatedAt: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
       items:  Array< {
@@ -617,6 +661,8 @@ export type OnUpdatePostSubscription = {
     imageId: string,
     projectId: string,
     text: string,
+    createdAt: string | null,
+    updatedAt: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
       items:  Array< {
@@ -637,6 +683,8 @@ export type OnDeletePostSubscription = {
     imageId: string,
     projectId: string,
     text: string,
+    createdAt: string | null,
+    updatedAt: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
       items:  Array< {
@@ -661,6 +709,8 @@ export type OnCreateCommentSubscription = {
       imageId: string,
       projectId: string,
       text: string,
+      createdAt: string | null,
+      updatedAt: string | null,
       comments:  {
         __typename: "ModelCommentConnection",
         nextToken: string | null,
@@ -681,6 +731,8 @@ export type OnUpdateCommentSubscription = {
       imageId: string,
       projectId: string,
       text: string,
+      createdAt: string | null,
+      updatedAt: string | null,
       comments:  {
         __typename: "ModelCommentConnection",
         nextToken: string | null,
@@ -701,6 +753,8 @@ export type OnDeleteCommentSubscription = {
       imageId: string,
       projectId: string,
       text: string,
+      createdAt: string | null,
+      updatedAt: string | null,
       comments:  {
         __typename: "ModelCommentConnection",
         nextToken: string | null,
