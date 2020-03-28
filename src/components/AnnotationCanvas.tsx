@@ -14,7 +14,7 @@ import Log from "../utils/Log";
 
 type AnnotationCanvasType = {
     backgroundImage: string
-    onPublishButtonClick: (blobPromise: Promise<Blob>, text: string) => void
+    onPublishButtonClick: (blobPromise: Promise<Blob>, text: string | undefined, title: string | undefined) => void
     onCancel: () => void
     visible: boolean
 }
@@ -30,10 +30,11 @@ type Coordinate = {
 }
 
 export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCancel, visible}: AnnotationCanvasType) => {
-    const [isPainting, setIsPainting] = useState(false);
-    const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(undefined);
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const textAreaRef= useRef<TextArea>(null);
+    const [isPainting, setIsPainting] = useState(false)
+    const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(undefined)
+    const canvasRef = useRef<HTMLCanvasElement>(null)
+    const textAreaRef= useRef<TextArea>(null)
+    const titleRef= useRef<Input>(null)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -221,7 +222,7 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
                         validateStatus="success"
                         //help="Cannot be empty."
                     >
-                        <Input placeholder="New Issue When Loading" id="error" />
+                        <Input ref={titleRef} placeholder="New Issue When Loading" id="error" />
                     </Form.Item>
 
                     <Form.Item
@@ -238,8 +239,9 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
                         return
                     }
                     const text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
-                    Log.info(`AnnotationCanvas text from form ${text}`, 'AnnotationCanvas')
-                    onPublishButtonClick(getBlobFromCanvas(), text)
+                    const title = titleRef.current === null ? "" : titleRef.current.state.value
+                    Log.info(`AnnotationCanvas title: ${title} text: ${text}`, 'AnnotationCanvas')
+                    onPublishButtonClick(getBlobFromCanvas(), text, title)
                 }}>Publish</Button>
             </div>
         </div>

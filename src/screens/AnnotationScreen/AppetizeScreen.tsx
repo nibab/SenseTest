@@ -75,12 +75,17 @@ export const AppetizeScreen = () => {
                 <AnnotationCanvas
                     visible={!createAnnotationModalHidden}
                     backgroundImage={imageToAnnotate}
-                    onPublishButtonClick={async (blobPromise, text) => {
+                    onPublishButtonClick={async (blobPromise, text, title) => {
 						const blob = await blobPromise
 						
 						// Validate that there is text.
 						if (text === "" || text === undefined) {
-							text = 'Test'
+							text = 'No title'
+						}
+
+						// Validate that there is a title.
+						if (title === "" || title === undefined) {
+							title = 'No text'
 						}
 
                         const createPostInput: CreatePostInput = {
@@ -88,7 +93,7 @@ export const AppetizeScreen = () => {
                             imageId: uuidv4(),
                             projectId: '1',
 							text: text,
-							title: 'TestTitle'
+							title: title
                         }
 						const newPost = await createNewAnnotationPost(blob, createPostInput)
 						dispatch(addPost(newPost))
