@@ -41,8 +41,7 @@ export const PostCard = ({postId, onClick}: PostCardProps) => {
             </Card> */}
             <div className='flex-row pt-3 bg-gray-100 rounded-lg hover:shadow-2xl cursor-pointer' style={{width: '250px'}} onClick={() => onClick()}>
                 <div className="p-1 rounded-lg container mx-auto" style={{height: '300px', width: '144px', backgroundSize: 'contain', backgroundImage: 'url("iPhoneXWireframe.png")'}}>
-                {/* window.URL.createObjectURL(post.image) */}
-                    <img className='hover rounded h-full mx-auto' src={'newsScreenshotSM.png'} />					
+                    <img className='hover rounded h-full mx-auto' src={window.URL.createObjectURL(post.image)} />					
                 </div>
                 <div className="bg-white rounded-lg p-4 shadow-lg -mt-24 relative mx-auto" style={{height: '150px', width: '250px'}}>
                     <h2 className='text-base font-bold truncate'>{post.title}</h2>

@@ -49,36 +49,50 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
         const canvas: HTMLCanvasElement = canvasRef.current
         const context = canvas.getContext('2d')
 
-        canvas.style.width ='100%';
-        canvas.style.height='100%';
+        //canvas.style.width ='100%';
+        //canvas.style.height='auto';
         // ...then set the internal size to match
-        canvas.width  = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
+        canvas.width  = (canvasRef.current)!.getBoundingClientRect().width
+        canvas.height = (canvasRef.current)!.getBoundingClientRect().height
+        
         
         if (context !== null) {
-            context.clearRect(0, 0, canvas.width, canvas.height)
+            //context.clearRect(0, 0, width, height)
         }
         
         const background = new Image()
         background.src = backgroundImage
         background.crossOrigin = 'anonymous'
 
-        var wrh = background.width / background.height;
-        var newWidth = canvas.width;
-        var newHeight = newWidth / wrh;
-        if (newHeight > canvas.height) {
-            newHeight = canvas.height;
-            newWidth = newHeight * wrh;
-        }
+        // var wrh = background.width / background.height;
+        // var newWidth = canvas.width;
+        // var newHeight = newWidth / wrh;
+        // if (newHeight > canvas.height) {
+        //     newHeight = canvas.height;
+        //     newWidth = newHeight * wrh;
+        // }
+
+        
         background.onload = () => {  
-            context?.drawImage(background, 0, 0, newWidth, newHeight)
+            const context = (canvasRef.current)!.getContext('2d')
+
+            const currentCanvasWidth = canvas.width
+            const canvasToImageRatio = canvas.width/background.width
+            const newImageHeight = background.height * canvasToImageRatio
+            canvas.height = newImageHeight
+            
+
+           
+            context?.drawImage(background, 0, 0, canvas.width, newImageHeight)
         }
 
         window.addEventListener('resize', (event) => {
-            const context = canvas.getContext('2d')
-            canvas.width  = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
-            context?.drawImage(background, 0, 0, newWidth, newHeight)
+            const context = (canvasRef.current)!.getContext('2d')
+            //const context = canvas.getContext('2d')
+            //canvas.width  = canvas.offsetWidth;
+            //canvas.height = canvas.offsetHeight;
+           
+            //context?.drawImage(background, 0, 0, width, height)
         })
     }
 
@@ -213,7 +227,8 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
     return (
         <div style={{ display: 'flex', height: '70vh'}} onLoad={() => console.log('blea canvasref')}> 
             <div style={{ flex: 0.35, alignContent: 'right'}}>
-                <canvas ref={canvasRef} height={'480'} width={'100%'} />
+            {/* <div style="width: 400px"> */}
+                <canvas ref={canvasRef} className='bg-red-400 w-full' />
             </div>
             <div style={{ flex: 0.6, paddingLeft: '30px' }}>
                 <Form layout='vertical'>
