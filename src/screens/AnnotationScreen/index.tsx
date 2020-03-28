@@ -33,11 +33,12 @@ export const AnnotationScreen = ({ }) => {
                 const posts = response.data.listPosts.items
                 posts?.forEach(async (post) => {
                     if (post !== null) {
-                        const postImgDownload = new PostImgDownload(post?.id, (blob) => {
+                        const postImgDownload = new PostImgDownload(post, (blob) => {
                             const _post = {
                                 id: post?.id,
                                 image: blob,
-                                projectId: projectId
+                                projectId: projectId,
+                                text: post?.text
                             }
                             //dispatch(addPost(_post))
                             Log.info(`Updated post ${JSON.stringify(_post)} in redux store.`)

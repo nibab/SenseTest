@@ -5,6 +5,10 @@ import { v4 as uuidv4 } from "uuid"
 import { PostCard } from "./PostCard";
 import { PostDiscussion } from "./PostDiscussion";
 import { Post } from "../../types";
+import Log from "../../utils/Log";
+
+const POSTS_PER_ROW = 4
+const TOTAL_ROWS = 3
 
 export const PostsGrid = () => {
     const postsSelector = useSelector(state => state.post)
@@ -15,58 +19,69 @@ export const PostsGrid = () => {
 	// Introducing a constraint of maximum 6 cards per page. The rest of the cards will be displayed on the other pages.
 	if (posts.length === 0) {
 		return (<div></div>)
-	}
-	var nrOfRows = Math.ceil(posts.length / 2)
-	if (nrOfRows > 3) {
+    }
+    
+    Log.info(`Total posts downloaded ${posts.length}.`, "PostsGrid")
+
+	var nrOfRows = Math.ceil(posts.length / POSTS_PER_ROW)
+	if (nrOfRows > TOTAL_ROWS) {
 		// Create multiple pages
-		nrOfRows = 3
+		nrOfRows = TOTAL_ROWS
 	} 
-	const items = []
-	for (let i = 0; i < nrOfRows; i++) {
-        if (posts.length - (i + 1) * 2 < 0) {
-            const postId = posts[i * 2]
-            items.push(
-                <Row key={uuidv4()} gutter={8}>
-                    <Col span={12}>
-                        <PostCard postId={postId} onClick={() => {
-                            setPostDiscussionToDisplay(postsSelector.posts[postId])
-                            setModalVisible(true)
-                        }} />
-                    </Col>
-                </Row>
-            )
-        } else {
-            const postId = posts[i * 2]
-            const postId2 = posts[i * 2 + 1]
-            items.push(
-                <Row key={uuidv4()} gutter={8} style={{ marginBottom: 8 }}>
-                    <Col span={6}>
-                        <PostCard postId={postId} onClick={() => {
-                            setPostDiscussionToDisplay(postsSelector.posts[postId])
-                            setModalVisible(true)
-                        }} />
-                    </Col>
-                    <Col span={6}>
-                        <PostCard postId={postId} onClick={() => {
-                            setPostDiscussionToDisplay(postsSelector.posts[postId])
-                            setModalVisible(true)
-                        }} />
-                    </Col>
-                    <Col span={6}>
-                        <PostCard postId={postId} onClick={() => {
-                            setPostDiscussionToDisplay(postsSelector.posts[postId])
-                            setModalVisible(true)
-                        }} />
-                    </Col>
-                    <Col span={6}>
-                        <PostCard postId={postId2} onClick={() => {
-                            setPostDiscussionToDisplay(postsSelector.posts[postId2])
-                            setModalVisible(true)
-                        }} />
-                    </Col>
-                </Row>
-            )
-        }
+    
+    Log.info(`Total rows ${nrOfRows}.`, "PostsGrid")
+    
+    const row1Ids = posts.slice(0, POSTS_PER_ROW)
+    const row2Ids = posts.slice(POSTS_PER_ROW, POSTS_PER_ROW * 2)
+    const row3Ids = posts.slice(POSTS_PER_ROW * 2, POSTS_PER_ROW * 3)
+
+    const row1Items = []
+    for (let i = 0; i < row1Ids.length; i++) {
+        const postId = row1Ids[i]
+        row1Items.push(
+            <Col span={6}>
+                <PostCard postId={postId} onClick={() => {
+                    setPostDiscussionToDisplay(postsSelector.posts[postId])
+                    setModalVisible(true)
+                }} />
+            </Col>
+        )
+    }
+
+    const row2Items = []
+    for (let i = 0; i < row2Ids.length; i++) {
+        const postId = row2Ids[i]
+        row2Items.push(
+            <Col span={6}>
+                <PostCard postId={postId} onClick={() => {
+                    setPostDiscussionToDisplay(postsSelector.posts[postId])
+                    setModalVisible(true)
+                }} />
+            </Col>
+        )
+    }
+
+    const row3Items = []
+    for (let i = 0; i < row3Ids.length; i++) {
+        const postId = row3Ids[i]
+        row3Items.push(
+            <Col span={6}>
+                <PostCard postId={postId} onClick={() => {
+                    setPostDiscussionToDisplay(postsSelector.posts[postId])
+                    setModalVisible(true)
+                }} />
+            </Col>
+        )
+    }
+
+    const items = []
+    const allRows = [row1Items, row2Items, row3Items]
+    for (let i = 0; i < allRows.length; i++) {
+        items.push(
+            <Row gutter={8} style={{paddingTop: '8px'}}>
+                {allRows[i]}
+            </Row>
+        )
     }
     
     const renderPostDiscussioModal = () => {

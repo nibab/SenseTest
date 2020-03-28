@@ -44,12 +44,12 @@ export const PostCard = ({postId, onClick}: PostCardProps) => {
                     <img className='hover rounded shadow-xl h-full mx-auto' src={window.URL.createObjectURL(post.image)} />					
                 </div>
                 <div className="bg-white rounded-lg p-4 shadow-lg -mt-24 relative mx-auto" style={{height: '150px', width: '250px'}}>
-                    <h2 className='text-base font-bold truncate'>How do we handle a big title like this or even this</h2>
+                    <h2 className='text-base font-bold truncate'>{post.title}</h2>
                     <div className='-mt-1 text-xs uppercase text-gray-500 font-semibold '>
                         21/02/2020 10:30PM EST
                     </div>
                     <p className='mt-1 text-xs leading-tight'>
-                        The screen has the wrong alignment on image x. It is the first time we have this.
+                        {post.text}
                     </p>
                 </div>
             </div>

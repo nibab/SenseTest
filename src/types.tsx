@@ -2,18 +2,18 @@ import { PostImgDownload } from './utils/PostImgDownload'
 
 export type Post = {
   id: string,
-  title?: string,
+  title: string,
   image: Blob | PostImgDownload,
   projectId: string,
-  text?: string,
+  text: string,
   dateCreated?: string
 }
 
-export type PostRaw = {
+export type FetchedPost = {
   id: string,
-  title?: string,
+  title: string,
   imageId: string,
   projectId: string,
-  text?: string,
+  text: string,
   dateCreated?: string
 }

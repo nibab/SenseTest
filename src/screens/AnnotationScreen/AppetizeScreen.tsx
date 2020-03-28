@@ -70,13 +70,19 @@ export const AppetizeScreen = () => {
                     backgroundImage={imageToAnnotate}
                     onPublishButtonClick={async (blobPromise, text) => {
                         const uuid = uuidv4()
-                        const blob = await blobPromise
+						const blob = await blobPromise
+						
+						// Validate that there is text.
+						if (text === "" || text === undefined) {
+							text = 'Test'
+						}
 
                         const newPost: Post = {
                             id: uuid,
                             image: blob,
                             projectId: '1',
-                            text: text
+							text: text,
+							title: 'TestTitle'
                         }
 
                         dispatch(addPost(newPost))
