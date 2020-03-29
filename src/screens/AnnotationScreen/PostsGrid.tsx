@@ -78,7 +78,7 @@ export const PostsGrid = () => {
     const allRows = [row1Items, row2Items, row3Items]
     for (let i = 0; i < allRows.length; i++) {
         items.push(
-            <Row gutter={8} style={{paddingTop: '8px'}}>
+            <Row gutter={5} style={{paddingTop: '15px'}}>
                 {allRows[i]}
             </Row>
         )
