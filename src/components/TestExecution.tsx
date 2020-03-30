@@ -1,8 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Card, Descriptions, Popover, Result, Tag, Input, Button, Table, Icon, Collapse } from 'antd';
+import { Card, Descriptions, Popover, Result, Tag, Input, Button, Table, Icon, Collapse, Row, Col } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import FileUpload from './FileUpload';
 import ZeplinScreenCard from './ZeplinScreenCard';
 import FileScreenCard from './FileScreenCard';

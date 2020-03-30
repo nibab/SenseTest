@@ -1,10 +1,6 @@
 import React, { Fragment, useState, ReactNode } from 'react';
-import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
-import Modal from 'react-bootstrap/Modal';
-import FormControl from 'react-bootstrap/FormControl';
 import uuidv1 from "uuid";
-import { Button, Card, Radio } from 'antd';
+import { Button, Card, Radio, Modal } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { TestCasesClient, TestCase } from '../clients/TestCasesClient';
 import FileUpload from './FileUpload';
@@ -12,6 +8,7 @@ import ZeplinImport from './ZeplinImport';
 import ZeplinScreenCard from './ZeplinScreenCard';
 import FileScreenCard from './FileScreenCard';
 import { ZeplinScreen } from '../utils/ZeplinAuth';
+import { Container } from 'aws-amplify-react';
 
 type TestFileManagerProps = {
   zeplinScreen: ZeplinScreen | null
@@ -211,60 +208,60 @@ class TestForm extends React.Component<TestFormProps, TestFormState> {
         }
       ];
 
-      const parameters = (
-        <Form>
-          <Form.Group>
-            <Form.Label>Version</Form.Label>
-            <FormControl name='version'
-              placeholder='v1.5.0' required type="text"
-              value={this.state.version}
-              onChange={this.handleChange} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Journey</Form.Label>
-            <Form.Control name='journey'
-              placeholder='Onboarding' required type='text'
-              value={this.state.journey}
-              onChange={this.handleChange} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Platform</Form.Label>
-            <Form.Control name='platform'
-              required as='select'
-              value={this.state.platform}
-              onChange={this.handleChange}>
-              <option value='mobile'>Mobile</option>
-              <option value='web'>Web</option>
-            </Form.Control>
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Action</Form.Label>
-            <Form.Control name='action' required as='textarea'
-              value={this.state.action}
-              onChange={this.handleChange} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Expected behavior</Form.Label>
-            <Form.Control name='expectedBehavior' required as='textarea'
-              value={this.state.expectedBehavior}
-              onChange={this.handleChange} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Check type='checkbox' label='Critical' required
-              name='isCritical'
-              checked={this.state.isCritical}
-              onChange={(newValue: any) => { this.setState({ isCritical: newValue.currentTarget.checked }) }} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Default Assignee</Form.Label>
-            <Form.Control name='defaultAssignee' as='select' required
-              value={this.state.defaultAssignee}
-              onChange={this.handleChange}>
-              {assigneeOptions}
-            </Form.Control>
-          </Form.Group>
-        </Form>
-      )
+      // const parameters = (
+      //   <Form>
+      //     <Form.Group>
+      //       <Form.Label>Version</Form.Label>
+      //       <FormControl name='version'
+      //         placeholder='v1.5.0' required type="text"
+      //         value={this.state.version}
+      //         onChange={this.handleChange} />
+      //     </Form.Group>
+      //     <Form.Group>
+      //       <Form.Label>Journey</Form.Label>
+      //       <Form.Control name='journey'
+      //         placeholder='Onboarding' required type='text'
+      //         value={this.state.journey}
+      //         onChange={this.handleChange} />
+      //     </Form.Group>
+      //     <Form.Group>
+      //       <Form.Label>Platform</Form.Label>
+      //       <Form.Control name='platform'
+      //         required as='select'
+      //         value={this.state.platform}
+      //         onChange={this.handleChange}>
+      //         <option value='mobile'>Mobile</option>
+      //         <option value='web'>Web</option>
+      //       </Form.Control>
+      //     </Form.Group>
+      //     <Form.Group>
+      //       <Form.Label>Action</Form.Label>
+      //       <Form.Control name='action' required as='textarea'
+      //         value={this.state.action}
+      //         onChange={this.handleChange} />
+      //     </Form.Group>
+      //     <Form.Group>
+      //       <Form.Label>Expected behavior</Form.Label>
+      //       <Form.Control name='expectedBehavior' required as='textarea'
+      //         value={this.state.expectedBehavior}
+      //         onChange={this.handleChange} />
+      //     </Form.Group>
+      //     <Form.Group>
+      //       <Form.Check type='checkbox' label='Critical' required
+      //         name='isCritical'
+      //         checked={this.state.isCritical}
+      //         onChange={(newValue: any) => { this.setState({ isCritical: newValue.currentTarget.checked }) }} />
+      //     </Form.Group>
+      //     <Form.Group>
+      //       <Form.Label>Default Assignee</Form.Label>
+      //       <Form.Control name='defaultAssignee' as='select' required
+      //         value={this.state.defaultAssignee}
+      //         onChange={this.handleChange}>
+      //         {assigneeOptions}
+      //       </Form.Control>
+      //     </Form.Group>
+      //   </Form>
+      // )
 
       const screens = (
         <TestFileManager setZeplinScreen={this.setZeplinScreen}
@@ -273,35 +270,35 @@ class TestForm extends React.Component<TestFormProps, TestFormState> {
           file={this.state.file} />
       )
 
-      const contentList: { [key: string]: ReactNode } = {
-        parameters: parameters,
-        screens: screens,
-      }
+      // const contentList: { [key: string]: ReactNode } = {
+      //   parameters: parameters,
+      //   screens: screens,
+      // }
 
-      return (
-        <Modal show={this.props.show} onHide={this.props.handleClose}
-          id='test-modal' onEntering={this.onEntering} onExiting={this.onExiting}>
-          <Modal.Header closeButton>
-            <Modal.Title>Test Form</Modal.Title>
-          </Modal.Header>
-          <Modal.Body style={{backgroundColor: '#f0f2f5'}}>
-            <Card style={{ width: '100%', backgroundColor: '#f0f2f5'}}
-              tabList={tabList}
-              bordered={false}
-              activeTabKey={this.state.activeKey}
-              onTabChange={(key: string) => this.setActiveKey(key)}>
-                {contentList[this.state.activeKey]}
-            </Card>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button type='default' onClick={this.props.handleClose}>
-              Close
-            </Button>
-            <Button type='primary' disabled={!this.isValid()} onClick={this.onSubmit}>
-              Save
-            </Button>
-          </Modal.Footer>
-        </Modal> 
+      return (<></>
+        // <Modal show={this.props.show} onHide={this.props.handleClose}
+        //   id='test-modal' onEntering={this.onEntering} onExiting={this.onExiting}>
+        //   <Modal.Header closeButton>
+        //     <Modal.Title>Test Form</Modal.Title>
+        //   </Modal.Header>
+        //   <Modal.Body style={{backgroundColor: '#f0f2f5'}}>
+        //     <Card style={{ width: '100%', backgroundColor: '#f0f2f5'}}
+        //       tabList={tabList}
+        //       bordered={false}
+        //       activeTabKey={this.state.activeKey}
+        //       onTabChange={(key: string) => this.setActiveKey(key)}>
+        //         {contentList[this.state.activeKey]}
+        //     </Card>
+        //   </Modal.Body>
+        //   <Modal.Footer>
+        //     <Button type='default' onClick={this.props.handleClose}>
+        //       Close
+        //     </Button>
+        //     <Button type='primary' disabled={!this.isValid()} onClick={this.onSubmit}>
+        //       Save
+        //     </Button>
+        //   </Modal.Footer>
+        // </Modal> 
       )
     }
 };

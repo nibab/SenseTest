@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react';
 import ZeplinAuth, { ZeplinScreen, ZeplinProject } from '../utils/ZeplinAuth';
-import { Card, Select } from 'antd';
-import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
+import { Card, Select, Form } from 'antd';
 import ZeplinScreenCard from './ZeplinScreenCard';
 import { ZeplinScreenSelector } from './ZeplinScreenSelector';
+import { Container } from 'aws-amplify-react';
 
 const { Option } = Select;
 
@@ -141,11 +140,11 @@ export default class ZeplinImport extends React.Component<ZeplinImportProps, Zep
     renderScreens() {
       return (
         <div>
-            {!!this.state.screens.length && (
-              <Form.Group>
-                <Form.Control placeholder='search...' type='text'
-                  onChange={this.onQueryChanged}/>
-              </Form.Group>
+            {!!this.state.screens.length && ( <></>
+              // <Form.Group>
+              //   <Form.Control placeholder='search...' type='text'
+              //     onChange={this.onQueryChanged}/>
+              // </Form.Group>
             )}
             <ZeplinScreenSelector filteredScreens={this.state.filteredScreens} setSelectedScreen={this.setSelectedScreen} />
         </div>

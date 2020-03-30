@@ -1,14 +1,13 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
 import RunCard from '../components/RunCard';
 import TestExecutionTable, { TestCaseExecutionMap, RunState } from '../components/TestExecutionTable';
 import { TestCaseExecutionsClient, TestCaseExecution } from '../clients/TestCaseExecutionsClient';
 import { Run, RunsClient } from '../clients/RunsClient';
 import { DateUtils } from '../utils/DateUtils';
 import { LoadingScreen } from './LoadingScreen';
+import { Container } from 'aws-amplify-react';
+import { Row, Col } from 'antd';
 
 const RunScreen = () => {
   const { runId } = useParams();

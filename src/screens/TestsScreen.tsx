@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from 'antd';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { Button, Row, Col } from 'antd';
 import TestCaseTable from '../components/TestCaseTable';
 import TestForm from '../components/TestForm';
 import { TestCasesClient, TestCase } from '../clients/TestCasesClient';
+import { Container } from 'aws-amplify-react';
 
 type TestsScreenProps = {
   asAddIn: boolean,

@@ -9,14 +9,10 @@ import {
 import Amplify, { Auth as AmplifyAuth } from 'aws-amplify';
 import awsconfig from './aws-exports.js';
 import './App.css';
-import HomeScreen from './screens/HomeScreen';
-import LandingScreen from './screens/LandingScreen';
 import OnboardingScreen from './screens/OnboardingScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import RunScreen from './screens/RunScreen';
-import RunsScreen from './screens/RunsScreen';
 import TestsScreen from './screens/TestsScreen';
-import TestExecutionScreen from './screens/TestExecutionScreen';
 import NavBar from './components/NavBar';
 import AuthForm from './components/AuthForm';
 import { bool } from 'aws-sdk/clients/signer';
@@ -112,12 +108,6 @@ class App extends Component<{}, AppState> {
           component={AutoTestScreen}
         ></ProtectedRoute>
         <ProtectedRoute
-          path='/run/:runId/executions' // TODO: If the user navigates directly to this URL, the navigation context will be lost (won't have the TestExecutions loaded).
-          isLoggedIn={isLoggedIn}
-          isLoading={isLoading}
-          component={TestExecutionScreen}
-        ></ProtectedRoute>
-        <ProtectedRoute
           exact
           path='/tests'
           isLoggedIn={isLoggedIn}
@@ -130,13 +120,6 @@ class App extends Component<{}, AppState> {
         isLoading={isLoading}
         component={RunScreen}
         />
-        <ProtectedRoute
-          exact
-          path='/runs'
-          isLoggedIn={isLoggedIn}
-          isLoading={isLoading}
-          component={RunsScreen}
-        ></ProtectedRoute>
         <ProtectedRoute
           exact
           path='/settings'
@@ -176,7 +159,7 @@ class App extends Component<{}, AppState> {
               }}> */}
                 {this.renderContent(isLoggedIn, isLoading)}
               {/* </Content> */}
-              <Footer style={{ textAlign: 'center' }}>Isengard LLC ©2020</Footer>
+              {/* <Footer style={{ textAlign: 'center' }}>Isengard LLC ©2020</Footer> */}
             </Provider>
             
       </Router>

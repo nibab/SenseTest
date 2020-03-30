@@ -10,14 +10,44 @@ const SettingsScreen = () => {
   return (
     <div>
       <PlanPanel />
-      {/* <PaymentsPanel /> */}
+      <PaymentsPanel />
     </div>
+  )
+}
+
+const PlanPanel = () => {
+  return (
+    <div className="max-w-7xl mx-auto pt-6 sm:px-6 lg:px-8">
+			<div className="max-w-3xl mx-auto">
+      <div className="bg-white shadow sm:rounded-lg">
+        <div className="px-4 py-5 sm:p-6">
+          <h3 className="text-lg leading-6 font-medium text-gray-900">
+            Manage subscription
+          </h3>
+          <div className="mt-2 sm:flex sm:items-start sm:justify-between">
+            <div className="max-w-xl text-sm leading-5 text-gray-500">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae voluptatibus corrupti atque repudiandae nam.
+              </p>
+            </div>
+            <div className="mt-5 sm:mt-0 sm:ml-6 sm:flex-shrink-0 sm:flex sm:items-center">
+              <span className="inline-flex rounded-md shadow-sm">
+                <button type="button" className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150">
+                  Change plan
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   )
 }
 
 const PaymentsPanel = () => {
   return (
-    <div className="max-w-7xl mx-auto py-12 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto pt-3 sm:px-6 lg:px-8">
 			<div className="max-w-3xl mx-auto">
         <div className="bg-white shadow sm:rounded-lg">
           <div className="px-4 py-5 sm:p-6">
@@ -25,7 +55,7 @@ const PaymentsPanel = () => {
               Payment method
             </h3>
             <div className="mt-5">
-              <div className="rounded-md bg-gray-50 px-6 py-5 sm:flex sm:items-start sm:justify-between">
+              <div className="rounded-md bg-gray-100 px-6 py-5 sm:flex sm:items-start sm:justify-between">
                 <div className="sm:flex sm:items-start">
                   <svg className="h-8 w-auto sm:flex-shrink-0 sm:h-6" fill="none" viewBox="0 0 36 24">
                     <rect width="36" height="24" fill="#224DBA" rx="4" />
@@ -64,35 +94,7 @@ const PaymentsPanel = () => {
   )
 }
 
-const PlanPanel = () => {
-  return (
-    <div className="max-w-7xl mx-auto py-12 sm:px-6 lg:px-8">
-			<div className="max-w-3xl mx-auto">
-      <div className="bg-white shadow sm:rounded-lg">
-        <div className="px-4 py-5 sm:p-6">
-          <h3 className="text-lg leading-6 font-medium text-gray-900">
-            Manage subscription
-          </h3>
-          <div className="mt-2 sm:flex sm:items-start sm:justify-between">
-            <div className="max-w-xl text-sm leading-5 text-gray-500">
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae voluptatibus corrupti atque repudiandae nam.
-              </p>
-            </div>
-            <div className="mt-5 sm:mt-0 sm:ml-6 sm:flex-shrink-0 sm:flex sm:items-center">
-              <span className="inline-flex rounded-md shadow-sm">
-                <button type="button" className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150">
-                  Change plan
-                </button>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  )
-}
+
 
 // const SettingsScreen = () => {
 //   const enabled = false;
