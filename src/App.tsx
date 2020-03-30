@@ -164,25 +164,21 @@ class App extends Component<{}, AppState> {
   renderRouter = (isLoggedIn: boolean, isLoading: boolean) => {
     return (
       <Router>
-        <Layout>
           <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/>
           {/* <Sider width={256}>
             <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/>
           </Sider> */}
-          <Layout>
             <Provider store={store}>
-              <Content style={{
+              {/* <Content style={{
                 padding: 24,
                 margin: 0,
                 minHeight: 280,
-              }}>
+              }}> */}
                 {this.renderContent(isLoggedIn, isLoading)}
-              </Content>
+              {/* </Content> */}
               <Footer style={{ textAlign: 'center' }}>Isengard LLC ©2020</Footer>
             </Provider>
             
-          </Layout>
-        </Layout>  
       </Router>
     )
   }

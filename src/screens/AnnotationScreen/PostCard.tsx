@@ -7,7 +7,6 @@ import { PostDiscussion } from "./PostDiscussion"
 import { Typography } from 'antd'
 import { useSelector } from "../../store"
 import Meta from "antd/lib/card/Meta"
-import '../../styles/main.css'
 
 const { Title } = Typography;
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, Icon } from 'antd';
-import 'antd/dist/antd.css';
 import { Link } from 'react-router-dom';
 
 type NavBarProps = {
