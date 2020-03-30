@@ -165,6 +165,7 @@ class App extends Component<{}, AppState> {
     return (
       <Router>
         <Layout>
+          <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/>
           {/* <Sider width={256}>
             <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/>
           </Sider> */}
