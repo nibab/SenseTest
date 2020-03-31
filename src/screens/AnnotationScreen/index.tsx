@@ -57,13 +57,71 @@ export const AnnotationScreen = ({ }) => {
     }, [])
 
     return getPostsFetchInProgress ? <Loading /> : (
-        <div>
-            <h4>Annotation </h4>
-            <div style={{ display: 'flex', width: '100%' }}>
-                <AppetizeScreen />
-                <PostsGrid />
-            </div>
-        </div>
+        <div className='flex flex-row'> 
+			<div className='flex-shrink-0 bg-red-400 h-full min-h-screen w-72'>
+				<div className='bg-gray-400 flex flex-row min-h-screen max-h-screen'>
+					<div className='bg-blue-400 m-3 flex-auto overflow-scroll flex flex-col p-3 rounded-lg'> 
+						<div className="grid grid-cols-2 gap-3 pb-2">	 
+							<div className='bg-red-400 h-56 flex'>
+								<img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
+							</div>
+							<div className='bg-red-400 h-56 flex'>
+								<img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
+							</div>
+						</div>
+						<div className="grid grid-cols-2 gap-3 pb-2">	 
+							<div className='bg-red-400 h-56 flex'>
+								<img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
+							</div>
+							<div className='bg-red-400 h-56 flex'>
+								<img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
+							</div>
+						</div>
+						<div className="grid grid-cols-2 gap-3 pb-2">	 
+							<div className='bg-red-400 h-56 flex'>
+								<img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
+							</div>
+							<div className='bg-red-400 h-56 flex'>
+								<img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div className='bg-green-500 h-full min-h-screen flex-auto'>
+				<div className='bg-gray-500 min-h-screen flex flex-row min-h-screen max-h-screen'>
+					<div className='flex-shrink-0 bg-blue-400 h-64 ml-3 mt-3 w-8'> </div>
+					<div className='flex-shrink-0 bg-gray-400 h-auto ml-3 mt-3 mb-3 w-72 flex-col align-middle p-3'> 
+						{/* <div className='bg-blue-500 w-60 h-64 mx-auto'></div> */}
+						<img src='../../iPhoneXWireframe.png'></img>
+						<div className='bg-green-500 mt-3 w-56 h-32 mx-auto'></div>
+					</div>
+					<div className='bg-gray-400 m-3 flex-auto overflow-y-scroll flex flex-col p-3'> 
+						<div className='flex-shrink-0 bg-orange-400 w-auto h-12 rounded-lg'></div>
+						<div className='flex-shrink-0 bg-orange-400 w-auto mt-1 h-48 rounded-lg'></div> 
+						<div className='flex-shrink-0 bg-orange-400 w-auto mt-1 rounded-lg'>
+							asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds
+							asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds
+
+							asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds
+
+						</div> 
+						<div className='flex-shrink-0 bg-orange-400 w-auto mt-1 h-32 rounded-lg'></div> 
+						<div className='flex-shrink-0 bg-orange-400 w-auto mt-1 h-32 rounded-lg'></div> 
+						<div className='flex-shrink-0 bg-orange-400 w-auto mt-1 h-32 rounded-lg'></div> 
+						<div className='flex-shrink-0 bg-orange-400 w-auto mt-1 h-32 rounded-lg'></div> 
+					</div>
+				</div>
+				
+			</div>
+		</div>
+        // <div>
+        //     <h4>Annotation </h4>
+        //     <div style={{ display: 'flex', width: '100%' }}>
+        //         <AppetizeScreen />
+        //         <PostsGrid />
+        //     </div>
+        // </div>
     )
 }
 

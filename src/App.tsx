@@ -23,6 +23,7 @@ import { AutoTestScreen } from './screens/AutoTestScreen';
 import { createStore } from 'redux'
 import { rootReducer } from './store'
 import { Provider } from 'react-redux'
+import TeamScreen from './screens/TeamScreen';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -108,6 +109,12 @@ class App extends Component<{}, AppState> {
           component={AutoTestScreen}
         ></ProtectedRoute>
         <ProtectedRoute
+          path='/team'
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
+          component={TeamScreen}
+        ></ProtectedRoute>
+        <ProtectedRoute
           exact
           path='/tests'
           isLoggedIn={isLoggedIn}
@@ -147,20 +154,19 @@ class App extends Component<{}, AppState> {
   renderRouter = (isLoggedIn: boolean, isLoading: boolean) => {
     return (
       <Router>
-          <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/>
-          {/* <Sider width={256}>
-            <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/>
-          </Sider> */}
-            <Provider store={store}>
-              {/* <Content style={{
-                padding: 24,
-                margin: 0,
-                minHeight: 280,
-              }}> */}
-                {this.renderContent(isLoggedIn, isLoading)}
-              {/* </Content> */}
-              {/* <Footer style={{ textAlign: 'center' }}>Isengard LLC ©2020</Footer> */}
-            </Provider>
+        <div className="antialiased font-sans bg-gray-200">
+        <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/>
+        <Provider store={store}>
+          {/* <Content style={{
+            padding: 24,
+            margin: 0,
+            minHeight: 280,
+          }}> */}
+            {this.renderContent(isLoggedIn, isLoading)}
+          {/* </Content> */}
+        </Provider>
+        </div>
+          
             
       </Router>
     )
