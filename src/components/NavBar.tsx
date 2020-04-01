@@ -9,13 +9,13 @@ type NavBarProps = {
   width: number
 }
 
-type NavBarItem = 'Dashboard' | 'Team' | 'Projects' | 'Calendar' | 'Reports'
+type NavBarItem = 'Dashboard' | 'Team' | 'Releases' | 'Calendar' | 'Reports'
 const navBarDir: Record<NavBarItem, string> = {
   'Dashboard': '/',
   'Calendar': '/',
   'Reports': '/',
   'Team': '/team',
-  'Projects': '/annotation'
+  'Releases': '/annotation'
 }
 
 type ScreenSize = 'large' | 'small' 
@@ -98,14 +98,28 @@ const NavBar = ({ isLoggedIn, signOut, width} : NavBarProps) =>{
   return (
     <>
     <div>
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <NavBarItems navBarDir={navBarDir} screenSize={'large'} />
-            { renderNotificationAndProfileButton('large') }
-            { renderMenuButtonForMobile() } 
+      <nav className="">
+        <div className="max-w-7xl">
+          <div className="flex h-16 w-full flex-row">
+            {/* <NavBarItems navBarDir={navBarDir} screenSize={'large'} /> */}
+            <div className="bg-red-100 w-full h-full flex flex-row relative">
+              <div className="bg-green-200 w-84 h-full p-2 mx-auto">
+                <div className="bg-white shadow-xl p-1 h-full rounded-lg"></div>
+              </div>
+              <div className="bg-blue-300 w-auto h-full flex absolute flex-row right-0 mr-3">
+                <NotificationButton />
+                <div className="h-8 my-auto object-contain">    
+                  <ProfileDropDown />
+                </div>
+              </div>
+            </div>
+            
+            
+            {/* { renderNotificationAndProfileButton('large') } */}
+            {/* { renderMenuButtonForMobile() }  */}
           </div>
         </div>
+
         <div className={`${blockOpen ? 'block' : 'hidden'}`}>
           <NavBarItemsMobile navBarDir={navBarDir} />
         </div>
@@ -122,8 +136,8 @@ type NavBarItemsMobileProps = {
 }
 
 const NavBarItemsMobile = ({navBarDir}: NavBarItemsMobileProps) => {
-  const firstItem: NavBarItem = 'Projects'
-  const [selectedNavBarItem, setSelectedNavBarItem] = useState<NavBarItem>('Projects')
+  const firstItem: NavBarItem = 'Releases'
+  const [selectedNavBarItem, setSelectedNavBarItem] = useState<NavBarItem>('Releases')
 
   const renderNavBarItem = (item: NavBarItem) => {
     return (
@@ -136,7 +150,7 @@ const NavBarItemsMobile = ({navBarDir}: NavBarItemsMobileProps) => {
     <>
       <div className="pt-2 pb-3">
         <a href="#" className="block pl-3 pr-4 py-2 border-l-4 border-indigo-500 text-base font-medium text-indigo-700 bg-indigo-50 focus:outline-none focus:text-indigo-800 focus:bg-indigo-100 focus:border-indigo-700 transition duration-150 ease-in-out">Dashboard</a>
-        { renderNavBarItem('Projects') }
+        { renderNavBarItem('Releases') }
         { renderNavBarItem('Team')}
       </div>
       <div className="pt-4 pb-3 border-t border-gray-200">
@@ -165,8 +179,16 @@ type NavBarItemsProps = {
 }
 
 const NavBarItems = ({ screenSize, navBarDir }: NavBarItemsProps) => {
-  const firstItem: NavBarItem = 'Projects'
-  const [selectedNavBarItem, setSelectedNavBarItem] = useState<NavBarItem>('Projects')
+  const firstItem: NavBarItem = 'Releases'
+  const [selectedNavBarItem, setSelectedNavBarItem] = useState<NavBarItem>('Releases')
+
+  const renderProjects = () => {
+    return (
+      <svg className="mr-3 h-6 w-6 text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500 transition ease-in-out duration-150" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+      </svg>
+    )
+  }
 
   useEffect(() => {}, [screenSize])
 
@@ -174,7 +196,9 @@ const NavBarItems = ({ screenSize, navBarDir }: NavBarItemsProps) => {
     if (screenSize === 'large') {
       return (
         <Link to={{pathname: navBarDir[item]}} onClick={() => setSelectedNavBarItem(item)} 
-          className={`${selectedNavBarItem === item ? 'border-indigo-500 text-gray-900 focus:outline-none focus:border-indigo-700 hover:text-gray-900 ': 'border-transparent focus:border-gray-300 hover:text-gray-700 hover:border-gray-300'} ${item !== firstItem ? 'ml-8' : ''} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 text-gray-500 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-100 ease-in-out`}>{item}</Link>
+              className={`${selectedNavBarItem === item ? 'border-indigo-500 text-gray-900 focus:outline-none focus:border-indigo-700 hover:text-gray-900 ': 'border-transparent focus:border-gray-300 hover:text-gray-700 hover:border-gray-300'} ${item !== firstItem ? 'ml-8' : ''} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 text-gray-500 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-100 ease-in-out`}>
+          {item}
+        </Link>
       )
     } else {
       return (
@@ -188,10 +212,10 @@ const NavBarItems = ({ screenSize, navBarDir }: NavBarItemsProps) => {
     return (
       <div className="flex">
         <div className="flex-shrink-0 flex items-center">
-          <img className="h-8 w-8" src="/img/logos/workflow-mark-on-brand.svg" alt="logo" />
+          <img className="h-8 w-auto" src="workflow-logo-on-white.svg" alt="logo" />
         </div>
         <div className="hidden sm:ml-6 sm:flex">
-            {renderNavBarItem('Projects')}
+            {renderNavBarItem('Releases')}
             {renderNavBarItem('Team')}
         </div>
       </div>
@@ -199,7 +223,7 @@ const NavBarItems = ({ screenSize, navBarDir }: NavBarItemsProps) => {
   } else {
     return (
       <>
-        {renderNavBarItem('Projects')}
+        {renderNavBarItem('Releases')}
         {renderNavBarItem('Team')}
       </>
     )
@@ -237,12 +261,12 @@ const ProfileDropDown = () => {
 
   const renderAvatarButton = () => {
     return (
-      <div>
+      <>
         <button onClick={() => setShowProfileDropDown(!showProfileDropDown)} className="max-w-xs flex items-center text-sm rounded-full text-white focus:outline-none focus:shadow-solid" id="user-menu" aria-label="User menu" aria-haspopup="true">
         {/* <button @click="open = !open" className="max-w-xs flex items-center text-sm rounded-full text-white focus:outline-none focus:shadow-solid" id="user-menu" aria-label="User menu" aria-haspopup="true" x-bind:aria-expanded="open"> */}
           <img className="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
         </button>
-      </div>
+      </>
     )
   }
 

@@ -57,64 +57,111 @@ export const AnnotationScreen = ({ }) => {
     }, [])
 
     return getPostsFetchInProgress ? <Loading /> : (
-        <div className='flex flex-row'> 
-			<div className='flex-shrink-0 bg-red-400 h-full min-h-screen w-72'>
-				<div className='bg-gray-400 flex flex-row min-h-screen max-h-screen'>
-					<div className='bg-blue-400 m-3 flex-auto overflow-scroll flex flex-col p-3 rounded-lg'> 
-						<div className="grid grid-cols-2 gap-3 pb-2">	 
-							<div className='bg-red-400 h-56 flex'>
-								<img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
-							</div>
-							<div className='bg-red-400 h-56 flex'>
-								<img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
-							</div>
-						</div>
-						<div className="grid grid-cols-2 gap-3 pb-2">	 
-							<div className='bg-red-400 h-56 flex'>
-								<img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
-							</div>
-							<div className='bg-red-400 h-56 flex'>
-								<img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
-							</div>
-						</div>
-						<div className="grid grid-cols-2 gap-3 pb-2">	 
-							<div className='bg-red-400 h-56 flex'>
-								<img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
-							</div>
-							<div className='bg-red-400 h-56 flex'>
-								<img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div className='bg-green-500 h-full min-h-screen flex-auto'>
-				<div className='bg-gray-500 min-h-screen flex flex-row min-h-screen max-h-screen'>
-					<div className='flex-shrink-0 bg-blue-400 h-64 ml-3 mt-3 w-8'> </div>
-					<div className='flex-shrink-0 bg-gray-400 h-auto ml-3 mt-3 mb-3 w-72 flex-col align-middle p-3'> 
-						{/* <div className='bg-blue-500 w-60 h-64 mx-auto'></div> */}
-						<img src='../../iPhoneXWireframe.png'></img>
-						<div className='bg-green-500 mt-3 w-56 h-32 mx-auto'></div>
-					</div>
-					<div className='bg-gray-400 m-3 flex-auto overflow-y-scroll flex flex-col p-3'> 
-						<div className='flex-shrink-0 bg-orange-400 w-auto h-12 rounded-lg'></div>
-						<div className='flex-shrink-0 bg-orange-400 w-auto mt-1 h-48 rounded-lg'></div> 
-						<div className='flex-shrink-0 bg-orange-400 w-auto mt-1 rounded-lg'>
-							asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds
-							asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds
+        <>
+            {/* <div className='flex w-full h-20 absolute flex-col justify-end pb-1 align-middle'>
+                <div className='bg-blue-200 h-12 w-64 mx-auto'></div>
+            </div> */}
+            <div className='flex flex-row h-full'> 
+            {/* <div className='bg-white h-full m-3 flex-shrink-0 w-20 rounded-lg shadow-xl'>
 
-							asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds
+            </div> */}
+            <div className='flex-shrink-0 w-72 bg-gray-400 h-full ml-4 mt-3 shadow-inner rounded-lg'>
+                <div className='flex flex-col overflow-hidden p-3'>
+                    <div className="grid grid-cols-2 gap-3 pb-2">	 
+                        <div className='h-56 flex hover:shadow-outline'>
+                            <div className='h-full w-full object-contain flex relative'>	
+                                <div className='h-full w-full mx-auto' style={{width: '77.7%'}}>
+                                    <img className='h-full w-full mx-auto object-contain' src='newsScreenshot.png'></img>
+                                </div>
+                                <div className='h-full w-full absolute '>
+                                    <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='h-56 flex hover:shadow-outline'>
+                            <div className='h-full w-full object-contain flex relative'>	
+                                <div className='h-full w-full mx-auto' style={{width: '77.7%'}}>
+                                    <img className='h-full w-full mx-auto object-contain' src='newsScreenshot.png'></img>
+                                </div>
+                                <div className='h-full w-full absolute '>
+                                    <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 pb-2">	 
+                        <div className='h-56 flex hover:shadow-outline'>
+                            <div className='h-full w-full object-contain flex relative'>	
+                                <div className='h-full w-full mx-auto' style={{width: '77.7%'}}>
+                                    <img className='h-full w-full mx-auto object-contain' src='newsScreenshot.png'></img>
+                                </div>
+                                <div className='h-full w-full absolute '>
+                                    <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='h-56 flex hover:shadow-outline'>
+                            <div className='h-full w-full object-contain flex relative'>	
+                                <div className='h-full w-full mx-auto' style={{width: '77.7%'}}>
+                                    <img className='h-full w-full mx-auto object-contain' src='newsScreenshot.png'></img>
+                                </div>
+                                <div className='h-full w-full absolute '>
+                                    <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 pb-2 overflow-hidden">	 
+                        <div className='h-56 flex'>
+                            <img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
+                        </div>
+                        <div className='h-56 flex'>
+                            <img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* <div className='h-full w-1 bg-gray-300'></div> */}
+            <div className='h-full flex-auto flex flex-row'>
+                <div className='hidden flex-shrink-0 bg-gray-100 rounded-full shadow-lg h-64 ml-3 mt-3 w-16'></div>
+                <div className='flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col' style={{height: '600px', width: '305px'}}> 
+                    <div className='h-full w-full object-contain flex relative'>	
+                        <div className='h-full w-full mx-auto' style={{width: '86%'}}>
+                            <img className='h-full w-full mx-auto object-contain' src='newsScreenshot.png'></img>
+                        </div>
+                        <div className='h-full w-full absolute '>
+                            <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
+                        </div>
+                    </div>							
+                </div>
+                <div className='flex-auto h-full flex flex-col ml-3 mr-3'> 
+                    <div className='bg-white h-auto shadow-xl mt-3 rounded-lg p-3 w-72'>
+                        <h2 className='text-base font-bold truncate'>How do we handle a big title like this or even this</h2>
+                        <div className='-mt-1 text-xs uppercase text-gray-500 font-semibold '>
+                            21/02/2020 10:30PM EST
+                        </div>
+                        <p className='mt-1 text-xs leading-tight'>
+                            The screen has the wrong alignment on image x. It is the first time we have this ...
+                        </p>
+                    </div>
+                    <div className='bg-gray-100 hidden flex flex-col p-3 shadow-xl mt-3 rounded-lg h-auto overflow-y-scroll mb-3'>
+                        <div className='flex-shrink-0 bg-gray-200 w-auto h-12 rounded-lg'></div>
+                        <div className='flex-shrink-0 bg-gray-200 w-auto mt-1 h-48 rounded-lg'></div> 
+                        <div className='flex-shrink-0 bg-gray-200 w-auto mt-1 rounded-lg'>
+                            asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds
+                            asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds
 
-						</div> 
-						<div className='flex-shrink-0 bg-orange-400 w-auto mt-1 h-32 rounded-lg'></div> 
-						<div className='flex-shrink-0 bg-orange-400 w-auto mt-1 h-32 rounded-lg'></div> 
-						<div className='flex-shrink-0 bg-orange-400 w-auto mt-1 h-32 rounded-lg'></div> 
-						<div className='flex-shrink-0 bg-orange-400 w-auto mt-1 h-32 rounded-lg'></div> 
-					</div>
-				</div>
-				
-			</div>
-		</div>
+                            asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds asdads dasds
+
+                        </div> 
+                        <div className='flex-shrink-0 bg-gray-200 w-auto mt-1 h-32 rounded-lg'></div>  
+                        <div className='flex-shrink-0 bg-gray-200 w-auto mt-1 h-32 rounded-lg'></div> 
+                    </div>
+                    
+                </div>  
+            </div>
+        </div>
+        </>
         // <div>
         //     <h4>Annotation </h4>
         //     <div style={{ display: 'flex', width: '100%' }}>
