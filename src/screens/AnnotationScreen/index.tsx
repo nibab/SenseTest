@@ -58,15 +58,9 @@ export const AnnotationScreen = ({ }) => {
 
     return getPostsFetchInProgress ? <Loading /> : (
         <>
-            {/* <div className='flex w-full h-20 absolute flex-col justify-end pb-1 align-middle'>
-                <div className='bg-blue-200 h-12 w-64 mx-auto'></div>
-            </div> */}
-            <div className='flex flex-row h-full'> 
-            {/* <div className='bg-white h-full m-3 flex-shrink-0 w-20 rounded-lg shadow-xl'>
-
-            </div> */}
-            <div className='flex-shrink-0 w-72 bg-gray-400 h-full ml-4 mt-3 shadow-inner rounded-lg'>
-                <div className='flex flex-col overflow-hidden p-3'>
+        <div className="flex flex-row h-full bg-gray-200">
+            <div className='flex-shrink-0 w-72 bg-gray-400 ml-4 mt-3 mb-3 shadow-inner rounded-lg' >
+                <div className='flex flex-col p-3 h-full overflow-scroll'>
                     <div className="grid grid-cols-2 gap-3 pb-2">	 
                         <div className='h-56 flex hover:shadow-outline'>
                             <div className='h-full w-full object-contain flex relative'>	
@@ -111,12 +105,48 @@ export const AnnotationScreen = ({ }) => {
                             </div>
                         </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-3 pb-2 overflow-hidden">	 
-                        <div className='h-56 flex'>
-                            <img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
+                    <div className="grid grid-cols-2 gap-3 pb-2">	 
+                        <div className='h-56 flex hover:shadow-outline'>
+                            <div className='h-full w-full object-contain flex relative'>	
+                                <div className='h-full w-full mx-auto' style={{width: '77.7%'}}>
+                                    <img className='h-full w-full mx-auto object-contain' src='newsScreenshot.png'></img>
+                                </div>
+                                <div className='h-full w-full absolute '>
+                                    <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
+                                </div>
+                            </div>
                         </div>
-                        <div className='h-56 flex'>
-                            <img className="object-contain" src='../../../public/iPhoneXWireframe.png'></img>
+                        <div className='h-56 flex hover:shadow-outline'>
+                            <div className='h-full w-full object-contain flex relative'>	
+                                <div className='h-full w-full mx-auto' style={{width: '77.7%'}}>
+                                    <img className='h-full w-full mx-auto object-contain' src='newsScreenshot.png'></img>
+                                </div>
+                                <div className='h-full w-full absolute '>
+                                    <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 pb-2">	 
+                        <div className='h-56 flex hover:shadow-outline'>
+                            <div className='h-full w-full object-contain flex relative'>	
+                                <div className='h-full w-full mx-auto' style={{width: '77.7%'}}>
+                                    <img className='h-full w-full mx-auto object-contain' src='newsScreenshot.png'></img>
+                                </div>
+                                <div className='h-full w-full absolute '>
+                                    <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='h-56 flex hover:shadow-outline'>
+                            <div className='h-full w-full object-contain flex relative'>	
+                                <div className='h-full w-full mx-auto' style={{width: '77.7%'}}>
+                                    <img className='h-full w-full mx-auto object-contain' src='newsScreenshot.png'></img>
+                                </div>
+                                <div className='h-full w-full absolute '>
+                                    <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -135,8 +165,8 @@ export const AnnotationScreen = ({ }) => {
                     </div>							
                 </div>
                 <div className='flex-auto h-full flex flex-col ml-3 mr-3'> 
-                    <div className='bg-white h-auto shadow-xl mt-3 rounded-lg p-3 w-72'>
-                        <h2 className='text-base font-bold truncate'>How do we handle a big title like this or even this</h2>
+                    <div className='bg-white h-auto shadow-xl mt-3 rounded-lg p-3 w-96'>
+                        <h2 className='text-base font-bold'>How do we handle a big title like this or even this</h2>
                         <div className='-mt-1 text-xs uppercase text-gray-500 font-semibold '>
                             21/02/2020 10:30PM EST
                         </div>
@@ -160,7 +190,7 @@ export const AnnotationScreen = ({ }) => {
                     
                 </div>  
             </div>
-        </div>
+            </div>
         </>
         // <div>
         //     <h4>Annotation </h4>

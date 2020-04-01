@@ -10,7 +10,7 @@ const SettingsScreen = () => {
   return (
     <div>
       <PlanPanel />
-      <PaymentsPanel />
+      {/* <PaymentsPanel /> */}
     </div>
   )
 }

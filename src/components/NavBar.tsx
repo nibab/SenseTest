@@ -97,36 +97,27 @@ const NavBar = ({ isLoggedIn, signOut, width} : NavBarProps) =>{
 
   return (
     <>
-    <div>
-      <nav className="">
-        <div className="max-w-7xl">
-          <div className="flex h-16 w-full flex-row">
-            {/* <NavBarItems navBarDir={navBarDir} screenSize={'large'} /> */}
-            <div className="bg-red-100 w-full h-full flex flex-row relative">
-              <div className="bg-green-200 w-84 h-full p-2 mx-auto">
-                <div className="bg-white shadow-xl p-1 h-full rounded-lg"></div>
-              </div>
-              <div className="bg-blue-300 w-auto h-full flex absolute flex-row right-0 mr-3">
-                <NotificationButton />
-                <div className="h-8 my-auto object-contain">    
-                  <ProfileDropDown />
-                </div>
-              </div>
-            </div>
-            
-            
-            {/* { renderNotificationAndProfileButton('large') } */}
-            {/* { renderMenuButtonForMobile() }  */}
+      {/* <NavBarItems navBarDir={navBarDir} screenSize={'large'} /> */}
+      <div className="w-full h-full flex flex-row relative">
+        <div className=" w-84 h-full p-2 mx-auto">
+          <div className="bg-white shadow-xl p-1 h-full rounded-lg"></div>
+        </div>
+        <div className="w-auto h-full flex absolute flex-row right-0 mr-3">
+          <NotificationButton />
+          <div className="h-8 my-auto object-contain">    
+            <ProfileDropDown />
           </div>
         </div>
+      </div>
+      
+      
+      {/* { renderNotificationAndProfileButton('large') } */}
+      {/* { renderMenuButtonForMobile() }  */}
 
-        <div className={`${blockOpen ? 'block' : 'hidden'}`}>
-          <NavBarItemsMobile navBarDir={navBarDir} />
-        </div>
-      </nav>
-      { renderPageHeader() }
-      { renderMainContent() }
-    </div>
+
+      {/* <div className={`${blockOpen ? 'block' : 'hidden'}`}>
+        <NavBarItemsMobile navBarDir={navBarDir} />
+      </div> */}
     </>
   )
 }

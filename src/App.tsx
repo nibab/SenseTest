@@ -154,17 +154,16 @@ class App extends Component<{}, AppState> {
   renderRouter = (isLoggedIn: boolean, isLoading: boolean) => {
     return (
       <Router>
-        <div className="flex h-screen w-screen flex-col antialiased font-sans bg-gray-200">
-          <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/>
+        <div className="bg-gray-200 h-screen w-screen flex flex-col antialiased font-sans">
+          <div className='flex-shrink-0 flex h-16 w-full flex-row'>
+            <NavBar width={256} isLoggedIn={isLoggedIn} signOut={this.signOut}/>
+          </div>  
+          
+          
           <Provider  store={store}>
-            {/* <Content style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-            }}> */}
-              {this.renderContent(isLoggedIn, isLoading)}
-            {/* </Content> */}
+            {this.renderContent(isLoggedIn, isLoading)}
           </Provider>
+          
         </div>  
       </Router>
     )
@@ -174,10 +173,9 @@ class App extends Component<{}, AppState> {
 
     const { isLoggedIn, isLoading } = this.state.authState;
     return (
-      <div>
+      <>
         {this.renderRouter(isLoggedIn, isLoading)}
-      </div>
-      
+      </>
     );  
   }
 }
