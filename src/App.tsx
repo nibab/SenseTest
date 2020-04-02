@@ -11,15 +11,12 @@ import awsconfig from './aws-exports.js';
 import './App.css';
 import OnboardingScreen from './screens/OnboardingScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import RunScreen from './screens/RunScreen';
-import TestsScreen from './screens/TestsScreen';
 import NavBar from './components/NavBar';
 import AuthForm from './components/AuthForm';
 import { bool } from 'aws-sdk/clients/signer';
 import ZeplinAuth from './utils/ZeplinAuth';
 import { Layout } from 'antd';
 import AnnotationScreen from './screens/AnnotationScreen';
-import { AutoTestScreen } from './screens/AutoTestScreen';
 import { createStore } from 'redux'
 import { rootReducer } from './store'
 import { Provider } from 'react-redux'
@@ -103,30 +100,11 @@ class App extends Component<{}, AppState> {
           component={AnnotationScreen}
         ></ProtectedRoute>
         <ProtectedRoute
-          path='/autoTest'
-          isLoggedIn={isLoggedIn}
-          isLoading={isLoading}
-          component={AutoTestScreen}
-        ></ProtectedRoute>
-        <ProtectedRoute
           path='/team'
           isLoggedIn={isLoggedIn}
           isLoading={isLoading}
           component={TeamScreen}
         ></ProtectedRoute>
-        <ProtectedRoute
-          exact
-          path='/tests'
-          isLoggedIn={isLoggedIn}
-          isLoading={isLoading}
-          component={TestsScreen}
-        />
-        <ProtectedRoute
-        path='/run/:runId'
-        isLoggedIn={isLoggedIn}
-        isLoading={isLoading}
-        component={RunScreen}
-        />
         <ProtectedRoute
           exact
           path='/settings'

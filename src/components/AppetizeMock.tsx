@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect, useRef } from "react"
-import { AppetizeContext } from "../screens/AutoTestScreen"
 import TextArea from "antd/lib/input/TextArea"
 import { Button } from "antd"
 import { StyleSheet } from '../../src/GlobalTypes'
@@ -14,7 +13,6 @@ export const AppetizeMock = ({onScreenshot}: AppetizeMockProps) => {
     const mockImageSrc = ["newsScreenshot.png", "newsScreenshot2.png", "newsScreenshot3.png", "newsScreenshot4.png"]
     const [imageToDisplay, setImageToDisplay] = useState<string>(mockImageSrc[0])
     
-    const appetizeContext = useContext(AppetizeContext)
     // for testing the context sharing
     const textAreaRef= useRef<TextArea>(null);
 
