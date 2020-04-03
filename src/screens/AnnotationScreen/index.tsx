@@ -19,6 +19,7 @@ export const AnnotationScreen = ({ }) => {
     const dispatch = useDispatch()
     const postsSelector = useSelector(state => state.post)
     const [currentPost, setCurrentPost] = useState<Post>()
+    const [displayCreateNewPost, setDisplayCreateNewPost] = useState<boolean>(false)
 
     const getPostsGraphQl = async (projectId: string) => {
         const query: ModelPostFilterInput = {
@@ -60,7 +61,7 @@ export const AnnotationScreen = ({ }) => {
     const renderPostIcon = (post: Post) => {
         const className = `${currentPost !== undefined && post.id === currentPost.id ? 'shadow-outline' : 'hover:shadow-outline'} h-full w-full object-contain flex relative`
         return (
-            <div onClick={() => setCurrentPost(post)} className={className}>	
+            <div onClick={() => {setDisplayCreateNewPost(false); setCurrentPost(post)}} className={className}>	
                 <div className='h-full w-full mx-auto' style={{width: '77.7%'}}>
                     <img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img>
                 </div>
@@ -71,8 +72,28 @@ export const AnnotationScreen = ({ }) => {
         )
     }
 
+    const createNewPostIcon = () => {
+        const className = 'hover:shadow-outline h-full w-full object-contain flex relative'
+        return (
+            <div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined)}} className={className}>	
+                <div className='h-full w-full mx-auto' style={{width: '77.7%'}}>
+                    <img className='h-full w-full mx-auto object-contain' src='iPhoneXWireframe.png'></img>
+                </div>
+                <div className='h-full w-full absolute '>
+                    <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
+                </div>
+            </div>
+        )
+    }
+
     const renderPostsInSelectorWindow = () => {
         let items: JSX.Element[] = []
+
+        // Add the create new post icon
+        items.push(<div className='h-56 flex '>
+            {createNewPostIcon()}
+        </div>)
+
         for (let post in postsSelector.posts) {
             items.push(
                 <div className='h-56 flex '>
@@ -109,6 +130,17 @@ export const AnnotationScreen = ({ }) => {
         return posts
     }
 
+    const renderPostDetailView = () => {
+        if (!displayCreateNewPost) {
+            if (currentPost) {
+                return (<PostView post={currentPost} />) 
+            }
+        } else {
+            return (<CreatePostView />)
+        }
+        
+    }
+
     return getPostsFetchInProgress ? <Loading /> : (
         <>
         <div className="flex flex-row h-full bg-gray-200">
@@ -134,7 +166,7 @@ export const AnnotationScreen = ({ }) => {
                 </div>
             </div>
             {/* <div className='h-full w-1 bg-gray-300'></div> */}
-            { currentPost ? <PostView post={currentPost} /> : <></>}
+            { renderPostDetailView() }
             </div>
         </>
         // <div>
@@ -144,6 +176,46 @@ export const AnnotationScreen = ({ }) => {
         //         <PostsGrid />
         //     </div>
         // </div>
+    )
+}
+
+const CreatePostView = () => {
+    const renderAppetizeScreen = () => {
+        return (
+            <div className='flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col' style={{height: '600px', width: '305px'}}> 
+                <div className='h-full w-full object-contain flex relative'>	
+                    <div className='h-full w-full mx-auto' style={{width: '86%'}}>
+                        <img className='h-full w-full mx-auto object-contain' src={'iPhoneXWireframe.png'}></img>
+                    </div>
+                    <div className='h-full w-full absolute '>
+                        <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
+                    </div>
+                </div>							
+            </div>
+        )
+    }
+
+    const renderAnnotationCanvas = () => {
+        return (
+            <div className='flex-shrink-0 h-full ml-3 mt-3 mr-3 mb-3' style={{height: '600px', width: '305px'}}>  
+                <div className='h-full w-full object-contain flex relative'>	
+                    <div className='h-full w-full mx-auto' style={{width: '86%'}}>
+                        <img className='h-full w-full mx-auto object-contain' src={'iPhoneXWireframe.png'}></img>
+                    </div>
+                    <div className='h-full w-full absolute '>
+                        <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className='h-full flex-auto flex flex-row'>
+            { renderAppetizeScreen() }
+            <div className='flex-shrink-0 bg-gray-100 rounded-full shadow-lg h-64 ml-3 mt-3 w-16'></div>
+            { renderAnnotationCanvas() }
+        </div>
     )
 }
 
