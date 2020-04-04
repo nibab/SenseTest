@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom'
+import { SignOut } from 'aws-amplify-react';
 
 // TODO: Be deliberate about not displaying on mobile screens.
 
 type NavBarProps = {
   isLoggedIn: boolean,
-  signOut: Function,
+  signOut: () => void,
   width: number
 }
 
@@ -54,7 +55,7 @@ const NavBar = ({ isLoggedIn, signOut, width} : NavBarProps) =>{
         <div className="hidden sm:ml-6 sm:flex sm:items-center">
           <NotificationButton />
           <div className="ml-3 relative">
-            <ProfileDropDown />
+            <ProfileDropDown signOut={signOut} />
           </div>
         </div>
       )
@@ -105,7 +106,7 @@ const NavBar = ({ isLoggedIn, signOut, width} : NavBarProps) =>{
         <div className="w-auto h-full flex absolute flex-row right-0 mr-3">
           <NotificationButton />
           <div className="h-8 my-auto object-contain">    
-            <ProfileDropDown />
+            <ProfileDropDown signOut={signOut} />
           </div>
         </div>
       </div>
@@ -231,7 +232,10 @@ const NotificationButton = () => {
   )
 }
 
-const ProfileDropDown = () => {
+type ProfileDropDownProps = {
+  signOut: () => void
+}
+const ProfileDropDown = ({signOut}: ProfileDropDownProps) => {
   const [showProfileDropDown, setShowProfileDropDown] = useState(false)
 
   const profileDropDownRef = useRef<HTMLDivElement>(null);
@@ -270,7 +274,7 @@ const ProfileDropDown = () => {
           <div className="py-1 rounded-md bg-white shadow-xs">
             <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</a>
             <Link className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" to={{pathname: `/settings`}}>Settings</Link>
-            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</a>
+            <a href="#" onClick={() => {signOut()}} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</a>
           </div>
         </div>
       </>
