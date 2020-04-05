@@ -535,7 +535,7 @@
 								"Fn::Join": [
 									".",
 									[
-										"GetPostProjectResolver",
+										"GetProjectPipelineResolver",
 										"res",
 										"vtl"
 									]

@@ -5,7 +5,6 @@ import { SignOut } from 'aws-amplify-react';
 // TODO: Be deliberate about not displaying on mobile screens.
 
 type NavBarProps = {
-  isLoggedIn: boolean,
   signOut: () => void,
   width: number
 }
@@ -21,7 +20,7 @@ const navBarDir: Record<NavBarItem, string> = {
 
 type ScreenSize = 'large' | 'small' 
 
-const NavBar = ({ isLoggedIn, signOut, width} : NavBarProps) =>{
+const NavBar = ({ signOut, width} : NavBarProps) =>{
   const [blockOpen, setBlockOpen] = useState(false)
   const [open, setOpen] = useState(false)
 
