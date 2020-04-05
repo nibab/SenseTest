@@ -29,7 +29,6 @@ const SignInForm = ({ handleStateChange }: SignInFormProps) => {
 				}
 				handleStateChange('signedIn', user)
 			}).catch(e => {
-				debugger
 				console.log(e);
 			});
 	}

@@ -43,13 +43,12 @@ type AuthStateHistory = {
 
 class AuthForm extends Component<AuthProps, AuthStateHistory> {
   state = {
-    currentState: "signUp" as AuthState,
+    currentState: null,
     previousState: null,
     userObject: undefined
   }
 
   handleStateChange = (state: AuthState) => {
-    debugger
     console.log(state);
     const previousState = this.state.currentState;
     this.setState({currentState: state, previousState })
@@ -74,27 +73,27 @@ class AuthForm extends Component<AuthProps, AuthStateHistory> {
 
     return (
       <div>
-        <Authenticator authState={'requireNewPassword'} hideDefault={true} usernameAttributes={UsernameAttributes.EMAIL}
+        {/* <Authenticator authState={'requireNewPassword'} hideDefault={true} usernameAttributes={UsernameAttributes.EMAIL}
           onStateChange={(authState, data) => {
             if (isAuthState(authState)) {
               this.handleStateChange(authState) 
             }
-        }}>
+        }}> */}
 
-            <SignIn handleStateChange={(authState, userObject) => {
+            { this.state.currentState === null && <SignIn handleStateChange={(authState, userObject) => {
               this.handleStateChange(authState)
               this.setState({ userObject: userObject})
-            }}/>
-            <SignInCreateNewPassword override={'CreateNewPassword'} userObject={this.state.userObject} handleStateChange={(authState) => {
-                this.handleStateChange(authState)
-            }}/>
+            }}/>}
+            
             { this.state.currentState === 'signedUpAfterInvite' && 
-              
-            }
-            <SignUp signUpConfig={signUpConfig}/>
-            <ConfirmSignUp/>
+              <SignInCreateNewPassword userObject={this.state.userObject} handleStateChange={(authState) => {
+                this.handleStateChange(authState)
+            }}/>}
 
-        </Authenticator>
+            {/* <SignUp signUpConfig={signUpConfig}/>
+            <ConfirmSignUp/> */}
+
+        {/* </Authenticator> */}
       </div>
     );
   }
