@@ -20,6 +20,11 @@ export type PostGraphQl = {
   updatedAt: string | null// This is introduced by Amplify at the resolver level.
 }
 
+export type Project = {
+  id: string,
+  name: string
+}
+
 const stringLitArray = <L extends string>(arr: L[]) => arr
 const authStates = stringLitArray(["signedIn", "signedUp", "signUp", "signedUpAfterInvite"])
 export type AuthState = (typeof authStates)[number]
