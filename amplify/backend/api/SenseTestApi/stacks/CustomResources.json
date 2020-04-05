@@ -410,6 +410,141 @@
 					]
 				}
 			}
+		},
+		"QueryGetProjectFunction": {
+			"Type" : "AWS::AppSync::FunctionConfiguration",
+			"Properties" : {
+				"ApiId" : {
+					"Ref": "AppSyncApiId"
+				},
+				"DataSourceName" : "ProjectTable",
+				"FunctionVersion" : "2018-05-29",
+				"Name" : "Query_getProject_Function",
+				"RequestMappingTemplateS3Location" : {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Query",
+										"getProject",
+										"resolver",
+										"req",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				},
+				"ResponseMappingTemplateS3Location" : {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Query",
+										"getProject",
+										"resolver",
+										"res",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				}
+			}
+		},
+		"QueryGetProjectResolver": {
+			"Type": "AWS::AppSync::Resolver",
+			"DependsOn" : "QueryGetProjectFunction",
+			"Properties": {
+				"ApiId": {
+					"Ref": "AppSyncApiId"
+				},
+				"FieldName": "getProject",
+				"TypeName": "Query",
+				"Kind": "PIPELINE",
+				"PipelineConfig": {
+					"Functions": [
+						{
+							"Fn::GetAtt": [
+								"QueryGetProjectFunction",
+								"FunctionId"
+							]
+						},
+						{
+							"Fn::GetAtt": [
+								"IsUserAuthorizedToAccessProject",
+								"FunctionId"
+							]
+						}
+					]
+				},
+				"RequestMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"GetProjectPipelineResolver",
+										"req",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				},
+				"ResponseMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"GetPostProjectResolver",
+										"res",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				}
+			}
 		}
 	},
 	"Conditions": {
