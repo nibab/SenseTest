@@ -21,6 +21,7 @@ import { createStore } from 'redux'
 import { rootReducer } from './store'
 import { Provider } from 'react-redux'
 import TeamScreen from './screens/TeamScreen';
+import ProjectsScreen from './screens/ProjectsScreen';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -93,6 +94,12 @@ class App extends Component<{}, AppState> {
         <Route path='/login' render={(props) => (
           <AuthForm onUserSignIn={this.handleUserSignIn} />
         )}/>
+        <ProtectedRoute
+          path='/projects'
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
+          component={ProjectsScreen}
+        ></ProtectedRoute>
         <ProtectedRoute
           path='/annotate'
           isLoggedIn={isLoggedIn}
