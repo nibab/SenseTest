@@ -19,3 +19,8 @@ export type PostGraphQl = {
   createdAt: string | null, // This is introduced by Amplify at the resolver level.
   updatedAt: string | null// This is introduced by Amplify at the resolver level.
 }
+
+const stringLitArray = <L extends string>(arr: L[]) => arr
+const authStates = stringLitArray(["signedIn", "signedUp", "signUp", "signedUpAfterInvite"])
+export type AuthState = (typeof authStates)[number]
+export const isAuthState = (x: any): x is AuthState => authStates.includes(x);

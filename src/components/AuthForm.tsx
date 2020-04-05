@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { Authenticator, SignIn, SignUp, ConfirmSignUp } from 'aws-amplify-react';
+import { Authenticator, SignUp, ConfirmSignUp, RequireNewPassword } from 'aws-amplify-react';
 import { UsernameAttributes } from 'aws-amplify-react/lib-esm/Auth/common/types';
 import { History } from 'history';
 import { Redirect } from "react-router-dom"
+import { AuthState, isAuthState } from '../types';
+import SignInCreateNewPassword from './AuthForms/SignInCreateNewPassword';
+import SignIn from './AuthForms/SignIn';
 
 const signUpConfig = {
   hiddenDefaults: ['username', 'phone_number'],
@@ -32,17 +35,21 @@ type AuthProps = {
   onUserSignIn: Function,
 }
 
-type AuthState = {
-  currentState: string | null,
-  previousState: string | null
+type AuthStateHistory = {
+  currentState: AuthState | null,
+  previousState: AuthState | null,
+  userObject: any 
 }
 
-class AuthForm extends Component<AuthProps, AuthState> {
+class AuthForm extends Component<AuthProps, AuthStateHistory> {
   state = {
-    currentState: null,
-    previousState: null
+    currentState: "signUp" as AuthState,
+    previousState: null,
+    userObject: undefined
   }
-  handleStateChange = (state: string) => {
+
+  handleStateChange = (state: AuthState) => {
+    debugger
     console.log(state);
     const previousState = this.state.currentState;
     this.setState({currentState: state, previousState })
@@ -67,11 +74,26 @@ class AuthForm extends Component<AuthProps, AuthState> {
 
     return (
       <div>
-        <Authenticator hideDefault={true} usernameAttributes={UsernameAttributes.EMAIL}
-          onStateChange={this.handleStateChange}>
-            <SignIn/>
+        <Authenticator authState={'requireNewPassword'} hideDefault={true} usernameAttributes={UsernameAttributes.EMAIL}
+          onStateChange={(authState, data) => {
+            if (isAuthState(authState)) {
+              this.handleStateChange(authState) 
+            }
+        }}>
+
+            <SignIn handleStateChange={(authState, userObject) => {
+              this.handleStateChange(authState)
+              this.setState({ userObject: userObject})
+            }}/>
+            <SignInCreateNewPassword override={'CreateNewPassword'} userObject={this.state.userObject} handleStateChange={(authState) => {
+                this.handleStateChange(authState)
+            }}/>
+            { this.state.currentState === 'signedUpAfterInvite' && 
+              
+            }
             <SignUp signUpConfig={signUpConfig}/>
             <ConfirmSignUp/>
+
         </Authenticator>
       </div>
     );
