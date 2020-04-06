@@ -1,0 +1,35 @@
+{
+    "paths": [
+        {
+            "name": "/tests",
+            "lambdaFunction": "testsLambda",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "SnapTestRESTAPI",
+    "apiName": "SnapTestRESTAPI",
+    "functionArns": [
+        {
+            "lambdaFunction": "testsLambda"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-snaptest-dev-232134-authRole",
+        "unAuthRoleName": "amplify-snaptest-dev-232134-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "testsLambda",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ],
+    "uuid": "fa9ae460"
+}

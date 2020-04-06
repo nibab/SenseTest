@@ -2,66 +2,6 @@
 // eslint-disable
 // this is an auto generated file. This will be overwritten
 
-export const onCreateProject = /* GraphQL */ `
-  subscription OnCreateProject {
-    onCreateProject {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          imageId
-          projectId
-          text
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const onUpdateProject = /* GraphQL */ `
-  subscription OnUpdateProject {
-    onUpdateProject {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          imageId
-          projectId
-          text
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const onDeleteProject = /* GraphQL */ `
-  subscription OnDeleteProject {
-    onDeleteProject {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          imageId
-          projectId
-          text
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-    }
-  }
-`;
 export const onCreatePost = /* GraphQL */ `
   subscription OnCreatePost {
     onCreatePost {
@@ -73,11 +13,17 @@ export const onCreatePost = /* GraphQL */ `
       createdAt
       updatedAt
       comments {
-        items {
+        id
+        content
+        post {
           id
-          content
+          title
+          imageId
+          projectId
+          text
+          createdAt
+          updatedAt
         }
-        nextToken
       }
     }
   }
@@ -93,11 +39,17 @@ export const onUpdatePost = /* GraphQL */ `
       createdAt
       updatedAt
       comments {
-        items {
+        id
+        content
+        post {
           id
-          content
+          title
+          imageId
+          projectId
+          text
+          createdAt
+          updatedAt
         }
-        nextToken
       }
     }
   }
@@ -113,11 +65,17 @@ export const onDeletePost = /* GraphQL */ `
       createdAt
       updatedAt
       comments {
-        items {
+        id
+        content
+        post {
           id
-          content
+          title
+          imageId
+          projectId
+          text
+          createdAt
+          updatedAt
         }
-        nextToken
       }
     }
   }
@@ -136,7 +94,8 @@ export const onCreateComment = /* GraphQL */ `
         createdAt
         updatedAt
         comments {
-          nextToken
+          id
+          content
         }
       }
     }
@@ -156,7 +115,8 @@ export const onUpdateComment = /* GraphQL */ `
         createdAt
         updatedAt
         comments {
-          nextToken
+          id
+          content
         }
       }
     }
@@ -176,7 +136,8 @@ export const onDeleteComment = /* GraphQL */ `
         createdAt
         updatedAt
         comments {
-          nextToken
+          id
+          content
         }
       }
     }

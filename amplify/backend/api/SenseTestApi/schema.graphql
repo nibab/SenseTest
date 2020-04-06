@@ -1,7 +1,7 @@
-type Project @model(queries: {list: "listProjects"}, mutations: {}) {
+type Project @model(queries: {list: "listProjects"}, mutations: null) {
   id: ID!
   name: String!
-  posts: [Post] @connection(keyName: "byProject", fields: ["id"])
+  #posts: [Post] @connection(keyName: "byProject", fields: ["id"])
 }
 type Post @model(queries: {list: "listPosts"})  
   @key(name: "byProject", fields:["projectId", "title"]) 
@@ -13,12 +13,12 @@ type Post @model(queries: {list: "listPosts"})
   text: String!
   createdAt: String
   updatedAt: String
-  comments: [Comment] @connection(name: "PostComments")
+  #comments: [Comment] @connection(name: "PostComments")
 }
 type Comment @model(queries: {list: "listComments", get: "getComment"}) {
   id: ID!
   content: String
-  post: Post @connection(name: "PostComments")
+  #post: Post @connection(name: "PostComments")
 }
 type Query {
   getPost(id: ID!): Post

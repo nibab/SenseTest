@@ -1,7 +1,0 @@
-{
-    "tableName": "postsTable",
-    "partitionKeyName": "projectId",
-    "partitionKeyType": "S",
-    "sortKeyName": "postId",
-    "sortKeyType": "S"
-}
