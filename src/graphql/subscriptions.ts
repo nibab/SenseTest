@@ -13,17 +13,11 @@ export const onCreatePost = /* GraphQL */ `
       createdAt
       updatedAt
       comments {
-        id
-        content
-        post {
+        items {
           id
-          title
-          imageId
-          projectId
-          text
-          createdAt
-          updatedAt
+          content
         }
+        nextToken
       }
     }
   }
@@ -39,17 +33,11 @@ export const onUpdatePost = /* GraphQL */ `
       createdAt
       updatedAt
       comments {
-        id
-        content
-        post {
+        items {
           id
-          title
-          imageId
-          projectId
-          text
-          createdAt
-          updatedAt
+          content
         }
+        nextToken
       }
     }
   }
@@ -65,17 +53,11 @@ export const onDeletePost = /* GraphQL */ `
       createdAt
       updatedAt
       comments {
-        id
-        content
-        post {
+        items {
           id
-          title
-          imageId
-          projectId
-          text
-          createdAt
-          updatedAt
+          content
         }
+        nextToken
       }
     }
   }
@@ -94,8 +76,7 @@ export const onCreateComment = /* GraphQL */ `
         createdAt
         updatedAt
         comments {
-          id
-          content
+          nextToken
         }
       }
     }
@@ -115,8 +96,7 @@ export const onUpdateComment = /* GraphQL */ `
         createdAt
         updatedAt
         comments {
-          id
-          content
+          nextToken
         }
       }
     }
@@ -136,8 +116,7 @@ export const onDeleteComment = /* GraphQL */ `
         createdAt
         updatedAt
         comments {
-          id
-          content
+          nextToken
         }
       }
     }
