@@ -1,4 +1,4 @@
-type Project @model(queries: {list: "listProjects"}, mutations: {create: "createProject"}) {
+type Project @model(queries: null, mutations: {create: "createProject"}) {
   id: ID!
   name: String!
   posts: [Post] @connection(keyName: "byProject", fields: ["id"])
@@ -20,11 +20,43 @@ type Comment @model(queries: {list: "listComments", get: "getComment"}) {
   content: String
   post: Post @connection(name: "PostComments")
 }
+
 type Query {
   getPost(id: ID!): Post
   getProject(id: ID!): Project
+  listProjects(filter: ModelProjectFilterInput, limit: Int, nextToken: String): ModelProjectConnection
 }
+
+type Mutation {
+  createProject(input: CreateProjectInput!, condition: ModelProjectConditionInput): Project
+}
+
 ## Project
+type ModelProjectConnection {
+	items: [Project]
+	nextToken: String
+}
+
+input ModelProjectFilterInput {
+	id: ModelIDInput
+	name: ModelStringInput
+	and: [ModelProjectFilterInput]
+	or: [ModelProjectFilterInput]
+	not: ModelProjectFilterInput
+}
+
+input ModelProjectConditionInput {
+	name: ModelStringInput
+	and: [ModelProjectConditionInput]
+	or: [ModelProjectConditionInput]
+	not: ModelProjectConditionInput
+}
+input CreateProjectInput {
+	id: ID
+	name: String!
+}
+
+## Generic
 enum ModelAttributeTypes {
 	binary
 	binarySet
@@ -36,6 +68,34 @@ enum ModelAttributeTypes {
 	string
 	stringSet
 	_null
+}
+
+enum ModelAttributeTypes {
+	binary
+	binarySet
+	bool
+	list
+	map
+	number
+	numberSet
+	string
+	stringSet
+	_null
+}
+input ModelIDInput {
+	ne: ID
+	eq: ID
+	le: ID
+	lt: ID
+	ge: ID
+	gt: ID
+	contains: ID
+	notContains: ID
+	between: [ID]
+	beginsWith: ID
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+	size: ModelSizeInput
 }
 input ModelSizeInput {
 	ne: Int
@@ -60,17 +120,4 @@ input ModelStringInput {
 	attributeExists: Boolean
 	attributeType: ModelAttributeTypes
 	size: ModelSizeInput
-}
-input ModelProjectConditionInput {
-	name: ModelStringInput
-	and: [ModelProjectConditionInput]
-	or: [ModelProjectConditionInput]
-	not: ModelProjectConditionInput
-}
-input CreateProjectInput {
-	id: ID
-	name: String!
-}
-type Mutation {
-  createProject(input: CreateProjectInput!, condition: ModelProjectConditionInput): Project
 }
