@@ -1,4 +1,4 @@
-type Project @model(queries: null, mutations: {create: "createProject"}) {
+type Project @model(queries: null, mutations: null) {
   id: ID!
   name: String!
   posts: [Post] @connection(keyName: "byProject", fields: ["id"])
@@ -57,19 +57,6 @@ input CreateProjectInput {
 }
 
 ## Generic
-enum ModelAttributeTypes {
-	binary
-	binarySet
-	bool
-	list
-	map
-	number
-	numberSet
-	string
-	stringSet
-	_null
-}
-
 enum ModelAttributeTypes {
 	binary
 	binarySet

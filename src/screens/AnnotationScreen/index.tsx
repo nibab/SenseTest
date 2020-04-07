@@ -232,9 +232,9 @@ const PostView = ({ post }: PostViewProps) => {
 
     const renderDevice = () => {
         return (
-            <div className='flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col' style={{height: '500px', width: '250px'}}> 
+            <div className='flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col' style={{height: '570px', width: '300px'}}> 
                 <div className='h-full w-full object-contain flex relative'>	
-                    <div className='h-full w-full mx-auto' style={{width: '87.4%'}}>
+                    <div className='h-full w-full mx-auto' style={{width: '83%'}}>
                         <img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img>
                     </div>
                     <div className='h-full w-full absolute '>
