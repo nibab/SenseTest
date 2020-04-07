@@ -36,7 +36,7 @@ const ProjectsScreen = () => {
 				Log.info(`Succeeded in creating project ${JSON.stringify(_newProject)}.`, "ProjectsScreen")
 				resolve(_newProject)
 			} catch (err) {
-				Log.error(`There was an error creating a project ${err}.`, "ProjectsScreen")
+				Log.error(`There was an error creating a project ${JSON.stringify(err)}.`, "ProjectsScreen")
 				reject()
 			}
 		})

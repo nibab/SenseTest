@@ -1,4 +1,4 @@
-type Project @model(queries: {list: "listProjects"}, mutations: null) {
+type Project @model(queries: {list: "listProjects"}, mutations: {create: "createProject"}) {
   id: ID!
   name: String!
   posts: [Post] @connection(keyName: "byProject", fields: ["id"])
