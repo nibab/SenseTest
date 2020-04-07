@@ -1,0 +1,24 @@
+## Raise a GraphQL field error in case of a datasource invocation error
+#if($ctx.error)
+    $util.error($ctx.error.message, $ctx.error.type)
+#end
+
+## Populate a map with the projects that the user has permissions to **
+#set($projectsUserBelongsTo = {})
+#foreach($item in $context.result.items)
+	$util.qr($projectsUserBelongsTo.put($item.projectId, true))
+#end
+
+#if($projectsUserBelongsTo.isEmpty())
+	#return
+#end
+
+## Go through all the results in the previous requests and filter out the ones that the user doesnt have access to.
+#set($items = [])
+#foreach( $item in $ctx.prev.result.items)
+	#if($util.isBoolean($projectsUserBelongsTo.get($item.id)))
+		$util.qr($items.add($item))    	
+    #end
+#end
+
+$util.toJson({"items": $items})
