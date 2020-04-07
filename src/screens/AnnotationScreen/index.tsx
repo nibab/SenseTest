@@ -12,6 +12,7 @@ import { AppetizeScreen } from './AppetizeScreen'
 import Log from "../../utils/Log";
 import { Loading } from "aws-amplify-react";
 import { useSelector } from "../../store"
+import { AnnotationCanvas } from "../../components/AnnotationCanvas";
 
 export const AnnotationScreen = ({ }) => {
     // Posts
@@ -62,7 +63,7 @@ export const AnnotationScreen = ({ }) => {
         const className = `${currentPost !== undefined && post.id === currentPost.id ? 'shadow-outline' : 'hover:shadow-outline'} h-full w-full object-contain flex relative`
         return (
             <div onClick={() => {setDisplayCreateNewPost(false); setCurrentPost(post)}} className={className}>	
-                <div className='h-full w-full mx-auto' style={{width: '77.7%'}}>
+                <div className='h-full w-full mx-auto' style={{width: '82.5%'}}>
                     <img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img>
                 </div>
                 <div className='h-full w-full absolute '>
@@ -184,12 +185,13 @@ const CreatePostView = () => {
         return (
             <div className='flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col' style={{height: '600px', width: '305px'}}> 
                 <div className='h-full w-full object-contain flex relative'>	
-                    <div className='h-full w-full mx-auto' style={{width: '86%'}}>
+                    <AppetizeScreen />
+                    {/* <div className='h-full w-full mx-auto' style={{width: '86%'}}>
                         <img className='h-full w-full mx-auto object-contain' src={'iPhoneXWireframe.png'}></img>
                     </div>
                     <div className='h-full w-full absolute '>
                         <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
-                    </div>
+                    </div> */}
                 </div>							
             </div>
         )
@@ -197,7 +199,7 @@ const CreatePostView = () => {
 
     const renderAnnotationCanvas = () => {
         return (
-            <div className='flex-shrink-0 h-full ml-3 mt-3 mr-3 mb-3' style={{height: '600px', width: '305px'}}>  
+            <div className='flex-shrink-0 h-full ml-3 mt-3 mr-3 mb-3' style={{height: '600px', width: '305px'}}>
                 <div className='h-full w-full object-contain flex relative'>	
                     <div className='h-full w-full mx-auto' style={{width: '86%'}}>
                         <img className='h-full w-full mx-auto object-contain' src={'iPhoneXWireframe.png'}></img>
@@ -230,9 +232,9 @@ const PostView = ({ post }: PostViewProps) => {
 
     const renderDevice = () => {
         return (
-            <div className='flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col' style={{height: '600px', width: '305px'}}> 
+            <div className='flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col' style={{height: '500px', width: '250px'}}> 
                 <div className='h-full w-full object-contain flex relative'>	
-                    <div className='h-full w-full mx-auto' style={{width: '86%'}}>
+                    <div className='h-full w-full mx-auto' style={{width: '87.4%'}}>
                         <img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img>
                     </div>
                     <div className='h-full w-full absolute '>
