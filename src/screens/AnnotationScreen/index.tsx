@@ -13,6 +13,8 @@ import Log from "../../utils/Log";
 import { Loading } from "aws-amplify-react";
 import { useSelector } from "../../store"
 import { AnnotationCanvas } from "../../components/AnnotationCanvas";
+import { v4 as uuidv4 } from "uuid"
+import { DataLayerClient } from "../../clients/DataLayerClient";
 
 export const AnnotationScreen = ({ }) => {
     // Posts
@@ -63,12 +65,13 @@ export const AnnotationScreen = ({ }) => {
         const className = `${currentPost !== undefined && post.id === currentPost.id ? 'shadow-outline' : 'hover:shadow-outline'} h-full w-full object-contain flex relative`
         return (
             <div onClick={() => {setDisplayCreateNewPost(false); setCurrentPost(post)}} className={className}>	
-                <div className='h-full w-full mx-auto' style={{width: '82.5%'}}>
+                <div className='h-full w-full absolute z-0'>
+                    <img className="h-full w-full object-contain" src='iphonexBlack.png'></img>
+                </div>
+                <div className='w-full mx-auto my-auto overflow-hidden z-10' style={{width: '83.5%', borderRadius: '0.7rem'}}>
                     <img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img>
                 </div>
-                <div className='h-full w-full absolute '>
-                    <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
-                </div>
+                
             </div>
         )
     }
@@ -181,33 +184,44 @@ export const AnnotationScreen = ({ }) => {
 }
 
 const CreatePostView = () => {
-    const renderAppetizeScreen = () => {
-        return (
-            <div className='flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col' style={{height: '600px', width: '305px'}}> 
-                <div className='h-full w-full object-contain flex relative'>	
-                    <AppetizeScreen />
-                    {/* <div className='h-full w-full mx-auto' style={{width: '86%'}}>
-                        <img className='h-full w-full mx-auto object-contain' src={'iPhoneXWireframe.png'}></img>
-                    </div>
-                    <div className='h-full w-full absolute '>
-                        <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
-                    </div> */}
-                </div>							
-            </div>
-        )
+    const iframeRef = useRef<HTMLIFrameElement>(null)
+    const [imageToAnnotate, setImageToAnnotate] = useState<string>('newsScreenshot.png')
+
+    useEffect(() => {
+        window.addEventListener("message", receiveMessage, false);
+    })
+
+    const receiveMessage = (event: any) => {
+        console.log('blea')
+        if(event.data && event.data.type == 'screenshot'){
+            console.log(event.data);
+            setImageToAnnotate(event.data.data)
+            console.log("BLEA screenshot")
+            //document.getElementById("screenshot").src = event.data.data;
+        }
     }
 
-    const renderAnnotationCanvas = () => {
+    const iFrameLoaded = () => {
+        //iframeRef.current?.contentWindow?.postMessage('requestSession', '*');
+    }
+
+    const onScreenshotButtonClick = (event: any) => {        
+        iframeRef.current?.contentWindow?.postMessage('getScreenshot', '*')
+    }
+
+    const renderAppetizeScreen = () => {
         return (
-            <div className='flex-shrink-0 h-full ml-3 mt-3 mr-3 mb-3' style={{height: '600px', width: '305px'}}>
-                <div className='h-full w-full object-contain flex relative'>	
+            <div className='flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col bg-green-600 relative' style={{height: '583px', width: '282px'}}>
+                <button className='bg-blue-600 absolute w-24 h-10 right-0' onClick={(event) => onScreenshotButtonClick(event)}> Take Screenshot </button> 
+                <iframe onLoad={() => iFrameLoaded()} ref={iframeRef} src="https://appetize.io/embed/fczxctdk32wb17vabzd3k2wq9w?device=iphonex&scale=69&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true" width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
+                {/* <div className='h-full w-full object-contain flex relative'>	
                     <div className='h-full w-full mx-auto' style={{width: '86%'}}>
                         <img className='h-full w-full mx-auto object-contain' src={'iPhoneXWireframe.png'}></img>
                     </div>
                     <div className='h-full w-full absolute '>
                         <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
                     </div>
-                </div>
+                </div>							 */}
             </div>
         )
     }
@@ -215,8 +229,17 @@ const CreatePostView = () => {
     return (
         <div className='h-full flex-auto flex flex-row'>
             { renderAppetizeScreen() }
-            <div className='flex-shrink-0 bg-gray-100 rounded-full shadow-lg h-64 ml-3 mt-3 w-16'></div>
-            { renderAnnotationCanvas() }
+            {/* <DeviceScreenshot src={'testScreenshot.jpg'}/> */}
+            
+            { imageToAnnotate !== undefined ? 
+                <>
+                    <div className='flex-shrink-0 bg-gray-100 rounded-full shadow-lg h-64 ml-3 mt-3 w-16'>
+                        <button className="w-8 h-8 bg-red-500 mx-auto my-8" onClick={(event) => onScreenshotButtonClick(event)}>S</button>
+                    </div>
+                    <AnnotationScreenshot src={imageToAnnotate} /> 
+                </>
+                
+                : <></>}            
         </div>
     )
 }
@@ -229,21 +252,6 @@ const PostView = ({ post }: PostViewProps) => {
     useEffect(() => {
 
     }, [post])
-
-    const renderDevice = () => {
-        return (
-            <div className='flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col' style={{height: '570px', width: '300px'}}> 
-                <div className='h-full w-full object-contain flex relative'>	
-                    <div className='h-full w-full mx-auto' style={{width: '83%'}}>
-                        <img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img>
-                    </div>
-                    <div className='h-full w-full absolute '>
-                        <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
-                    </div>
-                </div>							
-            </div>
-        )
-    }
 
     const renderPostText = (title: string, text: string, dateCreated: string) => {
         return (
@@ -281,7 +289,7 @@ const PostView = ({ post }: PostViewProps) => {
         return (
             <div className='h-full flex-auto flex flex-row'>
                 <div className='hidden flex-shrink-0 bg-gray-100 rounded-full shadow-lg h-64 ml-3 mt-3 w-16'></div>
-                { renderDevice() }
+                <DeviceScreenshot src={window.URL.createObjectURL(post.image)}/>
                 <div className='flex-auto h-full flex flex-col ml-3 mr-3'> 
                     { renderPostText(post.title, post.text, "21/02/2020 10:30PM EST") }
                     { renderComments() }
@@ -294,6 +302,73 @@ const PostView = ({ post }: PostViewProps) => {
         <>
             { renderPostView() }
         </>
+    )
+}
+
+type ScreenshotProps = {
+    src: string
+}
+
+const DeviceScreenshot = ({ src }: ScreenshotProps) => {
+    return (
+        <div className='bg-green-400 flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col' style={{height: '583px', width: '281px'}}> 
+            <div className='h-full w-full object-contain flex relative'>
+                <div className='h-full w-full absolute z-0'>
+                    <img className="h-full w-full object-contain" src='iphonexBlack.png'></img>
+                </div>	
+                <div className=' mx-auto my-auto z-10 overflow-hidden' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
+                    <img className='h-full w-full mx-auto object-contain' src={src}></img>
+                </div>
+                
+            </div>							
+        </div>
+    )
+}
+
+const AnnotationScreenshot = ({ src }: ScreenshotProps) => {
+    return (
+        <div className='flex-shrink-0 h-full ml-3 mt-3 mr-3 mb-3' style={{height: '583px', width: '282px'}}>
+            <div className='h-full w-full object-contain flex relative'>
+                <div className='h-full w-full absolute z-0'>
+                    <img className="h-full w-full object-contain" src='iphonexBlack.png'></img>
+                </div>	
+                <div className=' mx-auto my-auto z-10 overflow-hidden' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
+                    <AnnotationCanvas
+                        visible={src !== undefined}
+                        backgroundImage={src !== undefined ? src : ""}
+                        onPublishButtonClick={async (blobPromise, text, title) => {
+                            const blob = await blobPromise
+                            
+                            // Validate that there is text.
+                            if (text === "" || text === undefined) {
+                                text = 'No title'
+                            }
+
+                            // Validate that there is a title.
+                            if (title === "" || title === undefined) {
+                                title = 'No text'
+                            }
+
+                            const createPostInput: CreatePostInput = {
+                                id: uuidv4(),
+                                imageId: uuidv4(),
+                                projectId: '1',
+                                text: text,
+                                title: title
+                            }
+                            const newPost = await DataLayerClient.createNewAnnotationPost(blob, createPostInput)
+                            ///dispatch(addPost(newPost))
+                            //setCreateAnnotationModalHidden(true)
+                            //setImageToAnnotate("")
+                        }}
+                        onCancel={() => {
+                            console.log('blea cancel')
+                            //setCreateAnnotationModalHidden(true)
+                        }}
+                    />
+                </div>
+            </div>
+        </div>
     )
 }
 

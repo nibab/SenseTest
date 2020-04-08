@@ -70,12 +70,8 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
         }
 
         window.addEventListener('resize', (event) => {
-            const context = (canvasRef.current)!.getContext('2d')
-            //const context = canvas.getContext('2d')
-            canvas.width  = (canvasRef.current)!.getBoundingClientRect().width
-            //canvas.height = (canvasRef.current)!.getBoundingClientRect().height
-           
-            //context?.drawImage(background, 0, 0, width, height)
+            //const context = (canvasRef.current)!.getContext('2d')
+            //canvas.width  = (canvasRef.current)!.getBoundingClientRect().width
         })
     }
 
@@ -208,12 +204,14 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
     }
 
     return (
-        <div style={{ display: 'flex', height: '70vh'}} onLoad={() => console.log('blea canvasref')}> 
+        // <div style={{ display: 'flex', height: '100%'}} onLoad={() => console.log('blea canvasref')}> 
             <div style={{ flex: 0.35, alignContent: 'right'}}>
-            {/* <div style="width: 400px"> */}
                 <canvas ref={canvasRef} className='bg-red-400 w-full' />
             </div>
-            <div style={{ flex: 0.6, paddingLeft: '30px' }}>
+    )
+}
+
+{/* <div style={{ flex: 0.6, paddingLeft: '30px' }}>
                 <Form layout='vertical'>
                     <Form.Item
                         label="Title"
@@ -241,7 +239,5 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
                     Log.info(`AnnotationCanvas title: ${title} text: ${text}`, 'AnnotationCanvas')
                     onPublishButtonClick(getBlobFromCanvas(), text, title)
                 }}>Publish</Button>
-            </div>
-        </div>
-    )
-}
+            </div> */}
+        // </div>

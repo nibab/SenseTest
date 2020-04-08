@@ -87,8 +87,8 @@ const NavBar = ({ signOut, width} : NavBarProps) =>{
       <div className="-mr-2 flex items-center sm:hidden">
         <button onClick={() => setBlockOpen(!blockOpen)} className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out" aria-label={`${blockOpen ? 'Close main menu' : 'Main menu'}`} aria-expanded={blockOpen ? true : false}>
           <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-            <path className={`${blockOpen ? 'hidden' : 'inline-flex'}`} stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            <path className={`${blockOpen ? 'inline-flex' : 'hidden'}`} stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            <path className={`${blockOpen ? 'hidden' : 'inline-flex'}`} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+            <path className={`${blockOpen ? 'inline-flex' : 'hidden'}`} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
@@ -176,7 +176,7 @@ const NavBarItems = ({ screenSize, navBarDir }: NavBarItemsProps) => {
   const renderProjects = () => {
     return (
       <svg className="mr-3 h-6 w-6 text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500 transition ease-in-out duration-150" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
       </svg>
     )
   }
@@ -225,7 +225,7 @@ const NotificationButton = () => {
   return (
     <button className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition duration-150 ease-in-out">
       <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
       </svg>
     </button>
   )
@@ -268,7 +268,7 @@ const ProfileDropDown = ({signOut}: ProfileDropDownProps) => {
     return (
       <>
         { renderAvatarButton() }
-        <div ref={profileDropDownRef} x-show="open" className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg">
+        <div ref={profileDropDownRef} x-show="open" className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg z-50">
           {/* <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg"> */}
           <div className="py-1 rounded-md bg-white shadow-xs">
             <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</a>
