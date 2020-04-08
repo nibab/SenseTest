@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef, useEffect, forwardRef } from "react"
 import { PostsClient } from '../../clients/PostsClient'
 import { Post } from "../../types";
 import { API, graphqlOperation } from "aws-amplify";
@@ -15,14 +15,18 @@ import { useSelector } from "../../store"
 import { AnnotationCanvas } from "../../components/AnnotationCanvas";
 import { v4 as uuidv4 } from "uuid"
 import { DataLayerClient } from "../../clients/DataLayerClient";
+import { Input, Form, Modal, Button } from 'antd';
+import TextArea from "antd/lib/input/TextArea";
+
+
 
 export const AnnotationScreen = ({ }) => {
     // Posts
     const [getPostsFetchInProgress, setGetPostsFetchInProgress] = useState(false)
-    const dispatch = useDispatch()
     const postsSelector = useSelector(state => state.post)
     const [currentPost, setCurrentPost] = useState<Post>()
     const [displayCreateNewPost, setDisplayCreateNewPost] = useState<boolean>(false)
+    const dispatch = useDispatch()
 
     const getPostsGraphQl = async (projectId: string) => {
         const query: ModelPostFilterInput = {
@@ -185,7 +189,11 @@ export const AnnotationScreen = ({ }) => {
 
 const CreatePostView = () => {
     const iframeRef = useRef<HTMLIFrameElement>(null)
+    const canvasRef = useRef<HTMLCanvasElement>(null)
+    const textAreaRef= useRef<TextArea>(null)
+    const titleRef= useRef<Input>(null)
     const [imageToAnnotate, setImageToAnnotate] = useState<string>('newsScreenshot.png')
+    const dispatch = useDispatch()
 
     useEffect(() => {
         window.addEventListener("message", receiveMessage, false);
@@ -209,8 +217,33 @@ const CreatePostView = () => {
         iframeRef.current?.contentWindow?.postMessage('getScreenshot', '*')
     }
 
-    const onUploadButtonClick = (event: any) => {
+    const onUploadButtonClick = async (event: any) => {
         // Take the canvas ref and then upload it with some text
+        const blob = await getBlobFromCanvas()
+        var text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
+        var title = titleRef.current === null ? "" : titleRef.current.state.value
+                            
+        // Validate that there is text.
+        if (text === "" || text === undefined) {
+            text = 'No title'
+        }
+
+        // Validate that there is a title.
+        if (title === "" || title === undefined) {
+            title = 'No text'
+        }
+
+        const createPostInput: CreatePostInput = {
+            id: uuidv4(),
+            imageId: uuidv4(),
+            projectId: '1',
+            text: text,
+            title: title
+        }
+        const newPost = await DataLayerClient.createNewAnnotationPost(blob, createPostInput)
+        dispatch(addPost(newPost))
+        //setCreateAnnotationModalHidden(true)
+        //setImageToAnnotate("")
     }
 
     const renderAppetizeScreen = () => {
@@ -230,6 +263,61 @@ const CreatePostView = () => {
         )
     }
 
+    const getBase64ImageOfCanvas = (): string | null => {
+        if (!canvasRef.current) {
+            return null
+        }
+        const canvas: HTMLCanvasElement = canvasRef.current;
+        const context = canvas.getContext('2d');
+        if (context) {
+            var dataURL = canvas.toDataURL("image/png");
+            return dataURL
+        } else {
+            return null
+        }
+    }
+
+    const getBlobFromCanvas = (): Promise<Blob> => {
+        return new Promise((resolve, reject) => {
+            const currentCanvas = canvasRef.current
+            if (currentCanvas !== undefined && currentCanvas !== null) {
+                const context = currentCanvas.getContext('2d');
+                if (context) {
+                    currentCanvas.toBlob((blob) => {
+                        if (blob !== null) {
+                            resolve(blob)
+                        }
+                        reject()
+                    }, "image/png");                    
+                } else {
+                    reject()
+                }
+            } else {
+                reject()
+            }
+        })
+    }
+
+    const renderForm = () => (
+        <Form layout='vertical'>
+            <Form.Item
+                label="Title"
+                validateStatus="success"
+                //help="Cannot be empty."
+            >
+                <Input ref={titleRef} placeholder="New Issue When Loading" id="error" />
+            </Form.Item>
+
+            <Form.Item
+                label="Description"
+                hasFeedback
+                //help="The information is being validated..."
+            >
+                <Input.TextArea ref={textAreaRef} autoSize={{ minRows: 4, maxRows: 6 }} placeholder="Description" id="validating" />
+            </Form.Item>
+        </Form>
+    )
+
     return (
         <div className='h-full flex-auto flex flex-row'>
             { renderAppetizeScreen() }
@@ -245,7 +333,11 @@ const CreatePostView = () => {
                             <button className="w-8 h-8 bg-red-500 mx-auto my-8" onClick={(event) => onUploadButtonClick(event)}>U</button>
                         </div>
                     </div>
-                    <AnnotationScreenshot src={imageToAnnotate} /> 
+                    <AnnotationScreenshot src={imageToAnnotate} ref={canvasRef}/> 
+                    <div className='flex-shrink-0 bg-gray-100 shadow-lg rounded-lg h-64 ml-3 mt-3 p-3 w-64 flex-col'>
+                        { renderForm() }
+                    </div>
+                    
                 </>
                 
                 : <></>}            
@@ -334,7 +426,7 @@ const DeviceScreenshot = ({ src }: ScreenshotProps) => {
     )
 }
 
-const AnnotationScreenshot = ({ src }: ScreenshotProps) => {
+const AnnotationScreenshot = forwardRef<HTMLCanvasElement, ScreenshotProps>((props, canvasRef) => {
     return (
         <div className='flex-shrink-0 h-full ml-3 mt-3 mr-3 mb-3' style={{height: '583px', width: '282px'}}>
             <div className='h-full w-full object-contain flex relative'>
@@ -343,32 +435,11 @@ const AnnotationScreenshot = ({ src }: ScreenshotProps) => {
                 </div>	
                 <div className=' mx-auto my-auto z-10 overflow-hidden' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
                     <AnnotationCanvas
-                        visible={src !== undefined}
-                        backgroundImage={src !== undefined ? src : ""}
+                        ref={canvasRef}
+                        visible={props.src !== undefined}
+                        backgroundImage={props.src !== undefined ? props.src : ""}
                         onPublishButtonClick={async (blobPromise, text, title) => {
-                            const blob = await blobPromise
                             
-                            // Validate that there is text.
-                            if (text === "" || text === undefined) {
-                                text = 'No title'
-                            }
-
-                            // Validate that there is a title.
-                            if (title === "" || title === undefined) {
-                                title = 'No text'
-                            }
-
-                            const createPostInput: CreatePostInput = {
-                                id: uuidv4(),
-                                imageId: uuidv4(),
-                                projectId: '1',
-                                text: text,
-                                title: title
-                            }
-                            const newPost = await DataLayerClient.createNewAnnotationPost(blob, createPostInput)
-                            ///dispatch(addPost(newPost))
-                            //setCreateAnnotationModalHidden(true)
-                            //setImageToAnnotate("")
                         }}
                         onCancel={() => {
                             console.log('blea cancel')
@@ -379,7 +450,49 @@ const AnnotationScreenshot = ({ src }: ScreenshotProps) => {
             </div>
         </div>
     )
+})
+
+// const textAreaRef= useRef<TextArea>(null)
+//     const titleRef= useRef<Input>(null)
+type ParentRef = {
+    titleRef: HTMLInputElement
+    textAreaRef: HTMLTextAreaElement
 }
+
+const AnnotationForm = forwardRef<any, {}>((props, ref) => {
+    const textAreaRef= useRef<TextArea>(null)
+    const titleRef= useRef<Input>(null)
+
+    return (<>
+        <Form layout='vertical'>
+            <Form.Item
+                label="Title"
+                validateStatus="success"
+                //help="Cannot be empty."
+            >
+                <Input ref={titleRef} placeholder="New Issue When Loading" id="error" />
+            </Form.Item>
+
+            <Form.Item
+                label="Description"
+                hasFeedback
+                //help="The information is being validated..."
+            >
+                <Input.TextArea ref={textAreaRef} autoSize={{ minRows: 4, maxRows: 6 }} placeholder="Description" id="validating" />
+            </Form.Item>
+        </Form>
+        <Button style={{marginTop: '5px', float: 'right'}} onClick={async () => {
+            // const canvasImage = getBase64ImageOfCanvas()
+            // if (canvasImage === null) {
+            //     return
+            // }
+            const text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
+            const title = titleRef.current === null ? "" : titleRef.current.state.value
+            Log.info(`AnnotationCanvas title: ${title} text: ${text}`, 'AnnotationCanvas')
+            //onPublishButtonClick(getBlobFromCanvas(), text, title)
+        }}>Publish</Button>
+    </>)
+})
 
 export default AnnotationScreen;
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react"
+import React, { useState, useEffect, useRef, useCallback, forwardRef, Ref } from "react"
 import { Input, Form, Modal, Button } from 'antd';
 import TextArea from "antd/lib/input/TextArea";
 import { AssetStorageClient } from "../clients/AssetStorageClient";
@@ -12,7 +12,7 @@ import { CreatePostInput } from "../API";
 import 'antd/dist/antd.css';
 import Log from "../utils/Log";
 
-type AnnotationCanvasType = {
+type AnnotationCanvasProps = {
     backgroundImage: string
     onPublishButtonClick: (blobPromise: Promise<Blob>, text: string | undefined, title: string | undefined) => void
     onCancel: () => void
@@ -29,35 +29,60 @@ type Coordinate = {
     y: number
 }
 
-export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCancel, visible}: AnnotationCanvasType) => {
+/**
+ * Combines many refs into one. Useful for combining many ref hooks
+ */
+function useCombinedRefs<T extends any>(...refs: Array<Ref<T>>) {
+    const targetRef = useRef<T>(null)
+    useEffect(() => {
+        refs.forEach(ref => {
+            if (!ref) return
+
+            if (typeof ref === 'function') {
+                ref(targetRef.current)
+            } else {
+                (ref as any).current = targetRef.current
+            }
+        })
+    }, [refs])
+
+    return targetRef
+}
+
+export const AnnotationCanvas = forwardRef<HTMLCanvasElement, AnnotationCanvasProps>((props, canvasRef) => {
     const [isPainting, setIsPainting] = useState(false)
     const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(undefined)
-    const canvasRef = useRef<HTMLCanvasElement>(null)
+    //const canvasRef = useRef<HTMLCanvasElement>(null)
     const textAreaRef= useRef<TextArea>(null)
     const titleRef= useRef<Input>(null)
     const dispatch = useDispatch()
 
+    const innerCanvasRef = useRef(null)
+    const combinedRef = useCombinedRefs(canvasRef, innerCanvasRef)
+
     useEffect(() => {
         drawBackground()
-    }, [backgroundImage]);
+    }, [props.backgroundImage]);
 
     const drawBackground = () => {
-        if (!canvasRef.current) {
+        if (!innerCanvasRef.current) {
             return
         }
         
-        const canvas: HTMLCanvasElement = canvasRef.current
+        const canvas: HTMLCanvasElement | null = combinedRef?.current
+
+        if (canvas === null) return
 
         // ...then set the internal size to match
-        canvas.width  = (canvasRef.current)!.getBoundingClientRect().width
-        canvas.height = (canvasRef.current)!.getBoundingClientRect().height
+        canvas.width  = (combinedRef.current)!.getBoundingClientRect().width
+        canvas.height = (combinedRef.current)!.getBoundingClientRect().height
         
         const background = new Image()
-        background.src = backgroundImage
+        background.src = props.backgroundImage
         background.crossOrigin = 'anonymous'
         
         background.onload = () => {  
-            const context = (canvasRef.current)!.getContext('2d')
+            const context = (combinedRef.current)!.getContext('2d')
 
             const currentCanvasWidth = canvas.width
             const canvasToImageRatio = canvas.width/background.width
@@ -76,12 +101,12 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
     }
 
     const getCoordinates = (event: MouseEvent): Coordinate | undefined => {
-        if (!canvasRef.current) {
+        if (!combinedRef.current) {
             return;
         }
     
-        const canvasCoordinateX = (canvasRef.current.parentNode! as Element).getBoundingClientRect().x
-        const canvasCoordinateY = (canvasRef.current.parentNode! as Element).getBoundingClientRect().y
+        const canvasCoordinateX = (combinedRef.current.parentNode! as Element).getBoundingClientRect().x
+        const canvasCoordinateY = (combinedRef.current.parentNode! as Element).getBoundingClientRect().y
         const coordinate: Coordinate = {
             x: event.clientX - canvasCoordinateX,
             y: event.clientY - canvasCoordinateY
@@ -98,10 +123,10 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
     }, []);
 
     const drawLine = (originalMousePosition: Coordinate, newMousePosition: Coordinate) => {
-        if (!canvasRef.current) {
+        if (!combinedRef.current) {
             return;
         }
-        const canvas: HTMLCanvasElement = canvasRef.current;
+        const canvas: HTMLCanvasElement = combinedRef.current;
         const context = canvas.getContext('2d');
         if (context) {
             context.strokeStyle = 'red';
@@ -130,10 +155,10 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
     );
 
     useEffect(() => {
-        if (!canvasRef.current) {
+        if (!combinedRef.current) {
             return;
         }
-        const canvas: HTMLCanvasElement = canvasRef.current;
+        const canvas: HTMLCanvasElement = combinedRef.current;
         canvas.addEventListener('mousedown', startPaint);
         return () => {
             canvas.removeEventListener('mousedown', startPaint);
@@ -141,10 +166,10 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
     }, [startPaint]);
 
     useEffect(() => {
-        if (!canvasRef.current) {
+        if (!combinedRef.current) {
             return;
         }
-        const canvas: HTMLCanvasElement = canvasRef.current;
+        const canvas: HTMLCanvasElement = combinedRef.current;
         canvas.addEventListener('mousemove', paint);
         return () => {
             canvas.removeEventListener('mousemove', paint);
@@ -156,10 +181,10 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
     }, []);
 
     useEffect(() => {
-        if (!canvasRef.current) {
+        if (!combinedRef.current) {
             return;
         }
-        const canvas: HTMLCanvasElement = canvasRef.current;
+        const canvas: HTMLCanvasElement = combinedRef.current;
         canvas.addEventListener('mouseup', exitPaint);
         canvas.addEventListener('mouseleave', exitPaint);
         return () => {
@@ -168,48 +193,13 @@ export const AnnotationCanvas = ({backgroundImage, onPublishButtonClick, onCance
         };
     }, [exitPaint]);
 
-    const getBase64ImageOfCanvas = (): string | null => {
-        if (!canvasRef.current) {
-            return null
-        }
-        const canvas: HTMLCanvasElement = canvasRef.current;
-        const context = canvas.getContext('2d');
-        if (context) {
-            var dataURL = canvas.toDataURL("image/png");
-            return dataURL
-        } else {
-            return null
-        }
-    }
-
-    const getBlobFromCanvas = (): Promise<Blob> => {
-        return new Promise((resolve, reject) => {
-            const currentCanvas = canvasRef.current
-            if (currentCanvas !== undefined && currentCanvas !== null) {
-                const context = currentCanvas.getContext('2d');
-                if (context) {
-                    currentCanvas.toBlob((blob) => {
-                        if (blob !== null) {
-                            resolve(blob)
-                        }
-                        reject()
-                    }, "image/png");                    
-                } else {
-                    reject()
-                }
-            } else {
-                reject()
-            }
-        })
-    }
-
     return (
         // <div style={{ display: 'flex', height: '100%'}} onLoad={() => console.log('blea canvasref')}> 
             <div style={{ flex: 0.35, alignContent: 'right'}}>
-                <canvas ref={canvasRef} className='bg-red-400 w-full' />
+                <canvas ref={ combinedRef } className='bg-red-400 w-full' />
             </div>
     )
-}
+})
 
 {/* <div style={{ flex: 0.6, paddingLeft: '30px' }}>
                 <Form layout='vertical'>

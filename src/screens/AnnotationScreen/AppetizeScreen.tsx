@@ -16,7 +16,7 @@ import Log from "../../utils/Log"
 export const AppetizeScreen = () => {
 	const [createAnnotationModalHidden, setCreateAnnotationModalHidden] = useState(true)
 	const [imageToAnnotate, setImageToAnnotate] = useState("newsScreenshot.png")
-	const dispatch = useDispatch()
+    const dispatch = useDispatch()
 	
 	const renderCreateAnnotationModal = () => {
         return (
