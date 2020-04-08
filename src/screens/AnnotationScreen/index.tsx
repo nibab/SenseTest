@@ -209,6 +209,10 @@ const CreatePostView = () => {
         iframeRef.current?.contentWindow?.postMessage('getScreenshot', '*')
     }
 
+    const onUploadButtonClick = (event: any) => {
+        // Take the canvas ref and then upload it with some text
+    }
+
     const renderAppetizeScreen = () => {
         return (
             <div className='flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col bg-green-600 relative' style={{height: '583px', width: '282px'}}>
@@ -233,8 +237,13 @@ const CreatePostView = () => {
             
             { imageToAnnotate !== undefined ? 
                 <>
-                    <div className='flex-shrink-0 bg-gray-100 rounded-full shadow-lg h-64 ml-3 mt-3 w-16'>
-                        <button className="w-8 h-8 bg-red-500 mx-auto my-8" onClick={(event) => onScreenshotButtonClick(event)}>S</button>
+                    <div className='flex-shrink-0 bg-gray-100 rounded-full shadow-lg h-64 ml-3 mt-3 w-16 flex-col'>
+                        <div className='w-full'>
+                            <button className="w-8 h-8 bg-red-500 mx-auto my-8" onClick={(event) => onScreenshotButtonClick(event)}>S</button>
+                        </div>
+                        <div className='w-full'>
+                            <button className="w-8 h-8 bg-red-500 mx-auto my-8" onClick={(event) => onUploadButtonClick(event)}>U</button>
+                        </div>
                     </div>
                     <AnnotationScreenshot src={imageToAnnotate} /> 
                 </>
