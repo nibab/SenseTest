@@ -23,7 +23,7 @@ export const DeviceScreenshot = ({ src }: ScreenshotProps) => {
 
 export const AnnotationScreenshot = forwardRef<HTMLCanvasElement, ScreenshotProps>((props, canvasRef) => {
     return (
-        <div className='flex-shrink-0 h-full ml-3 mt-3 mr-3 mb-3' style={{height: '583px', width: '282px'}}>
+        <div className='flex-shrink-0 h-full ml-3 mr-3 mb-3' style={{height: '583px', width: '282px'}}>
             <div className='h-full w-full object-contain flex relative'>
                 <div className='h-full w-full absolute z-0'>
                     <img className="h-full w-full object-contain" src='iphonexBlack.png'></img>

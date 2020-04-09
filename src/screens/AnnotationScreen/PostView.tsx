@@ -46,7 +46,7 @@ const PostView = ({ post }: PostViewProps) => {
     const renderPostView = () => {
         return (
             <div className='h-full flex-auto flex flex-row'>
-                <div className='hidden flex-shrink-0 bg-gray-100 rounded-full shadow-lg h-64 ml-3 mt-3 w-16'></div>
+                <div className='hidden flex-shrink-0 bg-gray-100 rounded-full shadow-lg h-64 ml-3 w-16'></div>
                 
                 <div className='flex-auto h-full flex flex-col '> 
 					<div className='my-auto flex w-screen flex-row justify-center'> 
@@ -55,7 +55,9 @@ const PostView = ({ post }: PostViewProps) => {
 						<div className='overflow-hidden ml-3 '>
 							{ renderPostText(post.title, post.text, "21/02/2020 10:30PM EST") }
 						</div>
-					</div>                   
+					</div> 
+					{/* This is here to act as a pad placeholder for the screenshot navigator. */}
+					<div className="flex-shrink-0 h-10 w-full"></div>                  
                 </div>  
             </div>
         )

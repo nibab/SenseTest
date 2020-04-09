@@ -100,7 +100,7 @@ const NavBar = ({ signOut, width} : NavBarProps) =>{
       {/* <NavBarItems navBarDir={navBarDir} screenSize={'large'} /> */}
       <div className="w-full h-full flex flex-row relative">
         <div className="w-72 h-full p-2 left-0 ml-2">
-						<div className="bg-white shadow-lg p-2 h-full rounded-lg flex">	
+						<div className="bg-white shadow p-2 h-full rounded-lg flex">	
 							<div className="bg-green-300 rounded-lg w-12 h-12 my-auto">
                 <img src="appIcon.png" />
 							</div>
