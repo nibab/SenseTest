@@ -1,24 +1,19 @@
 import React, { useState, useRef, useEffect, forwardRef } from "react"
-import { PostsClient } from '../../clients/PostsClient'
 import { Post } from "../../types";
 import { API, graphqlOperation } from "aws-amplify";
 import { listPosts } from "../../graphql/queries"
 import { ListPostsQuery, ModelPostFilterInput, CreatePostInput } from "../../API";
-import { useSelector as useReduxSelector, useDispatch } from "react-redux";
 import { addPost } from '../../store/post/actions'
 import { PostImgDownload } from "../../utils/PostImgDownload";
-import { PostsGrid } from "./PostsGrid";
-import { AppetizeScreen } from './AppetizeScreen'
 import Log from "../../utils/Log";
 import { Loading } from "aws-amplify-react";
 import { useSelector } from "../../store"
 import { AnnotationCanvas } from "../../components/AnnotationCanvas";
 import { v4 as uuidv4 } from "uuid"
 import { DataLayerClient } from "../../clients/DataLayerClient";
-import { Input, Form, Modal, Button } from 'antd';
+import { Input, Form } from 'antd';
 import TextArea from "antd/lib/input/TextArea";
-
-
+import { useDispatch } from "react-redux";
 
 export const AnnotationScreen = ({ }) => {
     // Posts
@@ -44,13 +39,6 @@ export const AnnotationScreen = ({ }) => {
                     if (post !== null) {
                         const postImgDownload = new PostImgDownload(post, (blob) => {})
                         const newPost = await postImgDownload.imagePromise
-                        // We want to make sure that after a post image is fully downloaded, it's updated in the redux store.
-                        // const newPost: Post = {
-                        //     id: post?.id,    
-                        //     image: ,
-                        //     projectId: projectId,
-                        //     text: post.text
-                        // }
                         dispatch(addPost(newPost))
                     }
                 })
@@ -155,45 +143,30 @@ export const AnnotationScreen = ({ }) => {
             <div className='flex-shrink-0 w-72 bg-gray-400 ml-4 mt-3 mb-3 shadow-inner rounded-lg' >
                 <div className='flex flex-col p-3 h-full overflow-scroll'>
                     { renderPostsInSelectorWindow() }
-                    {/* <div className="grid grid-cols-2 gap-3 pb-2">	 
-                        <div className='h-56 flex hover:shadow-outline'>
-                            { renderPostIcon() }
-                        </div>
-                        <div className='h-56 flex hover:shadow-outline'>
-                            { renderPostIcon() }
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3 pb-2">	 
-                        <div className='h-56 flex hover:shadow-outline'>
-                            { renderPostIcon() }
-                        </div>
-                        <div className='h-56 flex hover:shadow-outline'>
-                            { renderPostIcon() }
-                        </div>
-                    </div> */}
                 </div>
             </div>
-            {/* <div className='h-full w-1 bg-gray-300'></div> */}
             { renderPostDetailView() }
             </div>
         </>
-        // <div>
-        //     <h4>Annotation </h4>
-        //     <div style={{ display: 'flex', width: '100%' }}>
-        //         <AppetizeScreen />
-        //         <PostsGrid />
-        //     </div>
-        // </div>
     )
+}
+
+type CreatePostViewProps = {
+    onPostCreated: () => void
 }
 
 const CreatePostView = () => {
     const iframeRef = useRef<HTMLIFrameElement>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null)
-    const textAreaRef= useRef<TextArea>(null)
-    const titleRef= useRef<Input>(null)
+    
     const [imageToAnnotate, setImageToAnnotate] = useState<string>('newsScreenshot.png')
     const dispatch = useDispatch()
+
+    // Form
+    const textAreaRef= useRef<TextArea>(null)
+    const titleRef= useRef<Input>(null)
+    const assignToRef = useRef<Input>(null)
+    const reproStepsRef = useRef<TextArea>(null)
 
     useEffect(() => {
         window.addEventListener("message", receiveMessage, false);
@@ -241,9 +214,8 @@ const CreatePostView = () => {
             title: title
         }
         const newPost = await DataLayerClient.createNewAnnotationPost(blob, createPostInput)
+        // Save the post in the redux store so that the side grid is updated.
         dispatch(addPost(newPost))
-        //setCreateAnnotationModalHidden(true)
-        //setImageToAnnotate("")
     }
 
     const renderAppetizeScreen = () => {
@@ -251,14 +223,6 @@ const CreatePostView = () => {
             <div className='flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col bg-green-600 relative' style={{height: '583px', width: '282px'}}>
                 <button className='bg-blue-600 absolute w-24 h-10 right-0' onClick={(event) => onScreenshotButtonClick(event)}> Take Screenshot </button> 
                 <iframe onLoad={() => iFrameLoaded()} ref={iframeRef} src="https://appetize.io/embed/fczxctdk32wb17vabzd3k2wq9w?device=iphonex&scale=69&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true" width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
-                {/* <div className='h-full w-full object-contain flex relative'>	
-                    <div className='h-full w-full mx-auto' style={{width: '86%'}}>
-                        <img className='h-full w-full mx-auto object-contain' src={'iPhoneXWireframe.png'}></img>
-                    </div>
-                    <div className='h-full w-full absolute '>
-                        <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
-                    </div>
-                </div>							 */}
             </div>
         )
     }
@@ -315,6 +279,22 @@ const CreatePostView = () => {
             >
                 <Input.TextArea ref={textAreaRef} autoSize={{ minRows: 4, maxRows: 6 }} placeholder="Description" id="validating" />
             </Form.Item>
+
+            <Form.Item
+                label="Repro steps"
+                hasFeedback
+                //help="The information is being validated..."
+            >
+                <Input.TextArea ref={reproStepsRef} autoSize={{ minRows: 4, maxRows: 6 }} placeholder="Description" id="validating" />
+            </Form.Item>
+
+            <Form.Item
+                label="Assign to"
+                validateStatus="success"
+                //help="Cannot be empty."
+            >
+                <Input ref={assignToRef} placeholder="New Issue When Loading" id="error" />
+            </Form.Item>
         </Form>
     )
 
@@ -322,7 +302,6 @@ const CreatePostView = () => {
         <div className='h-full flex-auto flex flex-row'>
             { renderAppetizeScreen() }
             {/* <DeviceScreenshot src={'testScreenshot.jpg'}/> */}
-            
             { imageToAnnotate !== undefined ? 
                 <>
                     <div className='flex-shrink-0 bg-gray-100 rounded-full shadow-lg h-64 ml-3 mt-3 w-16 flex-col'>
@@ -334,12 +313,13 @@ const CreatePostView = () => {
                         </div>
                     </div>
                     <AnnotationScreenshot src={imageToAnnotate} ref={canvasRef}/> 
-                    <div className='flex-shrink-0 bg-gray-100 shadow-lg rounded-lg h-64 ml-3 mt-3 p-3 w-64 flex-col'>
-                        { renderForm() }
+                    <div className='ml-3 mt-3 flex-auto flex flex-col'>
+                        <div className="bg-gray-100 shadow-lg rounded-lg w-64 h-auto p-3">
+                            { renderForm() }
+                        </div>
+                        
                     </div>
-                    
                 </>
-                
                 : <></>}            
         </div>
     )
@@ -438,60 +418,11 @@ const AnnotationScreenshot = forwardRef<HTMLCanvasElement, ScreenshotProps>((pro
                         ref={canvasRef}
                         visible={props.src !== undefined}
                         backgroundImage={props.src !== undefined ? props.src : ""}
-                        onPublishButtonClick={async (blobPromise, text, title) => {
-                            
-                        }}
-                        onCancel={() => {
-                            console.log('blea cancel')
-                            //setCreateAnnotationModalHidden(true)
-                        }}
                     />
                 </div>
             </div>
         </div>
     )
-})
-
-// const textAreaRef= useRef<TextArea>(null)
-//     const titleRef= useRef<Input>(null)
-type ParentRef = {
-    titleRef: HTMLInputElement
-    textAreaRef: HTMLTextAreaElement
-}
-
-const AnnotationForm = forwardRef<any, {}>((props, ref) => {
-    const textAreaRef= useRef<TextArea>(null)
-    const titleRef= useRef<Input>(null)
-
-    return (<>
-        <Form layout='vertical'>
-            <Form.Item
-                label="Title"
-                validateStatus="success"
-                //help="Cannot be empty."
-            >
-                <Input ref={titleRef} placeholder="New Issue When Loading" id="error" />
-            </Form.Item>
-
-            <Form.Item
-                label="Description"
-                hasFeedback
-                //help="The information is being validated..."
-            >
-                <Input.TextArea ref={textAreaRef} autoSize={{ minRows: 4, maxRows: 6 }} placeholder="Description" id="validating" />
-            </Form.Item>
-        </Form>
-        <Button style={{marginTop: '5px', float: 'right'}} onClick={async () => {
-            // const canvasImage = getBase64ImageOfCanvas()
-            // if (canvasImage === null) {
-            //     return
-            // }
-            const text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
-            const title = titleRef.current === null ? "" : titleRef.current.state.value
-            Log.info(`AnnotationCanvas title: ${title} text: ${text}`, 'AnnotationCanvas')
-            //onPublishButtonClick(getBlobFromCanvas(), text, title)
-        }}>Publish</Button>
-    </>)
 })
 
 export default AnnotationScreen;

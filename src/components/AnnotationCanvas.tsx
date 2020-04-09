@@ -1,27 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback, forwardRef, Ref } from "react"
-import { Input, Form, Modal, Button } from 'antd';
-import TextArea from "antd/lib/input/TextArea";
-import { AssetStorageClient } from "../clients/AssetStorageClient";
-import { v4 as uuidv4 } from "uuid"
-import { Post } from "../types";
-import { useDispatch } from "react-redux";
-import { addPost } from '../store/post/actions'
-import { graphqlOperation, API } from 'aws-amplify'
-import { createPost } from '../graphql/mutations'
-import { CreatePostInput } from "../API";
 import 'antd/dist/antd.css';
 import Log from "../utils/Log";
 
 type AnnotationCanvasProps = {
     backgroundImage: string
-    onPublishButtonClick: (blobPromise: Promise<Blob>, text: string | undefined, title: string | undefined) => void
-    onCancel: () => void
     visible: boolean
-}
-
-type AnnotationCanvasData = {
-    img: string | null,
-    text: string
 }
 
 type Coordinate = {
@@ -52,10 +35,6 @@ function useCombinedRefs<T extends any>(...refs: Array<Ref<T>>) {
 export const AnnotationCanvas = forwardRef<HTMLCanvasElement, AnnotationCanvasProps>((props, canvasRef) => {
     const [isPainting, setIsPainting] = useState(false)
     const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(undefined)
-    //const canvasRef = useRef<HTMLCanvasElement>(null)
-    const textAreaRef= useRef<TextArea>(null)
-    const titleRef= useRef<Input>(null)
-    const dispatch = useDispatch()
 
     const innerCanvasRef = useRef(null)
     const combinedRef = useCombinedRefs(canvasRef, innerCanvasRef)
@@ -83,21 +62,11 @@ export const AnnotationCanvas = forwardRef<HTMLCanvasElement, AnnotationCanvasPr
         
         background.onload = () => {  
             const context = (combinedRef.current)!.getContext('2d')
-
-            const currentCanvasWidth = canvas.width
             const canvasToImageRatio = canvas.width/background.width
             const newImageHeight = background.height * canvasToImageRatio
             canvas.height = newImageHeight
-            
-
-           
             context?.drawImage(background, 0, 0, canvas.width, newImageHeight)
         }
-
-        window.addEventListener('resize', (event) => {
-            //const context = (canvasRef.current)!.getContext('2d')
-            //canvas.width  = (canvasRef.current)!.getBoundingClientRect().width
-        })
     }
 
     const getCoordinates = (event: MouseEvent): Coordinate | undefined => {
@@ -194,40 +163,8 @@ export const AnnotationCanvas = forwardRef<HTMLCanvasElement, AnnotationCanvasPr
     }, [exitPaint]);
 
     return (
-        // <div style={{ display: 'flex', height: '100%'}} onLoad={() => console.log('blea canvasref')}> 
-            <div style={{ flex: 0.35, alignContent: 'right'}}>
-                <canvas ref={ combinedRef } className='bg-red-400 w-full' />
-            </div>
+        <div style={{ flex: 0.35, alignContent: 'right'}}>
+            <canvas ref={ combinedRef } className='bg-red-400 w-full' />
+        </div>
     )
 })
-
-{/* <div style={{ flex: 0.6, paddingLeft: '30px' }}>
-                <Form layout='vertical'>
-                    <Form.Item
-                        label="Title"
-                        validateStatus="success"
-                        //help="Cannot be empty."
-                    >
-                        <Input ref={titleRef} placeholder="New Issue When Loading" id="error" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Description"
-                        hasFeedback
-                        //help="The information is being validated..."
-                    >
-                        <Input.TextArea ref={textAreaRef} autoSize={{ minRows: 4, maxRows: 6 }} placeholder="Description" id="validating" />
-                    </Form.Item>
-                </Form>
-                <Button style={{marginTop: '5px', float: 'right'}} onClick={async () => {
-                    const canvasImage = getBase64ImageOfCanvas()
-                    if (canvasImage === null) {
-                        return
-                    }
-                    const text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
-                    const title = titleRef.current === null ? "" : titleRef.current.state.value
-                    Log.info(`AnnotationCanvas title: ${title} text: ${text}`, 'AnnotationCanvas')
-                    onPublishButtonClick(getBlobFromCanvas(), text, title)
-                }}>Publish</Button>
-            </div> */}
-        // </div>
