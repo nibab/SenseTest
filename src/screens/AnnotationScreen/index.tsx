@@ -295,6 +295,14 @@ const CreatePostView = () => {
             >
                 <Input ref={assignToRef} placeholder="New Issue When Loading" id="error" />
             </Form.Item>
+
+            <Form.Item
+                label="Status"
+                validateStatus="success"
+                //help="Cannot be empty."
+            >
+                <Input ref={assignToRef} placeholder="Blocker" id="error" />
+            </Form.Item>
         </Form>
     )
 
