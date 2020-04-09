@@ -1,9 +1,13 @@
-import { CreatePostInput, CreatePostMutation } from "../API"
+import { CreatePostInput, CreatePostMutation, ModelPostFilterInput, ListPostsQuery } from "../API"
 import { Post } from "../types"
 import {AssetStorageClient} from "./AssetStorageClient"
 import { API, graphqlOperation } from "aws-amplify"
 import { createPost } from "../graphql/mutations"
 import Log from "../utils/Log"
+import { listPosts } from "../graphql/queries"
+import { useDispatch } from "react-redux"
+import { addPost } from "../store/post/actions"
+import { PostImgDownload } from "../utils/PostImgDownload"
 
 export class DataLayerClient {
 	static createNewAnnotationPost = (imageBlob: Blob, createPostInput: CreatePostInput): Promise<Post> => {
@@ -33,7 +37,5 @@ export class DataLayerClient {
 				
 			})
 		})
-		
 	}
-
 }
