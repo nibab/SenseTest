@@ -7,7 +7,7 @@ type ScreenshotProps = {
 
 export const DeviceScreenshot = ({ src }: ScreenshotProps) => {
     return (
-        <div className='bg-green-400 flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col' style={{height: '583px', width: '281px'}}> 
+        <div className='bg-green-400 flex-shrink-0 h-full mb-3 w-64 flex-col' style={{height: '583px', width: '281px'}}> 
             <div className='h-full w-full object-contain flex relative'>
                 <div className='h-full w-full absolute z-0'>
                     <img className="h-full w-full object-contain" src='iphonexBlack.png'></img>

@@ -13,13 +13,13 @@ const PostView = ({ post }: PostViewProps) => {
 
     const renderPostText = (title: string, text: string, dateCreated: string) => {
         return (
-            <div className='bg-white h-auto shadow-xl mt-3 rounded-lg p-3 w-96'>
+            <div className='bg-white shadow-xl rounded-lg p-3 w-96'>
                 <h2 className='text-base font-bold'>{title}</h2>
                 <div className='-mt-1 text-xs uppercase text-gray-500 font-semibold '>
                     { dateCreated }
                 </div>
-                <p className='mt-1 text-xs leading-tight'>
-                    { text }
+                <p className='mt-1 text-xs leading-tight flex-wrap'>
+                    { "The fox jumped on. The fox jumped on the rabbit. The fox jumped on the moose." }
                 </p>
             </div>
         )
@@ -45,11 +45,18 @@ const PostView = ({ post }: PostViewProps) => {
 
     const renderPostView = () => {
         return (
-            <div className='h-full flex-auto flex flex-row'>
+            <div className='bg-blue-500 h-full flex-auto flex flex-row'>
                 <div className='hidden flex-shrink-0 bg-gray-100 rounded-full shadow-lg h-64 ml-3 mt-3 w-16'></div>
-                <DeviceScreenshot src={window.URL.createObjectURL(post.image)}/>
-                <div className='flex-auto h-full flex flex-col ml-3 mr-3'> 
-                    { renderPostText(post.title, post.text, "21/02/2020 10:30PM EST") }
+                
+                <div className='bg-blue-300 flex-auto h-full flex flex-col '> 
+					<div className='flex bg-gray-400 w-screen flex-row justify-center'> 
+						<div className='flex-shrink-0 bg-green-800 w-10 flex-shrink-0 h-64 '></div>
+						<DeviceScreenshot src={window.URL.createObjectURL(post.image)}/>
+						<div className='overflow-hidden bg-green-300 ml-3 '>
+							{ renderPostText(post.title, post.text, "21/02/2020 10:30PM EST") }
+						</div>
+					</div>
+                    
                     { renderComments() }
                 </div>  
             </div>
