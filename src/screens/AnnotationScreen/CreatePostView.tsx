@@ -77,7 +77,7 @@ const CreatePostView = () => {
 
     const renderAppetizeScreen = () => {
         return (
-            <div className='flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col bg-green-600 relative' style={{height: '583px', width: '282px'}}>
+            <div className='flex-shrink-0 h-full ml-3 mt-3 mb-3 w-64 flex-col relative' style={{height: '583px', width: '282px'}}>
                 <button className='bg-blue-600 absolute w-24 h-10 right-0' onClick={(event) => onScreenshotButtonClick(event)}> Take Screenshot </button> 
                 <iframe onLoad={() => iFrameLoaded()} ref={iframeRef} src="https://appetize.io/embed/fczxctdk32wb17vabzd3k2wq9w?device=iphonex&scale=69&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true" width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
             </div>
@@ -161,31 +161,35 @@ const CreatePostView = () => {
                 <Input ref={assignToRef} placeholder="Blocker" id="error" />
             </Form.Item>
         </Form>
-    )
+	)
+	
+	const renderPostToolBar = () => {
+		return (
+			<div className='flex-shrink-0 bg-gray-100 rounded-full shadow-lg h-64 mt-3 w-16 flex-col'>
+				<div className='w-full'>
+					<button className="w-8 h-8 bg-red-500 mx-auto my-8" onClick={(event) => onScreenshotButtonClick(event)}>S</button>
+				</div>
+				<div className='w-full'>
+					<button className="w-8 h-8 bg-red-500 mx-auto my-8" onClick={(event) => onUploadButtonClick(event)}>U</button>
+				</div>
+			</div>
+		)
+	}
 
     return (
         <div className='h-full flex-auto flex flex-row'>
-            { renderAppetizeScreen() }
-            {/* <DeviceScreenshot src={'testScreenshot.jpg'}/> */}
-            { imageToAnnotate !== undefined ? 
-                <>
-                    <div className='flex-shrink-0 bg-gray-100 rounded-full shadow-lg h-64 ml-3 mt-3 w-16 flex-col'>
-                        <div className='w-full'>
-                            <button className="w-8 h-8 bg-red-500 mx-auto my-8" onClick={(event) => onScreenshotButtonClick(event)}>S</button>
-                        </div>
-                        <div className='w-full'>
-                            <button className="w-8 h-8 bg-red-500 mx-auto my-8" onClick={(event) => onUploadButtonClick(event)}>U</button>
-                        </div>
-                    </div>
-                    <AnnotationScreenshot src={imageToAnnotate} ref={canvasRef}/> 
-                    <div className='ml-3 mt-3 flex-auto flex flex-col'>
+			<div className='flex-auto h-full flex flex-col '> 
+				<div className='flex w-screen flex-row justify-center my-auto'>
+					{ renderAppetizeScreen() } 					
+					<AnnotationScreenshot src={imageToAnnotate} ref={canvasRef}/> 
+					{ renderPostToolBar() }
+					<div className='ml-3 mt-3 max-h-full flex flex-col'>
                         <div className="bg-gray-100 shadow-lg rounded-lg w-64 h-auto p-3">
                             { renderForm() }
                         </div>
-                        
                     </div>
-                </>
-                : <></>}            
+				</div>
+			</div>
         </div>
     )
 }

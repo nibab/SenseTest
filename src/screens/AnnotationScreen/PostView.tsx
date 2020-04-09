@@ -45,19 +45,17 @@ const PostView = ({ post }: PostViewProps) => {
 
     const renderPostView = () => {
         return (
-            <div className='bg-blue-500 h-full flex-auto flex flex-row'>
+            <div className='h-full flex-auto flex flex-row'>
                 <div className='hidden flex-shrink-0 bg-gray-100 rounded-full shadow-lg h-64 ml-3 mt-3 w-16'></div>
                 
-                <div className='bg-blue-300 flex-auto h-full flex flex-col '> 
-					<div className='flex bg-gray-400 w-screen flex-row justify-center'> 
+                <div className='flex-auto h-full flex flex-col '> 
+					<div className='my-auto flex w-screen flex-row justify-center'> 
 						<div className='flex-shrink-0 bg-green-800 w-10 flex-shrink-0 h-64 '></div>
 						<DeviceScreenshot src={window.URL.createObjectURL(post.image)}/>
-						<div className='overflow-hidden bg-green-300 ml-3 '>
+						<div className='overflow-hidden ml-3 '>
 							{ renderPostText(post.title, post.text, "21/02/2020 10:30PM EST") }
 						</div>
-					</div>
-                    
-                    { renderComments() }
+					</div>                   
                 </div>  
             </div>
         )
