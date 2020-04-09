@@ -141,8 +141,8 @@ export const AnnotationScreen = ({ }) => {
     const renderSelector = () => {
         
         return (
-            <div onMouseEnter={() => setIsShown(true)} onMouseLeave={() => setIsShown(false)} className='flex-shrink-0 bg-gray-600 w-screen h-10 hover:h-72 bottom-0 absolute p-3 z-30' >
-                <div className={`${!isShown ? 'hidden' : ''} bg-gray-500 shadow-inner rounded-lg flex w-full h-full flex-row overflow-scroll`}>
+            <div onMouseEnter={() => setIsShown(true)} onMouseLeave={() => setIsShown(false)} className='flex-shrink-0 bg-gray-500 shadow-xl w-screen h-10 hover:h-72 bottom-0 absolute p-3 z-30' >
+                <div className={`${!isShown ? 'hidden' : ''} bg-gray-600 shadow-inner rounded-lg flex w-full h-full flex-row overflow-scroll`}>
                     { isShown ? renderPostsInSelectorWindow() : <></>}
                 </div>
             </div>
