@@ -55,7 +55,7 @@ export const AnnotationScreen = ({ }) => {
                 <div className='h-full w-full absolute z-0'>
                     <img className="h-full w-full object-contain" src='iphonexBlack.png'></img>
                 </div>
-                <div className='w-full mx-auto my-auto overflow-hidden z-10' style={{width: '83.5%', borderRadius: '0.7rem'}}>
+                <div className='w-full mx-auto my-auto overflow-hidden z-10' style={{width: '85.8%', borderRadius: '0.7rem'}}>
                     <img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img>
                 </div>
                 
@@ -64,30 +64,34 @@ export const AnnotationScreen = ({ }) => {
     }
 
     const createNewPostIcon = () => {
-        const className = 'hover:shadow-outline h-full w-full object-contain flex relative'
+        const className = `hover:shadow-outline' h-full w-full object-contain flex relative`
         return (
             <div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined)}} className={className}>	
-                <div className='h-full w-full mx-auto' style={{width: '77.7%'}}>
-                    <img className='h-full w-full mx-auto object-contain' src='iPhoneXWireframe.png'></img>
+                <div className='h-full w-full absolute z-0'>
+                    <img className="h-full w-full object-contain" src='iphonexBlack.png'></img>
                 </div>
-                <div className='h-full w-full absolute '>
-                    <img className="h-full w-full object-contain" src='iPhoneXWireframe.png'></img>
+                <div className='w-full mx-auto my-auto overflow-hidden z-10' style={{width: '85.8%', borderRadius: '0.7rem'}}>
+                    <img className='h-full w-full mx-auto object-contain' src={'logo192.png'}></img>
                 </div>
+                
             </div>
         )
+
     }
 
     const renderPostsInSelectorWindow = () => {
         let items: JSX.Element[] = []
 
         // Add the create new post icon
-        items.push(<div className='h-56 flex '>
-            {createNewPostIcon()}
-        </div>)
+        items.push(
+            <div className='h-full w-full flex max-w-xs p-2 ml-2 my-auto' style={{maxWidth: '130px', minWidth: '130px', height: '90%'}}>
+                {createNewPostIcon()}
+            </div>
+        )
 
         for (let post in postsSelector.posts) {
             items.push(
-                <div className='h-56 flex '>
+                <div className='h-full w-full flex max-w-xs p-2 ml-2 my-auto' style={{maxWidth: '130px', minWidth: '130px', height: '235px'}}>
                     { renderPostIcon(postsSelector.posts[post]) }
                 </div>
             )
@@ -95,30 +99,30 @@ export const AnnotationScreen = ({ }) => {
 
         let posts: JSX.Element[] = []
         const itemsQueue = items.reverse()
-        while (itemsQueue.length !== 0) {
-            const item1 = items.pop()
-            const item2 = items.pop()
-            if (item1 !== undefined && item2 !== undefined) {
-                posts.push(
-                    <div className="grid grid-cols-2 gap-3 pb-2">	
-                        {item1}
-                        {item2}
-                    </div>
-                )
-            }
-            // if the number of posts is odd make sure the last row only contains one item
-            if (item2 === undefined) {
-                posts.push(
-                    <div className="grid grid-cols-2 gap-3 pb-2">	
-                        {item1}
-                    </div>
-                )
-            }
-            // if both item1 and item2 are undefined, it means that the itemsQueue was empty at the start of the function
-            // which is impossible
-        }
+        // while (itemsQueue.length !== 0) {
+        //     const item1 = items.pop()
+        //     const item2 = items.pop()
+        //     if (item1 !== undefined && item2 !== undefined) {
+        //         posts.push(
+        //             <div className="grid grid-cols-2 gap-3 pb-2">	
+        //                 {item1}
+        //                 {item2}
+        //             </div>
+        //         )
+        //     }
+        //     // if the number of posts is odd make sure the last row only contains one item
+        //     if (item2 === undefined) {
+        //         posts.push(
+        //             <div className="grid grid-cols-2 gap-3 pb-2">	
+        //                 {item1}
+        //             </div>
+        //         )
+        //     }
+        //     // if both item1 and item2 are undefined, it means that the itemsQueue was empty at the start of the function
+        //     // which is impossible
+        // }
 
-        return posts
+        return items
     }
 
     const renderPostDetailView = () => {
@@ -132,14 +136,23 @@ export const AnnotationScreen = ({ }) => {
         
     }
 
-    return getPostsFetchInProgress ? <Loading /> : (
-        <>
-        <div className="flex flex-row h-full bg-gray-200">
-            <div className='flex-shrink-0 w-72 bg-gray-400 ml-4 mt-3 mb-3 shadow-inner rounded-lg' >
-                <div className='flex flex-col p-3 h-full overflow-scroll'>
-                    { renderPostsInSelectorWindow() }
+    const [isShown, setIsShown] = useState(false)
+
+    const renderSelector = () => {
+        
+        return (
+            <div onMouseEnter={() => setIsShown(true)} onMouseLeave={() => setIsShown(false)} className='bg-gray-600 w-screen h-10 hover:h-72 bottom-0 absolute p-3 z-30' >
+                <div className={`${!isShown ? 'hidden' : ''} bg-gray-500 shadow-inner rounded-lg flex w-full h-full flex-row overflow-scroll`}>
+                    { isShown ? renderPostsInSelectorWindow() : <></>}
                 </div>
             </div>
+        )
+    }
+
+    return getPostsFetchInProgress ? <Loading /> : (
+        <>
+        <div className="flex flex-row h-full bg-gray-200 relative">
+            { renderSelector() }
             { renderPostDetailView() }
             </div>
         </>
