@@ -140,10 +140,10 @@ class App extends Component<{}, AppState> {
     return (
       <Router>
         <div className="bg-gray-200 h-screen w-screen flex flex-col antialiased font-sans">
-          <div className={`${!isLoggedIn ? 'hidden' : ''} flex-shrink-0 flex h-20 w-full flex-row`}>
+          {/* <div className={`${!isLoggedIn ? 'hidden' : ''} flex-shrink-0 flex h-16 w-full flex-row`}>
             <NavBar width={256} signOut={this.signOut}/>
           </div>  
-          
+           */}
           
           <Provider  store={store}>
             {this.renderContent(isLoggedIn, isLoading)}
