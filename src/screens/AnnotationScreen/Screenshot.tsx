@@ -26,7 +26,8 @@ export const AnnotationScreenshot = forwardRef<HTMLCanvasElement, ScreenshotProp
         <div className='flex-shrink-0 h-full ml-3 mr-3 mb-3' style={{height: '583px', width: '282px'}}>
             <div className='h-full w-full object-contain flex relative'>
                 <div className='h-full w-full absolute z-0'>
-                    <img className="h-full w-full object-contain" src='iphonexBlack.png'></img>
+                    {/* <img className="h-full w-full object-contain" src='iphonexBlack.png'></img> */}
+					<div className="h-full w-full bg-gray-100 shadow-lg rounded-md"></div>
                 </div>	
                 <div className=' mx-auto my-auto z-10 overflow-hidden' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
                     <AnnotationCanvas
