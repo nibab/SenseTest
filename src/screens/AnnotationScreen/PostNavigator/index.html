@@ -20,35 +20,51 @@
 		<div class='bg-gray-100 font-body w-screen h-screen bg-white flex justify-center'>
 			
 			<div class='bg-white rounded-lg w-96 pt-24 h-full overflow-scroll my-auto flex flex-col'>
-				<div class='w-full h-6 mb-4'>
-					<h2 class='font-normal p-3 font-medium uppercase text-xs text-gray-600 tracking-wider'>Issues</h2>
-				</div>
-				<div class='h-full'>
+				<div id='createNew' class='flex flex-col  pb-10'>
 					<div class="cursor-pointer bg-blue-100 shadow-sm mx-2 rounded-lg font-medium pl-3 pr-3 pt-1 pb-1 mb-1 flex flex-row">
-						<a class='my-auto w-full h-6 my-auto text-blue-800 truncate'>
-							The title becomes too big when streetched out by							
-						</a>
 						<div>
-							<span class="ml-1 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
-								Blocker
-							</span>
-							
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 mr-1 icon-add"><path class="secondary" fill-rule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
 						</div>
-					</div>
-					<div class="cursor-pointer mx-2 hover:bg-gray-100 rounded-lg font-normal pl-3 pr-3 pt-1 pb-1 flex flex-row relative">
-						<!-- <span class="flex-shrink-0 my-auto mr-1 top-0 left-0 block h-4 w-6 rounded-full text-white bg-red-400 flex items-center justify-center text-xs font-bold">12</span> -->
-						<a class=' my-auto w-full h-6 my-auto text-gray-700 truncate'>
-							The title becomes too big when streetched out by							
+
+						<a class='my-auto w-full h-6 my-auto text-blue-800 truncate'>
+							Create New							
 						</a>
-						<div>
-							<span class="ml-1 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
-								Blocker
-							</span>
-							
-						</div>	
+						
 					</div>
-					
 				</div>
+
+				<div id='issues' class='flex flex-col'>
+					<div class='w-full h-6 mb-4'>
+						<h2 class='font-normal p-3 font-medium uppercase text-xs text-gray-600 tracking-wider'>Issues</h2>
+					</div>
+					<div class='h-full'>
+						<div class="cursor-pointer bg-blue-100 shadow-sm mx-2 rounded-lg font-medium pl-3 pr-3 pt-1 pb-1 mb-1 flex flex-row">
+							<a class='my-auto w-full h-6 my-auto text-blue-800 truncate'>
+								The title becomes too big when streetched out by							
+							</a>
+							<div>
+								<span class="ml-1 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
+									Blocker
+								</span>
+								
+							</div>
+						</div>
+						<div class="cursor-pointer mx-2 hover:bg-gray-100 rounded-lg font-normal pl-3 pr-3 pt-1 pb-1 flex flex-row relative">
+							<!-- <span class="flex-shrink-0 my-auto mr-1 top-0 left-0 block h-4 w-6 rounded-full text-white bg-red-400 flex items-center justify-center text-xs font-bold">12</span> -->
+							<a class=' my-auto w-full h-6 my-auto text-gray-700 truncate'>
+								The title becomes too big when streetched out by							
+							</a>
+							<div>
+								<span class="ml-1 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
+									Blocker
+								</span>
+								
+							</div>	
+						</div>
+						
+					</div>
+				</div>
+				
 
 			</div>
 		</div>
