@@ -1,5 +1,8 @@
 module.exports = {
   theme: {
+    fontFamily: {
+      body: ['Roboto', 'sans-serif'],
+    },
     extend: {
       spacing: {
         '72': '18rem',

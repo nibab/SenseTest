@@ -21,23 +21,6 @@ export const PostCard = ({postId, onClick}: PostCardProps) => {
     const post = postsSelector.posts[postId]
     return (
         <div>
-            {/* <Card 
-                key={uuidv4()}
-                hoverable={true}
-                onClick={() => {
-                    onClick()
-                }}
-                cover={<PostImage postId={postId} height={100} width={150}/>}
-                bordered={true}
-                style={{ maxWidth: '150px', height: '400px'}}
-            >
-                <Meta title={"TestTitle"}></Meta>
-                <div className="px-6 py-4">
-                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#Software Engineer</span>
-                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#Writter</span>
-                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#Public Speaker</span>
-                </div>
-            </Card> */}
             <div className='flex-row pt-3 bg-gray-100 rounded-lg hover:shadow-2xl cursor-pointer' style={{width: '250px'}} onClick={() => onClick()}>
                 <div className="p-1 rounded-lg container mx-auto" style={{height: '300px', width: '144px', backgroundSize: 'contain', backgroundImage: 'url("iPhoneXWireframe.png")'}}>
                     <img className='hover rounded h-full mx-auto' src={window.URL.createObjectURL(post.image)} />					

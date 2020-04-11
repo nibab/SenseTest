@@ -12,7 +12,6 @@ import { listPosts } from "../../graphql/queries"
 import { PostImgDownload } from "../../utils/PostImgDownload"
 import { addPost } from "../../store/post/actions"
 import Log from "../../utils/Log"
-import { PostHeader } from './PostHeader'
 
 export const AnnotationScreen = ({ }) => {
     // Posts
