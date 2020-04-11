@@ -164,7 +164,7 @@ const CreatePostView = () => {
 	
 	const renderPostToolBar = () => {
 		return (
-			<div className='bg-blue-200 rounded-full flex-shrink-0 w-16 p-1'>
+			<div className='rounded-full flex-shrink-0 w-16 p-1'>
 				<div id='button-container' className='w-full flex-col'> 
 					<div className='w-full h-16 flex flex-col'>
 						<button onClick={(event) => onScreenshotButtonClick(event)} className="focus:outline-none  border-gray-400 shadow-lg active:shadow-sm active:bg-gray-300 w-10 h-10 bg-gray-100 rounded-full mx-auto" style={{borderWidth: "1px"}}>

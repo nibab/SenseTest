@@ -142,7 +142,7 @@ export const AnnotationScreen = ({ }) => {
     const renderSelector = () => {
         
         return (
-            <div onMouseEnter={() => setIsShown(true)} onMouseLeave={() => setIsShown(false)} className='flex-shrink-0 flex flex-row bg-gray-500 shadow-xl w-screen h-20 hover:h-72 bottom-0 absolute p-3 z-30' >
+            <div onMouseEnter={() => setIsShown(true)} onMouseLeave={() => setIsShown(false)} className='flex-shrink-0 flex flex-row bg-gray-500 shadow-xl w-screen h-2 hover:h-72 bottom-0 absolute p-3 z-30' >
                 {/* <div className="w-96 h-full p-1 left-0 flex "> */}
                     {/* <div className="bg-white shadow p-1 h-full rounded-lg flex">	 */}
                         {/* <div className="bg-green-300 rounded-lg w-16 h-16 my-auto">
@@ -208,7 +208,8 @@ export const AnnotationScreen = ({ }) => {
 
     return getPostsFetchInProgress ? <Loading /> : (
         <>
-        <div className="flex flex-row h-full bg-gray-200 relative">  
+        {/* <PostHeader></PostHeader> */}
+        <div className="flex flex-row h-full bg-gray-100 relative">  
             { renderPostDetailView() }
         </div>
         { renderSelector() }
