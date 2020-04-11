@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { Post } from '../../types'
-import { DeviceScreenshot } from './Screenshot'
+import { Post } from '../../../types'
+import { DeviceScreenshot } from '../Screenshot'
 
 type PostViewProps = {
     post: Post
