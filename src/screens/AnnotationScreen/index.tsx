@@ -66,7 +66,7 @@ export const AnnotationScreen = ({ }) => {
         <div className="flex flex-row h-full bg-gray-100 relative">  
             { renderPostDetailView() }
         </div>
-        {/* <PostFooterBar posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost} /> */}
+        <PostFooterBar posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost} />
         </>
         
     )
