@@ -17,44 +17,73 @@
 		<!--[if lt IE 7]>
 			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
 		<![endif]-->
-		<div class='bg-gray-100 font-body w-screen h-screen bg-white flex justify-center'>
+		<div class='bg-gray-300 font-body w-screen h-screen bg-white flex justify-center'>
 			
-			<div class='bg-white rounded-lg w-96 pt-24 h-full overflow-scroll my-auto flex flex-col'>
-				<div id='createNew' class='flex flex-col  pb-10'>
-					<div class="cursor-pointer bg-blue-100 shadow-sm mx-2 rounded-lg font-medium pl-3 pr-3 pt-1 pb-1 mb-1 flex flex-row">
-						<div>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 mr-1 icon-add"><path class="secondary" fill-rule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
+			<div class='shadow-lg bg-white w-4/12 pt-1 h-screen overflow-scroll my-auto flex flex-col'>
+				
+				<div id='menu' class='flex-shrink-0 flex flex-col pb-5 '>
+					<div class="flex-shrink-0 flex border-b border-gray-200 px-4 py-2 ">
+						<div href="#" class="flex-shrink-0 group block focus:outline-none ">
+						  <div class="flex items-center">
+							<div class=''>
+							  <img class="inline-block h-8 w-8 rounded-md" src="/public/appIcon.png" alt="" />
+							</div>
+							<div class="ml-2 ">
+							  <p class="text-sm leading-3 pt-2 font-medium text-gray-700 group-hover:text-gray-900">
+								App.ly
+							  </p>
+							  <p class="text-xs leading-5 font-medium text-gray-500 group-hover:text-gray-700 group-focus:underline transition ease-in-out duration-150">
+								V 0.1.1beta
+							  </p>
+							</div>
+						  </div>
+						</div>
+					</div>
+					
+					<div class="cursor-pointer mx-2 hover:bg-gray-200 rounded-lg font-normal pl-3 pr-3 pt-1 mt-2 pb-1 flex flex-row relative text-gray-700">
+						<div class='my-auto'>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 mr-2 icon-notification"><circle cx="12" cy="19" r="3" class="secondary"/><path class="primary" d="M10.02 4.28L10 4a2 2 0 1 1 3.98.28A7 7 0 0 1 19 11v5a1 1 0 0 0 1 1 1 1 0 0 1 0 2H4a1 1 0 0 1 0-2 1 1 0 0 0 1-1v-5a7 7 0 0 1 5.02-6.72z"/></svg>
 						</div>
 
-						<a class='my-auto w-full h-6 my-auto text-blue-800 truncate'>
-							Create New							
+						<a class='my-auto w-full text-sm my-auto  truncate'>
+							Notifications							
+						</a>
+						
+					</div>
+					<div class="cursor-pointer mx-2 hover:bg-gray-200 rounded-lg font-normal pl-3 pr-3  pt-1 pb-1 flex flex-row relative text-gray-700">
+						<div class='my-auto h-full'>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 mr-2 icon-cog"><path class="primary" d="M6.8 3.45c.87-.52 1.82-.92 2.83-1.17a2.5 2.5 0 0 0 4.74 0c1.01.25 1.96.65 2.82 1.17a2.5 2.5 0 0 0 3.36 3.36c.52.86.92 1.8 1.17 2.82a2.5 2.5 0 0 0 0 4.74c-.25 1.01-.65 1.96-1.17 2.82a2.5 2.5 0 0 0-3.36 3.36c-.86.52-1.8.92-2.82 1.17a2.5 2.5 0 0 0-4.74 0c-1.01-.25-1.96-.65-2.82-1.17a2.5 2.5 0 0 0-3.36-3.36 9.94 9.94 0 0 1-1.17-2.82 2.5 2.5 0 0 0 0-4.74c.25-1.01.65-1.96 1.17-2.82a2.5 2.5 0 0 0 3.36-3.36zM12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><circle cx="12" cy="12" r="2" class="secondary"/></svg>
+						</div>
+
+						<a class='flex w-full text-sm my-auto  truncate'>
+							Settings 							
 						</a>
 						
 					</div>
 				</div>
 
-				<div id='issues' class='flex flex-col'>
+				<div id='issues' class='flex flex-col h-full'>
 					<div class='w-full h-6 mb-4'>
 						<h2 class='font-normal p-3 font-medium uppercase text-xs text-gray-600 tracking-wider'>Issues</h2>
 					</div>
-					<div class='h-full'>
+					<div class='h-full overflow-scroll'>
 						<div class="cursor-pointer bg-blue-100 shadow-sm mx-2 rounded-lg font-medium pl-3 pr-3 pt-1 pb-1 mb-1 flex flex-row">
-							<a class='my-auto w-full h-6 my-auto text-blue-800 truncate'>
+							<a class='my-auto w-full text-blue-800 text-sm truncate'>
 								The title becomes too big when streetched out by							
 							</a>
-							<div>
+							<div class=' flex'>
 								<span class="ml-1 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
 									Blocker
 								</span>
 								
 							</div>
 						</div>
-						<div class="cursor-pointer mx-2 hover:bg-gray-100 rounded-lg font-normal pl-3 pr-3 pt-1 pb-1 flex flex-row relative">
+						<div class="cursor-pointer mx-2 hover:bg-gray-200 rounded-lg font-normal pl-3 pr-3 pt-1 pb-1 flex flex-row relative">
 							<!-- <span class="flex-shrink-0 my-auto mr-1 top-0 left-0 block h-4 w-6 rounded-full text-white bg-red-400 flex items-center justify-center text-xs font-bold">12</span> -->
-							<a class=' my-auto w-full h-6 my-auto text-gray-700 truncate'>
+							<a class=' my-auto w-full text-sm text-gray-700 truncate'>
 								The title becomes too big when streetched out by							
 							</a>
-							<div>
+							<div class='flex'>
 								<span class="ml-1 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
 									Blocker
 								</span>
@@ -64,10 +93,25 @@
 						
 					</div>
 				</div>
+
+				<div id='createNew' class='border-t flex-shrink-0 flex flex-col h-12 bottom-0 text-gray-700 hover:bg-gray-200 hover:text-blue-800'>
+					
+					<div class="cursor-pointer h-full mx-2  font-medium pl-3 pr-3 flex flex-row">
+						<div class='my-auto'>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 mr-1 icon-add"><path class="primary" fill-rule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
+						</div>
+
+						<a class='my-auto w-full text-sm my-auto  truncate'>
+							Create New							
+						</a>
+						
+					</div>
+				</div>
 				
 
 			</div>
-		</div>
+
+			</div>
 		
 		
 	</body>
