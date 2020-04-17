@@ -14,6 +14,7 @@ import { addPost } from "../../store/post/actions"
 import Log from "../../utils/Log"
 import PostFooterBar from "./PostsFooterBar.tsx"
 import { ReleaseStatusBar } from "./ReleaseStatusBar"
+import { PostToolbar } from "./PostToolbar"
 
 export const AnnotationScreen = ({ }) => {
     // Posts
@@ -62,20 +63,18 @@ export const AnnotationScreen = ({ }) => {
     }
 
     return getPostsFetchInProgress ? <Loading /> : (
-        <div class='flex flex-col'>
-            {/* <PostHeader></PostHeader> */}
-            <ReleaseStatusBar />
-            <div className="flex flex-row h-full bg-gray-100 relative">  
-                { renderPostDetailView() }
+        <div className='h-screen w-screen flex flex-row'>	
+            <PostToolbar posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost}/>
+            <div className='flex flex-col w-full bg-gray-100'>
+                {/* <PostHeader></PostHeader> */}
+                <ReleaseStatusBar />
+                <div className="flex flex-row h-full relative overflow-scroll">  
+                    { renderPostDetailView() }
+                </div>
+                {/* <PostFooterBar posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost} /> */}
             </div>
-            <PostFooterBar posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost} />
         </div>
     )
 }
 
 export default AnnotationScreen;
-
-
-
-
-

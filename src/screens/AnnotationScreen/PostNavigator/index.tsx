@@ -9,13 +9,13 @@ export const PostNavigator = () => {
 					<div className="flex-shrink-0 group block focus:outline-none ">
 						<div className="flex items-center">
 						<div className=''>
-							<img className="inline-block h-8 w-8 rounded-md" src="/public/appIcon.png" alt="" />
+							<img className="inline-block h-8 w-8 rounded-md" src="appIcon.png" alt="" />
 						</div>
 						<div className="ml-2 ">
 							<p className="text-sm leading-3 pt-2 font-medium text-gray-700 group-hover:text-gray-900">
 							App.ly
 							</p>
-							<p className="text-xs leading-5 font-medium text-gray-500 group-hover:text-gray-700 group-focus:underline transition ease-in-out duration-150">
+							<p className="text-xs font-medium text-gray-500 group-hover:text-gray-700 group-focus:underline transition ease-in-out duration-150">
 							V 0.1.1beta
 							</p>
 						</div>

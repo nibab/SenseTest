@@ -2,7 +2,7 @@ import React from 'react'
 
 export const ReleaseStatusBar = () => {
 	return (
-		<div className="bg-whiteflex flex-col">
+		<div className="bg-white flex flex-col w-full">
 			<div className="mx-auto w-full flex justify-center h-10 relative">
 				<div className='h-full w-full absolute flex'>
 					<div className="flex flex-auto right-0 my-auto z-0 overflow-hidden justify-end pr-2">

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback, forwardRef, Ref } from "react"
-import 'antd/dist/antd.css';
 import Log from "../utils/Log";
 
 type AnnotationCanvasProps = {

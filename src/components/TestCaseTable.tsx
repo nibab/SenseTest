@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import 'antd/dist/antd.css';
 import { Button, Table, Divider, Tag } from 'antd';
 import { TestCase } from '../clients/TestCasesClient';
 

@@ -13,7 +13,7 @@ const PostView = ({ post }: PostViewProps) => {
 
     const renderPostView = () => {
         return (
-			<div className='flex-auto relative overflow-scroll'>
+			<div className='flex-auto relative overflow-hidden'>
 				<div className="z-30 w-full absolute bottom-0 ">
 					<div className="rounded-md bg-yellow-100 shadow-xl p-4 mx-4 my-1">
 						<div className="flex">
@@ -48,20 +48,20 @@ const PostView = ({ post }: PostViewProps) => {
 
 				<div className='overflow-scroll flex-auto h-full flex flex-col relative'> 
 					<div className="bg-gray-100 p-3 py-3 shadow-inner">
-						<h2 className='text-base font-bold'>The text doees not render properly</h2>
+						<h2 className='text-base font-bold'>{post.title}</h2>
 						<div className='-mt-1 text-xs uppercase text-gray-500 font-semibold '>
 							2/20/20
 						</div>
 						<p className='mt-1 text-xs leading-tight flex-wrap'>
-							{ "The fox jumped on. The fox jumped on the rabbit. The fox jumped on the moose." }
+							{post.title} 
 						</p>
 						<div className="bg-gray-300 px-4 mt-3 w-full h-0.5"></div>
 					</div>
 					
 					
 
-					<div className='my-auto bg-gray-100 h-full flex flex-row pl-2 pr-2'> 
-						<div className='flex-shrink-0 overflow-hidden mr-3'>
+					<div className='my-auto h-full flex flex-row pl-2 pr-2'> 
+						<div className='flex-shrink-0 mr-3'>
 							<div className='rounded-full flex-shrink-0'>
 								<div id='button-container' className='w-full flex-col'> 
 									<div className='w-full h-16 my-1 flex flex-col'>
@@ -110,10 +110,10 @@ const PostView = ({ post }: PostViewProps) => {
 							<div className='flex-shrink-0  mb-3 w-64 flex-col mr-3' style={{height: '583px', width: '281px'}}> 
 								<div className='h-full w-full object-contain flex relative'>
 									<div className='h-full w-full absolute z-0'>
-										<img className="h-full w-full object-contain" src='../../../../public/iphonexBlack.png'></img>
+										<img className="h-full w-full object-contain" src='iphonexBlack.png'></img>
 									</div>	
 									<div className=' mx-auto my-auto z-10 overflow-hidden' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
-										<img className='h-full w-full mx-auto object-contain' src='../../../../public/newsScreenshot.png'></img>
+										<img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img>
 									</div>
 									
 								</div>							
@@ -138,7 +138,7 @@ const PostView = ({ post }: PostViewProps) => {
 										{/* <img className="h-full w-full object-contain" src=''></img> */}
 									</div>	
 									<div className=' mx-auto my-auto z-10 overflow-hidden' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
-										<img className='h-full w-full mx-auto object-contain' src='../../../../public/newsScreenshot.png'></img>
+										<img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img>
 									</div>
 									
 									
@@ -164,9 +164,9 @@ const PostView = ({ post }: PostViewProps) => {
     }
 
     return (
-        <>
+        <div className="flex flex-col">
             { renderPostView() }
-        </>
+        </div>
     )
 }
 
