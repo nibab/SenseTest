@@ -50,11 +50,21 @@ const PostView = ({ post }: PostViewProps) => {
 	}
 
 	const renderPostTitle = () => {
+		// Temporary function to get today's date and display it.
+		const getDate = (): string => {
+			var today = new Date()
+			var dd = String(today.getDate()).padStart(2, '0')
+			var mm = String(today.getMonth() + 1).padStart(2, '0')
+			var yyyy = today.getFullYear()
+
+			return mm + '/' + dd + '/' + yyyy
+		}
+
 		return (
 			<div className="bg-gray-100 p-3 py-3 shadow-inner">
 				<h2 className='text-base font-bold'>{post.title}</h2>
 				<div className='-mt-1 text-xs uppercase text-gray-500 font-semibold '>
-					2/20/20
+					{getDate()}
 				</div>
 				<p className='mt-1 text-xs leading-tight flex-wrap'>
 					{post.title} 
