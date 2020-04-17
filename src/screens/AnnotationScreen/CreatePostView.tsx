@@ -159,6 +159,7 @@ const CreatePostView = () => {
             >
                 <Input ref={assignToRef} placeholder="Blocker" id="error" />
             </Form.Item>
+            <button onClick={(e) => onUploadButtonClick(e)} className='mt-2 bg-blue-200 text-blue-400 rounded-md p-1'>UPLOAD</button>
         </Form>
 	)
 	
@@ -195,7 +196,8 @@ const CreatePostView = () => {
     return (
         <div className='h-full flex-auto flex flex-row'>
 			<div className='flex-auto h-full flex flex-col '> 
-				<div className='flex w-screen flex-row justify-center my-auto'>
+                {/* when navbar is hidden this should also include justify-center */}
+				<div className='flex w-full flex-row  my-auto'> 
 					{/* RenderPostToolBar is contained because otherwise it stretches for the whole height. */}
 					<div className='overflow-hidden ml-3 '>
 						{ renderPostToolBar() }

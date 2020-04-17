@@ -71,15 +71,15 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 
 	const renderItem = (post: Post) => {
 		const common = 'mb-1 mx-2 pl-3 pr-3 pt-1 pb-1 flex flex-row rounded-lg cursor-pointer'
-		const selectedClassName = 'bg-blue-100 shadow-sm font-medium ' + ' ' + common
-		const notSelectedClassName = 'hover:bg-gray-200 font-normal relative'  + ' ' + common
+		const selectedClassName = 'bg-blue-100 shadow-sm font-medium text-blue-800 ' + ' ' + common
+		const notSelectedClassName = 'hover:bg-gray-200 font-normal relative text-gray-700'  + ' ' + common
 
 		const className = currentPost !== undefined && post.id === currentPost.id ? selectedClassName : notSelectedClassName
 
 		return (
 			<div onClick={() => {setDisplayCreateNewPost(false); setCurrentPost(post)}} className={className}>
 				{/* <span className="flex-shrink-0 my-auto mr-1 top-0 left-0 block h-4 w-6 rounded-full text-white bg-red-400 flex items-center justify-center text-xs font-bold">12</span> */}
-				<div className=' my-auto w-full text-sm text-gray-700 truncate'>
+				<div className=' my-auto w-full text-sm truncate'>
 					{ post.title }							
 				</div>
 				<div className='flex'>
@@ -91,32 +91,9 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 		)	
 	}
 
-	return (
-		<div className='flex-shrink-0 shadow-lg bg-white w-3/12 h-screen overflow-scroll my-auto flex flex-col'>
-			{ renderHeader() }
-
-			<div id='issues' className='flex flex-col h-full'>
-				<div className='w-full h-6 mb-4'>
-					<h2 className='font-normal p-3 font-medium uppercase text-xs text-gray-600 tracking-wider'>Issues</h2>
-				</div>
-				<div className='h-full overflow-scroll'>
-					<div className="cursor-pointer bg-blue-100 shadow-sm mx-2 rounded-lg font-medium pl-3 pr-3 pt-1 pb-1 mb-1 flex flex-row">
-						<div className='my-auto w-full text-blue-800 text-sm truncate'>
-							The title becomes too big when streetched out by							
-						</div>
-						<div className=' flex'>
-							<span className="ml-1 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
-								Blocker
-							</span>
-							
-						</div>
-					</div>
-					
-					{ renderPosts() }
-				</div>
-			</div>
-
-			<div id='createNew' className='border-t flex-shrink-0 flex flex-col h-12 bottom-0 text-gray-700 hover:bg-gray-200 hover:text-blue-800'>
+	const renderCreateNewButton = () => {
+		return (
+			<div id='createNew' onClick={() => setDisplayCreateNewPost(true)} className='border-t flex-shrink-0 flex flex-col h-12 bottom-0 text-gray-700 hover:bg-gray-200 hover:text-blue-800'>
 				
 				<div className="cursor-pointer h-full mx-2  font-medium pl-3 pr-3 flex flex-row">
 					<div className='my-auto'>
@@ -129,8 +106,22 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 					
 				</div>
 			</div>
-			
+		)
+	}
 
+	return (
+		<div className='flex-shrink-0 shadow-lg bg-white w-3/12 h-screen overflow-scroll my-auto flex flex-col'>
+			{ renderHeader() }
+
+			<div id='issues' className='flex flex-col h-full'>
+				<div className='w-full h-6 mb-4'>
+					<h2 className='font-normal p-3 font-medium uppercase text-xs text-gray-600 tracking-wider'>Issues</h2>
+				</div>
+				<div className='h-full overflow-scroll'>
+					{ renderPosts() }
+				</div>
+			</div>
+			{ renderCreateNewButton() }
 		</div>
 	)
 }
