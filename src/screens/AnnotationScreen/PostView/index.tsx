@@ -18,7 +18,7 @@ const PostView = ({ post }: PostViewProps) => {
 	const renderWarningMessage = () => {
 		return (
 			<div className="z-30 w-full absolute bottom-0 ">
-				<div className="rounded-md bg-yellow-100 shadow-xl p-4 mx-4 my-1">
+				<div className="rounded-md bg-yellow-100 shadow-xl p-4 mx-2 my-1">
 					<div className="flex">
 						<div className="flex-shrink-0">
 							<svg className="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -63,7 +63,7 @@ const PostView = ({ post }: PostViewProps) => {
 		}
 
 		return (
-			<div className="bg-gray-100 px-3 py-1">
+			<div className="bg-gray-100 mx-3 pt-2 pb-1">
 				<h2 className='text-base font-bold'>{post.title}</h2>
 				<div className='-mt-1 text-xs uppercase text-gray-500 font-semibold '>
 					{getDate()}
@@ -206,7 +206,7 @@ const PostView = ({ post }: PostViewProps) => {
 							</span>
 						</div>
 					</div>
-					<div className='h-full w-full object-contain flex relative bg-gray-300 shadow-lg'>
+					<div className='h-full w-full object-contain flex relative bg-gray-300 shadow-inner rounded-lg shadow-lg'>
 						<div className='h-full w-full absolute z-0 rounded-lg'>
 							{/* <img className="h-full w-full object-contain" src=''></img> */}
 						</div>	
@@ -225,7 +225,7 @@ const PostView = ({ post }: PostViewProps) => {
     return (
         <div className="flex flex-col w-full">
             <div className='flex-auto relative overflow-hidden'>
-				{ renderWarningMessage() }
+				{/* { renderWarningMessage() } */}
 				<div className='overflow-scroll flex-auto h-full flex flex-col relative'> 
 					{ renderPostTitle() }
 					<div className='my-auto h-full flex flex-row pl-2 pr-2'> 
