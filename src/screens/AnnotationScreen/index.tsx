@@ -13,6 +13,7 @@ import { PostImgDownload } from "../../utils/PostImgDownload"
 import { addPost } from "../../store/post/actions"
 import Log from "../../utils/Log"
 import PostFooterBar from "./PostsFooterBar.tsx"
+import { ReleaseStatusBar } from "./ReleaseStatusBar"
 
 export const AnnotationScreen = ({ }) => {
     // Posts
@@ -61,14 +62,14 @@ export const AnnotationScreen = ({ }) => {
     }
 
     return getPostsFetchInProgress ? <Loading /> : (
-        <>
-        {/* <PostHeader></PostHeader> */}
-        <div className="flex flex-row h-full bg-gray-100 relative">  
-            { renderPostDetailView() }
+        <div class='flex flex-col'>
+            {/* <PostHeader></PostHeader> */}
+            <ReleaseStatusBar />
+            <div className="flex flex-row h-full bg-gray-100 relative">  
+                { renderPostDetailView() }
+            </div>
+            <PostFooterBar posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost} />
         </div>
-        <PostFooterBar posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost} />
-        </>
-        
     )
 }
 
