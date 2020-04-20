@@ -143,7 +143,7 @@
 
 					</div>
 				</div>
-				<div class='flex-auto relative overflow-hidden'>
+				<div class='w-full overflow-scroll'>
 					<!-- <div class="z-30 w-full absolute bottom-0 ">
 						<div class="rounded-md bg-yellow-100 shadow-xl p-4 mx-2 my-2">
 							<div class="flex">
@@ -176,7 +176,7 @@
 						</div>
 					</div> -->
 	
-					<div class='overflow-scroll flex-auto h-full flex flex-col relative'> 
+					<div class='bg-gray-100 flex-auto flex flex-col relative h-full'> 
 						<div class="bg-gray-100 mx-3 py-1 ">
 							<h2 class='text-base font-bold'>The text doees not render properly</h2>
 							<div class='-mt-1 text-xs uppercase text-gray-500 font-semibold '>
@@ -190,8 +190,9 @@
 						
 						
 	
-						<div class='my-auto bg-gray-100 h-full flex flex-row pl-2 pr-2'> 
-							<div class='flex-shrink-0 overflow-hidden mr-3'>
+						<div class='my-auto pt-1 flex flex-row pl-2 pr-2 h-screen overflow-scroll'> 
+							
+							<div class='flex-shrink-0 mr-3'>
 								<div class='rounded-full flex-shrink-0'>
 									<div id='button-container' class='w-full flex-col'> 
 										<div class='w-full h-16 my-1 flex flex-col'>
@@ -221,64 +222,278 @@
 									</div>
 								</div>
 							</div>
-							<div class='h-full'>
-								<div class='w-full h-8 flex'>
+							
+							<div class='flex flex-col max-h-full'>
+								<div class=' w-full h-8 flex'>
 									<div class=' pb-1 mx-auto flex flex-row p-0.5'>
-										<button class="inline-flex items-center px-2.5 mr-1 border text-xs border-transparent font-medium leading-4 rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150">
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 mr-1 icon-view-visible"><path class="primary" d="M17.56 17.66a8 8 0 0 1-11.32 0L1.3 12.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95zM11.9 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><circle cx="12" cy="12" r="3" class="secondary"/></svg>
-											Visual Diff
-										</button>
+										
 										<span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-indigo-100 text-indigo-800">
 											<svg class="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
 												<circle cx="4" cy="4" r="3" />
 											</svg>
-											v 1.0.1.b
+											Simulator v 1.0.1.b
 										</span>
+									</div> 
+								</div>
+								<div class='pb-3 pl-3 pr-3 rounded-lg border-dashed border-blue-300 bg-blue-100 border-2'>
+									
+									<div class='h-full '>
+										<div class='w-full h-8 flex my-1'>
+											<div class='mx-auto flex flex-row p-0.5'>
+												<button class="inline-flex items-center px-2.5 mr-1 border text-xs border-transparent font-medium leading-4 rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 mr-1 icon-view-visible"><path class="primary" d="M17.56 17.66a8 8 0 0 1-11.32 0L1.3 12.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95zM11.9 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><circle cx="12" cy="12" r="3" class="secondary"/></svg>
+													Visual Diff
+												</button>
+												
+											</div>
+										</div>
+				
+										<div class='flex-shrink-0  mb-3 w-64 flex-col ' style="height: 583px; width: 281px"> 
+											<div class='h-full w-full object-contain flex relative'>
+												<div class='h-full w-full absolute z-0'>
+													<img class="h-full w-full object-contain" src='../../../../public/iphonexBlack.png'></img>
+												</div>	
+												<div class=' mx-auto my-auto z-10 overflow-hidden' style="width: 92.1%; height: 96.5%; border-radius: 2.2rem">
+													<img class='h-full w-full mx-auto object-contain' src='../../../../public/newsScreenshot.png'></img>
+												</div>
+												
+											</div>							
+										</div>
 									</div>
 								</div>
-		
-								<div class='flex-shrink-0  mb-3 w-64 flex-col mr-3' style="height: 583px; width: 281px"> 
-									<div class='h-full w-full object-contain flex relative'>
-										<div class='h-full w-full absolute z-0'>
-											<img class="h-full w-full object-contain" src='../../../../public/iphonexBlack.png'></img>
-										</div>	
-										<div class=' mx-auto my-auto z-10 overflow-hidden' style="width: 92.1%; height: 96.5%; border-radius: 2.2rem">
-											<img class='h-full w-full mx-auto object-contain' src='../../../../public/newsScreenshot.png'></img>
-										</div>
-										
-									</div>							
-								</div>
 							</div>
+
 							
-							
-							<div class='flex-shrink-0 h-full mb-3 w-64 flex-col relative rounded-md' style="height: 583px; width: 281px"> 
-								<div class='h-full'>
-									<div class='w-full h-8 flex'>
+							<div class='flex-auto flex flex-row ml-3 rounded-md  shadow-inner ' > 
+								<div class='flex-shrink-0'>
+									<div class=' w-full h-8 flex'>
 										<div class=' pb-1 mx-auto flex flex-row p-0.5'>
-											
 											<span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-indigo-100 text-indigo-800">
 												<svg class="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
 													<circle cx="4" cy="4" r="3" />
 												</svg>
-												v 1.0.1.beta
+												Screenshot v 1.0.1.b
 											</span>
-										</div>
+											
+		
+										</div> 
 									</div>
-									<div class='h-full w-full object-contain flex relative bg-gray-400 shadow-lg'>
-										<div class='h-full w-full absolute z-0 rounded-lg'>
-											<!-- <img class="h-full w-full object-contain" src=''></img> -->
-										</div>	
-										<div class=' mx-auto my-auto z-10 overflow-hidden' style="width: 92.1%; height: 96.5%; border-radius: 2.2rem">
-											<img class='h-full w-full mx-auto object-contain' src='../../../../public/newsScreenshot.png'></img>
-										</div>
-										
+									<div>
 										
 									</div>
-										
+									<div class=' bg-gray-400 pb-3 pl-3 pr-3 mb-3 flex-shrink-0  flex-col relative border-dashed border-transparent rounded-lg border-2' >
+										<div class='w-full h-8 flex my-1'>
+											<div class='mx-auto flex flex-row p-0.5'>
+												<button class="inline-flex items-center px-2.5 mr-1 border text-xs border-transparent font-medium leading-4 rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 mr-1 icon-view-visible"><path class="primary" d="M17.56 17.66a8 8 0 0 1-11.32 0L1.3 12.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95zM11.9 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><circle cx="12" cy="12" r="3" class="secondary"/></svg>
+													Annotate
+												</button>
+												
+											</div>
+										</div>
+										<div class='flex-shrink-0 w-full object-contain flex relative bg-gray-200 rounded-lg' style="height: 583px; width: 281px">
+											<div class='h-full w-full absolute z-0 rounded-lg'>
+												<!-- <img class="h-full w-full object-contain" src='../../../../public/iphonexBlack.png'></img> -->
+											</div>	
+											<div class=' mx-auto my-auto z-10 overflow-hidden' style="width: 92.1%; height: 96.5%; border-radius: 2.2rem">
+												<img class='h-full w-full mx-auto object-contain' src='../../../../public/newsScreenshot.png'></img>
+											</div>
+											
+											
+										</div>
+									</div>
 								</div>
+
+								
+								
+								
+							
+								<div class=' mr-2 pt-3 flex flex-col max-h-full overflow-scroll'>
+									<div class='mb-2 w-full'>
+										<div class='flex flex-row'>
+											<div class='bg-white rounded-lg p-3  w-full relative'>
+												<div class="flex-shrink-0 flex border-gray-200">
+													<div href="#" class="flex-shrink-0 group block focus:outline-none ">
+														
+													</div>
+												</div>
+												<div class=' text-sm leading-tight font text-gray-700 bg-gray-200  rounded-md flex-row flex'>
+													<div class='w-full p-1 h-full flex-wrap'>
+														Write comment or @mention Write comment or @mention Write comment or @mention
+													</div>
+													<div class='cursor-pointer m-1 inline-flex items-center h-8 px-2 py-1  border border-transparent text-xs leading-4 font-medium rounded text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150'>
+														Publish
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class='overflow-scroll'>
+										<div class='bg-white  rounded-lg flex flex-row mb-3'>
+											<div class='flex-shrink-0 my-auto h-full flex justify-center'>
+												<div class='cursor-pointer hover:bg-indigo-400 bg-indigo-600 flex text-sm font-medium w-6 h-6 mx-2 rounded-full items-center justify-center text-gray-300'>
+													1
+												</div>
+											</div> 
+											<div class=' p-2 pb-2 w-full relative'>
+												<div class="flex-shrink-0 flex border-gray-200">
+													<div href="#" class="flex-shrink-0 group block focus:outline-none ">
+														<div class="flex items-center">
+														<div class=''>
+															<img class="inline-block h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+														</div>
+														<div class="ml-2 ">
+															<p class="text-sm leading-3 pt-2 font-medium text-gray-700 group-hover:text-gray-900">
+															Cezar Babin
+															</p>
+															<p class="text-xs leading-5 font text-gray-500 group-hover:text-gray-700 group-focus:underline transition ease-in-out duration-150">
+															moments ago
+															</p>
+														</div>
+														</div>
+													</div>
+												</div>
+												<p class='mt-2 text-sm leading-tight font text-gray-700 flex-wrap'>
+													{ "The fox jumped on. The fox jumped on the rabbit. The fox jumped on the moose." } adjssajdjsjsdajjsjsjsjsj
+												</p>
+												<div>
+													<p class='cursor-pointer mt-3 text-xs leading-tight font-medium text-indigo-700 flex-wrap'>
+														Reply
+													</p>
+												</div>
+
+
+												
+												
+												 
+											</div>
+										</div>
+										<div class='flex flex-row mb-3 rounded-lg'>
+											 
+											<div class='bg-white rounded-lg p-4 pb-5 w-full relative'>
+												<div class="flex-shrink-0 flex border-gray-200">
+													<div href="#" class="flex-shrink-0 group block focus:outline-none ">
+														<div class="flex items-center">
+														<div class=''>
+															<img class="inline-block h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+														</div>
+														<div class="ml-2 ">
+															<p class="text-sm leading-3 pt-2 font-medium text-gray-700 group-hover:text-gray-900">
+															Cezar Babin
+															</p>
+															<p class="text-xs leading-5 font text-gray-500 group-hover:text-gray-700 group-focus:underline transition ease-in-out duration-150">
+															moments ago
+															</p>
+														</div>
+														</div>
+													</div>
+												</div>
+												<p class='mt-2 text-sm leading-tight font text-gray-700 flex-wrap'>
+													{ "The fox jumped on. The fox jumped on the rabbit. The fox jumped on the moose." } adjssajdjsjsdajjsjsjsjsj
+												</p>
+												<p class='cursor-pointer mt-3 text-xs leading-tight font-medium text-red-800 flex-wrap'>
+													Cancel Reply
+												</p>
+												<div class='relative mt-1 text-sm leading-tight font text-gray-700 bg-gray-200  rounded-md flex-row flex'>
+													<div contenteditable="true" style='outline: none' class='w-full p-1 h-full flex-wrap'>
+														Write comment or @mention Write comment or @mention Write comment or @mention Write comment or @mention Write comment or @mention Write comment or @mention
+													</div>
+													<div class='cursor-pointer m-1 inline-flex items-center h-8 px-2 py-1  border border-transparent text-xs leading-4 font-medium rounded text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150'>
+														Publish
+													</div>
+												</div>
+												 
+											</div>
+										</div>
+										
+										
+										<div class='flex flex-col bg-white rounded-lg relative mb-3'>
+											<div class='p-4 pb-5 border-b w-full relative'>
+												
+												<div class="flex-shrink-0 flex border-gray-200">
+													<div href="#" class="flex-shrink-0 group block focus:outline-none ">
+														<div class="flex items-center">
+														<div class=''>
+															<img class="inline-block h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+														</div>
+														<div class="ml-2">
+															<p class="text-sm leading-3 pt-2 font-medium text-gray-700 group-hover:text-gray-900">
+															Cezar Babin
+															</p>
+															<p class="text-xs leading-5 font text-gray-500 group-hover:text-gray-700 group-focus:underline transition ease-in-out duration-150">
+															moments ago
+															</p>
+														</div>
+														</div>
+													</div>
+												</div>
+												<p class='mt-2 text-sm leading-tight font text-gray-700 flex-wrap'>
+													{ "The fox jumped on. The fox jumped on the rabbit. The fox jumped on the moose." } adjssajdjsjsdajjsjsjsjsj
+												</p>
+												<p class='cursor-pointer mt-3 text-xs leading-tight font-medium text-indigo-700 flex-wrap'>
+													Reply
+												</p>												
+											</div>
+											<div class='p-4 pb-5 border-b w-full relative'>
+												<div class="flex-shrink-0 flex border-gray-200">
+													<div href="#" class="flex-shrink-0 group block focus:outline-none ">
+														<div class="flex items-center">
+														<div class=''>
+															<img class="inline-block h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+														</div>
+														<div class="ml-2 ">
+															<p class="text-sm leading-3 pt-2 font-medium text-gray-700 group-hover:text-gray-900">
+															Cezar Babin
+															</p>
+															<p class="text-xs leading-5 font text-gray-500 group-hover:text-gray-700 group-focus:underline transition ease-in-out duration-150">
+															moments ago
+															</p>
+														</div>
+														</div>
+													</div>
+												</div>
+												<p class='mt-2 text-sm leading-tight font text-gray-700 flex-wrap'>
+													{ "The fox jumped on. The fox jumped on the rabbit. The fox jumped on the moose." } adjssajdjsjsdajjsjsjsjsj
+												</p>
+												<p class='cursor-pointer mt-3 text-xs leading-tight font-medium text-indigo-700 flex-wrap'>
+													Reply
+												</p>												
+											</div>
+											
+										</div>						
+									</div>
+								</div>
+									
+	
+								
+							</div>
+								
 							</div>
 							
-							<div class='h-full overflow-scroll mx-3 my-1 bg-gray-300 rounded-lg shadow-inner p-3'>
+							<!-- bg-gray-300 rounded-lg shadow-inner -->
+							<!-- <div class='h-full overflow-scroll mx-3   p-3'>
+								<div class='flex flex-row mb-3'>
+									
+									<div class='bg-white rounded-lg p-3  w-full relative'>
+										<div class="flex-shrink-0 flex border-gray-200">
+											<div href="#" class="flex-shrink-0 group block focus:outline-none ">
+												
+											</div>
+										</div>
+										<div class=' text-sm leading-tight font text-gray-700 bg-gray-200  rounded-md flex-row flex'>
+											<div class='w-full p-1 h-full flex-wrap'>
+												Write comment or @mention Write comment or @mention Write comment or @mention
+											</div>
+											<div class='cursor-pointer m-1 inline-flex items-center h-8 px-2 py-1  border border-transparent text-xs leading-4 font-medium rounded text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150'>
+												Publish
+											</div>
+
+											
+										</div>
+										
+										 
+									</div>
+								</div>
 								<div class='flex flex-row mb-3'>
 									<div class='flex-shrink-0 my-auto h-full flex justify-center'>
 										<div class='cursor-pointer hover:bg-indigo-400 bg-indigo-600 flex text-sm font-medium w-6 h-6 mr-2 rounded-full items-center justify-center text-gray-300'>
@@ -303,7 +518,7 @@
 												</div>
 											</div>
 										</div>
-										<p class='mt-2 text-xs leading-tight font-medium text-gray-700 flex-wrap'>
+										<p class='mt-2 text-sm leading-tight font text-gray-700 flex-wrap'>
 											{ "The fox jumped on. The fox jumped on the rabbit. The fox jumped on the moose." } adjssajdjsjsdajjsjsjsjsj
 										</p>
 										<p class='cursor-pointer mt-3 text-xs leading-tight font-medium text-indigo-700 flex-wrap'>
@@ -312,12 +527,43 @@
 										 
 									</div>
 								</div>
-
-
-								
+								<div class='flex flex-row mb-3'>
+									<div class='flex-shrink-0 my-auto h-full flex justify-center'>
+										<div class='cursor-pointer hover:bg-indigo-400 bg-indigo-600 flex text-sm font-medium w-6 h-6 mr-2 rounded-full items-center justify-center text-gray-300'>
+											1
+										</div>
+									</div> 
+									<div class='bg-white rounded-lg p-4 pb-5 w-full relative'>
+										<div class="flex-shrink-0 flex border-gray-200">
+											<div href="#" class="flex-shrink-0 group block focus:outline-none ">
+												<div class="flex items-center">
+												<div class=''>
+													<img class="inline-block h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+												</div>
+												<div class="ml-2 ">
+													<p class="text-sm leading-3 pt-2 font-medium text-gray-700 group-hover:text-gray-900">
+													Cezar Babin
+													</p>
+													<p class="text-xs leading-5 font text-gray-500 group-hover:text-gray-700 group-focus:underline transition ease-in-out duration-150">
+													moments ago
+													</p>
+												</div>
+												</div>
+											</div>
+										</div>
+										<p class='mt-2 text-sm leading-tight font text-gray-700 flex-wrap'>
+											{ "The fox jumped on. The fox jumped on the rabbit. The fox jumped on the moose." } adjssajdjsjsdajjsjsjsjsj
+										</p>
+										<p class='cursor-pointer mt-3 text-xs leading-tight font-medium text-indigo-700 flex-wrap'>
+											Reply
+										</p>
+										 
+									</div>
+								</div>
 							</div>
-						</div> 					
-					</div>  
+
+						</div> 					 -->
+					<!-- </div>   -->
 				</div>
 			</div>
 			
