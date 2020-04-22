@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
 import { Post } from '../../../types'
 
+
+const TEST_COMMENT = {message: 'Hello', author: 'Cezar', date:'now', annotation:'1'} 
+const TEST_RESPONSES = [{message: 'World', author: 'Cezar', date:'now', annotation:'1'},{message: 'World', author: 'Cezar', date:'now', annotation:'1'} ]
+const REPLY_BOX_PLACEHOLDER = 'Write comment or @mention'
+
 type PostScreenshotProps = {
 	post: Post
 }
@@ -95,7 +100,7 @@ const CommentsSection = () => {
 						</div>
 						<div className=' text-sm leading-tight font text-gray-700 bg-gray-200  rounded-md flex-row flex'>
 							<div className='w-full p-1 h-full flex-wrap'>
-								Write comment or @mentiona
+								{ REPLY_BOX_PLACEHOLDER }
 							</div>
 							<div className='cursor-pointer m-1 inline-flex items-center h-8 px-2 py-1  border border-transparent text-xs leading-4 font-medium rounded text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150'>
 								Publish
@@ -132,10 +137,10 @@ const CommentsSection = () => {
 						</div>
 						<div className="ml-2 ">
 							<p className="text-sm leading-3 pt-2 font-medium text-gray-700 group-hover:text-gray-900">
-							Cezar Babin
+								{ comment.author }
 							</p>
 							<p className="text-xs leading-5 font text-gray-500 group-hover:text-gray-700 group-focus:underline transition ease-in-out duration-150">
-							moments ago
+								{ comment.date }
 							</p>
 						</div>
 						</div>
@@ -147,8 +152,8 @@ const CommentsSection = () => {
 		const commentMessage = () => {
 			return (
 				<p className='mt-2 text-sm leading-tight font text-gray-700 flex-wrap'>
-							{ "The fox jumped on. The fox jumped on the rabbit. The fox jumped on the moose." } 
-						</p>
+					{ comment.message } 
+				</p>
 			)
 		}
 	
@@ -156,7 +161,7 @@ const CommentsSection = () => {
 			return (
 				<div className='relative mt-1 text-sm leading-tight font text-gray-700 bg-gray-200  rounded-md flex-row flex'>
 					<div contentEditable="true" style={{outline: 'none'}} className='w-full p-1 h-full flex-wrap'>
-						Write comment or @mention
+						{ REPLY_BOX_PLACEHOLDER }
 					</div>
 					<div className='cursor-pointer m-1 inline-flex items-center h-8 px-2 py-1  border border-transparent text-xs leading-4 font-medium rounded text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150'>
 						Publish
@@ -211,7 +216,7 @@ const CommentsSection = () => {
 				let response = responses[_i]
 				items.push(
 					<div className={`pt-4 px-4 ${_i == responses.length - 1 ? '' : 'border-b' } w-full relative`}>
-						<Comment comment={comment} />												
+						<Comment comment={response} />												
 					</div>
 				)
 			}
@@ -233,7 +238,7 @@ const CommentsSection = () => {
 			return (
 				<div className='flex-shrink-0 my-auto h-full flex justify-center'>
 					<div className='cursor-pointer hover:bg-indigo-400 bg-indigo-600 flex text-sm font-medium w-6 h-6 mx-2 rounded-full items-center justify-center text-gray-300'>
-						1
+						{ comment.annotation }
 					</div>
 				</div>
 			)
@@ -252,15 +257,12 @@ const CommentsSection = () => {
 		)
 	}
 
-	const comment = {message: 'Hello', author: 'Cezar', date:'now', annotation:'1'} 
-	const responses = [{message: 'World', author: 'Cezar', date:'now', annotation:'1'},{message: 'World', author: 'Cezar', date:'now', annotation:'1'} ]
-
 	return (
 		<>
 			{ createNewComment() }
 			<div className='overflow-scroll'>
-				<CommentGroup comment={comment} _responses={[]} />
-				<CommentGroup comment={comment} _responses={responses} />
+				<CommentGroup comment={TEST_COMMENT} _responses={[]} />
+				<CommentGroup comment={TEST_COMMENT} _responses={TEST_RESPONSES} />
 			</div>
 		</>
 	)
