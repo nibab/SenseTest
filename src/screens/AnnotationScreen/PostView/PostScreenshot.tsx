@@ -2,8 +2,29 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Post } from '../../../types'
 
 
-const TEST_COMMENT = {message: 'Hello', author: 'Cezar', date:'now', annotation:'1'} 
-const TEST_RESPONSES = [{message: 'World', author: 'Cezar', date:'now', annotation:'1'},{message: 'World', author: 'Cezar', date:'now', annotation:'1'} ]
+const TEST_COMMENT = {
+	message: 'Hello world how are uy', 
+	author: 'Cezar Babin', 
+	date:'now', 
+	annotation:'1',
+	avatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+} 
+const TEST_RESPONSES = [
+	{
+		message: 'World', 
+		author: 'Cezar Babin', 
+		date:'now', 
+		annotation:'1',
+		avatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+	},
+	{
+		message: 'World', 
+		author: 'Cezar Babin', 
+		date:'now', 
+		annotation:'1',
+		avatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+	}
+]
 const REPLY_BOX_PLACEHOLDER = 'Write comment or @mention'
 
 type PostScreenshotProps = {
@@ -11,7 +32,7 @@ type PostScreenshotProps = {
 }
 
 const PostScreenshot = ({ post }: PostScreenshotProps) => {
-	
+	const [displayNewCommentBox, setDisplayNewCommentBox] = useState(false)
 
 	const renderTag = () => {
 		return (
@@ -35,11 +56,10 @@ const PostScreenshot = ({ post }: PostScreenshotProps) => {
 		return (
 			<div className='w-full h-8 flex my-1'>
 				<div className='mx-auto flex flex-row p-0.5'>
-					<button className="inline-flex items-center mr-1 inline-flex items-center px-2.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
+					<button onClick={() => setDisplayNewCommentBox(!displayNewCommentBox)} className="inline-flex items-center mr-1 inline-flex items-center px-2.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mr-1 icon-click-target"><path className="primary" d="M21.97 12.73c-.25-.22-.56-.4-.92-.54L20 11.8a8 8 0 1 0-8.2 8.2l.4 1.06c.12.36.3.67.53.92a10 10 0 1 1 9.25-9.25zm-10.95 5.19a6 6 0 1 1 6.9-6.9l-2.39-.9a4 4 0 1 0-5.41 5.41l.9 2.39z"/><path className="secondary" d="M17.96 16.54l3.75 3.75a1 1 0 0 1-1.42 1.42l-3.75-3.75-.57 2.28a1 1 0 0 1-1.9.11l-3-8a1 1 0 0 1 1.28-1.29l8 3a1 1 0 0 1-.1 1.91l-2.3.57z"/></svg>
 						Annotate
-					</button>
-					
+					</button>					
 				</div>
 			</div>
 		)
@@ -73,7 +93,7 @@ const PostScreenshot = ({ post }: PostScreenshotProps) => {
 						<div className='mx-auto flex flex-row p-0.5'></div>
 					</div>
 					<div className='w-full relative bg-gray-300 overflow-scroll p-2 rounded-lg rounded-l-none flex flex-col' style={{height: '583px'}}>
-						<CommentsSection />
+						<CommentsSection  displayNewCommentBox={displayNewCommentBox} />
 					</div>
 				</div>
 			</div>
@@ -82,15 +102,24 @@ const PostScreenshot = ({ post }: PostScreenshotProps) => {
 
 }
 
+type CommentsSectionProps = {
+	displayNewCommentBox: boolean
+}
 
-const CommentsSection = () => {
+const CommentsSection = (props: CommentsSectionProps) => {
+	const [displayNewCommentBox, setDisplayNewCommentBox] = useState<boolean>()
+
+	useEffect(() => {
+		setDisplayNewCommentBox(props.displayNewCommentBox)
+	}, [props])
+
 	const createNewComment = () => {
 		return (
 			<>
-				<div className='hidden absolute z-30 h-full w-full pr-3'>
+				<div className={`${displayNewCommentBox ? '' : 'hidden'} absolute z-30 h-full w-full pr-3`}>
 					<div className='absolute h-full w-full bg-gray-600 opacity-50 rounded-lg'></div>
 				</div>
-				<div className='hidden absolute w-full h-full z-30 pr-4'>
+				<div className={`${displayNewCommentBox ? '' : 'hidden'} absolute w-full h-full z-30 pr-4`}>
 					
 					<div className='bg-white rounded-lg p-3 mr-3 w-full relative'>
 						<div className="flex-shrink-0 flex border-gray-200">
@@ -127,6 +156,7 @@ const CommentsSection = () => {
 type Comment = {
 	message: string
 	author: string
+	avatarSrc: string
 	date: string
 	annotation?: string
 }
@@ -146,7 +176,7 @@ const Comment = ({comment, onReply}: CommentProps) => {
 				<div className="flex-shrink-0 group block focus:outline-none ">
 					<div className="flex items-center">
 					<div className=''>
-						<img className="inline-block h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+						<img className="inline-block h-8 w-8 rounded-full" src={comment.avatarSrc} alt="" />
 					</div>
 					<div className="ml-2 ">
 						<p className="text-sm leading-3 pt-2 font-medium text-gray-700 group-hover:text-gray-900">
@@ -236,7 +266,8 @@ const CommentGroup = (props: CommentGroupProps) => {
 		newResponses.push({
 			message: text,
 			author: 'Cezar Babin',
-			date: 'now'
+			date: 'now',
+			avatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
 		})
 		setResponses(newResponses)
 	}
