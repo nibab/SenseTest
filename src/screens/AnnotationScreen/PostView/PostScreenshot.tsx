@@ -61,7 +61,7 @@ const PostScreenshot = ({ post }: PostScreenshotProps) => {
 	}
 
 	return (
-		<div className='flex-auto flex flex-col ml-3 ' > 
+		<div className='max-w-full flex flex-col ml-3 ' > 
 			{ renderTag() }
 			<div className='pb-3 pl-3 pr-3 rounded-lg border-dashed border-gray-400 border-2 flex flex-row'>
 				<div className='mb-3 flex-shrink-0  flex-col relative' >
