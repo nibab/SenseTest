@@ -69,7 +69,7 @@ const TempScreen = (props: TempScreenProps) => {
 				{/* <div className='mx-auto my-auto z-10 overflow-hidden' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
 					<img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img>
 				</div> */}
-				<div className='mx-auto my-auto' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
+				<div className='mx-auto my-auto z-30' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
 					<Annotation src={window.URL.createObjectURL(post.image)} annotations={annotations} onSubmit={onSubmit} onChange={onChange} type={PointSelector.TYPE} value={annotation}>
 						{/* <img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img> */}
 					</Annotation>
