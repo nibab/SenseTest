@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Post } from '../../../types'
 
 
@@ -72,7 +72,7 @@ const PostScreenshot = ({ post }: PostScreenshotProps) => {
 					<div className='w-full h-8 flex my-1'>
 						<div className='mx-auto flex flex-row p-0.5'></div>
 					</div>
-					<div className='relative bg-gray-300 overflow-scroll p-2 rounded-lg rounded-l-none flex flex-col' style={{height: '583px'}}>
+					<div className='w-full relative bg-gray-300 overflow-scroll p-2 rounded-lg rounded-l-none flex flex-col' style={{height: '583px'}}>
 						<CommentsSection />
 					</div>
 				</div>
@@ -113,158 +113,184 @@ const CommentsSection = () => {
 		)
 	}
 
-	type Comment = {
-		message: string
-		author: string
-		date: string
-		annotation?: string
-	}
+	return (
+		<>
+			{ createNewComment() }
+			<div className='overflow-scroll w-full'>
+				<CommentGroup comment={TEST_COMMENT} _responses={[]} />
+				<CommentGroup comment={TEST_COMMENT} _responses={TEST_RESPONSES} />
+			</div>
+		</>
+	)
+}
 
-	type CommentProps = {
-		comment: Comment
-	}
+type Comment = {
+	message: string
+	author: string
+	date: string
+	annotation?: string
+}
 
-	const Comment = ({comment}: CommentProps) => {
-		const [replyInProgress, setReplyInProgress] = useState(false)
+type CommentProps = {
+	comment: Comment
+	onReply: (text: string) => void
+}
 
-		const commentHeader = () => {
-			return (
-				<div className="flex-shrink-0 flex border-gray-200">
-					<div className="flex-shrink-0 group block focus:outline-none ">
-						<div className="flex items-center">
-						<div className=''>
-							<img className="inline-block h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
-						</div>
-						<div className="ml-2 ">
-							<p className="text-sm leading-3 pt-2 font-medium text-gray-700 group-hover:text-gray-900">
-								{ comment.author }
-							</p>
-							<p className="text-xs leading-5 font text-gray-500 group-hover:text-gray-700 group-focus:underline transition ease-in-out duration-150">
-								{ comment.date }
-							</p>
-						</div>
-						</div>
-					</div>
-				</div>
-			)
-		}
-	
-		const commentMessage = () => {
-			return (
-				<p className='mt-2 text-sm leading-tight font text-gray-700 flex-wrap'>
-					{ comment.message } 
-				</p>
-			)
-		}
-	
-		const replyBox = () => {
-			return (
-				<div className='relative mt-1 text-sm leading-tight font text-gray-700 bg-gray-200  rounded-md flex-row flex'>
-					<div contentEditable="true" style={{outline: 'none'}} className='w-full p-1 h-full flex-wrap'>
-						{ REPLY_BOX_PLACEHOLDER }
-					</div>
-					<div className='cursor-pointer m-1 inline-flex items-center h-8 px-2 py-1  border border-transparent text-xs leading-4 font-medium rounded text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150'>
-						Publish
-					</div>
-				</div>
-			)
-		}
+const Comment = ({comment, onReply}: CommentProps) => {
+	const [replyInProgress, setReplyInProgress] = useState(false)
+	const replyBoxRef = useRef<HTMLDivElement>(null)
 
-		const renderReplySection = () => {
-			if (replyInProgress) {
-				return (
-					<div className='mt-2 mb-3'>
-						<a onClick={() => setReplyInProgress(false)} className='cursor-pointer mt-3 text-xs leading-tight font-medium text-red-800 flex-wrap'>
-							Cancel Reply
-						</a>
-						{ replyBox() }
-					</div>
-					
-				)
-			} else {
-				return (
-					<div className='mt-2 mb-3'>
-						<a onClick={() => setReplyInProgress(true)} className='cursor-pointer mt-3 text-xs leading-tight font-medium text-indigo-700 flex-wrap'>
-							Reply
-						</a>
-					</div>
-				)
-			}
-		}
-
+	const commentHeader = () => {
 		return (
-			<div className='w-full relative'>
-				{ commentHeader() }
-				{ commentMessage() }
-				{ renderReplySection() }
+			<div className="flex-shrink-0 flex border-gray-200">
+				<div className="flex-shrink-0 group block focus:outline-none ">
+					<div className="flex items-center">
+					<div className=''>
+						<img className="inline-block h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+					</div>
+					<div className="ml-2 ">
+						<p className="text-sm leading-3 pt-2 font-medium text-gray-700 group-hover:text-gray-900">
+							{ comment.author }
+						</p>
+						<p className="text-xs leading-5 font text-gray-500 group-hover:text-gray-700 group-focus:underline transition ease-in-out duration-150">
+							{ comment.date }
+						</p>
+					</div>
+					</div>
+				</div>
 			</div>
 		)
 	}
 
-	type CommentGroupProps = {
-		comment: Comment
-		_responses: Comment[]
+	const commentMessage = () => {
+		return (
+			<p className='mt-2 text-sm leading-tight font text-gray-700 flex-wrap'>
+				{ comment.message } 
+			</p>
+		)
 	}
 
-	const CommentGroup = ({comment, _responses}: CommentGroupProps) => {
-		const [responses, setResponses] = useState<Comment[]>(_responses)
-
-		const renderReponses = () => {
-			const items = []
-
-			for (var _i = 0; _i < responses.length; _i++) {
-				let response = responses[_i]
-				items.push(
-					<div className={`pt-4 px-4 ${_i == responses.length - 1 ? '' : 'border-b' } w-full relative`}>
-						<Comment comment={response} />												
-					</div>
-				)
-			}
-
-			if (responses.length === 0) {
-				return (<></>)
-			} else {
-				return (
-					<div className=''>
-						{ items } 
-					</div>
-				)
-			}
-		}
-
-		const commentClassName = `flex flex-row ${responses.length === 0 ? '' : ' border-b '}`
+	const onReplyButtonClick = () => {
+		const replyBoxContent = replyBoxRef.current?.innerText
 		
-		const renderAnnotation = () => {
+		if (replyBoxContent !== undefined && replyBoxContent !== null) {
+			onReply(replyBoxContent)
+			setReplyInProgress(false)
+		}
+	}
+
+	const replyBox = () => {
+		return (
+			<div className='relative mt-1 text-sm leading-tight font text-gray-700 bg-gray-200  rounded-md flex-row flex'>
+				<div ref={replyBoxRef} contentEditable="true" style={{outline: 'none'}} className='w-full p-1 h-full flex-wrap'>
+					{ REPLY_BOX_PLACEHOLDER }
+				</div>
+				<button onClick={onReplyButtonClick} className='cursor-pointer m-1 inline-flex items-center h-8 px-2 py-1  border border-transparent text-xs leading-4 font-medium rounded text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150'>
+					Publish
+				</button>
+			</div>
+		)
+	}
+
+	const renderReplySection = () => {
+		if (replyInProgress) {
 			return (
-				<div className='flex-shrink-0 my-auto h-full flex justify-center'>
-					<div className='cursor-pointer hover:bg-indigo-400 bg-indigo-600 flex text-sm font-medium w-6 h-6 mx-2 rounded-full items-center justify-center text-gray-300'>
-						{ comment.annotation }
-					</div>
+				<div className='mt-2 mb-3'>
+					<a onClick={() => setReplyInProgress(false)} className='cursor-pointer mt-3 text-xs leading-tight font-medium text-red-800 flex-wrap'>
+						Cancel Reply
+					</a>
+					{ replyBox() }
+				</div>
+				
+			)
+		} else {
+			return (
+				<div className='mt-2 mb-3'>
+					<a onClick={() => setReplyInProgress(true)} className='cursor-pointer mt-3 text-xs leading-tight font-medium text-indigo-700 flex-wrap'>
+						Reply
+					</a>
+				</div>
+			)
+		}
+	}
+
+	return (
+		<div className='w-full relative'>
+			{ commentHeader() }
+			{ commentMessage() }
+			{ renderReplySection() }
+		</div>
+	)
+}
+
+type CommentGroupProps = {
+	comment: Comment
+	_responses: Comment[]
+}
+
+const CommentGroup = (props: CommentGroupProps) => {
+	const [responses, setResponses] = useState<Comment[]>([])
+
+	const addResponse = (text: string) => {
+		let newResponses = [...responses]
+		newResponses.push({
+			message: text,
+			author: 'Cezar Babin',
+			date: 'now'
+		})
+		setResponses(newResponses)
+	}
+
+	useEffect(() => {
+	
+		setResponses(props._responses)
+	}, [props])
+
+	const renderReponses = () => {
+		const items = []
+
+		for (var _i = 0; _i < responses.length; _i++) {
+			let response = responses[_i]
+			items.push(
+				<div className={`pt-4 px-4 ${_i == responses.length - 1 ? '' : 'border-b' } w-full relative`}>
+					<Comment comment={response} onReply={(text) => addResponse(text)} />												
 				</div>
 			)
 		}
 
-		return (
-			<div className='flex flex-col bg-white mb-3 rounded-lg'>
-				<div className={commentClassName}>
-					{ comment.annotation !== undefined ? renderAnnotation() : ''}
-					<div className={`${ comment.annotation !== undefined ? 'pl-2 pr-4' : 'p-4'} pt-4 w-full relative`}>
-						<Comment comment={comment} />											
-					</div>
+		if (responses.length === 0) {
+			return (<></>)
+		} else {
+			return (
+				<div className=''>
+					{ items } 
 				</div>
-				{ renderReponses() }
+			)
+		}
+	}
+
+	const commentClassName = `w-full flex flex-row ${responses.length === 0 ? '' : ' border-b '}`
+	
+	const renderAnnotation = () => {
+		return (
+			<div className='flex-shrink-0 my-auto h-full flex justify-center'>
+				<div className='cursor-pointer hover:bg-indigo-400 bg-indigo-600 flex text-sm font-medium w-6 h-6 mx-2 rounded-full items-center justify-center text-gray-300'>
+					{ props.comment.annotation }
+				</div>
 			</div>
 		)
 	}
 
 	return (
-		<>
-			{ createNewComment() }
-			<div className='overflow-scroll'>
-				<CommentGroup comment={TEST_COMMENT} _responses={[]} />
-				<CommentGroup comment={TEST_COMMENT} _responses={TEST_RESPONSES} />
+		<div className='flex flex-col bg-white mb-3 rounded-lg w-full'>
+			<div className={commentClassName}>
+				{ props.comment.annotation !== undefined ? renderAnnotation() : ''}
+				<div className={`${ props.comment.annotation !== undefined ? 'pl-2 pr-4' : 'p-4'} pt-4 w-full relative`}>
+					<Comment comment={props.comment} onReply={(text) => addResponse(text)} />											
+				</div>
 			</div>
-		</>
+			{ renderReponses() }
+		</div>
 	)
 }
 
