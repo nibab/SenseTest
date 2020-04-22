@@ -18,9 +18,13 @@ type Annotation = {
 		type: string,
 		width: number
 	},
-	selection: {
+	selection?: {
 		showEditor: boolean,
 		mode: string
+	},
+	data: {
+		text: string,
+		id: number
 	}
 }
 
@@ -44,7 +48,15 @@ const TempScreen = (props: TempScreenProps) => {
 
 	const onSubmit = (annotation: Annotation) => {
 		const currentAnnotations = [...annotations]
-		currentAnnotations.push(annotation)
+		const newAnnotation: Annotation = {
+			geometry: annotation.geometry,
+			data: {
+				...annotation.data,
+				id: Math.random()
+			}
+		}
+		currentAnnotations.push(newAnnotation)
+		setAnnotation({})
 		setAnnotations(currentAnnotations)
 	}
 
