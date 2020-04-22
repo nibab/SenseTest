@@ -1,13 +1,83 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Post } from '../../types'
 import { CommentsSection } from './Comments'
+import {
+	PointSelector
+} from 'react-image-annotation/lib/selectors'
+import Annotation from 'react-image-annotation'
 
 type PostScreenshotProps = {
 	post: Post
 }
 
-const PostScreenshot = ({ post }: PostScreenshotProps) => {
+type Annotation = {
+	geometry: {
+		x: number,
+		y: number,
+		height: number,
+		type: string,
+		width: number
+	},
+	selection: {
+		showEditor: boolean,
+		mode: string
+	}
+}
+
+type TempScreenProps = {
+	post: Post
+}
+
+const TempScreen = (props: TempScreenProps) => {
+	const [annotations, setAnnotations] = useState<Annotation[]>([])
+	const [annotation, setAnnotation] = useState<Annotation| {}>({})
+	const [post, setPost] = useState<Post>()
+
+	useEffect(() => {
+		setPost(props.post)
+	}, [props])
+
+	const onChange = (annotation: Annotation) => {
+		setAnnotation(annotation)
+		//debugger
+	}
+
+	const onSubmit = (annotation: Annotation) => {
+		const currentAnnotations = [...annotations]
+		currentAnnotations.push(annotation)
+		setAnnotations(currentAnnotations)
+	}
+
+	if (post !== undefined) {
+		return (
+			<div className='bg-gray-300 flex-shrink-0 w-full object-contain flex relative rounded-lg rounded-r-none' style={{height: '583px', width: '281px'}}>
+				<div className=' h-full w-full absolute z-0' >
+					{/* <img className="h-full w-full object-contain" src='../../../../public/iphonexBlack.png'></img> */}
+				</div>	
+				{/* <div className='mx-auto my-auto z-10 overflow-hidden' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
+					<img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img>
+				</div> */}
+				<div className='mx-auto my-auto' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
+					<Annotation src={window.URL.createObjectURL(post.image)} annotations={annotations} onSubmit={onSubmit} onChange={onChange} type={PointSelector.TYPE} value={annotation}>
+						{/* <img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img> */}
+					</Annotation>
+				</div>
+			</div>
+		)
+	} else {
+		return (<></>)
+	}	
+	
+	
+}
+
+const PostScreenshot = (props: PostScreenshotProps) => {
 	const [displayNewCommentBox, setDisplayNewCommentBox] = useState(false)
+	const [post, setPost] = useState<Post>()
+
+	useEffect(() => {
+		setPost(props.post)
+	}, [props])
 
 	const renderTag = () => {
 		return (
@@ -40,20 +110,9 @@ const PostScreenshot = ({ post }: PostScreenshotProps) => {
 		)
 	}
 
-	const renderScreen = () => {
-		return (
-			<div className='bg-gray-300 flex-shrink-0 w-full object-contain flex relative rounded-lg rounded-r-none' style={{height: '583px', width: '281px'}}>
-				<div className=' h-full w-full absolute z-0' >
-					{/* <img className="h-full w-full object-contain" src='../../../../public/iphonexBlack.png'></img> */}
-				</div>	
-				<div className='mx-auto my-auto z-10 overflow-hidden' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
-					<img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img>
-				</div>
-				
-				
-			</div>
-		)
-	}
+	
+
+	
 
 	return (
 		<div className='max-w-full flex flex-col ml-3 ' > 
@@ -61,7 +120,7 @@ const PostScreenshot = ({ post }: PostScreenshotProps) => {
 			<div className='pb-3 pl-3 pr-3 rounded-lg border-dashed border-gray-400 border-2 flex flex-row'>
 				<div className='mb-3 flex-shrink-0  flex-col relative' >
 					{ renderButtons() }
-					{ renderScreen() }
+					{ post !== undefined ? <TempScreen key={post.id} post={post} /> : <></>}
 				</div>
 				<div className='flex flex-col rounded-lg' >
 					<div className='w-full h-8 flex my-1'>
