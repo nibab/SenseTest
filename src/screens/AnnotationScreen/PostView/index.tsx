@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Post } from '../../../types'
-import { DeviceScreenshot } from '../Screenshot'
-import PostScreenshot from './PostScreenshot'
 import Simulator from './Simulator'
 import Attachment from './Attachment'
+import PostScreenshot from '../../../components/PostScreenshot'
 
 type PostViewProps = {
     post: Post
