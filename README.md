@@ -4,6 +4,8 @@
 3. Choose the staging environment
 4. Amplify will require AWS Credentials from you. Cezar can give you permission.
 
+To re-build the css after changing tailwindcss configs, run `npm run build:css`
+
 ## Auto-genned README.md:
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
