@@ -29,3 +29,34 @@ const stringLitArray = <L extends string>(arr: L[]) => arr
 const authStates = stringLitArray(["signedIn", "signedUp", "signUp", "signedUpAfterInvite"])
 export type AuthState = (typeof authStates)[number]
 export const isAuthState = (x: any): x is AuthState => authStates.includes(x);
+
+// Annotation types
+export type Geometry = {
+	x: number,
+	y: number,
+	height: number,
+	type: string,
+	width: number
+}
+
+export type Annotation = {
+	geometry?: Geometry,
+	selection?: {
+		showEditor: boolean,
+		mode: string
+	},
+	data: {
+		text: string,
+		id: number
+	}
+}
+
+export type Comment = {
+  id: string,
+  author: string,
+  authorAvatarSrc: string,
+  date: string,
+  annotation?: Annotation,
+  text: string,
+  subcomments?: Comment[]
+}

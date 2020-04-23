@@ -1,26 +1,57 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { useDispatch } from 'react-redux'
+import { addComment, addsubComment } from '../../store/comment/actions'
+import { Comment as CommentType } from '../../types'
+import { useSelector } from '../../store'
+import { v4 as uuidv4 } from 'uuid'
 
-const TEST_COMMENT = {
-	message: 'Hello world how are uy', 
+
+const TEST_COMMENT: CommentType = {
+	id: uuidv4(),
+	text: 'Hello world how are uy', 
 	author: 'Cezar Babin', 
 	date:'now', 
-	annotation:'1',
-	avatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+	annotation: {
+		geometry: {
+			x: 1,
+			y: 2,
+			height: 3,
+			width: 4,
+			type: 'type'
+		},
+		data: {
+			id: 1,
+			text: 'hello'
+		}
+	},
+	authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
 } 
-const TEST_RESPONSES = [
+const TEST_RESPONSES: CommentType[] = [
 	{
-		message: 'World', 
+		id: uuidv4(),
+		text: 'World', 
 		author: 'Cezar Babin', 
 		date:'now', 
-		annotation:'1',
-		avatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+		annotation: {
+			data: {
+				text: 'hellp',
+				id: 1
+			}
+		},
+		authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
 	},
 	{
-		message: 'World', 
+		id: uuidv4(),
+		text: 'Hello BLEA', 
 		author: 'Cezar Babin', 
 		date:'now', 
-		annotation:'1',
-		avatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+		annotation: {
+			data: {
+				text: 'hellp',
+				id: 1
+			}
+		},
+		authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
 	}
 ]
 const REPLY_BOX_PLACEHOLDER = 'Write comment or @mention'
@@ -31,10 +62,36 @@ type CommentsSectionProps = {
 
 export const CommentsSection = (props: CommentsSectionProps) => {
 	const [displayNewCommentBox, setDisplayNewCommentBox] = useState<boolean>()
+	const commentsSelector = useSelector(state => state.comment)
+
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		dispatch(addComment(TEST_COMMENT))
+		dispatch(addsubComment(TEST_COMMENT, TEST_RESPONSES[0]))
+	}, [])
 
 	useEffect(() => {
 		setDisplayNewCommentBox(props.displayNewCommentBox)
+		
 	}, [props])
+
+	const renderComments = () => {
+		const items = []
+		for (let commentId in commentsSelector.comments) {
+			let comment = commentsSelector.comments[commentId]
+			if (comment.subcomments !== undefined && comment.subcomments?.length > 0) {
+				items.push(
+					<CommentGroup comment={comment} _responses={comment.subcomments} />
+				)
+			} else {
+				items.push(
+					<CommentGroup comment={comment} _responses={[]} />
+				)
+			}
+		}
+		return items
+	}
 
 	const createNewComment = () => {
 		return (
@@ -69,23 +126,16 @@ export const CommentsSection = (props: CommentsSectionProps) => {
 		<>
 			{ createNewComment() }
 			<div className='overflow-scroll w-full'>
-				<CommentGroup comment={TEST_COMMENT} _responses={[]} />
-				<CommentGroup comment={TEST_COMMENT} _responses={TEST_RESPONSES} />
+				{ renderComments() }
+				{/* <CommentGroup comment={TEST_COMMENT} _responses={[]} />
+				<CommentGroup comment={TEST_COMMENT} _responses={TEST_RESPONSES} /> */}
 			</div>
 		</>
 	)
 }
 
-type Comment = {
-	message: string
-	author: string
-	avatarSrc: string
-	date: string
-	annotation?: string
-}
-
 type CommentProps = {
-	comment: Comment
+	comment: CommentType
 	onReply: (text: string) => void
 }
 
@@ -99,7 +149,7 @@ const Comment = ({comment, onReply}: CommentProps) => {
 				<div className="flex-shrink-0 group block focus:outline-none ">
 					<div className="flex items-center">
 					<div className=''>
-						<img className="inline-block h-8 w-8 rounded-full" src={comment.avatarSrc} alt="" />
+						<img className="inline-block h-8 w-8 rounded-full" src={comment.authorAvatarSrc} alt="" />
 					</div>
 					<div className="ml-2 ">
 						<p className="text-sm leading-3 pt-2 font-medium text-gray-700 group-hover:text-gray-900">
@@ -118,7 +168,7 @@ const Comment = ({comment, onReply}: CommentProps) => {
 	const commentMessage = () => {
 		return (
 			<p className='mt-2 text-sm leading-tight font text-gray-700 flex-wrap'>
-				{ comment.message } 
+				{ comment.text } 
 			</p>
 		)
 	}
@@ -177,31 +227,33 @@ const Comment = ({comment, onReply}: CommentProps) => {
 }
 
 type CommentGroupProps = {
-	comment: Comment
-	_responses: Comment[]
+	comment: CommentType
+	_responses: CommentType[]
 }
 
 const CommentGroup = (props: CommentGroupProps) => {
-	const [responses, setResponses] = useState<Comment[]>([])
+	const dispatch = useDispatch()
+	const commentsSelector = useSelector(state => state.comment)
 
 	const addResponse = (text: string) => {
-		let newResponses = [...responses]
-		newResponses.push({
-			message: text,
+		let newResponse: CommentType = {
+			id:  uuidv4(),
+			text: text,
 			author: 'Cezar Babin',
 			date: 'now',
-			avatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-		})
-		setResponses(newResponses)
+			authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+		}
+		dispatch(addsubComment(props.comment, newResponse))
 	}
-
-	useEffect(() => {
-	
-		setResponses(props._responses)
-	}, [props])
 
 	const renderReponses = () => {
 		const items = []
+
+		const responses = commentsSelector.comments[props.comment.id].subcomments
+
+		if (responses === undefined) {
+			return (<></>)
+		}
 
 		for (var _i = 0; _i < responses.length; _i++) {
 			let response = responses[_i]
@@ -223,21 +275,33 @@ const CommentGroup = (props: CommentGroupProps) => {
 		}
 	}
 
-	const commentClassName = `w-full flex flex-row ${responses.length === 0 ? '' : ' border-b '}`
+	const getComentClassName = () => {
+		const responses = commentsSelector.comments[props.comment.id].subcomments
+		if (responses !== undefined && responses.length > 0) {
+			return `w-full flex flex-row border-b`
+		} else {
+			return `w-full flex flex-row`
+		}
+	}
 	
 	const renderAnnotation = () => {
-		return (
-			<div className='flex-shrink-0 my-auto h-full flex justify-center'>
-				<div className='cursor-pointer hover:bg-indigo-400 bg-indigo-600 flex text-sm font-medium w-6 h-6 mx-2 rounded-full items-center justify-center text-gray-300'>
-					{ props.comment.annotation }
+		if (props.comment.annotation !== undefined) {
+			return (
+				<div className='flex-shrink-0 my-auto h-full flex justify-center'>
+					<div className='cursor-pointer hover:bg-indigo-400 bg-indigo-600 flex text-sm font-medium w-6 h-6 mx-2 rounded-full items-center justify-center text-gray-300'>
+						{ props.comment.annotation.data.id }
+					</div>
 				</div>
-			</div>
-		)
+			)
+		} else {
+			return (<></>)
+		}
+		
 	}
 
 	return (
 		<div className='flex flex-col bg-white mb-3 rounded-lg w-full'>
-			<div className={commentClassName}>
+			<div className={getComentClassName()}>
 				{ props.comment.annotation !== undefined ? renderAnnotation() : ''}
 				<div className={`${ props.comment.annotation !== undefined ? 'pl-2 pr-4' : 'p-4'} pt-4 w-full relative`}>
 					<Comment comment={props.comment} onReply={(text) => addResponse(text)} />											

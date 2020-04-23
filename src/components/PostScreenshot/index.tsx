@@ -1,33 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Post } from '../../types'
+import { Post, Geometry, Annotation as AnnotationType } from '../../types'
 import { CommentsSection } from './Comments'
 import {
 	PointSelector
 } from 'react-image-annotation/lib/selectors'
 import Annotation from 'react-image-annotation'
+import { useDispatch } from 'react-redux'
+import { addComment } from '../../store/comment/actions'
+import uuid from 'uuid'
 
 type PostScreenshotProps = {
 	post: Post
-}
-
-type Geometry = {
-	x: number,
-	y: number,
-	height: number,
-	type: string,
-	width: number
-}
-
-type Annotation = {
-	geometry: Geometry,
-	selection?: {
-		showEditor: boolean,
-		mode: string
-	},
-	data: {
-		text: string,
-		id: number
-	}
 }
 
 type AnnotationScreenProps = {
@@ -49,34 +32,46 @@ const Dot = ({geometry}: DotProps) => {
 }
 
 const AnnotationScreen = (props: AnnotationScreenProps) => {
-	const [annotations, setAnnotations] = useState<Annotation[]>([])
-	const [annotation, setAnnotation] = useState<Annotation| {}>({})
+	const [annotations, setAnnotations] = useState<AnnotationType[]>([])
+	const [annotation, setAnnotation] = useState<AnnotationType| {}>({})
 	const [post, setPost] = useState<Post>()
+	const dispatch = useDispatch()
 
 	useEffect(() => {
 		setPost(props.post)
 	}, [props])
 
-	const onChange = (annotation: Annotation) => {
+	const onChange = (annotation: AnnotationType) => {
 		setAnnotation(annotation)
 	}
 
-	const onSubmit = (annotation: Annotation) => {
+	const onSubmit = (annotation: AnnotationType) => {
 		const currentAnnotations = [...annotations]
-		const newAnnotation: Annotation = {
+		const newAnnotation: AnnotationType = {
 			geometry: annotation.geometry,
 			data: {
 				...annotation.data,
-				id: Math.random()
+				id: 1
 			}
 		}
 		currentAnnotations.push(newAnnotation)
 		setAnnotation({})
 		setAnnotations(currentAnnotations)
+
+		const newComment = {
+			id: uuid(),
+			author: 'Test',
+			text: annotation.data.text,
+			date: 'right now',
+			authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+			annotation: newAnnotation
+		}
+		dispatch(addComment(newComment))
+
 	}
 
 	type RenderHighlightParams = {
-		annotation: Annotation
+		annotation: AnnotationType
 		active: boolean
 	}
 
