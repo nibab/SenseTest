@@ -1,3 +1,11 @@
+## Getting started
+1. Install Amplify CLI (https://docs.amplify.aws/cli/start/install)
+2. Initialize the project with `amplify init`
+3. Choose the staging environment
+4. Amplify will require AWS Credentials from you. Cezar can give you permission.
+
+## Auto-genned README.md:
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
