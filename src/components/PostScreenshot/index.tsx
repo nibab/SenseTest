@@ -156,6 +156,7 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 const PostScreenshot = (props: PostScreenshotProps) => {
 	const [displayNewCommentBox, setDisplayNewCommentBox] = useState(false)
 	const [post, setPost] = useState<Post>()
+	const commentsSelector = useSelector(state => state.comment.comments[props.post.id])
 
 	useEffect(() => {
 		setPost(props.post)
@@ -192,14 +193,9 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 		)
 	}
 
-	return (
-		<div className='max-w-full flex flex-col ml-3 ' > 
-			{ renderTag() }
-			<div className='pb-3 pl-3 pr-3 rounded-lg border-dashed border-gray-400 border-2 flex flex-row'>
-				<div className='mb-3 flex-shrink-0  flex-col relative' >
-					{ renderButtons() }
-					{ post !== undefined ? <AnnotationScreen key={post.id} post={post} /> : <></>}
-				</div>
+	const renderComments = () => {
+		if (commentsSelector !== undefined && commentsSelector.length > 0) {
+			return (
 				<div className='flex flex-col rounded-lg' >
 					<div className='w-full h-8 flex my-1'>
 						<div className='mx-auto flex flex-row p-0.5'></div>
@@ -208,6 +204,20 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 						{ post !== undefined ? <CommentsSection post={post} displayNewCommentBox={displayNewCommentBox} /> : <></>}
 					</div>
 				</div>
+			)
+		}
+		
+	}
+
+	return (
+		<div className='max-w-full flex flex-col ml-3 ' > 
+			{ renderTag() }
+			<div className='pb-3 pl-3 pr-3 rounded-lg border-dashed border-gray-400 border-2 flex flex-row'>
+				<div className='mb-3 flex-shrink-0  flex-col relative' >
+					{ renderButtons() }
+					{ post !== undefined ? <AnnotationScreen key={post.id} post={post} /> : <></>}
+				</div>
+				{ renderComments() }
 			</div>
 		</div>
 	)
