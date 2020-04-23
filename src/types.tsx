@@ -52,6 +52,7 @@ export type Annotation = {
 }
 
 export type Comment = {
+  postId: string,
   id: string,
   author: string,
   authorAvatarSrc: string,
