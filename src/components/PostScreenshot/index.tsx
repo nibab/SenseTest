@@ -1,143 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Post, Geometry, Annotation as AnnotationType } from '../../types'
+import React, { useState, useEffect } from 'react'
+import { Post, Annotation } from '../../types'
 import { CommentsSection } from './Comments'
-import {
-	PointSelector
-} from 'react-image-annotation/lib/selectors'
-import Annotation from 'react-image-annotation'
+import { useSelector } from '../../store'
+import AnnotationScreen from './AnnotationScreen'
 import { useDispatch } from 'react-redux'
 import { addComment } from '../../store/comment/actions'
 import uuid from 'uuid'
-import Log from '../../utils/Log'
-import { useSelector } from '../../store'
-
-type AnnotationScreenProps = {
-	post: Post
-}
-
-type DotProps = {
-	geometry: Geometry
-	annotationId?: number
-}
-
-const Dot = ({geometry, annotationId}: DotProps) => {
-	if (annotationId !== undefined) {
-		return (
-			<div className='flex items-center justify-center w-6 h-6 -mt-3 -ml-3 text-sm font-medium text-gray-300 bg-indigo-600 border-2 border-white border-solid rounded-full cursor-pointer hover:bg-indigo-400' style={{
-				position: 'absolute',
-				left: `${geometry.x}%`,
-				top: `${geometry.y}%`,
-			}}> {annotationId} </div>
-		)
-	} else {
-		return (
-			<div className='w-6 h-6 -mt-3 -ml-3 bg-indigo-700 border-2 border-white border-solid rounded-full' style={{
-				position: 'absolute',
-				left: `${geometry.x}%`,
-				top: `${geometry.y}%`,
-			}} />
-		)
-	}
-}
-
-const AnnotationScreen = (props: AnnotationScreenProps) => {
-	const [annotations, setAnnotations] = useState<AnnotationType[]>([])
-	const [annotation, setAnnotation] = useState<AnnotationType| {}>({})
-	const dispatch = useDispatch()
-	// To see where we can draw existing annotations
-	const commentsSelector = useSelector(state => state.comment.comments[props.post.id])
-
-	useEffect(() => {
-		// Comment selector can be undefined if the post comments storage array has not been initialized yet
-		if (commentsSelector === undefined) {
-			return
-		}
-		const copyAnnotations = annotations
- 		commentsSelector.forEach((comment) => {
-			if (comment.annotation !== undefined) {
-				copyAnnotations.push(comment.annotation)
-			}
-		})
-		setAnnotations(copyAnnotations)
-	}, [])
-
-	useEffect(() => {
-		// TODO: This is a hacky way to ensure that annotations are displayed after the component has been unmounted.
-		// What happens is, if the component gets rendered once, then pushed down the stack and then re-mounted,
-		// the annotations are hidden until the mouse hovers over the screenshot.
-		setAnnotations([...annotations])
-	}, [props])
-
-	const onChange = (annotation: AnnotationType) => {
-		setAnnotation(annotation)
-	}
-
-	const onSubmit = (annotation: AnnotationType) => {
-		const currentAnnotations = [...annotations]
-		const newAnnotation: AnnotationType = {
-			geometry: annotation.geometry,
-			data: {
-				...annotation.data,
-				id: annotations.length + 1
-			}
-		}
-		currentAnnotations.push(newAnnotation)
-		setAnnotation({})
-		setAnnotations(currentAnnotations)
-		
-		const newComment = {
-			postId: props.post.id,
-			id: uuid(),
-			author: 'Test',
-			text: annotation.data.text,
-			date: 'right now',
-			authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-			annotation: newAnnotation
-		}
-		dispatch(addComment(newComment))
-	}
-
-	type RenderHighlightParams = {
-		annotation: AnnotationType
-		active: boolean
-	}
-
-	// Overriding the selector appearence from react-image-annotate
-	function renderSelector (params: RenderHighlightParams) {
-		const geometry = params.annotation.geometry
-		if (!geometry) return null
-	  
-		return (
-			<Dot geometry={geometry} />
-		)
-	}
-
-	// Overriding the highlight appearence from react-image-annotate
-	const renderHighlight = (params: RenderHighlightParams) => {
-		const geometry = params.annotation.geometry
-		if (!geometry) return null
-
-		return (
-			<Dot annotationId={params.annotation.data.id} geometry={geometry} />
-		)
-	}
-
-	return (
-		<div className='relative flex flex-shrink-0 object-contain w-full bg-gray-300 rounded-lg rounded-r-none' style={{height: '583px', width: '281px'}}>
-			<div className='absolute z-0 w-full h-full ' >
-				{/* <img className="object-contain w-full h-full" src='../../../../public/iphonexBlack.png'></img> */}
-			</div>	
-			{/* <div className='z-10 mx-auto my-auto overflow-hidden' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
-				<img className='object-contain w-full h-full mx-auto' src={window.URL.createObjectURL(post.image)}></img>
-			</div> */}
-			<div className='z-30 mx-auto my-auto' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
-				<Annotation src={window.URL.createObjectURL(props.post.image)} annotations={annotations} renderSelector={renderSelector} renderHighlight={renderHighlight} onSubmit={onSubmit} onChange={onChange} type={PointSelector.TYPE} value={annotation}>
-					{/* <img className='object-contain w-full h-full mx-auto' src={window.URL.createObjectURL(post.image)}></img> */}
-				</Annotation>
-			</div>
-		</div>
-	)
-}
 
 
 type PostScreenshotProps = {
@@ -148,6 +16,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 	const [displayNewCommentBox, setDisplayNewCommentBox] = useState(false)
 	const [post, setPost] = useState<Post>()
 	const commentsSelector = useSelector(state => state.comment.comments[props.post.id])
+	const dispatch = useDispatch()
 
 	useEffect(() => {
 		setPost(props.post)
@@ -200,13 +69,55 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 		
 	}
 
+	const renderAnnotationScreen = () => {
+		const getAnnotations = () => {
+			// Comment selector can be undefined if the post comments storage array has not been initialized yet
+			if (commentsSelector === undefined) {
+				return []
+			}
+			const annotations: Annotation[] = []
+			commentsSelector.forEach((comment) => {
+				if (comment.annotation !== undefined) {
+					annotations.push(comment.annotation)
+				}
+			})
+			return annotations
+		}
+
+		const onSubmitAnnotation = (annotation: Annotation) => {
+			const newComment = {
+				postId: props.post.id,
+				id: uuid(),
+				author: 'Test',
+				text: annotation.data.text,
+				date: 'right now',
+				authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+				annotation: annotation
+			}
+			dispatch(addComment(newComment))
+		}
+
+		if (post!== undefined) {
+			return (
+				<AnnotationScreen 
+					annotations={getAnnotations()} 
+					onSubmit={onSubmitAnnotation} 
+					key={post.id} 
+					imageSrc={window.URL.createObjectURL(props.post.image)} 
+				/>
+			)
+		} else {
+			return (<></>)
+		}
+	}
+
 	return (
-		<div className='flex flex-col max-w-full ml-3 ' > 
+		<div className='flex flex-col max-w-full ' > 
 			{ renderTag() }
 			<div className='flex flex-row pb-3 pl-3 pr-3 border-2 border-gray-400 border-dashed rounded-lg'>
 				<div className='relative flex-col flex-shrink-0 mb-3' >
 					{ renderButtons() }
-					{ post !== undefined ? <AnnotationScreen key={post.id} post={post} /> : <></>}
+					{ renderAnnotationScreen() }
 				</div>
 				{ renderComments() }
 			</div>
