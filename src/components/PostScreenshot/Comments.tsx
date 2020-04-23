@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
-import { addComment, addsubComment } from '../../store/comment/actions'
 import { Comment as CommentType, Post } from '../../types'
-import { useSelector } from '../../store'
 import { v4 as uuidv4 } from 'uuid'
 
 
@@ -61,18 +59,15 @@ const REPLY_BOX_PLACEHOLDER = 'Write comment or @mention'
 
 type CommentsSectionProps = {
 	displayNewCommentBox: boolean
-	post: Post
+	comments: CommentType[]
+	addSubComent: (childComment: CommentType, parentComment: CommentType) => void
 }
 
 export const CommentsSection = (props: CommentsSectionProps) => {
 	const [displayNewCommentBox, setDisplayNewCommentBox] = useState<boolean>()
-	const commentsSelector = useSelector(state => state.comment.comments[props.post.id])
-
-	const dispatch = useDispatch()
 
 	useEffect(() => {
-		dispatch(addComment(TEST_COMMENT))
-		dispatch(addsubComment(TEST_COMMENT, TEST_RESPONSES[0]))
+		
 	}, [])
 
 	useEffect(() => {
@@ -82,19 +77,15 @@ export const CommentsSection = (props: CommentsSectionProps) => {
 
 	const renderComments = () => {
 		const items: JSX.Element[] = []
-		// Comments could be undefined if the post has not been initialized yet. Not sure how to set up typescript to infer ha the type of this might be undefined
-		if (commentsSelector === undefined) {
-			return <></>
-		}
-		commentsSelector.forEach((comment) => {
+		props.comments.forEach((comment) => {
 			//let comment = commentsSelector.comments[commentId]
 			if (comment.subcomments !== undefined && comment.subcomments?.length > 0) {
 				items.push(
-					<CommentGroup comment={comment} _responses={comment.subcomments} />
+					<CommentGroup addSubComent={props.addSubComent} comment={comment} _responses={comment.subcomments} />
 				)
 			} else {
 				items.push(
-					<CommentGroup comment={comment} _responses={[]} />
+					<CommentGroup addSubComent={props.addSubComent} comment={comment} _responses={[]} />
 				)
 			}
 		})
@@ -106,21 +97,21 @@ export const CommentsSection = (props: CommentsSectionProps) => {
 		return (
 			<>
 				<div className={`${displayNewCommentBox ? '' : 'hidden'} absolute z-30 h-full w-full pr-3`}>
-					<div className='absolute h-full w-full bg-gray-600 opacity-50 rounded-lg'></div>
+					<div className='absolute w-full h-full bg-gray-600 rounded-lg opacity-50'></div>
 				</div>
 				<div className={`${displayNewCommentBox ? '' : 'hidden'} absolute w-full h-full z-30 pr-4`}>
 					
-					<div className='bg-white rounded-lg p-3 mr-3 w-full relative'>
-						<div className="flex-shrink-0 flex border-gray-200">
-							<div className="flex-shrink-0 group block focus:outline-none ">
+					<div className='relative w-full p-3 mr-3 bg-white rounded-lg'>
+						<div className="flex flex-shrink-0 border-gray-200">
+							<div className="flex-shrink-0 block group focus:outline-none ">
 								
 							</div>
 						</div>
-						<div className=' text-sm leading-tight font text-gray-700 bg-gray-200  rounded-md flex-row flex'>
-							<div className='w-full p-1 h-full flex-wrap'>
+						<div className='flex flex-row text-sm leading-tight text-gray-700 bg-gray-200 rounded-md font'>
+							<div className='flex-wrap w-full h-full p-1'>
 								{ REPLY_BOX_PLACEHOLDER }
 							</div>
-							<div className='cursor-pointer m-1 inline-flex items-center h-8 px-2 py-1  border border-transparent text-xs leading-4 font-medium rounded text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150'>
+							<div className='inline-flex items-center h-8 px-2 py-1 m-1 text-xs font-medium leading-4 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded cursor-pointer hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700'>
 								Publish
 							</div>
 						</div>
@@ -134,10 +125,8 @@ export const CommentsSection = (props: CommentsSectionProps) => {
 	return (
 		<>
 			{ createNewComment() }
-			<div className='overflow-scroll w-full'>
+			<div className='w-full overflow-scroll'>
 				{ renderComments() }
-				{/* <CommentGroup comment={TEST_COMMENT} _responses={[]} />
-				<CommentGroup comment={TEST_COMMENT} _responses={TEST_RESPONSES} /> */}
 			</div>
 		</>
 	)
@@ -154,17 +143,17 @@ const Comment = ({comment, onReply}: CommentProps) => {
 
 	const commentHeader = () => {
 		return (
-			<div className="flex-shrink-0 flex border-gray-200">
-				<div className="flex-shrink-0 group block focus:outline-none ">
+			<div className="flex flex-shrink-0 border-gray-200">
+				<div className="flex-shrink-0 block group focus:outline-none ">
 					<div className="flex items-center">
 					<div className=''>
-						<img className="inline-block h-8 w-8 rounded-full" src={comment.authorAvatarSrc} alt="" />
+						<img className="inline-block w-8 h-8 rounded-full" src={comment.authorAvatarSrc} alt="" />
 					</div>
 					<div className="ml-2 ">
-						<p className="text-sm leading-3 pt-2 font-medium text-gray-700 group-hover:text-gray-900">
+						<p className="pt-2 text-sm font-medium leading-3 text-gray-700 group-hover:text-gray-900">
 							{ comment.author }
 						</p>
-						<p className="text-xs leading-5 font text-gray-500 group-hover:text-gray-700 group-focus:underline transition ease-in-out duration-150">
+						<p className="text-xs leading-5 text-gray-500 transition duration-150 ease-in-out font group-hover:text-gray-700 group-focus:underline">
 							{ comment.date }
 						</p>
 					</div>
@@ -176,7 +165,7 @@ const Comment = ({comment, onReply}: CommentProps) => {
 
 	const commentMessage = () => {
 		return (
-			<p className='mt-2 text-sm leading-tight font text-gray-700 flex-wrap'>
+			<p className='flex-wrap mt-2 text-sm leading-tight text-gray-700 font'>
 				{ comment.text } 
 			</p>
 		)
@@ -193,11 +182,11 @@ const Comment = ({comment, onReply}: CommentProps) => {
 
 	const replyBox = () => {
 		return (
-			<div className='relative mt-1 text-sm leading-tight font text-gray-700 bg-gray-200  rounded-md flex-row flex'>
-				<div ref={replyBoxRef} contentEditable="true" style={{outline: 'none'}} className='w-full p-1 h-full flex-wrap'>
+			<div className='relative flex flex-row mt-1 text-sm leading-tight text-gray-700 bg-gray-200 rounded-md font'>
+				<div ref={replyBoxRef} contentEditable="true" style={{outline: 'none'}} className='flex-wrap w-full h-full p-1'>
 					{ REPLY_BOX_PLACEHOLDER }
 				</div>
-				<button onClick={onReplyButtonClick} className='cursor-pointer m-1 inline-flex items-center h-8 px-2 py-1  border border-transparent text-xs leading-4 font-medium rounded text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150'>
+				<button onClick={onReplyButtonClick} className='inline-flex items-center h-8 px-2 py-1 m-1 text-xs font-medium leading-4 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded cursor-pointer hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700'>
 					Publish
 				</button>
 			</div>
@@ -208,7 +197,7 @@ const Comment = ({comment, onReply}: CommentProps) => {
 		if (replyInProgress) {
 			return (
 				<div className='mt-2 mb-3'>
-					<a onClick={() => setReplyInProgress(false)} className='cursor-pointer mt-3 text-xs leading-tight font-medium text-red-800 flex-wrap'>
+					<a onClick={() => setReplyInProgress(false)} className='flex-wrap mt-3 text-xs font-medium leading-tight text-red-800 cursor-pointer'>
 						Cancel Reply
 					</a>
 					{ replyBox() }
@@ -218,7 +207,7 @@ const Comment = ({comment, onReply}: CommentProps) => {
 		} else {
 			return (
 				<div className='mt-2 mb-3'>
-					<a onClick={() => setReplyInProgress(true)} className='cursor-pointer mt-3 text-xs leading-tight font-medium text-indigo-700 flex-wrap'>
+					<a onClick={() => setReplyInProgress(true)} className='flex-wrap mt-3 text-xs font-medium leading-tight text-indigo-700 cursor-pointer'>
 						Reply
 					</a>
 				</div>
@@ -227,7 +216,7 @@ const Comment = ({comment, onReply}: CommentProps) => {
 	}
 
 	return (
-		<div className='w-full relative'>
+		<div className='relative w-full'>
 			{ commentHeader() }
 			{ commentMessage() }
 			{ renderReplySection() }
@@ -236,14 +225,13 @@ const Comment = ({comment, onReply}: CommentProps) => {
 }
 
 type CommentGroupProps = {
+	
 	comment: CommentType
 	_responses: CommentType[]
+	addSubComent: (childComment: CommentType, parentComment: CommentType) => void
 }
 
 const CommentGroup = (props: CommentGroupProps) => {
-	const dispatch = useDispatch()
-	//const commentsSelector = useSelector(state => state.comment)
-
 	const addResponse = (text: string) => {
 		let newResponse: CommentType = {
 			postId: props.comment.postId,
@@ -253,7 +241,7 @@ const CommentGroup = (props: CommentGroupProps) => {
 			date: 'now',
 			authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
 		}
-		dispatch(addsubComment(props.comment, newResponse))
+		props.addSubComent(newResponse, props.comment)
 	}
 
 	const renderReponses = () => {
@@ -297,8 +285,8 @@ const CommentGroup = (props: CommentGroupProps) => {
 	const renderAnnotation = () => {
 		if (props.comment.annotation !== undefined) {
 			return (
-				<div className='flex-shrink-0 my-auto h-full flex justify-center'>
-					<div className='cursor-pointer hover:bg-indigo-400 bg-indigo-600 flex text-sm font-medium w-6 h-6 mx-2 rounded-full items-center justify-center text-gray-300'>
+				<div className='flex justify-center flex-shrink-0 h-full my-auto'>
+					<div className='flex items-center justify-center w-6 h-6 mx-2 text-sm font-medium text-gray-300 bg-indigo-600 rounded-full cursor-pointer hover:bg-indigo-400'>
 						{ props.comment.annotation.data.id }
 					</div>
 				</div>
@@ -310,7 +298,7 @@ const CommentGroup = (props: CommentGroupProps) => {
 	}
 
 	return (
-		<div className='flex flex-col bg-white mb-3 rounded-lg w-full'>
+		<div className='flex flex-col w-full mb-3 bg-white rounded-lg'>
 			<div className={getComentClassName()}>
 				{ props.comment.annotation !== undefined ? renderAnnotation() : ''}
 				<div className={`${ props.comment.annotation !== undefined ? 'pl-2 pr-4' : 'p-4'} pt-4 w-full relative`}>

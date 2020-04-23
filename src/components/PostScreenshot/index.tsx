@@ -3,8 +3,11 @@ import { Post, Annotation } from '../../types'
 import { CommentsSection } from './Comments'
 import { useSelector } from '../../store'
 import AnnotationScreen from './AnnotationScreen'
+import { Comment as CommentType } from '../../types'
+
 import { useDispatch } from 'react-redux'
-import { addComment } from '../../store/comment/actions'
+import { addComment, addsubComment } from '../../store/comment/actions'
+
 import uuid from 'uuid'
 
 
@@ -54,6 +57,11 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 	}
 
 	const renderComments = () => {
+
+		const _addsubComment = (childComment: CommentType, parentComment: CommentType) => {
+			dispatch(addsubComment(parentComment, childComment))
+		}
+
 		if (commentsSelector !== undefined && commentsSelector.length > 0) {
 			return (
 				<div className='flex flex-col rounded-lg' >
@@ -61,7 +69,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 						<div className='mx-auto flex flex-row p-0.5'></div>
 					</div>
 					<div className='relative flex flex-col w-full p-2 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: '583px'}}>
-						{ post !== undefined ? <CommentsSection post={post} displayNewCommentBox={false} /> : <></>}
+						{ post !== undefined ? <CommentsSection comments={commentsSelector} addSubComent={_addsubComment} displayNewCommentBox={false} /> : <></>}
 					</div>
 				</div>
 			)
