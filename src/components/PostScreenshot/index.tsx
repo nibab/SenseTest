@@ -10,14 +10,16 @@ type PostScreenshotProps = {
 	post: Post
 }
 
+type Geometry = {
+	x: number,
+	y: number,
+	height: number,
+	type: string,
+	width: number
+}
+
 type Annotation = {
-	geometry: {
-		x: number,
-		y: number,
-		height: number,
-		type: string,
-		width: number
-	},
+	geometry: Geometry,
 	selection?: {
 		showEditor: boolean,
 		mode: string
@@ -28,11 +30,25 @@ type Annotation = {
 	}
 }
 
-type TempScreenProps = {
+type AnnotationScreenProps = {
 	post: Post
 }
 
-const TempScreen = (props: TempScreenProps) => {
+
+type DotProps = {
+	geometry: Geometry
+}
+const Dot = ({geometry}: DotProps) => {
+	return (
+		<div className='h-6 w-6 bg-indigo-700 border-2 border-white border-solid rounded-full -mt-3 -ml-3' style={{
+			position: 'absolute',
+			left: `${geometry.x}%`,
+			top: `${geometry.y}%`,
+		}} />
+	)
+}
+
+const AnnotationScreen = (props: AnnotationScreenProps) => {
 	const [annotations, setAnnotations] = useState<Annotation[]>([])
 	const [annotation, setAnnotation] = useState<Annotation| {}>({})
 	const [post, setPost] = useState<Post>()
@@ -43,7 +59,6 @@ const TempScreen = (props: TempScreenProps) => {
 
 	const onChange = (annotation: Annotation) => {
 		setAnnotation(annotation)
-		//debugger
 	}
 
 	const onSubmit = (annotation: Annotation) => {
@@ -60,6 +75,31 @@ const TempScreen = (props: TempScreenProps) => {
 		setAnnotations(currentAnnotations)
 	}
 
+	type RenderHighlightParams = {
+		annotation: Annotation
+		active: boolean
+	}
+
+	// Overriding the selector appearence from react-image-annotate
+	function renderSelector (params: RenderHighlightParams) {
+		const geometry = params.annotation.geometry
+		if (!geometry) return null
+	  
+		return (
+			<Dot geometry={geometry} />
+		)
+	}
+
+	// Overriding the highlight appearence from react-image-annotate
+	const renderHighlight = (params: RenderHighlightParams) => {
+		const geometry = params.annotation.geometry
+		if (!geometry) return null
+
+		return (
+			<Dot geometry={geometry} />
+		)
+	}
+
 	if (post !== undefined) {
 		return (
 			<div className='bg-gray-300 flex-shrink-0 w-full object-contain flex relative rounded-lg rounded-r-none' style={{height: '583px', width: '281px'}}>
@@ -70,7 +110,7 @@ const TempScreen = (props: TempScreenProps) => {
 					<img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img>
 				</div> */}
 				<div className='mx-auto my-auto z-30' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
-					<Annotation src={window.URL.createObjectURL(post.image)} annotations={annotations} onSubmit={onSubmit} onChange={onChange} type={PointSelector.TYPE} value={annotation}>
+					<Annotation src={window.URL.createObjectURL(post.image)} annotations={annotations} renderSelector={renderSelector} renderHighlight={renderHighlight} onSubmit={onSubmit} onChange={onChange} type={PointSelector.TYPE} value={annotation}>
 						{/* <img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img> */}
 					</Annotation>
 				</div>
@@ -122,17 +162,13 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 		)
 	}
 
-	
-
-	
-
 	return (
 		<div className='max-w-full flex flex-col ml-3 ' > 
 			{ renderTag() }
 			<div className='pb-3 pl-3 pr-3 rounded-lg border-dashed border-gray-400 border-2 flex flex-row'>
 				<div className='mb-3 flex-shrink-0  flex-col relative' >
 					{ renderButtons() }
-					{ post !== undefined ? <TempScreen key={post.id} post={post} /> : <></>}
+					{ post !== undefined ? <AnnotationScreen key={post.id} post={post} /> : <></>}
 				</div>
 				<div className='flex flex-col rounded-lg' >
 					<div className='w-full h-8 flex my-1'>
