@@ -205,7 +205,7 @@ const CreatePostView = () => {
 					<div className='ml-3 overflow-hidden '>
 						{ renderPostToolBar() }
 					</div>
-                    <div className='flex flex-row pt-1 pb-1 pl-2 pr-2 mx-auto overflow-scroll'> 
+                    <div className='flex flex-row w-full pt-1 pb-1 pl-2 pr-2 mx-auto overflow-scroll'> 
                         {/* <CreatePostViewSimulator onScreenshot={(img) => {}}/> */}
                         <NewPostForm></NewPostForm>
                         {/* <PostScreenshot post={{
