@@ -1,6 +1,27 @@
-import React from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 
-const Simulator = () => {
+const CreatePostViewSimulator = () => {
+	const iframeRef = useRef<HTMLIFrameElement>(null)
+	const [iframeLoaded, setIframeLoaded] = useState(false)
+
+	useEffect(() => {
+        window.addEventListener("message", receiveMessage, false);
+    })
+
+    const receiveMessage = (event: any) => {
+        console.log('blea')
+        if(event.data && event.data.type == 'screenshot'){
+            console.log(event.data);
+            //setImageToAnnotate(event.data.data)
+            console.log("BLEA screenshot")
+        }
+    }
+
+    const onScreenshotButtonClick = (event: any) => {        
+        iframeRef.current?.contentWindow?.postMessage('getScreenshot', '*')
+    }
+
+
 	const renderTag = () => {
 		return (
 			<div className=' w-full h-8 flex'>
@@ -24,8 +45,12 @@ const Simulator = () => {
 			<div className='w-full h-8 flex my-1'>
 				<div className='mx-auto p-0.5 flex'>
 					<button className="whitespace-no-wrap mr-1 w-auto inline-flex items-center px-2.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-1 icon-view-visible"><path className="primary" d="M17.56 17.66a8 8 0 0 1-11.32 0L1.3 12.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95zM11.9 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><circle cx="12" cy="12" r="3" className="secondary"/></svg>
-						Visual diff
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-6 mr-1 icon-camera"><path className="primary" d="M6.59 6l2.7-2.7A1 1 0 0 1 10 3h4a1 1 0 0 1 .7.3L17.42 6H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h2.59zM19 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-7 8a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><path className="secondary" d="M12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+						Screenshot
+					</button>
+					<button className="whitespace-no-wrap mr-1 w-auto inline-flex items-center px-2.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-6 mr-1 icon-videocam"><path className="secondary" d="M13.59 12l6.7-6.7A1 1 0 0 1 22 6v12a1 1 0 0 1-1.7.7L13.58 12z"/><rect width="14" height="14" x="2" y="5" className="primary" rx="2"/></svg>
+						Record
 					</button>
 					{/* <button className="mr-1 inline-flex items-center px-2.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-1 icon-view-visible"><path className="primary" d="M17.56 17.66a8 8 0 0 1-11.32 0L1.3 12.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95zM11.9 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><circle cx="12" cy="12" r="3" className="secondary"/></svg>
@@ -44,16 +69,30 @@ const Simulator = () => {
 		)
 	}
 
+	const iFrameLoaded = () => {
+		//iframeRef.current?.contentWindow?.postMessage('requestSession', '*');
+		setTimeout(() => setIframeLoaded(true), 300)
+	}
+	
+	const renderLoadingScreen = () => {
+		return (
+			<div className='h-full w-full absolute z-0'>
+				<img className="h-full w-full object-contain" src='iphonexBlack.png'></img>
+			</div>
+		)
+	}
+
+
 	const renderScreen = () => {
 		return (
 			<div className='flex-shrink-0 mx-auto mb-3 w-64 flex-col ' style={{height: '583px', width: '281px'}}> 
+				
 				<div className='h-full w-full object-contain flex relative'>
-					<div className='h-full w-full absolute z-0'>
+					{ !iframeLoaded ? renderLoadingScreen() : <></> }
+					{/* <div className='h-full w-full absolute z-0'>
 						<img className="h-full w-full object-contain" src='iphonexBlack.png'></img>
-					</div>	
-					<div className=' mx-auto my-auto z-10 overflow-hidden' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
-						<img className='h-full w-full mx-auto object-contain' src='newsScreenshot.png'></img>
-					</div>
+					</div>	 */}
+					<iframe onLoad={() => iFrameLoaded()} ref={iframeRef} src="https://appetize.io/embed/fczxctdk32wb17vabzd3k2wq9w?device=iphonex&scale=69&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true" width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
 				</div>							
 			</div>
 		)
@@ -72,4 +111,4 @@ const Simulator = () => {
 	)
 }
 
-export default Simulator
+export default CreatePostViewSimulator

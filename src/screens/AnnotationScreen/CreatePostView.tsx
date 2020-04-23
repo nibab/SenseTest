@@ -7,6 +7,7 @@ import { CreatePostInput } from '../../API'
 import { DataLayerClient } from '../../clients/DataLayerClient'
 import { addPost } from '../../store/post/actions'
 import { v4 as uuidv4 } from "uuid"
+import CreatePostViewSimulator from '../../components/Simulator/CreatePostViewSimulator'
 
 type CreatePostViewProps = {
     onPostCreated: () => void
@@ -167,7 +168,7 @@ const CreatePostView = () => {
 		return (
 			<div className='rounded-full flex-shrink-0 w-16 p-1'>
 				<div id='button-container' className='w-full flex-col'> 
-					<div className='w-full h-16 flex flex-col'>
+					{/* <div className='w-full h-16 flex flex-col'>
 						<button onClick={(event) => onScreenshotButtonClick(event)} className="focus:outline-none  border-gray-400 shadow-lg active:shadow-sm active:bg-gray-300 w-10 h-10 bg-gray-100 rounded-full mx-auto" style={{borderWidth: "1px"}}>
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-6 icon-camera"><path className="primary" d="M6.59 6l2.7-2.7A1 1 0 0 1 10 3h4a1 1 0 0 1 .7.3L17.42 6H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h2.59zM19 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-7 8a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><path className="secondary" d="M12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
 						</button>
@@ -178,7 +179,7 @@ const CreatePostView = () => {
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-6 icon-videocam"><path className="secondary" d="M13.59 12l6.7-6.7A1 1 0 0 1 22 6v12a1 1 0 0 1-1.7.7L13.58 12z"/><rect width="14" height="14" x="2" y="5" className="primary" rx="2"/></svg>
 						</button>
 						<a className=" text-xs text-center font-semibold text-gray-900" style={{fontSize: '10px'}}>Record</a>
-					</div>
+					</div> */}
 					
 					<div className='w-full h-16 my-1 flex flex-col'>
 						<button className="focus:outline-none border-gray-400 shadow-lg active:shadow-sm active:bg-gray-300 w-10 h-10 bg-gray-100 rounded-full mx-auto" style={{borderWidth: "1px"}}>
@@ -197,19 +198,23 @@ const CreatePostView = () => {
         <div className='h-full flex-auto flex flex-row'>
 			<div className='flex-auto h-full flex flex-col '> 
                 {/* when navbar is hidden this should also include justify-center */}
-				<div className='flex w-full flex-row  my-auto'> 
+				<div className='flex w-full flex-row  my-3'> 
 					{/* RenderPostToolBar is contained because otherwise it stretches for the whole height. */}
 					<div className='overflow-hidden ml-3 '>
 						{ renderPostToolBar() }
 					</div>
-					{ renderAppetizeScreen() } 					
-					<AnnotationScreenshot src={imageToAnnotate} ref={canvasRef}/> 
+                    <div className='pt-1 pb-1 flex flex-row pl-2 pr-2 overflow-scroll mx-auto'> 
+                        <CreatePostViewSimulator />
+                    </div>
+					{/* { renderAppetizeScreen() } 					
+					<AnnotationScreenshot src={imageToAnnotate} ref={canvasRef}/>  */}
+                   
 					
-					<div className='ml-3 max-h-full flex flex-col'>
+					{/* <div className='ml-3 max-h-full flex flex-col'>
                         <div className="bg-gray-100 shadow-lg rounded-lg w-64 h-auto p-3">
                             { renderForm() }
                         </div>
-                    </div>
+                    </div> */}
 				</div>
 				{/* This is here to act as a pad placeholder for the screenshot navigator. */}
 				<div className="flex-shrink-0 h-10 w-full"></div> 

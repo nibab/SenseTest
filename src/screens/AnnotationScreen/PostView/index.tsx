@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Post } from '../../../types'
-import Simulator from './Simulator'
+import { PostViewSimulator as Simulator } from '../../../components/Simulator/PostViewSimulator'
 import Attachment from './Attachment'
 import PostScreenshot from '../../../components/PostScreenshot'
 
