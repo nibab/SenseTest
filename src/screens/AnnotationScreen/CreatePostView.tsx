@@ -204,7 +204,8 @@ const CreatePostView = () => {
 						{ renderPostToolBar() }
 					</div>
                     <div className='pt-1 pb-1 flex flex-row pl-2 pr-2 overflow-scroll mx-auto'> 
-                        <CreatePostViewSimulator />
+                        <CreatePostViewSimulator onScreenshot={(img) => {}}/>
+                        
                     </div>
 					{/* { renderAppetizeScreen() } 					
 					<AnnotationScreenshot src={imageToAnnotate} ref={canvasRef}/>  */}

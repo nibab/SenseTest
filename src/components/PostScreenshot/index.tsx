@@ -11,19 +11,15 @@ import uuid from 'uuid'
 import Log from '../../utils/Log'
 import { useSelector } from '../../store'
 
-type PostScreenshotProps = {
-	post: Post
-}
-
 type AnnotationScreenProps = {
 	post: Post
 }
-
 
 type DotProps = {
 	geometry: Geometry
 	annotationId?: number
 }
+
 const Dot = ({geometry, annotationId}: DotProps) => {
 	if (annotationId !== undefined) {
 		return (
@@ -41,9 +37,7 @@ const Dot = ({geometry, annotationId}: DotProps) => {
 				top: `${geometry.y}%`,
 			}} />
 		)
-		
 	}
-	
 }
 
 const AnnotationScreen = (props: AnnotationScreenProps) => {
@@ -151,6 +145,11 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 	}	
 	
 	
+}
+
+
+type PostScreenshotProps = {
+	post: Post
 }
 
 const PostScreenshot = (props: PostScreenshotProps) => {

@@ -1,6 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react'
 
-const CreatePostViewSimulator = () => {
+type CreatePostViewSimulatorProps = {
+	onScreenshot: (imgSrc: string) => void
+}
+
+const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
 	const iframeRef = useRef<HTMLIFrameElement>(null)
 	const [iframeLoaded, setIframeLoaded] = useState(false)
 
@@ -12,7 +16,8 @@ const CreatePostViewSimulator = () => {
         console.log('blea')
         if(event.data && event.data.type == 'screenshot'){
             console.log(event.data);
-            //setImageToAnnotate(event.data.data)
+			//setImageToAnnotate(event.data.data)
+			props.onScreenshot(event.data.data)
             console.log("BLEA screenshot")
         }
     }
