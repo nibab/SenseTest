@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Post, Annotation } from '../../types'
-import { CommentsSection } from './Comments'
 import { useSelector } from '../../store'
-import AnnotationScreen from './AnnotationScreen'
 import { Comment as CommentType } from '../../types'
 
 import { useDispatch } from 'react-redux'
 import { addComment, addsubComment } from '../../store/comment/actions'
 
 import uuid from 'uuid'
+import { CommentsSection } from '../Comments'
+import AnnotationScreen from '../AnnotationScreen'
 
 
 type PostScreenshotProps = {
