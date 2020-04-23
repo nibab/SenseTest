@@ -23,7 +23,7 @@ type DotProps = {
 const Dot = ({geometry, annotationId}: DotProps) => {
 	if (annotationId !== undefined) {
 		return (
-			<div className='border-2 border-white border-solid cursor-pointer hover:bg-indigo-400 bg-indigo-600 flex text-sm font-medium w-6 h-6 rounded-full items-center justify-center text-gray-300 -mt-3 -ml-3' style={{
+			<div className='flex items-center justify-center w-6 h-6 -mt-3 -ml-3 text-sm font-medium text-gray-300 bg-indigo-600 border-2 border-white border-solid rounded-full cursor-pointer hover:bg-indigo-400' style={{
 				position: 'absolute',
 				left: `${geometry.x}%`,
 				top: `${geometry.y}%`,
@@ -31,7 +31,7 @@ const Dot = ({geometry, annotationId}: DotProps) => {
 		)
 	} else {
 		return (
-			<div className='h-6 w-6 bg-indigo-700 border-2 border-white border-solid rounded-full -mt-3 -ml-3' style={{
+			<div className='w-6 h-6 -mt-3 -ml-3 bg-indigo-700 border-2 border-white border-solid rounded-full' style={{
 				position: 'absolute',
 				left: `${geometry.x}%`,
 				top: `${geometry.y}%`,
@@ -43,24 +43,29 @@ const Dot = ({geometry, annotationId}: DotProps) => {
 const AnnotationScreen = (props: AnnotationScreenProps) => {
 	const [annotations, setAnnotations] = useState<AnnotationType[]>([])
 	const [annotation, setAnnotation] = useState<AnnotationType| {}>({})
-	const [post, setPost] = useState<Post>()
 	const dispatch = useDispatch()
 	// To see where we can draw existing annotations
 	const commentsSelector = useSelector(state => state.comment.comments[props.post.id])
 
 	useEffect(() => {
-		setPost(props.post)
 		// Comment selector can be undefined if the post comments storage array has not been initialized yet
 		if (commentsSelector === undefined) {
 			return
 		}
+		const copyAnnotations = annotations
  		commentsSelector.forEach((comment) => {
 			if (comment.annotation !== undefined) {
-				const copyAnnotations = annotations
 				copyAnnotations.push(comment.annotation)
-				setAnnotations(copyAnnotations)
 			}
 		})
+		setAnnotations(copyAnnotations)
+	}, [])
+
+	useEffect(() => {
+		// TODO: This is a hacky way to ensure that annotations are displayed after the component has been unmounted.
+		// What happens is, if the component gets rendered once, then pushed down the stack and then re-mounted,
+		// the annotations are hidden until the mouse hovers over the screenshot.
+		setAnnotations([...annotations])
 	}, [props])
 
 	const onChange = (annotation: AnnotationType) => {
@@ -79,24 +84,17 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 		currentAnnotations.push(newAnnotation)
 		setAnnotation({})
 		setAnnotations(currentAnnotations)
-
-		if (post !== undefined) {
-			const newComment = {
-				postId: post?.id,
-				id: uuid(),
-				author: 'Test',
-				text: annotation.data.text,
-				date: 'right now',
-				authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-				annotation: newAnnotation
-			}
-			dispatch(addComment(newComment))
-		} else {
-			Log.error("Tried commenting on an inexistent post", "AnnotationScreen")
-		}
-
 		
-
+		const newComment = {
+			postId: props.post.id,
+			id: uuid(),
+			author: 'Test',
+			text: annotation.data.text,
+			date: 'right now',
+			authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+			annotation: newAnnotation
+		}
+		dispatch(addComment(newComment))
 	}
 
 	type RenderHighlightParams = {
@@ -124,27 +122,21 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 		)
 	}
 
-	if (post !== undefined) {
-		return (
-			<div className='bg-gray-300 flex-shrink-0 w-full object-contain flex relative rounded-lg rounded-r-none' style={{height: '583px', width: '281px'}}>
-				<div className=' h-full w-full absolute z-0' >
-					{/* <img className="h-full w-full object-contain" src='../../../../public/iphonexBlack.png'></img> */}
-				</div>	
-				{/* <div className='mx-auto my-auto z-10 overflow-hidden' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
-					<img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img>
-				</div> */}
-				<div className='mx-auto my-auto z-30' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
-					<Annotation src={window.URL.createObjectURL(post.image)} annotations={annotations} renderSelector={renderSelector} renderHighlight={renderHighlight} onSubmit={onSubmit} onChange={onChange} type={PointSelector.TYPE} value={annotation}>
-						{/* <img className='h-full w-full mx-auto object-contain' src={window.URL.createObjectURL(post.image)}></img> */}
-					</Annotation>
-				</div>
+	return (
+		<div className='relative flex flex-shrink-0 object-contain w-full bg-gray-300 rounded-lg rounded-r-none' style={{height: '583px', width: '281px'}}>
+			<div className='absolute z-0 w-full h-full ' >
+				{/* <img className="object-contain w-full h-full" src='../../../../public/iphonexBlack.png'></img> */}
+			</div>	
+			{/* <div className='z-10 mx-auto my-auto overflow-hidden' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
+				<img className='object-contain w-full h-full mx-auto' src={window.URL.createObjectURL(post.image)}></img>
+			</div> */}
+			<div className='z-30 mx-auto my-auto' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
+				<Annotation src={window.URL.createObjectURL(props.post.image)} annotations={annotations} renderSelector={renderSelector} renderHighlight={renderHighlight} onSubmit={onSubmit} onChange={onChange} type={PointSelector.TYPE} value={annotation}>
+					{/* <img className='object-contain w-full h-full mx-auto' src={window.URL.createObjectURL(post.image)}></img> */}
+				</Annotation>
 			</div>
-		)
-	} else {
-		return (<></>)
-	}	
-	
-	
+		</div>
+	)
 }
 
 
@@ -163,7 +155,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 
 	const renderTag = () => {
 		return (
-			<div className=' w-full h-8 flex'>
+			<div className='flex w-full h-8 '>
 				<div className=' pb-1 mx-auto flex flex-row p-0.5'>
 					<span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-gray-100 text-gray-800">
 						Screenshot
@@ -181,7 +173,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 
 	const renderButtons = () => {
 		return (
-			<div className='w-full h-8 flex my-1'>
+			<div className='flex w-full h-8 my-1'>
 				<div className='mx-auto flex flex-row p-0.5'>
 					<button onClick={() => setDisplayNewCommentBox(!displayNewCommentBox)} className="inline-flex items-center mr-1 inline-flex items-center px-2.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mr-1 icon-click-target"><path className="primary" d="M21.97 12.73c-.25-.22-.56-.4-.92-.54L20 11.8a8 8 0 1 0-8.2 8.2l.4 1.06c.12.36.3.67.53.92a10 10 0 1 1 9.25-9.25zm-10.95 5.19a6 6 0 1 1 6.9-6.9l-2.39-.9a4 4 0 1 0-5.41 5.41l.9 2.39z"/><path className="secondary" d="M17.96 16.54l3.75 3.75a1 1 0 0 1-1.42 1.42l-3.75-3.75-.57 2.28a1 1 0 0 1-1.9.11l-3-8a1 1 0 0 1 1.28-1.29l8 3a1 1 0 0 1-.1 1.91l-2.3.57z"/></svg>
@@ -196,11 +188,11 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 		if (commentsSelector !== undefined && commentsSelector.length > 0) {
 			return (
 				<div className='flex flex-col rounded-lg' >
-					<div className='w-full h-8 flex my-1'>
+					<div className='flex w-full h-8 my-1'>
 						<div className='mx-auto flex flex-row p-0.5'></div>
 					</div>
-					<div className='w-full relative bg-gray-300 overflow-scroll p-2 rounded-lg rounded-l-none flex flex-col' style={{height: '583px'}}>
-						{ post !== undefined ? <CommentsSection post={post} displayNewCommentBox={displayNewCommentBox} /> : <></>}
+					<div className='relative flex flex-col w-full p-2 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: '583px'}}>
+						{ post !== undefined ? <CommentsSection post={post} displayNewCommentBox={false} /> : <></>}
 					</div>
 				</div>
 			)
@@ -209,10 +201,10 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 	}
 
 	return (
-		<div className='max-w-full flex flex-col ml-3 ' > 
+		<div className='flex flex-col max-w-full ml-3 ' > 
 			{ renderTag() }
-			<div className='pb-3 pl-3 pr-3 rounded-lg border-dashed border-gray-400 border-2 flex flex-row'>
-				<div className='mb-3 flex-shrink-0  flex-col relative' >
+			<div className='flex flex-row pb-3 pl-3 pr-3 border-2 border-gray-400 border-dashed rounded-lg'>
+				<div className='relative flex-col flex-shrink-0 mb-3' >
 					{ renderButtons() }
 					{ post !== undefined ? <AnnotationScreen key={post.id} post={post} /> : <></>}
 				</div>
