@@ -18,5 +18,8 @@ module.exports = {
     backgroundColor: ['responsive', 'hover', 'focus', 'active'],
     height: ['responsive', 'hover', 'focus']
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/ui'),
+    require('@tailwindcss/custom-forms'),
+  ]
 }
