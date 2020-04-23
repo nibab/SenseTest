@@ -8,6 +8,8 @@ import { DataLayerClient } from '../../clients/DataLayerClient'
 import { addPost } from '../../store/post/actions'
 import { v4 as uuidv4 } from "uuid"
 import CreatePostViewSimulator from '../../components/Simulator/CreatePostViewSimulator'
+import NewPostForm from '../../components/NewPostForm'
+import PostScreenshot from '../../components/PostScreenshot'
 
 type CreatePostViewProps = {
     onPostCreated: () => void
@@ -78,7 +80,7 @@ const CreatePostView = () => {
 
     const renderAppetizeScreen = () => {
         return (
-            <div className='flex-shrink-0 h-full ml-3 mb-3 w-64 flex-col relative' style={{height: '583px', width: '282px'}}>
+            <div className='relative flex-col flex-shrink-0 w-64 h-full mb-3 ml-3' style={{height: '583px', width: '282px'}}>
                 <iframe onLoad={() => iFrameLoaded()} ref={iframeRef} src="https://appetize.io/embed/fczxctdk32wb17vabzd3k2wq9w?device=iphonex&scale=69&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true" width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
             </div>
         )
@@ -160,32 +162,32 @@ const CreatePostView = () => {
             >
                 <Input ref={assignToRef} placeholder="Blocker" id="error" />
             </Form.Item>
-            <button onClick={(e) => onUploadButtonClick(e)} className='mt-2 bg-blue-200 text-blue-400 rounded-md p-1'>UPLOAD</button>
+            <button onClick={(e) => onUploadButtonClick(e)} className='p-1 mt-2 text-blue-400 bg-blue-200 rounded-md'>UPLOAD</button>
         </Form>
 	)
 	
 	const renderPostToolBar = () => {
 		return (
-			<div className='rounded-full flex-shrink-0 w-16 p-1'>
-				<div id='button-container' className='w-full flex-col'> 
-					{/* <div className='w-full h-16 flex flex-col'>
-						<button onClick={(event) => onScreenshotButtonClick(event)} className="focus:outline-none  border-gray-400 shadow-lg active:shadow-sm active:bg-gray-300 w-10 h-10 bg-gray-100 rounded-full mx-auto" style={{borderWidth: "1px"}}>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-6 icon-camera"><path className="primary" d="M6.59 6l2.7-2.7A1 1 0 0 1 10 3h4a1 1 0 0 1 .7.3L17.42 6H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h2.59zM19 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-7 8a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><path className="secondary" d="M12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+			<div className='flex-shrink-0 w-16 p-1 rounded-full'>
+				<div id='button-container' className='flex-col w-full'> 
+					{/* <div className='flex flex-col w-full h-16'>
+						<button onClick={(event) => onScreenshotButtonClick(event)} className="w-10 h-10 mx-auto bg-gray-100 border-gray-400 rounded-full shadow-lg focus:outline-none active:shadow-sm active:bg-gray-300" style={{borderWidth: "1px"}}>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-camera"><path className="primary" d="M6.59 6l2.7-2.7A1 1 0 0 1 10 3h4a1 1 0 0 1 .7.3L17.42 6H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h2.59zM19 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-7 8a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><path className="secondary" d="M12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
 						</button>
-						<a className="text-center font-semibold text-gray-900" style={{fontSize: '10px'}}>Screenshot</a>
+						<a className="font-semibold text-center text-gray-900" style={{fontSize: '10px'}}>Screenshot</a>
 					</div>
-					<div className='w-full h-16 my-1 flex flex-col'>
-						<button className="focus:outline-none border-gray-400 shadow-lg active:shadow-sm active:bg-gray-300 w-10 h-10 bg-gray-100 rounded-full mx-auto" style={{borderWidth: "1px"}}>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-6 icon-videocam"><path className="secondary" d="M13.59 12l6.7-6.7A1 1 0 0 1 22 6v12a1 1 0 0 1-1.7.7L13.58 12z"/><rect width="14" height="14" x="2" y="5" className="primary" rx="2"/></svg>
+					<div className='flex flex-col w-full h-16 my-1'>
+						<button className="w-10 h-10 mx-auto bg-gray-100 border-gray-400 rounded-full shadow-lg focus:outline-none active:shadow-sm active:bg-gray-300" style={{borderWidth: "1px"}}>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-videocam"><path className="secondary" d="M13.59 12l6.7-6.7A1 1 0 0 1 22 6v12a1 1 0 0 1-1.7.7L13.58 12z"/><rect width="14" height="14" x="2" y="5" className="primary" rx="2"/></svg>
 						</button>
-						<a className=" text-xs text-center font-semibold text-gray-900" style={{fontSize: '10px'}}>Record</a>
+						<a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Record</a>
 					</div> */}
 					
-					<div className='w-full h-16 my-1 flex flex-col'>
-						<button className="focus:outline-none border-gray-400 shadow-lg active:shadow-sm active:bg-gray-300 w-10 h-10 bg-gray-100 rounded-full mx-auto" style={{borderWidth: "1px"}}>
+					<div className='flex flex-col w-full h-16 my-1'>
+						<button className="w-10 h-10 mx-auto bg-gray-100 border-gray-400 rounded-full shadow-lg focus:outline-none active:shadow-sm active:bg-gray-300" style={{borderWidth: "1px"}}>
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
 						</button>
-						<a className=" text-xs text-center font-semibold text-gray-900" style={{fontSize: '10px'}}>Compare</a>
+						<a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Compare</a>
 					</div>
 					
 				</div>
@@ -195,30 +197,37 @@ const CreatePostView = () => {
 
 
     return (
-        <div className='h-full flex-auto flex flex-row'>
-			<div className='flex-auto h-full flex flex-col '> 
+        <div className='flex flex-row flex-auto h-full'>
+			<div className='flex flex-col flex-auto h-full '> 
                 {/* when navbar is hidden this should also include justify-center */}
-				<div className='flex w-full flex-row  my-3'> 
+				<div className='flex flex-row w-full my-3'> 
 					{/* RenderPostToolBar is contained because otherwise it stretches for the whole height. */}
-					<div className='overflow-hidden ml-3 '>
+					<div className='ml-3 overflow-hidden '>
 						{ renderPostToolBar() }
 					</div>
-                    <div className='pt-1 pb-1 flex flex-row pl-2 pr-2 overflow-scroll mx-auto'> 
-                        <CreatePostViewSimulator onScreenshot={(img) => {}}/>
-                        
+                    <div className='flex flex-row pt-1 pb-1 pl-2 pr-2 mx-auto overflow-scroll'> 
+                        {/* <CreatePostViewSimulator onScreenshot={(img) => {}}/> */}
+                        <NewPostForm></NewPostForm>
+                        {/* <PostScreenshot post={{
+                            id: '1',
+                            .image: window.URL.createObjectURL('newsScreenshot.png'),
+
+                        }
+                            
+                        }></PostScreenshot> */}
                     </div>
 					{/* { renderAppetizeScreen() } 					
 					<AnnotationScreenshot src={imageToAnnotate} ref={canvasRef}/>  */}
                    
 					
-					{/* <div className='ml-3 max-h-full flex flex-col'>
-                        <div className="bg-gray-100 shadow-lg rounded-lg w-64 h-auto p-3">
+					{/* <div className='flex flex-col max-h-full ml-3'>
+                        <div className="w-64 h-auto p-3 bg-gray-100 rounded-lg shadow-lg">
                             { renderForm() }
                         </div>
                     </div> */}
 				</div>
 				{/* This is here to act as a pad placeholder for the screenshot navigator. */}
-				<div className="flex-shrink-0 h-10 w-full"></div> 
+				<div className="flex-shrink-0 w-full h-10"></div> 
 			</div>
 			
         </div>

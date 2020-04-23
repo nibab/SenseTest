@@ -104,3 +104,5 @@
 			</div>
 		)
 	}
+
+	export default NewPostForm
