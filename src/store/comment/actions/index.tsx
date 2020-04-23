@@ -5,7 +5,7 @@ export const ADD_SUBCOMMENT = "ADD_SUBCOMMENT"
 export const REMOVE_COMMENT = "REMOVE_COMMENT"
 
 export type CommentState = {
-  comments: Record<string, Comment>
+  comments: Record<string, Comment[]>
 }
 
 interface AddCommentAction {

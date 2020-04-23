@@ -19,7 +19,7 @@ const PostView = ({ post }: PostViewProps) => {
 	
 	const renderWarningMessage = () => {
 		return (
-			<div className="z-30 w-full absolute bottom-0 ">
+			<div className="z-40 w-full absolute bottom-0 ">
 				<div className="rounded-md bg-yellow-100 shadow-xl p-4 mx-2 my-1">
 					<div className="flex">
 						<div className="flex-shrink-0">

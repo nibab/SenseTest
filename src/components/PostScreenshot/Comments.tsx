@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { addComment, addsubComment } from '../../store/comment/actions'
-import { Comment as CommentType } from '../../types'
+import { Comment as CommentType, Post } from '../../types'
 import { useSelector } from '../../store'
 import { v4 as uuidv4 } from 'uuid'
 
 
 const TEST_COMMENT: CommentType = {
+	postId: '1',
 	id: uuidv4(),
 	text: 'Hello world how are uy', 
 	author: 'Cezar Babin', 
@@ -28,6 +29,7 @@ const TEST_COMMENT: CommentType = {
 } 
 const TEST_RESPONSES: CommentType[] = [
 	{
+		postId: '1',
 		id: uuidv4(),
 		text: 'World', 
 		author: 'Cezar Babin', 
@@ -41,6 +43,7 @@ const TEST_RESPONSES: CommentType[] = [
 		authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
 	},
 	{
+		postId: '1',
 		id: uuidv4(),
 		text: 'Hello BLEA', 
 		author: 'Cezar Babin', 
@@ -58,11 +61,12 @@ const REPLY_BOX_PLACEHOLDER = 'Write comment or @mention'
 
 type CommentsSectionProps = {
 	displayNewCommentBox: boolean
+	post: Post
 }
 
 export const CommentsSection = (props: CommentsSectionProps) => {
 	const [displayNewCommentBox, setDisplayNewCommentBox] = useState<boolean>()
-	const commentsSelector = useSelector(state => state.comment)
+	const commentsSelector = useSelector(state => state.comment.comments[props.post.id])
 
 	const dispatch = useDispatch()
 
@@ -77,9 +81,13 @@ export const CommentsSection = (props: CommentsSectionProps) => {
 	}, [props])
 
 	const renderComments = () => {
-		const items = []
-		for (let commentId in commentsSelector.comments) {
-			let comment = commentsSelector.comments[commentId]
+		const items: JSX.Element[] = []
+		// Comments could be undefined if the post has not been initialized yet. Not sure how to set up typescript to infer ha the type of this might be undefined
+		if (commentsSelector === undefined) {
+			return <></>
+		}
+		commentsSelector.forEach((comment) => {
+			//let comment = commentsSelector.comments[commentId]
 			if (comment.subcomments !== undefined && comment.subcomments?.length > 0) {
 				items.push(
 					<CommentGroup comment={comment} _responses={comment.subcomments} />
@@ -89,7 +97,8 @@ export const CommentsSection = (props: CommentsSectionProps) => {
 					<CommentGroup comment={comment} _responses={[]} />
 				)
 			}
-		}
+		})
+		
 		return items
 	}
 
@@ -233,10 +242,11 @@ type CommentGroupProps = {
 
 const CommentGroup = (props: CommentGroupProps) => {
 	const dispatch = useDispatch()
-	const commentsSelector = useSelector(state => state.comment)
+	//const commentsSelector = useSelector(state => state.comment)
 
 	const addResponse = (text: string) => {
 		let newResponse: CommentType = {
+			postId: props.comment.postId,
 			id:  uuidv4(),
 			text: text,
 			author: 'Cezar Babin',
@@ -249,7 +259,7 @@ const CommentGroup = (props: CommentGroupProps) => {
 	const renderReponses = () => {
 		const items = []
 
-		const responses = commentsSelector.comments[props.comment.id].subcomments
+		const responses = props.comment.subcomments
 
 		if (responses === undefined) {
 			return (<></>)
@@ -276,7 +286,7 @@ const CommentGroup = (props: CommentGroupProps) => {
 	}
 
 	const getComentClassName = () => {
-		const responses = commentsSelector.comments[props.comment.id].subcomments
+		const responses = props.comment.subcomments
 		if (responses !== undefined && responses.length > 0) {
 			return `w-full flex flex-row border-b`
 		} else {

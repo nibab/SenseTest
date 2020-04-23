@@ -8,6 +8,8 @@ import Annotation from 'react-image-annotation'
 import { useDispatch } from 'react-redux'
 import { addComment } from '../../store/comment/actions'
 import uuid from 'uuid'
+import Log from '../../utils/Log'
+import { useSelector } from '../../store'
 
 type PostScreenshotProps = {
 	post: Post
@@ -20,15 +22,28 @@ type AnnotationScreenProps = {
 
 type DotProps = {
 	geometry: Geometry
+	annotationId?: number
 }
-const Dot = ({geometry}: DotProps) => {
-	return (
-		<div className='h-6 w-6 bg-indigo-700 border-2 border-white border-solid rounded-full -mt-3 -ml-3' style={{
-			position: 'absolute',
-			left: `${geometry.x}%`,
-			top: `${geometry.y}%`,
-		}} />
-	)
+const Dot = ({geometry, annotationId}: DotProps) => {
+	if (annotationId !== undefined) {
+		return (
+			<div className='border-2 border-white border-solid cursor-pointer hover:bg-indigo-400 bg-indigo-600 flex text-sm font-medium w-6 h-6 rounded-full items-center justify-center text-gray-300 -mt-3 -ml-3' style={{
+				position: 'absolute',
+				left: `${geometry.x}%`,
+				top: `${geometry.y}%`,
+			}}> {annotationId} </div>
+		)
+	} else {
+		return (
+			<div className='h-6 w-6 bg-indigo-700 border-2 border-white border-solid rounded-full -mt-3 -ml-3' style={{
+				position: 'absolute',
+				left: `${geometry.x}%`,
+				top: `${geometry.y}%`,
+			}} />
+		)
+		
+	}
+	
 }
 
 const AnnotationScreen = (props: AnnotationScreenProps) => {
@@ -36,9 +51,22 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 	const [annotation, setAnnotation] = useState<AnnotationType| {}>({})
 	const [post, setPost] = useState<Post>()
 	const dispatch = useDispatch()
+	// To see where we can draw existing annotations
+	const commentsSelector = useSelector(state => state.comment.comments[props.post.id])
 
 	useEffect(() => {
 		setPost(props.post)
+		// Comment selector can be undefined if the post comments storage array has not been initialized yet
+		if (commentsSelector === undefined) {
+			return
+		}
+ 		commentsSelector.forEach((comment) => {
+			if (comment.annotation !== undefined) {
+				const copyAnnotations = annotations
+				copyAnnotations.push(comment.annotation)
+				setAnnotations(copyAnnotations)
+			}
+		})
 	}, [props])
 
 	const onChange = (annotation: AnnotationType) => {
@@ -51,22 +79,29 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 			geometry: annotation.geometry,
 			data: {
 				...annotation.data,
-				id: 1
+				id: annotations.length + 1
 			}
 		}
 		currentAnnotations.push(newAnnotation)
 		setAnnotation({})
 		setAnnotations(currentAnnotations)
 
-		const newComment = {
-			id: uuid(),
-			author: 'Test',
-			text: annotation.data.text,
-			date: 'right now',
-			authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-			annotation: newAnnotation
+		if (post !== undefined) {
+			const newComment = {
+				postId: post?.id,
+				id: uuid(),
+				author: 'Test',
+				text: annotation.data.text,
+				date: 'right now',
+				authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+				annotation: newAnnotation
+			}
+			dispatch(addComment(newComment))
+		} else {
+			Log.error("Tried commenting on an inexistent post", "AnnotationScreen")
 		}
-		dispatch(addComment(newComment))
+
+		
 
 	}
 
@@ -91,7 +126,7 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 		if (!geometry) return null
 
 		return (
-			<Dot geometry={geometry} />
+			<Dot annotationId={params.annotation.data.id} geometry={geometry} />
 		)
 	}
 
@@ -170,7 +205,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 						<div className='mx-auto flex flex-row p-0.5'></div>
 					</div>
 					<div className='w-full relative bg-gray-300 overflow-scroll p-2 rounded-lg rounded-l-none flex flex-col' style={{height: '583px'}}>
-						<CommentsSection displayNewCommentBox={displayNewCommentBox} />
+						{ post !== undefined ? <CommentsSection post={post} displayNewCommentBox={displayNewCommentBox} /> : <></>}
 					</div>
 				</div>
 			</div>
