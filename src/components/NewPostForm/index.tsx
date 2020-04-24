@@ -107,7 +107,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 	const renderForm = () => {
 		return (
 			<div className="flex-shrink-0 h-full pr-3 overflow-scroll w-72">
-				<form>
+				<form className='ml-1'>
 					<div>
 					<div>
 						<div>
@@ -260,7 +260,8 @@ const NewPostForm = (props: NewPostFormProps) => {
 
 	return (
 		<div className='flex flex-col w-auto mx-auto mb-3 ml-3 mr-3 bg-white rounded-md shadow-lg'>
-			<div className='flex flex-row pt-5 pb-2 pl-5 pr-5'> 
+			{/* padding left is only 4 because form has a margin of 1 so that the field outline shadow shows properly */}
+			<div className='flex flex-row pt-5 pb-2 pl-4 pr-5'> 
 				{renderForm()}
 				<div className='flex flex-row my-auto border-dashed rounded-lg '>
 					<div className='relative flex-col flex-shrink-0 mb-3' >

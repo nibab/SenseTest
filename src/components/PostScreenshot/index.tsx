@@ -29,7 +29,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 		return (
 			<div className='flex w-full h-8 '>
 				<div className=' pb-1 mx-auto flex flex-row p-0.5'>
-					<span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-gray-100 text-gray-800">
+					<span className="mr-1 inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-gray-100 text-gray-800">
 						Screenshot
 					</span>
 					<span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-indigo-100 text-indigo-800">

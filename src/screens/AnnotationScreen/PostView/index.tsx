@@ -140,7 +140,7 @@ const PostView = ({ post }: PostViewProps) => {
 		}
 
 		return (
-			<div className="p-2 mx-2 mt-1 border-2 rounded-md bg-cool-gray-50">
+			<div className="p-2 mx-2 mt-1 border rounded-md bg-cool-gray-50">
 				{/* <h2 className='text-base font-bold'>{post.title}</h2>
 				<div className='-mt-1 text-xs font-semibold text-gray-500 uppercase '>
 					2/20/20

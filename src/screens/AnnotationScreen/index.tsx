@@ -63,12 +63,12 @@ export const AnnotationScreen = ({ }) => {
     }
 
     return getPostsFetchInProgress ? <Loading /> : (
-        <div className='h-screen w-screen flex flex-row'>	
+        <div className='flex flex-row w-screen h-screen'>	
             <PostToolbar posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost}/>
-            <div className='flex flex-col w-full bg-gray-100'>
+            <div className='flex flex-col w-full bg-gray-50'>
                 {/* <PostHeader></PostHeader> */}
                 <ReleaseStatusBar />
-                <div className="flex flex-row h-full relative overflow-scroll">  
+                <div className="relative flex flex-row h-full overflow-scroll">  
                     { renderPostDetailView() }
                 </div>
                 {/* <PostFooterBar posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost} /> */}
