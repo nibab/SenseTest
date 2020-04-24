@@ -143,7 +143,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 			id: props.postId,
 			title: 'Test',
 			dateCreated: 'now',
-			image: b64toBlob(props.imageToAnnotate),
+			image: new Blob(),//b64toBlob(props.imageToAnnotate),
 			projectId: '1',
 			text: 'text',
 			comments: comments
