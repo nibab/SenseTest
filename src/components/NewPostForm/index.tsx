@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import uuid from 'uuid'
 import AnnotationScreen from '../AnnotationScreen'
 import { CommentsSection } from '../Comments'
@@ -14,10 +14,48 @@ type NewPostFormProps = {
 	onCancel: () => void
 }
 
+type ValidationState = 'PageNameFailedValidation' | 'None'
+
 const NewPostForm = (props: NewPostFormProps) => {
 	const [comments, setComments] = useState<CommentType[]>([])
 	const [annotations, setAnnotations] = useState<Annotation[]>([])
 	const dispatch = useDispatch()
+	// Page name input
+	const pageNameRef = useRef<HTMLInputElement>(null)
+	const [validationState, setValidationState] = useState<ValidationState>('None')
+
+
+
+	const renderPageNameInput = () => {
+
+		const onInputChange = () => {
+			if (validationState === 'PageNameFailedValidation') {
+				setValidationState('None')
+			}
+		}
+
+		const inputClassName =  validationState === 'PageNameFailedValidation' ?
+			'form-input block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red sm:text-sm sm:leading-5' : 
+			'block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5'
+
+		return (
+			<div className="sm:col-span-5">
+				<label htmlFor="city" className="block text-sm font-medium leading-5 text-gray-700">
+					Page Name
+				</label>
+				<div className="relative mt-1 rounded-md shadow-sm">
+					<input onChange={onInputChange} ref={pageNameRef} id="pageName" className={inputClassName} />
+					{  validationState === 'PageNameFailedValidation' && <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+						<svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+						</svg>
+					</div>}
+				
+				</div>
+				{ validationState === 'PageNameFailedValidation' && <p className="mt-2 text-sm text-red-600" id="email-error">Page name cannot be empty.</p>}
+			</div>
+		)
+	}
 
 	const renderForm = () => {
 		return (
@@ -28,8 +66,8 @@ const NewPostForm = (props: NewPostFormProps) => {
 						<div>
 						<h3 className="flex text-lg font-medium leading-6 text-gray-900">
 							<div className=''>
-							New Issue
-								</div>
+								New Issue
+							</div>
 							<span className="ml-1 inline-flex flex-shrink-0 items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-indigo-100 text-indigo-800">
 								<svg className="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
 									<circle cx="4" cy="4" r="3" />
@@ -39,49 +77,42 @@ const NewPostForm = (props: NewPostFormProps) => {
 						</h3>
 						</div>
 						<div className="grid grid-cols-1 row-gap-6 col-gap-4 mt-6 sm:grid-cols-6">
-							<div className="sm:col-span-4">
-								<label htmlFor="city" className="block text-sm font-medium leading-5 text-gray-700">
-								Page Name
+							{renderPageNameInput()}
+				
+							<div className="sm:col-span-6">
+								<label htmlFor="about" className="block text-sm font-medium leading-5 text-gray-700">
+								Repro Steps
 								</label>
 								<div className="mt-1 rounded-md shadow-sm">
-								<input id="city" className="block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5" />
+								<textarea id="about" rows={3} className="block w-full transition duration-150 ease-in-out form-textarea sm:text-sm sm:leading-5"></textarea>
+								</div>
+								<p className="mt-2 text-sm text-gray-500">Help others reproduce the issue.</p>
+							</div>
+					
+							
+							<div className="sm:col-span-6">
+								<label htmlFor="cover_photo" className="block text-sm font-medium leading-5 text-gray-700">
+								Attachments
+								</label>
+								<div className="flex justify-center px-6 pt-5 pb-6 mt-2 border-2 border-gray-300 border-dashed rounded-md">
+								<div className="text-center">
+									<svg className="w-12 h-12 mx-auto text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+									<path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+									</svg>
+									<p className="mt-1 text-sm text-gray-600">
+									<button type="button" className="mr-1 font-medium text-indigo-600 transition duration-150 ease-in-out hover:text-indigo-500 focus:outline-none focus:underline">
+										Upload a file 
+									</button>
+									or drag and drop
+									</p>
+									<p className="mt-1 text-xs text-gray-500">
+									PNG, JPG, GIF up to 10MB
+									</p>
+								</div>
 								</div>
 							</div>
-				
-						<div className="sm:col-span-6">
-							<label htmlFor="about" className="block text-sm font-medium leading-5 text-gray-700">
-							Repro Steps
-							</label>
-							<div className="mt-1 rounded-md shadow-sm">
-							<textarea id="about" rows={3} className="block w-full transition duration-150 ease-in-out form-textarea sm:text-sm sm:leading-5"></textarea>
-							</div>
-							<p className="mt-2 text-sm text-gray-500">Help others reproduce the issue.</p>
-						</div>
-				
-						
-						<div className="sm:col-span-6">
-							<label htmlFor="cover_photo" className="block text-sm font-medium leading-5 text-gray-700">
-							Attachments
-							</label>
-							<div className="flex justify-center px-6 pt-5 pb-6 mt-2 border-2 border-gray-300 border-dashed rounded-md">
-							<div className="text-center">
-								<svg className="w-12 h-12 mx-auto text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-								<path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-								</svg>
-								<p className="mt-1 text-sm text-gray-600">
-								<button type="button" className="mr-1 font-medium text-indigo-600 transition duration-150 ease-in-out hover:text-indigo-500 focus:outline-none focus:underline">
-									Upload a file 
-								</button>
-								or drag and drop
-								</p>
-								<p className="mt-1 text-xs text-gray-500">
-								PNG, JPG, GIF up to 10MB
-								</p>
-							</div>
 							</div>
 						</div>
-						</div>
-					</div>
 					
 					<div className="mt-8 border-gray-200">
 						<fieldset className="mt-6">
@@ -139,6 +170,10 @@ const NewPostForm = (props: NewPostFormProps) => {
 	}
 
 	const onCreateButtonClick = () => {
+		if (pageNameRef.current?.value.length === 0) {
+			setValidationState('PageNameFailedValidation')
+			return
+		}
 		props.onCreatePostClicked({
 			id: props.postId,
 			title: 'Test',
