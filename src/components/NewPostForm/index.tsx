@@ -58,9 +58,55 @@ const NewPostForm = (props: NewPostFormProps) => {
 		)
 	}
 
+	const [isSelected, setIsSelected] = useState(false)
+
+	// Is this issue a blocker? 
+	const renderBlockerSelection = () => {
+		
+
+		const renderBlockerTag = () => {
+			if (isSelected) {
+				return (
+					<span className="bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
+						Blocker
+					</span>
+				)
+			} else {
+				return (
+					<div className=''>
+						<span onClick={() => setIsSelected(!isSelected)} className="cursor-pointer border border-gray-300 border-dashed rounded inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4  text-gray-600">
+							<svg className="w-3 mx-auto mr-1 icon-camera" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path fill-rule="evenodd" clip-rule="evenodd" d="M10 3C10.5523 3 11 3.44772 11 4V9H16C16.5523 9 17 9.44772 17 10C17 10.5523 16.5523 11 16 11H11V16C11 16.5523 10.5523 17 10 17C9.44772 17 9 16.5523 9 16V11H4C3.44772 11 3 10.5523 3 10C3 9.44771 3.44772 9 4 9L9 9V4C9 3.44772 9.44772 3 10 3Z" fill="#4A5568"/>
+							</svg>
+							Blocker
+						</span>
+
+					</div>
+					
+				)
+			}
+			
+		}
+
+		return (
+			<fieldset className="mt-6">
+				<legend className="text-base font-medium text-gray-900">
+				Tags
+				</legend>
+				{/* <p className="text-sm leading-5 text-gray-500">Does this issue block the release ?</p> */}
+				<div className="mt-2">
+					<div className='flex'>
+
+						{renderBlockerTag()}
+					</div>
+				</div>
+			</fieldset>			
+		)
+	}
+
 	const renderForm = () => {
 		return (
-			<div className="flex-shrink-0 h-full p-5 overflow-scroll w-72">
+			<div className="flex-shrink-0 h-full pr-3 overflow-scroll w-72">
 				<form>
 					<div>
 					<div>
@@ -69,7 +115,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 							<div className=''>
 								New Issue
 							</div>
-							<span className="ml-1 inline-flex flex-shrink-0 items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-indigo-100 text-indigo-800">
+							<span className="ml-2 inline-flex flex-shrink-0 items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-indigo-100 text-indigo-800">
 								<svg className="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
 									<circle cx="4" cy="4" r="3" />
 								</svg>
@@ -85,7 +131,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 								Repro Steps
 								</label>
 								<div className="mt-1 rounded-md shadow-sm">
-								<textarea id="about" rows={3} className="block w-full transition duration-150 ease-in-out form-textarea sm:text-sm sm:leading-5"></textarea>
+								<textarea id="about" rows={4} className="block w-full transition duration-150 ease-in-out form-textarea sm:text-sm sm:leading-5"></textarea>
 								</div>
 								<p className="mt-2 text-sm text-gray-500">Help others reproduce the issue.</p>
 							</div>
@@ -114,32 +160,11 @@ const NewPostForm = (props: NewPostFormProps) => {
 							</div>
 							</div>
 						</div>
-					
-					<div className="mt-8 border-gray-200">
-						<fieldset className="mt-6">
-							<legend className="text-base font-medium text-gray-900">
-							Blocking
-							</legend>
-							<p className="text-sm leading-5 text-gray-500">Does this issue block the release ?</p>
-							<div className="mt-4">
-							<div className="flex items-center">
-								<input id="push_everything" name="form-input push_notifications" type="radio" className="w-4 h-4 text-indigo-600 transition duration-150 ease-in-out form-radio" />
-								<label htmlFor="push_everything" className="ml-3">
-								<span className="block text-sm font-medium leading-5 text-gray-700">Yes</span>
-								</label>
-							</div>
-							<div className="flex items-center mt-4">
-								<input id="push_email" name="form-input push_notifications" type="radio" className="w-4 h-4 text-indigo-600 transition duration-150 ease-in-out form-radio" />
-								<label htmlFor="push_email" className="ml-3">
-								<span className="block text-sm font-medium leading-5 text-gray-700">No</span>
-								</label>
-							</div>
-							
-							</div>
-						</fieldset>
+						<div className="mt-8 border-gray-200">
+							{ renderBlockerSelection()}
+						</div>
 					
 						
-					</div>
 					</div>
 					
 				</form>
@@ -155,7 +180,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 		if (comments.length > 0) {
 			return (
 				<div className='flex flex-col rounded-lg' >
-					<div className='flex w-full h-8 my-1'>
+					<div className='flex w-full h-8'>
 						<div className='mx-auto flex flex-row p-0.5'></div>
 					</div>
 					<div className='relative flex flex-col w-auto p-2 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: '583px'}}>
@@ -222,7 +247,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 
 	const renderButtons = () => {
 		return (
-			<div className='flex w-full h-8 my-1'>
+			<div className='flex w-full h-8'>
 				<div className='mx-auto flex flex-row p-0.5'>
 					<div className="inline-flex items-center mr-1 inline-flex items-center px-2.5 border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mr-1 icon-click-target"><path className="primary" d="M21.97 12.73c-.25-.22-.56-.4-.92-.54L20 11.8a8 8 0 1 0-8.2 8.2l.4 1.06c.12.36.3.67.53.92a10 10 0 1 1 9.25-9.25zm-10.95 5.19a6 6 0 1 1 6.9-6.9l-2.39-.9a4 4 0 1 0-5.41 5.41l.9 2.39z"/><path className="secondary" d="M17.96 16.54l3.75 3.75a1 1 0 0 1-1.42 1.42l-3.75-3.75-.57 2.28a1 1 0 0 1-1.9.11l-3-8a1 1 0 0 1 1.28-1.29l8 3a1 1 0 0 1-.1 1.91l-2.3.57z"/></svg>
@@ -234,10 +259,10 @@ const NewPostForm = (props: NewPostFormProps) => {
 	}
 
 	return (
-		<div className='flex flex-col w-auto m-3 mx-auto bg-white rounded-md shadow-lg'>
-			<div className='flex flex-row'> 
+		<div className='flex flex-col w-auto mx-auto mb-3 ml-3 mr-3 bg-white rounded-md shadow-lg'>
+			<div className='flex flex-row pt-5 pb-2 pl-5 pr-5'> 
 				{renderForm()}
-				<div className='flex flex-row pr-5 my-auto border-dashed rounded-lg '>
+				<div className='flex flex-row my-auto border-dashed rounded-lg '>
 					<div className='relative flex-col flex-shrink-0 mb-3' >
 						{renderButtons()}
 

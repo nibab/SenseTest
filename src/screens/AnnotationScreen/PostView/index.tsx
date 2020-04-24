@@ -93,7 +93,7 @@ const PostView = ({ post }: PostViewProps) => {
 		}
 
 		return (
-			<div className='flex-shrink-0 mr-3'>
+			<div className='flex-shrink-0 mx-1'>
 				<div className='flex-shrink-0 rounded-full'>
 					<div className='flex-col w-full'> 
 						<div className={buttonContainerClassName}>
@@ -108,7 +108,7 @@ const PostView = ({ post }: PostViewProps) => {
 							</button>
 							<a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Simulator</a>
 						</div>
-						<div className={buttonContainerClassName}>
+						{/* <div className={buttonContainerClassName}>
 							<button className={unSelectedButtonClassName} style={{borderWidth: '1px'}}>
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-user"><path className="primary" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><path className="secondary" d="M21 20v-1a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v1c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2z"/></svg>
 							</button>
@@ -119,16 +119,28 @@ const PostView = ({ post }: PostViewProps) => {
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-flag"><path className="primary" d="M3 15a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h8a1 1 0 0 1 .7.3L13.42 5H21a1 1 0 0 1 .9 1.45L19.61 11l2.27 4.55A1 1 0 0 1 21 17h-8a1 1 0 0 1-.7-.3L10.58 15H3z"/><rect width="2" height="20" x="2" y="2" className="secondary" rx="1"/></svg>
 							</button>
 							<a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Flag</a>
-						</div>					
+						</div>					 */}
 					</div>
 				</div>
 			</div>
 		)
 	}
 
+	
+
 	const renderPostTitle = () => {
+		// Temporary function to get today's date and display it.
+		const getDate = (): string => {
+			var today = new Date()
+			var dd = String(today.getDate()).padStart(2, '0')
+			var mm = String(today.getMonth() + 1).padStart(2, '0')
+			var yyyy = today.getFullYear()
+
+			return mm + '/' + dd + '/' + yyyy
+		}
+
 		return (
-			<div className="p-3 mx-2 mt-1 border-2 rounded-md bg-cool-gray-50">
+			<div className="p-2 mx-2 mt-1 border-2 rounded-md bg-cool-gray-50">
 				{/* <h2 className='text-base font-bold'>{post.title}</h2>
 				<div className='-mt-1 text-xs font-semibold text-gray-500 uppercase '>
 					2/20/20
@@ -138,16 +150,42 @@ const PostView = ({ post }: PostViewProps) => {
 				</p> */}
 				<div className="flex-shrink-0 block group focus:outline-none ">
 					<div className="flex items-center">
-						<div className=''>
-							<img className="inline-block w-8 h-8 rounded-full" src={'newsScreenshot.png'} alt="" />
-						</div>
-						<div className="ml-2 ">
-							<h2 className="pt-2 font-medium leading-3 text-gray-800 text-md group-hover:text-gray-900">
-								{ post.title }
-							</h2>
-							<p className="text-xs font-normal leading-5 text-gray-500 transition duration-150 ease-in-out font group-hover:text-gray-700 group-focus:underline">
-								{ '2/20/20' }
-							</p>
+						
+						<div className='flex flex-row w-full'>
+							<div className="flex flex-row w-full my-auto ml-2 justift-center">
+								
+								<div className='my-auto mr-1'>
+								<img className="inline-block object-center w-8 h-8 rounded-full" src={'newsScreenshot.png'} alt="" />
+								</div>
+								<div>
+									<h2 className="pt-2 font-medium leading-3 text-gray-800 text-md group-hover:text-gray-900">
+										{ post.title }
+									</h2>
+									<p className="text-xs font-normal leading-5 text-gray-500 transition duration-150 ease-in-out font group-hover:text-gray-700 group-focus:underline">
+										{ getDate() }
+									</p>
+								</div>
+								
+							</div>
+							<div className='flex flex-row h-12'>
+								<span className="my-auto ml-3 mr-2 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
+									Blocker
+								</span>
+								<button className=" my-auto whitespace-no-wrap inline-flex items-center mr-2 inline-flex items-center px-2.5 py-1 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1 icon-user"><path className="primary" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><path className="secondary" d="M21 20v-1a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v1c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2z"/></svg>
+									Assign to
+								</button>
+								<button className=" my-auto inline-flex items-center mr-2 inline-flex items-center px-2.5 py-1 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1 icon-flag"><path className="primary" d="M3 15a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h8a1 1 0 0 1 .7.3L13.42 5H21a1 1 0 0 1 .9 1.45L19.61 11l2.27 4.55A1 1 0 0 1 21 17h-8a1 1 0 0 1-.7-.3L10.58 15H3z"/><rect width="2" height="20" x="2" y="2" className="secondary" rx="1"/></svg>
+									Status
+								</button>
+								<button className=" my-auto inline-flex items-center mr-2 inline-flex items-center px-2.5 py-1 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1 icon-check"><circle cx="12" cy="12" r="10" className="primary"/><path className="secondary" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
+									Resolve
+								</button>
+							</div>
+							
+								
 						</div>
 					</div>
 				</div>
