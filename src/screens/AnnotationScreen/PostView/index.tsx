@@ -80,9 +80,9 @@ const PostView = ({ post }: PostViewProps) => {
 
 	const renderToolbar = () => {
 		const buttonContainerClassName = 'w-full h-16 my-1 flex flex-col'
-		const buttonClassName = 'focus:outline-none  border-gray-400 active:shadow-sm active:bg-gray-300 w-10 h-10 rounded-full mx-auto'
-		const unSelectedButtonClassName = 'bg-white shadow-lg' + ' ' + buttonClassName
-		const selectedButtonClassName = 'bg-gray-400' + ' ' + buttonClassName
+		const buttonClassName = 'focus:outline-none active:shadow-sm active:bg-gray-300 w-10 h-10 rounded-full mx-auto'
+		const unSelectedButtonClassName = 'bg-white shadow-lg border-gray-400 ' + ' ' + buttonClassName
+		const selectedButtonClassName = 'bg-gray-200' + ' ' + buttonClassName
 
 		const handleButtonClick = (state: DisplayState) => {
 			if (state === displayState) {
@@ -128,15 +128,29 @@ const PostView = ({ post }: PostViewProps) => {
 
 	const renderPostTitle = () => {
 		return (
-			<div className="py-1 mx-3 bg-gray-100 ">
-				<h2 className='text-base font-bold'>The text doees not render properly</h2>
+			<div className="p-3 mx-2 mt-1 border-2 rounded-md bg-cool-gray-50">
+				{/* <h2 className='text-base font-bold'>{post.title}</h2>
 				<div className='-mt-1 text-xs font-semibold text-gray-500 uppercase '>
 					2/20/20
 				</div>
 				<p className='flex-wrap mt-1 text-xs leading-tight'>
-					{ "The fox jumped on. The fox jumped on the rabbit. The fox jumped on the moose." }
-				</p>
-				<div className="bg-gray-300 px-4 mt-3 w-full h-0.5"></div>
+					{ post.text }
+				</p> */}
+				<div className="flex-shrink-0 block group focus:outline-none ">
+					<div className="flex items-center">
+						<div className=''>
+							<img className="inline-block w-8 h-8 rounded-full" src={'newsScreenshot.png'} alt="" />
+						</div>
+						<div className="ml-2 ">
+							<h2 className="pt-2 font-medium leading-3 text-gray-800 text-md group-hover:text-gray-900">
+								{ post.title }
+							</h2>
+							<p className="text-xs font-normal leading-5 text-gray-500 transition duration-150 ease-in-out font group-hover:text-gray-700 group-focus:underline">
+								{ '2/20/20' }
+							</p>
+						</div>
+					</div>
+				</div>
 			</div>
 		)
 	}

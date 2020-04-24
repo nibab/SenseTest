@@ -170,45 +170,94 @@ const CreatePostView = () => {
         </Form>
 	)
 	
-	const renderPostToolBar = () => {
+	// const renderPostToolBar = () => {
+	// 	return (
+	// 		<div className='flex-shrink-0 w-16 p-1 rounded-full'>
+	// 			<div id='button-container' className='flex-col w-full'> 
+	// 				{/* <div className='flex flex-col w-full h-16'>
+	// 					<button onClick={(event) => onScreenshotButtonClick(event)} className="w-10 h-10 mx-auto bg-gray-100 border-gray-400 rounded-full shadow-lg focus:outline-none active:shadow-sm active:bg-gray-300" style={{borderWidth: "1px"}}>
+	// 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-camera"><path className="primary" d="M6.59 6l2.7-2.7A1 1 0 0 1 10 3h4a1 1 0 0 1 .7.3L17.42 6H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h2.59zM19 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-7 8a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><path className="secondary" d="M12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	// 					</button>
+	// 					<a className="font-semibold text-center text-gray-900" style={{fontSize: '10px'}}>Screenshot</a>
+	// 				</div>
+	// 				<div className='flex flex-col w-full h-16 my-1'>
+	// 					<button className="w-10 h-10 mx-auto bg-gray-100 border-gray-400 rounded-full shadow-lg focus:outline-none active:shadow-sm active:bg-gray-300" style={{borderWidth: "1px"}}>
+	// 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-videocam"><path className="secondary" d="M13.59 12l6.7-6.7A1 1 0 0 1 22 6v12a1 1 0 0 1-1.7.7L13.58 12z"/><rect width="14" height="14" x="2" y="5" className="primary" rx="2"/></svg>
+	// 					</button>
+	// 					<a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Record</a>
+	// 				</div> */}
+					
+	// 				<div className='flex flex-col w-full h-16 my-1'>
+	// 					<button className="w-10 h-10 mx-auto bg-gray-100 border-gray-400 rounded-full shadow-lg focus:outline-none active:shadow-sm active:bg-gray-300" style={{borderWidth: "1px"}}>
+	// 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+	// 					</button>
+	// 					<a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Compare</a>
+	// 				</div>
+					
+	// 			</div>
+	// 		</div>
+	// 	)
+    // }
+
+    const renderPostToolBar = () => {
+		const buttonContainerClassName = 'w-full flex flex-col'
+		const buttonClassName = 'focus:outline-none active:shadow-sm active:bg-gray-300 w-10 h-10 rounded-full mx-auto'
+		const unSelectedButtonClassName = 'bg-white shadow-lg border-gray-400 ' + ' ' + buttonClassName
+		const selectedButtonClassName = 'bg-gray-200' + ' ' + buttonClassName
+
+		// const handleButtonClick = (state: DisplayState) => {
+		// 	if (state === displayState) {
+		// 		setDisplayState('None')
+		// 	} else {
+		// 		setDisplayState(state)
+		// 	}
+		// }
+
 		return (
-			<div className='flex-shrink-0 w-16 p-1 rounded-full'>
-				<div id='button-container' className='flex-col w-full'> 
-					{/* <div className='flex flex-col w-full h-16'>
-						<button onClick={(event) => onScreenshotButtonClick(event)} className="w-10 h-10 mx-auto bg-gray-100 border-gray-400 rounded-full shadow-lg focus:outline-none active:shadow-sm active:bg-gray-300" style={{borderWidth: "1px"}}>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-camera"><path className="primary" d="M6.59 6l2.7-2.7A1 1 0 0 1 10 3h4a1 1 0 0 1 .7.3L17.42 6H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h2.59zM19 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-7 8a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><path className="secondary" d="M12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
-						</button>
-						<a className="font-semibold text-center text-gray-900" style={{fontSize: '10px'}}>Screenshot</a>
-					</div>
-					<div className='flex flex-col w-full h-16 my-1'>
-						<button className="w-10 h-10 mx-auto bg-gray-100 border-gray-400 rounded-full shadow-lg focus:outline-none active:shadow-sm active:bg-gray-300" style={{borderWidth: "1px"}}>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-videocam"><path className="secondary" d="M13.59 12l6.7-6.7A1 1 0 0 1 22 6v12a1 1 0 0 1-1.7.7L13.58 12z"/><rect width="14" height="14" x="2" y="5" className="primary" rx="2"/></svg>
-						</button>
-						<a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Record</a>
-					</div> */}
-					
-					<div className='flex flex-col w-full h-16 my-1'>
-						<button className="w-10 h-10 mx-auto bg-gray-100 border-gray-400 rounded-full shadow-lg focus:outline-none active:shadow-sm active:bg-gray-300" style={{borderWidth: "1px"}}>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
-						</button>
-						<a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Compare</a>
-					</div>
-					
-				</div>
-			</div>
+            <div className='mx-auto'>
+                 <div className='flex flex-row w-48 p-2 my-auto mr-3'>
+               
+                    {/* <div className={buttonContainerClassName}>
+                        <button className={unSelectedButtonClassName} style={{borderWidth: '1px'}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-attach"><path className="secondary" d="M20.12 11.95l-6.58 6.59a5 5 0 1 1-7.08-7.07l6.59-6.6a3 3 0 0 1 4.24 4.25l-6.58 6.59a1 1 0 1 1-1.42-1.42l6.59-6.58a1 1 0 0 0-1.42-1.42l-6.58 6.59a3 3 0 0 0 4.24 4.24l6.59-6.58a5 5 0 0 0-7.08-7.08l-6.58 6.6a7 7 0 0 0 9.9 9.9l6.59-6.6a1 1 0 0 0-1.42-1.4z"/></svg>
+                        </button>
+                        <a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Attachments</a>
+                    </div> */}
+                    <div className={buttonContainerClassName}>
+                        <button className={unSelectedButtonClassName} style={{borderWidth: '1px'}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+                        </button>
+                        <a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>New Simulator</a>
+                    </div>
+                    <div className={buttonContainerClassName}>
+                        <button className={unSelectedButtonClassName} style={{borderWidth: '1px'}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-user"><path className="primary" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><path className="secondary" d="M21 20v-1a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v1c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2z"/></svg>
+                        </button>
+                        <a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>UI Mocks</a>
+                    </div>
+                    {/* <div className={buttonContainerClassName}>
+                        <button className={unSelectedButtonClassName} style={{borderWidth: '1px'}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-flag"><path className="primary" d="M3 15a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h8a1 1 0 0 1 .7.3L13.42 5H21a1 1 0 0 1 .9 1.45L19.61 11l2.27 4.55A1 1 0 0 1 21 17h-8a1 1 0 0 1-.7-.3L10.58 15H3z"/><rect width="2" height="20" x="2" y="2" className="secondary" rx="1"/></svg>
+                        </button>
+                        <a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Flag</a>
+                    </div>					 */}
+                </div>
+            </div>
+           
 		)
-    }
+	}
 
     return (
         <div className='flex flex-row flex-auto h-full'>
 			<div className='flex flex-col flex-auto h-full '> 
                 {/* when navbar is hidden this should also include justify-center */}
-				<div className='flex flex-row w-full my-3'> 
+                <div className='flex flex-shrink-0 w-full ml-3 overflow-hidden'>
+                    { renderPostToolBar() }
+                </div>
+				<div className='flex flex-row my-1'> 
 					{/* RenderPostToolBar is contained because otherwise it stretches for the whole height. */}
-					<div className='ml-3 overflow-hidden '>
-						{ renderPostToolBar() }
-					</div>
-                    <div className='flex flex-row w-full pt-1 pb-1 pl-2 pr-2 mx-auto overflow-scroll'> 
+					
+                    <div className='flex flex-row justify-center w-full pt-1 pb-1 pl-2 pr-2 mx-auto overflow-scroll'> 
                         { currentMode === 'BROWSE' && <CreatePostViewSimulator onScreenshot={(img) => {setImageToAnnotate(img); setCurrentMode('CREATE_ISSUE')}}/> }
                         { currentMode === 'CREATE_ISSUE' && <NewPostForm 
                             postId={uuid()}
