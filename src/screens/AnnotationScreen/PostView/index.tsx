@@ -19,36 +19,41 @@ const PostView = ({ post }: PostViewProps) => {
 	
 	const renderWarningMessage = () => {
 		return (
-			<div className="absolute bottom-0 z-40 w-full ">
-				<div className="p-4 mx-2 my-1 bg-yellow-100 rounded-md shadow-xl">
-					<div className="flex">
-						<div className="flex-shrink-0">
-							<svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-							<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-							</svg>
-						</div>
-						<div className="ml-3">
-							<h3 className="text-sm font-medium leading-5 text-yellow-800">
-							Warning
-							</h3>
-							<div className="relative flex flex-row w-full mt-1 text-sm leading-5 text-yellow-700 ">
-								<div className='my-auto '>
-									There have been <b>2</b> new app versions since this post was created.
-								</div>
-								<span className="inline-flex mx-1 rounded-md shadow-sm">
-									<button type="button" className="inline-flex items-center px-2 py-1 text-xs font-medium leading-4 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700">
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mr-1 icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
-										Check Latest App Version
-									</button>
-									
-								</span>
-								<div className='my-auto'>
-									to see if this still an issue. 
+			<div className="absolute bottom-0 z-40 w-full">
+				<div className='relative text-yellow-700 '>
+					<div className='absolute right-0 z-50 mx-2 w-7 h-7 '><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto fill-current icon-close"><path className="" fill-rule="evenodd" d="M15.78 14.36a1 1 0 0 1-1.42 1.42l-2.82-2.83-2.83 2.83a1 1 0 1 1-1.42-1.42l2.83-2.82L7.3 8.7a1 1 0 0 1 1.42-1.42l2.83 2.83 2.82-2.83a1 1 0 0 1 1.42 1.42l-2.83 2.83 2.83 2.82z"/></svg></div>
+					<div className="relative p-4 mx-2 my-1 bg-yellow-100 rounded-md shadow-xl">
+						<div className="flex">
+							<div className="flex-shrink-0">
+								<svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+								<path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
+								</svg>
+							</div>
+							<div className="ml-3">
+								<h3 className="text-sm font-medium leading-5 text-yellow-800">
+								Warning
+								</h3>
+								<div className="relative flex flex-row w-full mt-1 text-sm leading-5">
+									<div className='my-auto '>
+										There have been <b>2</b> new app versions since this post was created.
+									</div>
+									<span className="inline-flex mx-1 rounded-md shadow-sm">
+										<button type="button" className="inline-flex items-center px-2 py-1 text-xs font-medium leading-4 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mr-1 icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+											Check Latest App Version
+										</button>
+										
+									</span>
+									<div className='my-auto'>
+										to see if this still an issue. 
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+
 				</div>
+				
 			</div>
 		)
 	}

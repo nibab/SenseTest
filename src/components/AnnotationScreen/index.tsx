@@ -13,7 +13,7 @@ type AnnotationScreenProps = {
 
 type DotProps = {
 	geometry: Geometry
-	annotationId?: number
+	annotationId?: string
 }
 
 const Dot = ({geometry, annotationId}: DotProps) => {
@@ -57,7 +57,7 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 			geometry: annotation.geometry,
 			data: {
 				...annotation.data,
-				id: annotations.length + 1
+				id: `${annotations.length + 1}`
 			}
 		}
 		currentAnnotations.push(newAnnotation)
@@ -87,7 +87,7 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 		if (!geometry) return null
 
 		return (
-			<Dot annotationId={params.annotation.data.id} geometry={geometry} />
+			<Dot annotationId={`${params.annotation.data.id}`} geometry={geometry} />
 		)
 	}
 

@@ -93,14 +93,15 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 		}
 
 		const onSubmitAnnotation = (annotation: Annotation) => {
-			const newComment = {
+			const newComment: CommentType = {
 				postId: props.post.id,
 				id: uuid(),
 				author: 'Test',
-				text: annotation.data.text,
+				text: annotation.data.text ? annotation.data.text : '',
 				date: 'right now',
 				authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-				annotation: annotation
+				annotation: annotation,
+				subcomments: []
 			}
 			dispatch(addComment(newComment))
 		}

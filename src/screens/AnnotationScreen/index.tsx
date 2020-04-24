@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react"
-import { Post } from "../../types"
+import { Post, Comment } from "../../types"
 import { Loading } from "aws-amplify-react"
 import { useSelector } from "../../store"
 import { DataLayerClient } from "../../clients/DataLayerClient"
 import { useDispatch } from "react-redux"
 import PostView from "./PostView"
 import CreatePostView from "./CreatePostView"
-import { ModelPostFilterInput, ListPostsQuery } from "../../API"
+import { ModelPostFilterInput, ListPostsQuery, GetPostQuery } from "../../API"
 import { graphqlOperation, API } from "aws-amplify"
-import { listPosts } from "../../graphql/queries"
+import { listPosts, getPost } from "../../graphql/queries"
 import { PostImgDownload } from "../../utils/PostImgDownload"
 import { addPost } from "../../store/post/actions"
 import Log from "../../utils/Log"
 import PostFooterBar from "./PostsFooterBar.tsx"
 import { ReleaseStatusBar } from "./ReleaseStatusBar"
 import { PostToolbar } from "./PostToolbar"
+import { addComment } from "../../store/comment/actions"
 
 export const AnnotationScreen = ({ }) => {
     // Posts
@@ -23,6 +24,31 @@ export const AnnotationScreen = ({ }) => {
     const [currentPost, setCurrentPost] = useState<Post>()
     const [displayCreateNewPost, setDisplayCreateNewPost] = useState<boolean>(false)
     const dispatch = useDispatch()
+
+    const getAllCommentsForPost = async (postId: string) => { 
+        const query = {
+            id: postId
+        }
+        const _post = await API.graphql(graphqlOperation(getPost, query)) as { data: GetPostQuery }
+        const comments = _post.data.getPost?.comments
+        if (comments !== null && comments !== undefined) {
+            if (comments.items !== null) {
+                comments.items.forEach((comment) => {
+                    const newComment: Comment = {
+                        postId: postId,
+                        text: comment!.content,
+                        author: comment!.author,
+                        id: comment!.id,
+                        authorAvatarSrc: comment!.authorAvatar,
+                        date: 'now',
+                        annotation: comment?.annotation !== null ? comment?.annotation : undefined,
+                        subcomments: [] // comment?.subComments !== undefined && comment?.subComments !== null ? comment.subComments : []
+                    }
+                    dispatch(addComment(newComment))
+                })
+            }
+        }
+    }
 
     const getPostsAndStoreInRedux = async (projectId: string) => {
         const query: ModelPostFilterInput = {
@@ -39,6 +65,7 @@ export const AnnotationScreen = ({ }) => {
                         const postImgDownload = new PostImgDownload(post, (blob) => {})
                         const newPost = await postImgDownload.imagePromise
                         dispatch(addPost(newPost))
+                        getAllCommentsForPost(post.id)
                     }
                 })
             }            

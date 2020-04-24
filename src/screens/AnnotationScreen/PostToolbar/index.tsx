@@ -88,7 +88,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 		const className = currentPost !== undefined && post.id === currentPost.id ? selectedClassName : notSelectedClassName
 
 		return (
-			<div onClick={() => {setDisplayCreateNewPost(false); setCurrentPost(post)}} className={className}>
+			<div key={post.id} onClick={() => {setDisplayCreateNewPost(false); setCurrentPost(post)}} className={className}>
 				{/* <span className="top-0 left-0 flex items-center justify-center flex-shrink-0 block w-6 h-4 my-auto mr-1 text-xs font-bold text-white bg-red-400 rounded-full">12</span> */}
 				<div className='w-full my-auto text-sm font-semibold truncate '>
 					{ post.title }							

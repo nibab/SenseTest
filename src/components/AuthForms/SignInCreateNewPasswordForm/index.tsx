@@ -21,8 +21,8 @@ const ValidationErrorBubble = ({ errorText }: ValidationErrorBubbleProps) => {
 					<p className={`text-sm text-red-600 pr-5`}>{errorText}</p>
 				</div>
 				<div className={`absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none`}>
-					<svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-						<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+					<svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+						<path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
 					</svg>
 				</div>
 			</div>
@@ -84,7 +84,7 @@ const SignInCreateNewPasswordForm = ({ userObject, handleStateChange}: SignInCre
 
 			<div className="mt-6">
 				<span className="block w-full rounded-md shadow-sm">
-					<button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+					<button type="submit" className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700">
 					Save Password
 					</button>
 				</span>

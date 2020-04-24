@@ -48,7 +48,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 					<input onChange={onInputChange} ref={pageNameRef} id="pageName" className={inputClassName} />
 					{  validationState === 'PageNameFailedValidation' && <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
 						<svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-							<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+							<path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
 						</svg>
 					</div>}
 				
@@ -76,7 +76,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 					<div className=''>
 						<span onClick={() => setIsSelected(!isSelected)} className="cursor-pointer border border-gray-300 border-dashed rounded inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4  text-gray-600">
 							<svg className="w-3 mx-auto mr-1 icon-camera" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path fill-rule="evenodd" clip-rule="evenodd" d="M10 3C10.5523 3 11 3.44772 11 4V9H16C16.5523 9 17 9.44772 17 10C17 10.5523 16.5523 11 16 11H11V16C11 16.5523 10.5523 17 10 17C9.44772 17 9 16.5523 9 16V11H4C3.44772 11 3 10.5523 3 10C3 9.44771 3.44772 9 4 9L9 9V4C9 3.44772 9.44772 3 10 3Z" fill="#4A5568"/>
+								<path fillRule="evenodd" clipRule="evenodd" d="M10 3C10.5523 3 11 3.44772 11 4V9H16C16.5523 9 17 9.44772 17 10C17 10.5523 16.5523 11 16 11H11V16C11 16.5523 10.5523 17 10 17C9.44772 17 9 16.5523 9 16V11H4C3.44772 11 3 10.5523 3 10C3 9.44771 3.44772 9 4 9L9 9V4C9 3.44772 9.44772 3 10 3Z" fill="#4A5568"/>
 							</svg>
 							Blocker
 						</span>
@@ -227,14 +227,15 @@ const NewPostForm = (props: NewPostFormProps) => {
 
 	const onSubmitAnnotation = (annotation: Annotation) => {
 		const commentsCopy = [...comments]
-		const newComment = {
+		const newComment: CommentType = {
 			postId: props.postId,
 			authorAvatarSrc: 'newsScreenshot.png',
-			text: annotation.data.text,
+			text: annotation.data.text !== null ? annotation.data.text : "",
 			id: uuid(),
 			date: 'now',
 			author: 'Cezbabs',
-			annotation: annotation
+			annotation: annotation,
+			subcomments: []
 		}
 		commentsCopy.push(newComment)
 		setComments(commentsCopy)

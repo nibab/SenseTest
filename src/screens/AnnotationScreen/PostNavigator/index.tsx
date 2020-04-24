@@ -81,7 +81,7 @@ export const PostNavigator = () => {
 				
 				<div className="flex flex-row h-full pl-3 pr-3 mx-2 font-medium cursor-pointer">
 					<div className='my-auto'>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-1 icon-add"><path className="primary" fill-rule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-1 icon-add"><path className="primary" fillRule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
 					</div>
 
 					<a className='w-full my-auto text-sm truncate'>

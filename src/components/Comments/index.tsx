@@ -19,10 +19,11 @@ const TEST_COMMENT: CommentType = {
 			type: 'type'
 		},
 		data: {
-			id: 1,
+			id: '1',
 			text: 'hello'
 		}
 	},
+	subcomments: [],
 	authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
 } 
 const TEST_RESPONSES: CommentType[] = [
@@ -33,12 +34,20 @@ const TEST_RESPONSES: CommentType[] = [
 		author: 'Cezar Babin', 
 		date:'now', 
 		annotation: {
+			geometry: {
+				x: 1,
+				y: 1,
+				height: 1,
+				width: 1,
+				type: 't'
+			},
 			data: {
 				text: 'hellp',
-				id: 1
+				id: '1'
 			}
 		},
-		authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+		authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+		subcomments: []
 	},
 	{
 		postId: '1',
@@ -47,12 +56,20 @@ const TEST_RESPONSES: CommentType[] = [
 		author: 'Cezar Babin', 
 		date:'now', 
 		annotation: {
+			geometry: {
+				x: 1,
+				y: 1,
+				height: 1,
+				width: 1,
+				type: 't'
+			},
 			data: {
 				text: 'hellp',
-				id: 1
+				id: '1'
 			}
 		},
-		authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+		authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+		subcomments: []
 	}
 ]
 const REPLY_BOX_PLACEHOLDER = 'Write comment or @mention'
@@ -239,7 +256,8 @@ const CommentGroup = (props: CommentGroupProps) => {
 			text: text,
 			author: 'Cezar Babin',
 			date: 'now',
-			authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+			authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+			subcomments: []
 		}
 		props.addSubComent(newResponse, props.comment)
 	}

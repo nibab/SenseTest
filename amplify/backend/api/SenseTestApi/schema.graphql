@@ -13,12 +13,50 @@ type Post @model(queries: {list: "listPosts"})
   text: String!
   createdAt: String
   updatedAt: String
+  status: PostStatus!
+  tags: [PostTag]!
+  attachments: [ID]
   comments: [Comment] @connection(name: "PostComments")
 }
+
+enum PostStatus {
+	OPEN
+	PENDING
+	RESOLVED
+}
+
+enum PostTag {
+	BLOCKER
+	DESIGN
+}
+
 type Comment @model(queries: {list: "listComments", get: "getComment"}) {
   id: ID!
-  content: String
-  post: Post @connection(name: "PostComments")
+  author: String!
+  authorAvatar: ID!
+  annotation: Annotation
+  content: String!
+  post: Post! @connection(name: "PostComments")
+  parentComment: ID
+  subComments: [Comment]
+}
+
+type Annotation {
+	geometry: Geometry!
+	data: AnnotationData!
+}
+
+type AnnotationData {
+	text: String!
+	id: ID!
+}
+
+type Geometry {
+	x: Float!
+	y: Float!
+	height: Float!
+	width: Float!
+	type: String!
 }
 
 type Query {

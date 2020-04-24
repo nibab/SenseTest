@@ -1,8 +1,8 @@
-import { CreatePostInput, CreatePostMutation, ModelPostFilterInput, ListPostsQuery } from "../API"
-import { Post } from "../types"
+import { CreatePostInput, CreatePostMutation, ModelPostFilterInput, ListPostsQuery, CreateCommentInput, CreateCommentMutation } from "../API"
+import { Post, Comment, Annotation } from "../types"
 import {AssetStorageClient} from "./AssetStorageClient"
 import { API, graphqlOperation } from "aws-amplify"
-import { createPost } from "../graphql/mutations"
+import { createPost, createComment } from "../graphql/mutations"
 import Log from "../utils/Log"
 import { listPosts } from "../graphql/queries"
 import { useDispatch } from "react-redux"
@@ -36,6 +36,44 @@ export class DataLayerClient {
 			}).catch(() => {
 				
 			})
+		})
+	}
+
+	static createCommentForPost = (post: Post, createCommentInput: CreateCommentInput): Promise<Comment> => {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const createNewCommentResult = (await API.graphql(graphqlOperation(createComment, {input: createCommentInput}))) as { data: CreateCommentMutation }
+				const newComment = createNewCommentResult.data.createComment!
+
+				const getAnnotation = (comment: typeof newComment) => {
+					let geometry = comment.annotation?.geometry
+					let data = comment.annotation?.data
+					
+					if (geometry !== null && data !== null) {
+						return {
+							geometry: geometry,
+							data: data
+						}
+					} else {
+						Log.info("No annotation discovered for comment during comment creation.")
+					}
+				} 
+
+				// Create post that can be displayed in the app.
+				const _newComment: Comment = {
+					postId: newComment.post!.id,
+					id: newComment.id,
+					author: newComment.author!,
+					authorAvatarSrc: newComment.authorAvatar!,
+					date: 'now',
+					text: newComment.content === null ? '' : newComment.content,
+					subcomments: []// newComment.subComments
+				}
+				Log.info("Succeeded in creating post.", "AppetizeScreen")
+				resolve(_newComment)
+			} catch (err) {
+				console.log("There has been an error in createNewAnnotationPost")
+			}
 		})
 	}
 }

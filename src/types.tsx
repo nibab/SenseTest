@@ -1,5 +1,8 @@
 import { PostImgDownload } from './utils/PostImgDownload'
 
+export type PostStatus = 'OPEN' | 'PENDING' | 'RESOLVED'
+export type PostTag = 'BLOCKER' | 'DESIGN'
+
 export type Post = {
   id: string,
   title: string,
@@ -8,8 +11,8 @@ export type Post = {
   text: string,
   dateCreated: string | null,
   comments?: Comment[]
-  tags?: string[]
-  status?: boolean // this indicates whether the issue has been resolved or is still pending
+  tags?: PostTag[]
+  status?: PostStatus // this indicates whether the issue has been resolved or is still pending
   attachments?: string[] // A list of assetIds or Blobs.
 }
 
@@ -44,14 +47,14 @@ export type Geometry = {
 }
 
 export type Annotation = {
-	geometry?: Geometry,
+	geometry: Geometry,
 	selection?: {
 		showEditor: boolean,
 		mode: string
 	},
 	data: {
 		text: string,
-		id: number
+		id: string
 	}
 }
 
@@ -63,5 +66,5 @@ export type Comment = {
   date: string,
   annotation?: Annotation,
   text: string,
-  subcomments?: Comment[]
+  subcomments: Comment[]
 }

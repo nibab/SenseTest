@@ -1,0 +1,62 @@
+# Welcome!
+#
+# This is an in-browser tool for writing, validating, and testing GraphQL queries.
+#
+# An example query named "GetPost" might look like:
+#
+#     query GetPost {
+#       getPost(id: 2) {
+#         id
+#        title
+#        tags
+#        comments {
+#          items {
+#            id
+#            author
+#          }
+#          nextToken
+#        }
+#      }
+#    }
+##
+# An example mutation named "PutPost" might look like:
+
+#   mutation PutComment {
+#    createComment(input:{
+#      author: "1",
+#      commentPostId:2
+#    }) {
+#      id
+#      post {
+#        id
+#        title
+#      }
+#    }
+#  }
+
+
+     mutation PutPost {
+       createPost(input:{
+        id: 2, 
+        title:"tst",
+      	projectId: 1,
+        tags: [BLOCKER],
+        
+      	imageId: 2,
+      	text:"yo"}) {
+         id
+         title
+         tags
+         comments {
+           nextToken
+         }
+       }
+     }
+#
+# Keyboard shortcuts:
+#
+#  Prettify Query:  Ctrl+Shift+P (also removes comments)
+#       Run Query:  Ctrl+Enter   (or press the play button above)
+#   Auto Complete:  Ctrl+Space   (or just start typing)
+#
+

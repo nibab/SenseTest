@@ -3,13 +3,15 @@ import { useDispatch } from 'react-redux'
 import TextArea from 'antd/lib/input/TextArea'
 import { Input, Form } from 'antd'
 import { AnnotationScreenshot } from './Screenshot'
-import { CreatePostInput } from '../../API'
+import { CreatePostInput, PostStatus } from '../../API'
 import { DataLayerClient } from '../../clients/DataLayerClient'
 import { addPost } from '../../store/post/actions'
 import uuid, { v4 as uuidv4 } from "uuid"
 import CreatePostViewSimulator from '../../components/Simulator/CreatePostViewSimulator'
 import NewPostForm from '../../components/NewPostForm'
 import PostScreenshot from '../../components/PostScreenshot'
+import { Post } from '../../types'
+import { addComment } from '../../store/comment/actions'
 
 type CreatePostViewProps = {
     onPostCreated: () => void
@@ -75,11 +77,37 @@ const CreatePostView = () => {
             imageId: uuidv4(),
             projectId: '1',
             text: text,
-            title: title
+            title: title,
+            status: PostStatus.OPEN,
+            tags: []
         }
         const newPost = await DataLayerClient.createNewAnnotationPost(blob, createPostInput)
         // Save the post in the redux store so that the side grid is updated.
         dispatch(addPost(newPost))
+    }
+
+    const onCreatePostClicked = async (post: Post) => {
+        dispatch(addPost(post))
+        const newPost = await DataLayerClient.createNewAnnotationPost(new Blob(), {
+            id: post.id,
+            title: post.title,
+            imageId: uuidv4(),
+            projectId: post.projectId,
+            text: post.text,
+            status: PostStatus.OPEN,
+            tags: []            
+        })
+        debugger
+        post.comments?.forEach(async (comment) => {
+            await DataLayerClient.createCommentForPost(newPost, {
+                commentPostId: post.id,
+                content: comment.text,
+                author: comment.author,
+                authorAvatar: comment.authorAvatarSrc,
+                annotation: comment.annotation !== undefined ? comment.annotation : undefined
+            })
+        }) 
+        setCurrentMode('BROWSE')
     }
 
     const renderAppetizeScreen = () => {
@@ -263,7 +291,7 @@ const CreatePostView = () => {
                             postId={uuid()}
                             projectId={'1'}
                             imageToAnnotate={imageToAnnotate} 
-                            onCreatePostClicked={(post) => {dispatch(addPost(post)); setCurrentMode('BROWSE')}} 
+                            onCreatePostClicked={onCreatePostClicked} 
                             onCancel={() => {setCurrentMode('BROWSE')}} />}
                         {/* <PostScreenshot post={{
                             id: '1',
