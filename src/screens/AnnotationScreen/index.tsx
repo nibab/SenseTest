@@ -6,9 +6,9 @@ import { DataLayerClient } from "../../clients/DataLayerClient"
 import { useDispatch } from "react-redux"
 import PostView from "./PostView"
 import CreatePostView from "./CreatePostView"
-import { ModelPostFilterInput, ListPostsQuery, GetPostQuery } from "../../API"
+import { ModelPostFilterInput, ListPostsQuery, GetPostQuery, GetProjectQuery,ProjectPostsByTimeQuery } from "../../API"
 import { graphqlOperation, API } from "aws-amplify"
-import { listPosts, getPost } from "../../graphql/queries"
+import { listPosts, getPost, getProject , projectPostsByTime} from "../../graphql/queries"
 import { PostImgDownload } from "../../utils/PostImgDownload"
 import { addPost } from "../../store/post/actions"
 import Log from "../../utils/Log"
@@ -57,11 +57,12 @@ export const AnnotationScreen = ({ }) => {
             }
         }
         try {
-            const response = await API.graphql(graphqlOperation(listPosts, {filter: query})) as { data: ListPostsQuery }
-            if (response.data.listPosts !== null) {
-                const posts = response.data.listPosts.items
+            const response = await API.graphql(graphqlOperation(projectPostsByTime, {projectId: projectId})) as { data: ProjectPostsByTimeQuery }
+            if (response.data.projectPostsByTime?.items !== null) {
+                const posts = response.data.projectPostsByTime?.items
                 posts?.forEach(async (post) => {
                     if (post !== null) {
+                        debugger
                         const postImgDownload = new PostImgDownload(post, (blob) => {})
                         const newPost = await postImgDownload.imagePromise
                         dispatch(addPost(newPost))

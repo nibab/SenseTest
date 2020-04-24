@@ -482,3 +482,65 @@ export const listComments = /* GraphQL */ `
     }
   }
 `;
+export const projectPostsByTime = /* GraphQL */ `
+  query ProjectPostsByTime(
+    $projectId: ID
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPostFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    projectPostsByTime(
+      projectId: $projectId
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        title
+        imageId
+        projectId
+        text
+        createdAt
+        updatedAt
+        status
+        tags
+        attachments
+        comments {
+          items {
+            id
+            author
+            authorAvatar
+            content
+            post {
+              id
+              title
+              imageId
+              projectId
+              text
+              createdAt
+              updatedAt
+              status
+              tags
+              attachments
+            }
+            parentComment
+            subComments {
+              id
+              author
+              authorAvatar
+              content
+              parentComment
+            }
+          }
+          nextToken
+        }
+      }
+      nextToken
+    }
+  }
+`;

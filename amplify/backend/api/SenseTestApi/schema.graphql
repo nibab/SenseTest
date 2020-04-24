@@ -5,7 +5,7 @@ type Project @model(queries: null, mutations: null) {
 }
 type Post @model(queries: {list: "listPosts"})  
   @key(name: "byProject", fields:["projectId", "title"])
-  @key(name: "byProjectAndTime", fields:["projectId", "createdAt"])  
+  @key(name: "byProjectAndTime", fields:["projectId", "createdAt"], queryField:"projectPostsByTime")  
   {
   id: ID!
   title: String!

@@ -227,6 +227,22 @@ export type ModelCommentFilterInput = {
   not?: ModelCommentFilterInput | null,
 };
 
+export type ModelStringKeyConditionInput = {
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
 export type CreateProjectMutationVariables = {
   input: CreateProjectInput,
   condition?: ModelProjectConditionInput | null,
@@ -1701,6 +1717,68 @@ export type ListCommentsQuery = {
           } | null > | null,
         } | null > | null,
       } | null > | null,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
+};
+
+export type ProjectPostsByTimeQueryVariables = {
+  projectId?: string | null,
+  createdAt?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPostFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ProjectPostsByTimeQuery = {
+  projectPostsByTime:  {
+    __typename: "ModelPostConnection",
+    items:  Array< {
+      __typename: "Post",
+      id: string,
+      title: string,
+      imageId: string,
+      projectId: string,
+      text: string,
+      createdAt: string | null,
+      updatedAt: string | null,
+      status: PostStatus,
+      tags: Array< PostTag | null >,
+      attachments: Array< string | null > | null,
+      comments:  {
+        __typename: "ModelCommentConnection",
+        items:  Array< {
+          __typename: "Comment",
+          id: string,
+          author: string,
+          authorAvatar: string,
+          content: string,
+          post:  {
+            __typename: "Post",
+            id: string,
+            title: string,
+            imageId: string,
+            projectId: string,
+            text: string,
+            createdAt: string | null,
+            updatedAt: string | null,
+            status: PostStatus,
+            tags: Array< PostTag | null >,
+            attachments: Array< string | null > | null,
+          },
+          parentComment: string | null,
+          subComments:  Array< {
+            __typename: "Comment",
+            id: string,
+            author: string,
+            authorAvatar: string,
+            content: string,
+            parentComment: string | null,
+          } | null > | null,
+        } | null > | null,
+        nextToken: string | null,
+      } | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
