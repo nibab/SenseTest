@@ -8,6 +8,9 @@ export type Post = {
   text: string,
   dateCreated: string | null,
   comments?: Comment[]
+  tags?: string[]
+  status?: boolean // this indicates whether the issue has been resolved or is still pending
+  attachments?: string[] // A list of assetIds or Blobs.
 }
 
 // This is basically the raw type that we get from AppSync.
