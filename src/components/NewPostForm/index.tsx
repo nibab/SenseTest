@@ -3,11 +3,21 @@ import React, { useState } from 'react'
 import uuid from 'uuid'
 import AnnotationScreen from '../AnnotationScreen'
 import { CommentsSection } from '../Comments'
-import { Comment as CommentType, Annotation } from '../../types'
+import { Comment as CommentType, Annotation, Post } from '../../types'
+import { useDispatch } from 'react-redux'
+import { addComment, addsubComment } from '../../store/comment/actions'
 
-const NewPostForm = () => {
+type NewPostFormProps = {
+	imageToAnnotate: string
+	postId: string
+	onCreatePostClicked: (post: Post) => void
+	onCancel: () => void
+}
+
+const NewPostForm = (props: NewPostFormProps) => {
 	const [comments, setComments] = useState<CommentType[]>([])
 	const [annotations, setAnnotations] = useState<Annotation[]>([])
+	const dispatch = useDispatch()
 
 	const renderForm = () => {
 		return (
@@ -106,6 +116,10 @@ const NewPostForm = () => {
 	}
 
 	const renderComments = () => {
+		const _addsubComment = (childComment: CommentType, parentComment: CommentType) => {
+			dispatch(addsubComment(parentComment, childComment))
+		}
+
 		if (comments.length > 0) {
 			return (
 				<div className='flex flex-col rounded-lg' >
@@ -113,25 +127,56 @@ const NewPostForm = () => {
 						<div className='mx-auto flex flex-row p-0.5'></div>
 					</div>
 					<div className='relative flex flex-col w-auto p-2 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: '583px'}}>
-						<CommentsSection comments={comments} addSubComent={() => {}} displayNewCommentBox={false} />
+						<CommentsSection comments={comments} addSubComent={_addsubComment} displayNewCommentBox={false} />
 					</div>
 				</div>
 			)
 		}		
 	}
 
+	const onCancelButtonClick = () => {
+		props.onCancel()
+	}
+
+	const onCreateButtonClick = () => {
+		props.onCreatePostClicked({
+			id: props.postId,
+			title: 'Test',
+			dateCreated: 'now',
+			image: b64toBlob(props.imageToAnnotate),
+			projectId: '1',
+			text: 'text',
+			comments: comments
+		})
+	}
+
+	function b64toBlob(dataURI: string) {
+
+		var byteString = atob(dataURI.split(',')[1]);
+		var ab = new ArrayBuffer(byteString.length);
+		var ia = new Uint8Array(ab);
+	
+		for (var i = 0; i < byteString.length; i++) {
+			ia[i] = byteString.charCodeAt(i);
+		}
+		return new Blob([ab], { type: 'image/jpeg' });
+	}
+
+
 	const onSubmitAnnotation = (annotation: Annotation) => {
 		const commentsCopy = [...comments]
-		commentsCopy.push({
-			postId: '1',
+		const newComment = {
+			postId: props.postId,
 			authorAvatarSrc: 'newsScreenshot.png',
 			text: annotation.data.text,
-			id: '12',
+			id: uuid(),
 			date: 'now',
 			author: 'Cezbabs',
 			annotation: annotation
-		})
+		}
+		commentsCopy.push(newComment)
 		setComments(commentsCopy)
+		dispatch(addComment(newComment))
 
 		const annotationsCopy = [...annotations]
 		annotationsCopy.push(annotation)
@@ -163,7 +208,7 @@ const NewPostForm = () => {
 							annotations={annotations} 
 							onSubmit={onSubmitAnnotation} 
 							key={uuid()} 
-							imageSrc={'newsScreenshot.png'} 
+							imageSrc={props.imageToAnnotate} 
 						/>
 					</div>
 					{ renderComments() }
@@ -172,12 +217,12 @@ const NewPostForm = () => {
 			<div className="p-5 border-t border-gray-200">
 				<div className="flex justify-end">
 					<span className="inline-flex rounded-md shadow-sm">
-					<button type="button" className="px-4 py-2 text-sm font-medium leading-5 text-gray-700 transition duration-150 ease-in-out border border-gray-300 rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800">
+					<button onClick={onCancelButtonClick} type="button" className="px-4 py-2 text-sm font-medium leading-5 text-gray-700 transition duration-150 ease-in-out border border-gray-300 rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800">
 						Cancel
 					</button>
 					</span>
 					<span className="inline-flex ml-3 rounded-md shadow-sm">
-					<button type="submit" className="inline-flex justify-center px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700">
+					<button onClick={onCreateButtonClick} type="submit" className="inline-flex justify-center px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700">
 						Create
 					</button>
 					</span>

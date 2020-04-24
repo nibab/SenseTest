@@ -6,7 +6,8 @@ export type Post = {
   image: Blob | PostImgDownload,
   projectId: string,
   text: string,
-  dateCreated: string | null
+  dateCreated: string | null,
+  comments?: Comment[]
 }
 
 // This is basically the raw type that we get from AppSync.

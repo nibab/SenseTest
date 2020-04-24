@@ -6,7 +6,7 @@ import { AnnotationScreenshot } from './Screenshot'
 import { CreatePostInput } from '../../API'
 import { DataLayerClient } from '../../clients/DataLayerClient'
 import { addPost } from '../../store/post/actions'
-import { v4 as uuidv4 } from "uuid"
+import uuid, { v4 as uuidv4 } from "uuid"
 import CreatePostViewSimulator from '../../components/Simulator/CreatePostViewSimulator'
 import NewPostForm from '../../components/NewPostForm'
 import PostScreenshot from '../../components/PostScreenshot'
@@ -15,11 +15,15 @@ type CreatePostViewProps = {
     onPostCreated: () => void
 }
 
+type Mode = 'CREATE_ISSUE' | 'BROWSE'
+
 const CreatePostView = () => {
     const iframeRef = useRef<HTMLIFrameElement>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null)
-    
+
+    const [currentMode, setCurrentMode] = useState<Mode>('BROWSE')
     const [imageToAnnotate, setImageToAnnotate] = useState<string>('newsScreenshot.png')
+    
     const dispatch = useDispatch()
 
     // Form
@@ -193,8 +197,7 @@ const CreatePostView = () => {
 				</div>
 			</div>
 		)
-	}
-
+    }
 
     return (
         <div className='flex flex-row flex-auto h-full'>
@@ -206,8 +209,12 @@ const CreatePostView = () => {
 						{ renderPostToolBar() }
 					</div>
                     <div className='flex flex-row w-full pt-1 pb-1 pl-2 pr-2 mx-auto overflow-scroll'> 
-                        {/* <CreatePostViewSimulator onScreenshot={(img) => {}}/> */}
-                        <NewPostForm></NewPostForm>
+                        { currentMode === 'BROWSE' && <CreatePostViewSimulator onScreenshot={(img) => {setImageToAnnotate(img); setCurrentMode('CREATE_ISSUE')}}/> }
+                        { currentMode === 'CREATE_ISSUE' && <NewPostForm 
+                            postId={uuid()}
+                            imageToAnnotate={imageToAnnotate} 
+                            onCreatePostClicked={(post) => {dispatch(addPost(post)); setCurrentMode('BROWSE')}} 
+                            onCancel={() => {setCurrentMode('BROWSE')}} />}
                         {/* <PostScreenshot post={{
                             id: '1',
                             .image: window.URL.createObjectURL('newsScreenshot.png'),
