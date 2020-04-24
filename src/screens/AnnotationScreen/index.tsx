@@ -62,9 +62,19 @@ export const AnnotationScreen = ({ }) => {
                 const posts = response.data.projectPostsByTime?.items
                 posts?.forEach(async (post) => {
                     if (post !== null) {
-                        debugger
                         const postImgDownload = new PostImgDownload(post, (blob) => {})
-                        const newPost = await postImgDownload.imagePromise
+                        postImgDownload.imagePromise.then((post) => {
+                            dispatch(addPost(post))
+                        })
+                        const newPost = {
+                            id: post.id,
+                            image: postImgDownload,
+                            projectId: post.projectId,
+                            text: post.text,
+                            title: post.title,
+                            dateCreated: post.createdAt
+                        }
+                        //const newPost = await postImgDownload.imagePromise
                         dispatch(addPost(newPost))
                         getAllCommentsForPost(post.id)
                     }

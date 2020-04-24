@@ -9,6 +9,7 @@ import { addComment, addsubComment } from '../../store/comment/actions'
 import uuid from 'uuid'
 import { CommentsSection } from '../Comments'
 import AnnotationScreen from '../AnnotationScreen'
+import { PostImgDownload } from '../../utils/PostImgDownload'
 
 
 type PostScreenshotProps = {
@@ -106,6 +107,18 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 			dispatch(addComment(newComment))
 		}
 
+		const getImage = (): Blob => {
+			
+			if (isPostImgDownload(post?.image)) {
+				// Show loading screen
+				return new Blob()
+			} else {
+				return post!.image
+			}
+		
+			
+		}
+
 		if (post!== undefined) {
 			return (
 				<AnnotationScreen 
@@ -133,5 +146,9 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 		</div>
 	)
 }
+
+function isPostImgDownload(object: any): object is PostImgDownload{
+	return object.callback !== undefined && object.completed !== undefined && object.imagePromise !== undefined
+  }
 
 export default PostScreenshot
