@@ -212,6 +212,7 @@ const CreatePostView = () => {
                         { currentMode === 'BROWSE' && <CreatePostViewSimulator onScreenshot={(img) => {setImageToAnnotate(img); setCurrentMode('CREATE_ISSUE')}}/> }
                         { currentMode === 'CREATE_ISSUE' && <NewPostForm 
                             postId={uuid()}
+                            projectId={'1'}
                             imageToAnnotate={imageToAnnotate} 
                             onCreatePostClicked={(post) => {dispatch(addPost(post)); setCurrentMode('BROWSE')}} 
                             onCancel={() => {setCurrentMode('BROWSE')}} />}

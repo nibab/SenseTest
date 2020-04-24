@@ -10,6 +10,7 @@ import { addComment, addsubComment } from '../../store/comment/actions'
 type NewPostFormProps = {
 	imageToAnnotate: string
 	postId: string
+	projectId: string
 	onCreatePostClicked: (post: Post) => void
 	onCancel: () => void
 }
@@ -170,16 +171,17 @@ const NewPostForm = (props: NewPostFormProps) => {
 	}
 
 	const onCreateButtonClick = () => {
-		if (pageNameRef.current?.value.length === 0) {
+		const pageName = pageNameRef.current?.value
+		if (pageName?.length === 0) {
 			setValidationState('PageNameFailedValidation')
 			return
 		}
 		props.onCreatePostClicked({
 			id: props.postId,
-			title: 'Test',
+			title: pageName!,
 			dateCreated: 'now',
 			image: new Blob(),//b64toBlob(props.imageToAnnotate),
-			projectId: '1',
+			projectId: props.projectId,
 			text: 'text',
 			comments: comments
 		})
