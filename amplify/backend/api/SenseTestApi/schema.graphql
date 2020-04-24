@@ -4,15 +4,16 @@ type Project @model(queries: null, mutations: null) {
   posts: [Post] @connection(keyName: "byProject", fields: ["id"])
 }
 type Post @model(queries: {list: "listPosts"})  
-  @key(name: "byProject", fields:["projectId", "title"]) 
+  @key(name: "byProject", fields:["projectId", "title"])
+  @key(name: "byProjectAndTime", fields:["projectId", "createdAt"])  
   {
   id: ID!
   title: String!
   imageId: ID!
   projectId: ID!
   text: String!
-  createdAt: String
-  updatedAt: String
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
   status: PostStatus!
   tags: [PostTag]!
   attachments: [ID]
