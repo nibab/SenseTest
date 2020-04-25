@@ -10,7 +10,7 @@ import { ModelPostFilterInput, ListPostsQuery, GetPostQuery, GetProjectQuery,Pro
 import { graphqlOperation, API } from "aws-amplify"
 import { listPosts, getPost, getProject , projectPostsByTime} from "../../graphql/queries"
 import { PostImgDownload } from "../../utils/PostImgDownload"
-import { addPost } from "../../store/post/actions"
+import { addPost, updateImageForPost } from "../../store/post/actions"
 import Log from "../../utils/Log"
 import PostFooterBar from "./PostsFooterBar.tsx"
 import { ReleaseStatusBar } from "./ReleaseStatusBar"
@@ -63,10 +63,7 @@ export const AnnotationScreen = ({ }) => {
                 posts?.forEach(async (post) => {
                     if (post !== null) {
                         const postImgDownload = new PostImgDownload(post, (blob) => {})
-                        postImgDownload.imagePromise.then((post) => {
-                            dispatch(addPost(post))
-                            Log.info("Downloaded post with title " + post.title)
-                        })
+                        
                         const newPost = {
                             id: post.id,
                             image: postImgDownload,
@@ -76,6 +73,10 @@ export const AnnotationScreen = ({ }) => {
                             dateCreated: post.createdAt,
                             tags: post.tags.filter((tag) => tag !== null).map((tag) => postTagGraphQLToLocalType(tag!) )
                         }
+                        postImgDownload.imagePromise.then((post) => {
+                            dispatch(updateImageForPost(newPost, post.image as Blob))
+                            Log.info("Downloaded post with title " + post.title)
+                        })
                         //const newPost = await postImgDownload.imagePromise
                         dispatch(addPost(newPost))
                         getAllCommentsForPost(post.id)
