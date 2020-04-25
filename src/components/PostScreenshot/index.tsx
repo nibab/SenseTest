@@ -123,14 +123,24 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 		}
 
 		if (post !== undefined) {
-			return (
-				<AnnotationScreen 
-					annotations={getAnnotations()} 
-					onSubmit={onSubmitAnnotation} 
-					key={post.id} 
-					imageSrc={window.URL.createObjectURL(getImage())} 
-				/>
-			)
+			const img = postsSelector.image
+			if (isPostImgDownload(img)) {
+				return (
+					<div className='relative flex flex-shrink-0 object-contain w-full bg-gray-300 rounded-lg rounded-r-none' style={{height: '583px', width: '281px'}}>
+						<div className='z-30 mx-auto my-auto bg-white spinner' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
+						</div>
+					</div>
+				)
+			} else {
+				return (
+					<AnnotationScreen 
+						annotations={getAnnotations()} 
+						onSubmit={onSubmitAnnotation} 
+						key={post.id} 
+						imageSrc={window.URL.createObjectURL(getImage())} 
+					/>
+				)
+			}			
 		} else {
 			return (<></>)
 		}
