@@ -72,7 +72,7 @@ export const AnnotationScreen = ({ }) => {
             }
         }
         try {
-            const response = await API.graphql(graphqlOperation(projectPostsByTime, {projectId: projectId})) as { data: ProjectPostsByTimeQuery }
+            const response = await API.graphql(graphqlOperation(projectPostsByTime, {projectId: projectId, limit: 100})) as { data: ProjectPostsByTimeQuery }
             if (response.data.projectPostsByTime?.items !== null) {
                 const posts = response.data.projectPostsByTime?.items
                 posts?.forEach(async (post) => {
