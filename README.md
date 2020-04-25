@@ -6,6 +6,10 @@
 
 To re-build the css after changing tailwindcss configs, run `npm run build:css`
 
+## Behaviors
+1. On the annotation path (`/annotation`) we have the AnnotationScreen. This compoent makes a call to get all posts for the project and stores them in a Redux store. Each post has an image associated with it, which can make the download of each post a bit slow. To fix that, the Redux store is populated with objects that have a PostImgDownload object instead of an image. The PostImgDownload object is a promise, that upon resolving, updates the object that contains it with the image that was downloaded.
+2. When creating a new post from a screenshot, the screenshot image is being uploaded while the post form is being filled out. Right before presenting the NewPostForm, we create an image promise for the upload. The image promise is being awaited on in the form. This gets rid of some latency that I was experiencing when creating a new post (due to the image upload). Image upload is effectively 'parallel' to the form filling.
+
 ## Auto-genned README.md:
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
