@@ -38,8 +38,22 @@ type Comment @model(queries: {list: "listComments", get: "getComment"}) {
   annotation: Annotation
   content: String!
   post: Post! @connection(name: "PostComments")
-  parentComment: ID
-  subComments: [Comment]
+  subComments: [SubComment] @connection(name: "SubComments")
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+type SubComment @model
+ @key(name: "byTime", fields:["postId", "createdAt"], queryField:"subCommentByTime")  
+ {
+	id: ID!
+  postId: ID!
+	author: String!
+	authorAvatar: ID!
+	content: String!
+	parentComment: Comment! @connection(name: "SubComments")
+	createdAt: AWSDateTime
+  updatedAt: AWSDateTime
 }
 
 type Annotation {

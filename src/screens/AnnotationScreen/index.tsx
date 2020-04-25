@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Post, Comment, postTagGraphQLToLocalType } from "../../types"
+import { Post, Comment, postTagGraphQLToLocalType, SubComment } from "../../types"
 import { Loading } from "aws-amplify-react"
 import { useSelector } from "../../store"
 import { DataLayerClient } from "../../clients/DataLayerClient"
@@ -34,6 +34,21 @@ export const AnnotationScreen = ({ }) => {
         if (comments !== null && comments !== undefined) {
             if (comments.items !== null) {
                 comments.items.forEach((comment) => {
+
+                    const _subComments = comment?.subComments !== null ? comment?.subComments.items : [] 
+                    let subComments: SubComment[] = []
+
+                    _subComments?.forEach((subComment) => {
+                        if (subComment !== null) subComments.push({
+                            id: subComment.id,
+                            author: subComment.author,
+                            authorAvatarSrc: subComment.authorAvatar,
+                            date: subComment.createdAt !== null ? subComment.createdAt : '',
+                            text: subComment.content,
+                            parentCommentId: comment!.id
+                        })
+                    })
+                    
                     const newComment: Comment = {
                         postId: postId,
                         text: comment!.content,
@@ -42,7 +57,7 @@ export const AnnotationScreen = ({ }) => {
                         authorAvatarSrc: comment!.authorAvatar,
                         date: 'now',
                         annotation: comment?.annotation !== null ? comment?.annotation : undefined,
-                        subcomments: [] // comment?.subComments !== undefined && comment?.subComments !== null ? comment.subComments : []
+                        subcomments: subComments !== null && subComments !== undefined ?  subComments : []
                     }
                     dispatch(addComment(newComment))
                 })

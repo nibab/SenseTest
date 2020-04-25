@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Post, Annotation } from '../../types'
+import { Post, Annotation, SubComment } from '../../types'
 import { useSelector } from '../../store'
 import { Comment as CommentType } from '../../types'
 
@@ -62,8 +62,9 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 
 	const renderComments = () => {
 
-		const _addsubComment = (childComment: CommentType, parentComment: CommentType) => {
+		const _addsubComment = (childComment: SubComment, parentComment: CommentType) => {
 			dispatch(addsubComment(parentComment, childComment))
+			DataLayerClient.addSubCommentToComment(childComment, parentComment)
 		}
 
 		if (commentsSelector !== undefined && commentsSelector.length > 0) {

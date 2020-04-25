@@ -1,4 +1,4 @@
-import { Comment } from "../../../types"
+import { Comment, SubComment } from "../../../types"
 
 export const ADD_COMMENT = "ADD_COMMENT"
 export const ADD_SUBCOMMENT = "ADD_SUBCOMMENT"
@@ -16,8 +16,8 @@ interface AddCommentAction {
 interface AddSubCommentAction {
     type: typeof ADD_SUBCOMMENT
     payload: {
-        parentComment: Comment,
-        childComment: Comment
+      parentComment: Comment,
+      childComment: SubComment
     }
 }
 
@@ -30,7 +30,7 @@ export function addComment(newComment: Comment): CommentActionTypes {
   }
 }
 
-export function addsubComment(parentComment: Comment, childComment: Comment): CommentActionTypes {
+export function addsubComment(parentComment: Comment, childComment: SubComment): CommentActionTypes {
     return {
       type: ADD_SUBCOMMENT,
       payload: {

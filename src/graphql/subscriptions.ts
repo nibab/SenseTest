@@ -49,33 +49,20 @@ export const onCreatePost = /* GraphQL */ `
               nextToken
             }
           }
-          parentComment
           subComments {
-            id
-            author
-            authorAvatar
-            content
-            post {
+            items {
               id
-              title
-              imageId
-              projectId
-              text
-              createdAt
-              updatedAt
-              status
-              tags
-              attachments
-            }
-            parentComment
-            subComments {
-              id
+              postId
               author
               authorAvatar
               content
-              parentComment
+              createdAt
+              updatedAt
             }
+            nextToken
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -129,33 +116,20 @@ export const onUpdatePost = /* GraphQL */ `
               nextToken
             }
           }
-          parentComment
           subComments {
-            id
-            author
-            authorAvatar
-            content
-            post {
+            items {
               id
-              title
-              imageId
-              projectId
-              text
-              createdAt
-              updatedAt
-              status
-              tags
-              attachments
-            }
-            parentComment
-            subComments {
-              id
+              postId
               author
               authorAvatar
               content
-              parentComment
+              createdAt
+              updatedAt
             }
+            nextToken
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -209,33 +183,20 @@ export const onDeletePost = /* GraphQL */ `
               nextToken
             }
           }
-          parentComment
           subComments {
-            id
-            author
-            authorAvatar
-            content
-            post {
+            items {
               id
-              title
-              imageId
-              projectId
-              text
-              createdAt
-              updatedAt
-              status
-              tags
-              attachments
-            }
-            parentComment
-            subComments {
-              id
+              postId
               author
               authorAvatar
               content
-              parentComment
+              createdAt
+              updatedAt
             }
+            nextToken
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -291,95 +252,23 @@ export const onCreateComment = /* GraphQL */ `
               tags
               attachments
             }
-            parentComment
             subComments {
-              id
-              author
-              authorAvatar
-              content
-              parentComment
+              nextToken
             }
+            createdAt
+            updatedAt
           }
           nextToken
         }
       }
-      parentComment
       subComments {
-        id
-        author
-        authorAvatar
-        annotation {
-          geometry {
-            x
-            y
-            height
-            width
-            type
-          }
-          data {
-            text
-            id
-          }
-        }
-        content
-        post {
+        items {
           id
-          title
-          imageId
-          projectId
-          text
-          createdAt
-          updatedAt
-          status
-          tags
-          attachments
-          comments {
-            items {
-              id
-              author
-              authorAvatar
-              content
-              parentComment
-            }
-            nextToken
-          }
-        }
-        parentComment
-        subComments {
-          id
+          postId
           author
           authorAvatar
-          annotation {
-            geometry {
-              x
-              y
-              height
-              width
-              type
-            }
-            data {
-              text
-              id
-            }
-          }
           content
-          post {
-            id
-            title
-            imageId
-            projectId
-            text
-            createdAt
-            updatedAt
-            status
-            tags
-            attachments
-            comments {
-              nextToken
-            }
-          }
-          parentComment
-          subComments {
+          parentComment {
             id
             author
             authorAvatar
@@ -396,17 +285,19 @@ export const onCreateComment = /* GraphQL */ `
               tags
               attachments
             }
-            parentComment
             subComments {
-              id
-              author
-              authorAvatar
-              content
-              parentComment
+              nextToken
             }
+            createdAt
+            updatedAt
           }
+          createdAt
+          updatedAt
         }
+        nextToken
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -459,95 +350,23 @@ export const onUpdateComment = /* GraphQL */ `
               tags
               attachments
             }
-            parentComment
             subComments {
-              id
-              author
-              authorAvatar
-              content
-              parentComment
+              nextToken
             }
+            createdAt
+            updatedAt
           }
           nextToken
         }
       }
-      parentComment
       subComments {
-        id
-        author
-        authorAvatar
-        annotation {
-          geometry {
-            x
-            y
-            height
-            width
-            type
-          }
-          data {
-            text
-            id
-          }
-        }
-        content
-        post {
+        items {
           id
-          title
-          imageId
-          projectId
-          text
-          createdAt
-          updatedAt
-          status
-          tags
-          attachments
-          comments {
-            items {
-              id
-              author
-              authorAvatar
-              content
-              parentComment
-            }
-            nextToken
-          }
-        }
-        parentComment
-        subComments {
-          id
+          postId
           author
           authorAvatar
-          annotation {
-            geometry {
-              x
-              y
-              height
-              width
-              type
-            }
-            data {
-              text
-              id
-            }
-          }
           content
-          post {
-            id
-            title
-            imageId
-            projectId
-            text
-            createdAt
-            updatedAt
-            status
-            tags
-            attachments
-            comments {
-              nextToken
-            }
-          }
-          parentComment
-          subComments {
+          parentComment {
             id
             author
             authorAvatar
@@ -564,17 +383,19 @@ export const onUpdateComment = /* GraphQL */ `
               tags
               attachments
             }
-            parentComment
             subComments {
-              id
-              author
-              authorAvatar
-              content
-              parentComment
+              nextToken
             }
+            createdAt
+            updatedAt
           }
+          createdAt
+          updatedAt
         }
+        nextToken
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -627,20 +448,64 @@ export const onDeleteComment = /* GraphQL */ `
               tags
               attachments
             }
-            parentComment
             subComments {
-              id
-              author
-              authorAvatar
-              content
-              parentComment
+              nextToken
             }
+            createdAt
+            updatedAt
           }
           nextToken
         }
       }
-      parentComment
       subComments {
+        items {
+          id
+          postId
+          author
+          authorAvatar
+          content
+          parentComment {
+            id
+            author
+            authorAvatar
+            content
+            post {
+              id
+              title
+              imageId
+              projectId
+              text
+              createdAt
+              updatedAt
+              status
+              tags
+              attachments
+            }
+            subComments {
+              nextToken
+            }
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateSubComment = /* GraphQL */ `
+  subscription OnCreateSubComment {
+    onCreateSubComment {
+      id
+      postId
+      author
+      authorAvatar
+      content
+      parentComment {
         id
         author
         authorAvatar
@@ -675,74 +540,191 @@ export const onDeleteComment = /* GraphQL */ `
               author
               authorAvatar
               content
-              parentComment
+              createdAt
+              updatedAt
             }
             nextToken
           }
         }
-        parentComment
         subComments {
-          id
-          author
-          authorAvatar
-          annotation {
-            geometry {
-              x
-              y
-              height
-              width
-              type
-            }
-            data {
-              text
-              id
-            }
-          }
-          content
-          post {
+          items {
             id
-            title
-            imageId
-            projectId
-            text
-            createdAt
-            updatedAt
-            status
-            tags
-            attachments
-            comments {
-              nextToken
-            }
-          }
-          parentComment
-          subComments {
-            id
+            postId
             author
             authorAvatar
             content
-            post {
-              id
-              title
-              imageId
-              projectId
-              text
-              createdAt
-              updatedAt
-              status
-              tags
-              attachments
-            }
-            parentComment
-            subComments {
+            parentComment {
               id
               author
               authorAvatar
               content
-              parentComment
+              createdAt
+              updatedAt
             }
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateSubComment = /* GraphQL */ `
+  subscription OnUpdateSubComment {
+    onUpdateSubComment {
+      id
+      postId
+      author
+      authorAvatar
+      content
+      parentComment {
+        id
+        author
+        authorAvatar
+        annotation {
+          geometry {
+            x
+            y
+            height
+            width
+            type
+          }
+          data {
+            text
+            id
           }
         }
+        content
+        post {
+          id
+          title
+          imageId
+          projectId
+          text
+          createdAt
+          updatedAt
+          status
+          tags
+          attachments
+          comments {
+            items {
+              id
+              author
+              authorAvatar
+              content
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+        }
+        subComments {
+          items {
+            id
+            postId
+            author
+            authorAvatar
+            content
+            parentComment {
+              id
+              author
+              authorAvatar
+              content
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteSubComment = /* GraphQL */ `
+  subscription OnDeleteSubComment {
+    onDeleteSubComment {
+      id
+      postId
+      author
+      authorAvatar
+      content
+      parentComment {
+        id
+        author
+        authorAvatar
+        annotation {
+          geometry {
+            x
+            y
+            height
+            width
+            type
+          }
+          data {
+            text
+            id
+          }
+        }
+        content
+        post {
+          id
+          title
+          imageId
+          projectId
+          text
+          createdAt
+          updatedAt
+          status
+          tags
+          attachments
+          comments {
+            items {
+              id
+              author
+              authorAvatar
+              content
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+        }
+        subComments {
+          items {
+            id
+            postId
+            author
+            authorAvatar
+            content
+            parentComment {
+              id
+              author
+              authorAvatar
+              content
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
     }
   }
 `;

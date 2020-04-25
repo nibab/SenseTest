@@ -85,5 +85,14 @@ export type Comment = {
   date: string,
   annotation?: Annotation,
   text: string,
-  subcomments: Comment[]
+  subcomments: SubComment[] 
+}
+
+export type SubComment = {
+  id: string,
+  author: string,
+  authorAvatarSrc: string,
+  date: string,
+  text: string,
+  parentCommentId: string
 }

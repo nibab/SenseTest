@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
-import { Comment as CommentType, Post } from '../../types'
+import { Comment as CommentType, Post, SubComment } from '../../types'
 import { v4 as uuidv4 } from 'uuid'
 
 
@@ -77,7 +77,7 @@ const REPLY_BOX_PLACEHOLDER = 'Write comment or @mention'
 type CommentsSectionProps = {
 	displayNewCommentBox: boolean
 	comments: CommentType[]
-	addSubComent: (childComment: CommentType, parentComment: CommentType) => void
+	addSubComent: (childComment: SubComment, parentComment: CommentType) => void
 }
 
 export const CommentsSection = (props: CommentsSectionProps) => {
@@ -150,7 +150,7 @@ export const CommentsSection = (props: CommentsSectionProps) => {
 }
 
 type CommentProps = {
-	comment: CommentType
+	comment: CommentType | SubComment
 	onReply: (text: string) => void
 }
 
@@ -244,25 +244,24 @@ const Comment = ({comment, onReply}: CommentProps) => {
 type CommentGroupProps = {
 	
 	comment: CommentType
-	_responses: CommentType[]
-	addSubComent: (childComment: CommentType, parentComment: CommentType) => void
+	_responses: SubComment[]
+	addSubComent: (childComment: SubComment, parentComment: CommentType) => void
 }
 
 const CommentGroup = (props: CommentGroupProps) => {
 	const addResponse = (text: string) => {
-		let newResponse: CommentType = {
-			postId: props.comment.postId,
+		let newResponse: SubComment = {
 			id:  uuidv4(),
 			text: text,
 			author: 'Cezar Babin',
 			date: 'now',
 			authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-			subcomments: []
+			parentCommentId: props.comment.id
 		}
 		props.addSubComent(newResponse, props.comment)
 	}
 
-	const renderReponses = () => {
+	const renderSubComments = () => {
 		const items = []
 
 		const responses = props.comment.subcomments
@@ -323,7 +322,7 @@ const CommentGroup = (props: CommentGroupProps) => {
 					<Comment comment={props.comment} onReply={(text) => addResponse(text)} />											
 				</div>
 			</div>
-			{ renderReponses() }
+			{ renderSubComments() }
 		</div>
 	)
 }

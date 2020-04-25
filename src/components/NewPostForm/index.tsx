@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react'
 import uuid from 'uuid'
 import AnnotationScreen from '../AnnotationScreen'
 import { CommentsSection } from '../Comments'
-import { Comment as CommentType, Annotation, Post, PostTag } from '../../types'
+import { Comment as CommentType, Annotation, Post, PostTag, SubComment } from '../../types'
 import { useDispatch } from 'react-redux'
 import { addComment, addsubComment } from '../../store/comment/actions'
 
@@ -171,7 +171,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 	}
 
 	const renderComments = () => {
-		const _addsubComment = (childComment: CommentType, parentComment: CommentType) => {
+		const _addsubComment = (childComment: SubComment, parentComment: CommentType) => {
 			dispatch(addsubComment(parentComment, childComment))
 		}
 

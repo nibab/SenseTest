@@ -1,8 +1,8 @@
-import { CreatePostInput, CreatePostMutation, ModelPostFilterInput, ListPostsQuery, CreateCommentInput, CreateCommentMutation } from "../API"
-import { Post, Comment, Annotation } from "../types"
+import { CreatePostInput, CreatePostMutation, ModelPostFilterInput, ListPostsQuery, CreateCommentInput, CreateCommentMutation, CreateSubCommentInput, CreateSubCommentMutation } from "../API"
+import { Post, Comment, Annotation, SubComment } from "../types"
 import {AssetStorageClient} from "./AssetStorageClient"
 import { API, graphqlOperation } from "aws-amplify"
-import { createPost, createComment } from "../graphql/mutations"
+import { createPost, createComment, createSubComment } from "../graphql/mutations"
 import Log from "../utils/Log"
 import { listPosts } from "../graphql/queries"
 import { useDispatch } from "react-redux"
@@ -37,6 +37,18 @@ export class DataLayerClient {
 				
 			})
 		})
+	}
+
+	static addSubCommentToComment = async (childComment: SubComment, parentComment: Comment) => {
+		const createSubCommentInput: CreateSubCommentInput = {
+			postId: parentComment.postId,
+			author: childComment.author,
+			authorAvatar: childComment.authorAvatarSrc,
+			content: childComment.text,
+			subCommentParentCommentId: parentComment.id
+		}
+		const createNewSubComment = (await API.graphql(graphqlOperation(createSubComment, {input: createSubCommentInput}))) as { data: CreateSubCommentMutation}
+
 	}
 
 	static createCommentForPost = (post: Post, comment: Comment): Promise<Comment> => {
