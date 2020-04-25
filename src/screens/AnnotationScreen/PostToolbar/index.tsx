@@ -94,9 +94,12 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 					{ post.title }							
 				</div>
 				<div className='flex'>
-					<span className="ml-1 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
-						Blocker
-					</span>
+					{
+						post.tags?.includes('BLOCKER') && 
+						<span className="ml-1 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
+							Blocker
+						</span>
+					}
 				</div>	
 			</div>
 		)	

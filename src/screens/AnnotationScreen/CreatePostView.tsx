@@ -10,7 +10,7 @@ import uuid, { v4 as uuidv4 } from "uuid"
 import CreatePostViewSimulator from '../../components/Simulator/CreatePostViewSimulator'
 import NewPostForm from '../../components/NewPostForm'
 import PostScreenshot from '../../components/PostScreenshot'
-import { Post } from '../../types'
+import { Post, postTagToGraphQLType } from '../../types'
 import { addComment } from '../../store/comment/actions'
 
 type CreatePostViewProps = {
@@ -95,7 +95,7 @@ const CreatePostView = () => {
             projectId: post.projectId,
             text: post.text,
             status: PostStatus.OPEN,
-            tags: []            
+            tags: post.tags === undefined ? [] : post.tags.map(postTag => postTagToGraphQLType(postTag))         
         })
         post.comments?.forEach(async (comment) => {
             await DataLayerClient.createCommentForPost(newPost, {

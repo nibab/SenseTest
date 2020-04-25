@@ -25,7 +25,7 @@ const PostView = ({ post }: PostViewProps) => {
 				<div className="absolute bottom-0 z-40 w-full">
 					<div className='relative text-yellow-700 '>
 						<button onClick={() => setWarningVisible(false)} className='absolute right-0 z-50 mx-2 w-7 h-7 '>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto fill-current icon-close"><path className="" fill-rule="evenodd" d="M15.78 14.36a1 1 0 0 1-1.42 1.42l-2.82-2.83-2.83 2.83a1 1 0 1 1-1.42-1.42l2.83-2.82L7.3 8.7a1 1 0 0 1 1.42-1.42l2.83 2.83 2.82-2.83a1 1 0 0 1 1.42 1.42l-2.83 2.83 2.83 2.82z"/>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto fill-current icon-close"><path className="" fillRule="evenodd" d="M15.78 14.36a1 1 0 0 1-1.42 1.42l-2.82-2.83-2.83 2.83a1 1 0 1 1-1.42-1.42l2.83-2.82L7.3 8.7a1 1 0 0 1 1.42-1.42l2.83 2.83 2.82-2.83a1 1 0 0 1 1.42 1.42l-2.83 2.83 2.83 2.82z"/>
 							</svg>
 						</button>
 						<div className="relative p-4 mx-2 my-1 bg-yellow-100 rounded-md shadow-xl">
@@ -151,6 +151,17 @@ const PostView = ({ post }: PostViewProps) => {
 			return mm + '/' + dd + '/' + yyyy
 		}
 
+		const renderTags = () => {
+			if (post.tags?.includes('BLOCKER')) {
+				return (
+					<span className="my-auto ml-3 mr-2 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
+						Blocker
+					</span>
+				)
+			}
+				
+		}
+
 		return (
 			<div className="p-2 mx-2 mt-1 border rounded-md bg-cool-gray-50">
 				{/* <h2 className='text-base font-bold'>{post.title}</h2>
@@ -180,9 +191,7 @@ const PostView = ({ post }: PostViewProps) => {
 								
 							</div>
 							<div className='flex flex-row h-12'>
-								<span className="my-auto ml-3 mr-2 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
-									Blocker
-								</span>
+								{ renderTags() }
 								<button className=" my-auto whitespace-no-wrap inline-flex items-center mr-2 inline-flex items-center px-2.5 py-1 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1 icon-user"><path className="primary" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><path className="secondary" d="M21 20v-1a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v1c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2z"/></svg>
 									Assign to

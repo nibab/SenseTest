@@ -1,7 +1,26 @@
 import { PostImgDownload } from './utils/PostImgDownload'
+import { PostTag as PostTagGraphQL} from './API'
 
 export type PostStatus = 'OPEN' | 'PENDING' | 'RESOLVED'
 export type PostTag = 'BLOCKER' | 'DESIGN'
+
+export const postTagToGraphQLType = (postTag: PostTag): PostTagGraphQL => {
+  switch(postTag) {
+    case 'BLOCKER':
+      return PostTagGraphQL.BLOCKER
+    case 'DESIGN':
+      return PostTagGraphQL.DESIGN 
+  }
+}
+
+export const postTagGraphQLToLocalType = (postTag: PostTagGraphQL): PostTag => {
+  switch(postTag) {
+    case PostTagGraphQL.BLOCKER:
+      return 'BLOCKER'
+    case PostTagGraphQL.DESIGN:
+      return 'DESIGN'
+  }
+}
 
 export type Post = {
   id: string,

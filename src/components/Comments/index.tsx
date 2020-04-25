@@ -98,11 +98,11 @@ export const CommentsSection = (props: CommentsSectionProps) => {
 			//let comment = commentsSelector.comments[commentId]
 			if (comment.subcomments !== undefined && comment.subcomments?.length > 0) {
 				items.push(
-					<CommentGroup addSubComent={props.addSubComent} comment={comment} _responses={comment.subcomments} />
+					<CommentGroup key={comment.id} addSubComent={props.addSubComent} comment={comment} _responses={comment.subcomments} />
 				)
 			} else {
 				items.push(
-					<CommentGroup addSubComent={props.addSubComent} comment={comment} _responses={[]} />
+					<CommentGroup key={comment.id} addSubComent={props.addSubComent} comment={comment} _responses={[]} />
 				)
 			}
 		})

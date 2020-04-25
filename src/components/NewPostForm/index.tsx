@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react'
 import uuid from 'uuid'
 import AnnotationScreen from '../AnnotationScreen'
 import { CommentsSection } from '../Comments'
-import { Comment as CommentType, Annotation, Post } from '../../types'
+import { Comment as CommentType, Annotation, Post, PostTag } from '../../types'
 import { useDispatch } from 'react-redux'
 import { addComment, addsubComment } from '../../store/comment/actions'
 
@@ -58,14 +58,14 @@ const NewPostForm = (props: NewPostFormProps) => {
 		)
 	}
 
-	const [isSelected, setIsSelected] = useState(false)
+	const [isBlocker, setIsBlocker] = useState(false)
 
 	// Is this issue a blocker? 
 	const renderBlockerSelection = () => {
 		
 
 		const renderBlockerTag = () => {
-			if (isSelected) {
+			if (isBlocker) {
 				return (
 					<span className="bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
 						Blocker
@@ -74,15 +74,13 @@ const NewPostForm = (props: NewPostFormProps) => {
 			} else {
 				return (
 					<div className=''>
-						<span onClick={() => setIsSelected(!isSelected)} className="cursor-pointer border border-gray-300 border-dashed rounded inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4  text-gray-600">
+						<span onClick={() => setIsBlocker(true)} className="cursor-pointer border border-gray-300 border-dashed rounded inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4  text-gray-600">
 							<svg className="w-3 mx-auto mr-1 icon-camera" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path fillRule="evenodd" clipRule="evenodd" d="M10 3C10.5523 3 11 3.44772 11 4V9H16C16.5523 9 17 9.44772 17 10C17 10.5523 16.5523 11 16 11H11V16C11 16.5523 10.5523 17 10 17C9.44772 17 9 16.5523 9 16V11H4C3.44772 11 3 10.5523 3 10C3 9.44771 3.44772 9 4 9L9 9V4C9 3.44772 9.44772 3 10 3Z" fill="#4A5568"/>
 							</svg>
 							Blocker
 						</span>
-
 					</div>
-					
 				)
 			}
 			
@@ -202,6 +200,9 @@ const NewPostForm = (props: NewPostFormProps) => {
 			return
 		}
 		const imgBlob = b64toBlob(props.imageToAnnotate)
+		const tagArray: PostTag[] = []
+		if (isBlocker) tagArray.push('BLOCKER')
+		// If there are any other tags, add them here.
 		props.onCreatePostClicked({
 			id: props.postId,
 			title: pageName!,
@@ -209,7 +210,8 @@ const NewPostForm = (props: NewPostFormProps) => {
 			image: imgBlob,
 			projectId: props.projectId,
 			text: 'text',
-			comments: comments
+			comments: comments,
+			tags: tagArray
 		})
 	}
 
