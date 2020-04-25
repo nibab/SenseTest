@@ -67,7 +67,8 @@
     "@tailwindcss/custom-forms": "^0.2.1",
     "babel-jest": "^24.9.0",
     "eslint-plugin-jest": "^23.1.1",
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "tailwindcss-spinner": "^1.0.0"
   },
   "jest": {
     "moduleNameMapper": {

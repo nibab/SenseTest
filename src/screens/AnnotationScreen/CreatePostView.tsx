@@ -12,6 +12,7 @@ import NewPostForm from '../../components/NewPostForm'
 import PostScreenshot from '../../components/PostScreenshot'
 import { Post, postTagToGraphQLType } from '../../types'
 import { addComment } from '../../store/comment/actions'
+import { AssetStorageClient } from '../../clients/AssetStorageClient'
 
 type CreatePostViewProps = {
     onPostCreated: () => void
@@ -88,18 +89,28 @@ const CreatePostView = () => {
 
     const onCreatePostClicked = async (post: Post) => {
         dispatch(addPost(post))
+
+        const imageId = uuidv4()
+        
+        AssetStorageClient.createUploadUrl(imageId, post.projectId).then((presignedUrlFields) => {
+            console.log("Presigned url for get " + presignedUrlFields)
+            return AssetStorageClient.uploadDataToUrl(post.image as Blob, presignedUrlFields)
+        })
+
         const newPost = await DataLayerClient.createNewAnnotationPost(post.image as Blob, {
             id: post.id,
             title: post.title,
-            imageId: uuidv4(),
+            imageId: imageId,
             projectId: post.projectId,
             text: post.text,
             status: PostStatus.OPEN,
             tags: post.tags === undefined ? [] : post.tags.map(postTag => postTagToGraphQLType(postTag))         
         })
+
         post.comments?.forEach(async (comment) => {
             await DataLayerClient.createCommentForPost(newPost, comment)
-        }) 
+        })
+         
         setCurrentMode('BROWSE')
     }
 
