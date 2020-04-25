@@ -137,7 +137,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 						annotations={getAnnotations()} 
 						onSubmit={onSubmitAnnotation} 
 						key={post.id} 
-						imageSrc={window.URL.createObjectURL(getImage())} 
+						imageBlob={img} 
 					/>
 				)
 			}			

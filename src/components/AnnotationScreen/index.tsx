@@ -6,7 +6,7 @@ import {
 import Annotation from 'react-image-annotation'
 
 type AnnotationScreenProps = {
-    imageSrc: string
+    imageBlob: Blob
     annotations: AnnotationType[]
     onSubmit: (annotation: AnnotationType) => void
 }
@@ -100,7 +100,7 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 				<img className='object-contain w-full h-full mx-auto' src={window.URL.createObjectURL(post.image)}></img>
 			</div> */}
 			<div className='z-30 mx-auto my-auto' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
-				<Annotation src={props.imageSrc} annotations={annotations} renderSelector={renderSelector} renderHighlight={renderHighlight} onSubmit={onSubmit} onChange={onChange} type={PointSelector.TYPE} value={annotation}>
+				<Annotation src={window.URL.createObjectURL(props.imageBlob)} annotations={annotations} renderSelector={renderSelector} renderHighlight={renderHighlight} onSubmit={onSubmit} onChange={onChange} type={PointSelector.TYPE} value={annotation}>
 					{/* <img className='object-contain w-full h-full mx-auto' src={window.URL.createObjectURL(post.image)}></img> */}
 				</Annotation>
 			</div>

@@ -13,6 +13,7 @@ import PostScreenshot from '../../components/PostScreenshot'
 import { Post, postTagToGraphQLType } from '../../types'
 import { addComment } from '../../store/comment/actions'
 import { AssetStorageClient } from '../../clients/AssetStorageClient'
+import Log from '../../utils/Log'
 
 type CreatePostViewProps = {
     onPostCreated: () => void
@@ -25,7 +26,7 @@ const CreatePostView = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
     const [currentMode, setCurrentMode] = useState<Mode>('BROWSE')
-    const [imageToAnnotate, setImageToAnnotate] = useState<string>('newsScreenshot.png')
+    const [imageToAnnotate, setImageToAnnotate] = useState<Blob>()
     
     const dispatch = useDispatch()
 
@@ -34,6 +35,9 @@ const CreatePostView = () => {
     const titleRef= useRef<Input>(null)
     const assignToRef = useRef<Input>(null)
     const reproStepsRef = useRef<TextArea>(null)
+
+    // Hardcoded projectId
+    const projectId = '1'
 
     useEffect(() => {
         window.addEventListener("message", receiveMessage, false);
@@ -49,53 +53,9 @@ const CreatePostView = () => {
         }
     }
 
-    const iFrameLoaded = () => {
-        //iframeRef.current?.contentWindow?.postMessage('requestSession', '*');
-    }
-
-    const onScreenshotButtonClick = (event: any) => {        
-        iframeRef.current?.contentWindow?.postMessage('getScreenshot', '*')
-    }
-
-    const onUploadButtonClick = async (event: any) => {
-        // Take the canvas ref and then upload it with some text
-        const blob = await getBlobFromCanvas()
-        var text = textAreaRef.current === null ? "" : textAreaRef.current.state.value
-        var title = titleRef.current === null ? "" : titleRef.current.state.value
-                            
-        // Validate that there is text.
-        if (text === "" || text === undefined) {
-            text = 'No title'
-        }
-
-        // Validate that there is a title.
-        if (title === "" || title === undefined) {
-            title = 'No text'
-        }
-
-        const createPostInput: CreatePostInput = {
-            id: uuidv4(),
-            imageId: uuidv4(),
-            projectId: '1',
-            text: text,
-            title: title,
-            status: PostStatus.OPEN,
-            tags: []
-        }
-        const newPost = await DataLayerClient.createNewAnnotationPost(blob, createPostInput)
-        // Save the post in the redux store so that the side grid is updated.
-        dispatch(addPost(newPost))
-    }
-
-    const onCreatePostClicked = async (post: Post) => {
+    const onCreatePostClicked = async (imageId: string, post: Post) => {
+        setCurrentMode('BROWSE')
         dispatch(addPost(post))
-
-        const imageId = uuidv4()
-        
-        AssetStorageClient.createUploadUrl(imageId, post.projectId).then((presignedUrlFields) => {
-            console.log("Presigned url for get " + presignedUrlFields)
-            return AssetStorageClient.uploadDataToUrl(post.image as Blob, presignedUrlFields)
-        })
 
         const newPost = await DataLayerClient.createNewAnnotationPost(post.image as Blob, {
             id: post.id,
@@ -110,125 +70,76 @@ const CreatePostView = () => {
         post.comments?.forEach(async (comment) => {
             await DataLayerClient.createCommentForPost(newPost, comment)
         })
-         
-        setCurrentMode('BROWSE')
     }
 
-    const renderAppetizeScreen = () => {
-        return (
-            <div className='relative flex-col flex-shrink-0 w-64 h-full mb-3 ml-3' style={{height: '583px', width: '282px'}}>
-                <iframe onLoad={() => iFrameLoaded()} ref={iframeRef} src="https://appetize.io/embed/fczxctdk32wb17vabzd3k2wq9w?device=iphonex&scale=69&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true" width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
-            </div>
-        )
-    }
+    function b64toBlob(dataURI: string): Blob {
 
-    const getBase64ImageOfCanvas = (): string | null => {
-        if (!canvasRef.current) {
-            return null
+        var byteString = atob(dataURI.split(',')[1]);
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
+    
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
         }
-        const canvas: HTMLCanvasElement = canvasRef.current;
-        const context = canvas.getContext('2d');
-        if (context) {
-            var dataURL = canvas.toDataURL("image/png");
-            return dataURL
-        } else {
-            return null
-        }
+        return new Blob([ab], { type: 'image/jpeg' });
     }
 
-    const getBlobFromCanvas = (): Promise<Blob> => {
+    const createImagePromise = (image: Blob): Promise<string> => {
         return new Promise((resolve, reject) => {
-            const currentCanvas = canvasRef.current
-            if (currentCanvas !== undefined && currentCanvas !== null) {
-                const context = currentCanvas.getContext('2d');
-                if (context) {
-                    currentCanvas.toBlob((blob) => {
-                        if (blob !== null) {
-                            resolve(blob)
-                        }
-                        reject()
-                    }, "image/png");                    
-                } else {
-                    reject()
-                }
-            } else {
-                reject()
-            }
+            const imageId = uuidv4()
+            AssetStorageClient.createUploadUrl(imageId, projectId).then((presignedUrlFields) => {
+                console.log("Presigned url for get " + presignedUrlFields)
+                return AssetStorageClient.uploadDataToUrl(image, presignedUrlFields)
+            }).then(() => {
+                resolve(imageId)
+            }).catch(() => {
+                Log.error("Something happened during image upload.", "CreatePostView")
+            })
         })
+        
     }
 
-    const renderForm = () => (
-        <Form layout='vertical'>
-            <Form.Item
-                label="Title"
-                validateStatus="success"
-                //help="Cannot be empty."
-            >
-                <Input ref={titleRef} placeholder="New Issue When Loading" id="error" />
-            </Form.Item>
+    // const renderAppetizeScreen = () => {
+    //     return (
+    //         <div className='relative flex-col flex-shrink-0 w-64 h-full mb-3 ml-3' style={{height: '583px', width: '282px'}}>
+    //             <iframe onLoad={() => iFrameLoaded()} ref={iframeRef} src="https://appetize.io/embed/fczxctdk32wb17vabzd3k2wq9w?device=iphonex&scale=69&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true" width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
+    //         </div>
+    //     )
+    // }
 
-            <Form.Item
-                label="Description"
-                hasFeedback
-                //help="The information is being validated..."
-            >
-                <Input.TextArea ref={textAreaRef} autoSize={{ minRows: 4, maxRows: 6 }} placeholder="Description" id="validating" />
-            </Form.Item>
+    // const getBase64ImageOfCanvas = (): string | null => {
+    //     if (!canvasRef.current) {
+    //         return null
+    //     }
+    //     const canvas: HTMLCanvasElement = canvasRef.current;
+    //     const context = canvas.getContext('2d');
+    //     if (context) {
+    //         var dataURL = canvas.toDataURL("image/png");
+    //         return dataURL
+    //     } else {
+    //         return null
+    //     }
+    // }
 
-            <Form.Item
-                label="Repro steps"
-                hasFeedback
-                //help="The information is being validated..."
-            >
-                <Input.TextArea ref={reproStepsRef} autoSize={{ minRows: 4, maxRows: 6 }} placeholder="Description" id="validating" />
-            </Form.Item>
-
-            {/* <Form.Item
-                label="Assign to"
-                validateStatus="success"
-                //help="Cannot be empty."
-            >
-                <Input ref={assignToRef} placeholder="New Issue When Loading" id="error" />
-            </Form.Item> */}
-
-            <Form.Item
-                label="Status"
-                validateStatus="success"
-                //help="Cannot be empty."
-            >
-                <Input ref={assignToRef} placeholder="Blocker" id="error" />
-            </Form.Item>
-            <button onClick={(e) => onUploadButtonClick(e)} className='p-1 mt-2 text-blue-400 bg-blue-200 rounded-md'>UPLOAD</button>
-        </Form>
-	)
-	
-	// const renderPostToolBar = () => {
-	// 	return (
-	// 		<div className='flex-shrink-0 w-16 p-1 rounded-full'>
-	// 			<div id='button-container' className='flex-col w-full'> 
-	// 				{/* <div className='flex flex-col w-full h-16'>
-	// 					<button onClick={(event) => onScreenshotButtonClick(event)} className="w-10 h-10 mx-auto bg-gray-100 border-gray-400 rounded-full shadow-lg focus:outline-none active:shadow-sm active:bg-gray-300" style={{borderWidth: "1px"}}>
-	// 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-camera"><path className="primary" d="M6.59 6l2.7-2.7A1 1 0 0 1 10 3h4a1 1 0 0 1 .7.3L17.42 6H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h2.59zM19 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-7 8a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><path className="secondary" d="M12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
-	// 					</button>
-	// 					<a className="font-semibold text-center text-gray-900" style={{fontSize: '10px'}}>Screenshot</a>
-	// 				</div>
-	// 				<div className='flex flex-col w-full h-16 my-1'>
-	// 					<button className="w-10 h-10 mx-auto bg-gray-100 border-gray-400 rounded-full shadow-lg focus:outline-none active:shadow-sm active:bg-gray-300" style={{borderWidth: "1px"}}>
-	// 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-videocam"><path className="secondary" d="M13.59 12l6.7-6.7A1 1 0 0 1 22 6v12a1 1 0 0 1-1.7.7L13.58 12z"/><rect width="14" height="14" x="2" y="5" className="primary" rx="2"/></svg>
-	// 					</button>
-	// 					<a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Record</a>
-	// 				</div> */}
-					
-	// 				<div className='flex flex-col w-full h-16 my-1'>
-	// 					<button className="w-10 h-10 mx-auto bg-gray-100 border-gray-400 rounded-full shadow-lg focus:outline-none active:shadow-sm active:bg-gray-300" style={{borderWidth: "1px"}}>
-	// 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
-	// 					</button>
-	// 					<a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Compare</a>
-	// 				</div>
-					
-	// 			</div>
-	// 		</div>
-	// 	)
+    // const getBlobFromCanvas = (): Promise<Blob> => {
+    //     return new Promise((resolve, reject) => {
+    //         const currentCanvas = canvasRef.current
+    //         if (currentCanvas !== undefined && currentCanvas !== null) {
+    //             const context = currentCanvas.getContext('2d');
+    //             if (context) {
+    //                 currentCanvas.toBlob((blob) => {
+    //                     if (blob !== null) {
+    //                         resolve(blob)
+    //                     }
+    //                     reject()
+    //                 }, "image/png");                    
+    //             } else {
+    //                 reject()
+    //             }
+    //         } else {
+    //             reject()
+    //         }
+    //     })
     // }
 
     const renderPostToolBar = () => {
@@ -277,7 +188,22 @@ const CreatePostView = () => {
             </div>
            
 		)
-	}
+    }
+    
+    const renderCreateIssue = () => {
+        if (currentMode === 'CREATE_ISSUE' && imageToAnnotate !== undefined) {
+            return (
+                <NewPostForm 
+                    postId={uuid()}
+                    projectId={projectId}
+                    imageToAnnotate={imageToAnnotate} 
+                    imagePromise={createImagePromise(imageToAnnotate)}
+                    onCreatePostClicked={onCreatePostClicked} 
+                    onCancel={() => {setCurrentMode('BROWSE')}} />
+            )
+        }
+     
+    }
 
     return (
         <div className='flex flex-row flex-auto h-full'>
@@ -290,13 +216,8 @@ const CreatePostView = () => {
 					{/* RenderPostToolBar is contained because otherwise it stretches for the whole height. */}
 					
                     <div className='flex flex-row justify-center w-full pt-1 pb-1 pl-2 pr-2 mx-auto overflow-scroll'> 
-                        { currentMode === 'BROWSE' && <CreatePostViewSimulator onScreenshot={(img) => {setImageToAnnotate(img); setCurrentMode('CREATE_ISSUE')}}/> }
-                        { currentMode === 'CREATE_ISSUE' && <NewPostForm 
-                            postId={uuid()}
-                            projectId={'1'}
-                            imageToAnnotate={imageToAnnotate} 
-                            onCreatePostClicked={onCreatePostClicked} 
-                            onCancel={() => {setCurrentMode('BROWSE')}} />}
+                        { currentMode === 'BROWSE' && <CreatePostViewSimulator onScreenshot={(img) => {setImageToAnnotate(b64toBlob(img)); setTimeout(() => {setCurrentMode('CREATE_ISSUE')}, 100)}}/> }
+                        { renderCreateIssue() }
                         {/* <PostScreenshot post={{
                             id: '1',
                             .image: window.URL.createObjectURL('newsScreenshot.png'),

@@ -8,10 +8,11 @@ import { useDispatch } from 'react-redux'
 import { addComment, addsubComment } from '../../store/comment/actions'
 
 type NewPostFormProps = {
-	imageToAnnotate: string
+	imageToAnnotate: Blob
+	imagePromise: Promise<string> // resolves with the imageId of the uploaded imageToAnnotate.
 	postId: string
 	projectId: string
-	onCreatePostClicked: (post: Post) => void
+	onCreatePostClicked: (imageId: string, post: Post) => void
 	onCancel: () => void
 }
 
@@ -193,40 +194,27 @@ const NewPostForm = (props: NewPostFormProps) => {
 		props.onCancel()
 	}
 
-	const onCreateButtonClick = () => {
+	const onCreateButtonClick = async () => {
 		const pageName = pageNameRef.current?.value
 		if (pageName?.length === 0) {
 			setValidationState('PageNameFailedValidation')
 			return
 		}
-		const imgBlob = b64toBlob(props.imageToAnnotate)
 		const tagArray: PostTag[] = []
 		if (isBlocker) tagArray.push('BLOCKER')
+		const imageId = await props.imagePromise
 		// If there are any other tags, add them here.
-		props.onCreatePostClicked({
+		props.onCreatePostClicked(imageId, {
 			id: props.postId,
 			title: pageName!,
 			dateCreated: 'now',
-			image: imgBlob,
+			image: props.imageToAnnotate,
 			projectId: props.projectId,
 			text: 'text',
 			comments: comments,
 			tags: tagArray
 		})
 	}
-
-	function b64toBlob(dataURI: string) {
-
-		var byteString = atob(dataURI.split(',')[1]);
-		var ab = new ArrayBuffer(byteString.length);
-		var ia = new Uint8Array(ab);
-	
-		for (var i = 0; i < byteString.length; i++) {
-			ia[i] = byteString.charCodeAt(i);
-		}
-		return new Blob([ab], { type: 'image/jpeg' });
-	}
-
 
 	const onSubmitAnnotation = (annotation: Annotation) => {
 		const commentsCopy = [...comments]
@@ -275,7 +263,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 							annotations={annotations} 
 							onSubmit={onSubmitAnnotation} 
 							key={uuid()} 
-							imageSrc={props.imageToAnnotate} 
+							imageBlob={props.imageToAnnotate} 
 						/>
 					</div>
 					{ renderComments() }
