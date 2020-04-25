@@ -39,7 +39,16 @@ export class DataLayerClient {
 		})
 	}
 
-	static createCommentForPost = (post: Post, createCommentInput: CreateCommentInput): Promise<Comment> => {
+	static createCommentForPost = (post: Post, comment: Comment): Promise<Comment> => {
+		const createCommentInput: CreateCommentInput = {
+			id: comment.id,
+			author: comment.author,
+			authorAvatar: comment.authorAvatarSrc,
+			content: comment.text,
+			commentPostId: post.id,
+			annotation: comment.annotation
+		}
+
 		return new Promise(async (resolve, reject) => {
 			try {
 				const createNewCommentResult = (await API.graphql(graphqlOperation(createComment, {input: createCommentInput}))) as { data: CreateCommentMutation }

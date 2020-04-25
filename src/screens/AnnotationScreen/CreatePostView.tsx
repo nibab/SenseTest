@@ -98,13 +98,7 @@ const CreatePostView = () => {
             tags: post.tags === undefined ? [] : post.tags.map(postTag => postTagToGraphQLType(postTag))         
         })
         post.comments?.forEach(async (comment) => {
-            await DataLayerClient.createCommentForPost(newPost, {
-                commentPostId: post.id,
-                content: comment.text,
-                author: comment.author,
-                authorAvatar: comment.authorAvatarSrc,
-                annotation: comment.annotation !== undefined ? comment.annotation : undefined
-            })
+            await DataLayerClient.createCommentForPost(newPost, comment)
         }) 
         setCurrentMode('BROWSE')
     }

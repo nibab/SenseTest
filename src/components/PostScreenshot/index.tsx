@@ -10,6 +10,7 @@ import uuid from 'uuid'
 import { CommentsSection } from '../Comments'
 import AnnotationScreen from '../AnnotationScreen'
 import { PostImgDownload } from '../../utils/PostImgDownload'
+import { DataLayerClient } from '../../clients/DataLayerClient'
 
 
 type PostScreenshotProps = {
@@ -107,6 +108,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 				subcomments: []
 			}
 			dispatch(addComment(newComment))
+			DataLayerClient.createCommentForPost(props.post, newComment)
 		}
 
 		const getImage = (): Blob => {
