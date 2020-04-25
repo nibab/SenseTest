@@ -88,7 +88,7 @@ const CreatePostView = () => {
 
     const onCreatePostClicked = async (post: Post) => {
         dispatch(addPost(post))
-        const newPost = await DataLayerClient.createNewAnnotationPost(new Blob(), {
+        const newPost = await DataLayerClient.createNewAnnotationPost(post.image as Blob, {
             id: post.id,
             title: post.title,
             imageId: uuidv4(),
@@ -97,7 +97,6 @@ const CreatePostView = () => {
             status: PostStatus.OPEN,
             tags: []            
         })
-        debugger
         post.comments?.forEach(async (comment) => {
             await DataLayerClient.createCommentForPost(newPost, {
                 commentPostId: post.id,

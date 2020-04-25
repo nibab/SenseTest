@@ -201,11 +201,12 @@ const NewPostForm = (props: NewPostFormProps) => {
 			setValidationState('PageNameFailedValidation')
 			return
 		}
+		const imgBlob = b64toBlob(props.imageToAnnotate)
 		props.onCreatePostClicked({
 			id: props.postId,
 			title: pageName!,
 			dateCreated: 'now',
-			image: b64toBlob(props.imageToAnnotate),
+			image: imgBlob,
 			projectId: props.projectId,
 			text: 'text',
 			comments: comments

@@ -74,7 +74,7 @@ export const PostImage = ({postId, height, width}: PostImageProps) => {
 }
 
 function isPostImgDownload(object: any): object is PostImgDownload {
-  return object.id !== undefined && object.completed !== undefined && object.imagePromise !== undefined
+  return object.completed !== undefined && object.imagePromise !== undefined
 }
 
 const styles: StyleSheet = {

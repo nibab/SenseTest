@@ -20,6 +20,8 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 	const [displayNewCommentBox, setDisplayNewCommentBox] = useState(false)
 	const [post, setPost] = useState<Post>()
 	const commentsSelector = useSelector(state => state.comment.comments[props.post.id])
+
+	const postsSelector = useSelector(state => state.post.posts[props.post.id])
 	const dispatch = useDispatch()
 
 	useEffect(() => {
@@ -108,24 +110,22 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 		}
 
 		const getImage = (): Blob => {
-			
-			if (isPostImgDownload(post?.image)) {
-				// Show loading screen
+			const img = postsSelector.image
+			if (isPostImgDownload(img)) {
+				// TODO: Show loading screen
 				return new Blob()
 			} else {
-				return post!.image
+				return img
 			}
-		
-			
 		}
 
-		if (post!== undefined) {
+		if (post !== undefined) {
 			return (
 				<AnnotationScreen 
 					annotations={getAnnotations()} 
 					onSubmit={onSubmitAnnotation} 
 					key={post.id} 
-					imageSrc={window.URL.createObjectURL(props.post.image)} 
+					imageSrc={window.URL.createObjectURL(getImage())} 
 				/>
 			)
 		} else {
@@ -148,7 +148,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 }
 
 function isPostImgDownload(object: any): object is PostImgDownload{
-	return object.callback !== undefined && object.completed !== undefined && object.imagePromise !== undefined
+	return object.imagePromise !== undefined
   }
 
 export default PostScreenshot

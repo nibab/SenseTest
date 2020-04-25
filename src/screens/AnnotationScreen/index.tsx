@@ -65,6 +65,7 @@ export const AnnotationScreen = ({ }) => {
                         const postImgDownload = new PostImgDownload(post, (blob) => {})
                         postImgDownload.imagePromise.then((post) => {
                             dispatch(addPost(post))
+                            Log.info("Downloaded post with title " + post.title)
                         })
                         const newPost = {
                             id: post.id,
