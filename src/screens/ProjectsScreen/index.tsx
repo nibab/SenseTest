@@ -30,7 +30,19 @@ const ProjectsScreen = () => {
 				// Create project that can be displayed in the app.
 				const _newProject: Project = {
 					id: newProject.id,
-					name: newProject.name
+					name: newProject.name,
+					posts: [],
+					appBuilds: [],
+					currentAppBuild: {
+						id: '1',
+						project: '1',
+						name: '1',
+						assetId: '2',
+						appetizeKey: '1',
+						createdAt: 'now',
+						version: '12',
+						uploadedByUserId: '1'
+					}
 				}
 
 				Log.info(`Succeeded in creating project ${JSON.stringify(_newProject)}.`, "ProjectsScreen")

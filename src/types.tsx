@@ -54,7 +54,10 @@ export type Post = {
 
 export type Project = {
   id: string,
-  name: string
+  name: string,
+  posts: Post[]
+  appBuilds: AppBuild[],
+  currentAppBuild: AppBuild
 }
 
 const stringLitArray = <L extends string>(arr: L[]) => arr
@@ -102,6 +105,19 @@ export type SubComment = {
   text: string,
   parentCommentId: string
 }
+
+export type AppBuild = {
+	id: string,
+	project: string,
+	name: string,
+	assetId: string,
+	appetizeKey: string,
+	version: string,
+	uploadedByUserId: string,
+	createdAt: string,
+  updatedAt?: string
+}
+
 
 // Adding new app builds
 export type AppBuildRequestBodyType = {
