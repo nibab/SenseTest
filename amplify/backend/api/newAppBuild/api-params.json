@@ -1,0 +1,40 @@
+{
+    "paths": [
+        {
+            "name": "/addAppBuild",
+            "lambdaFunction": "appetizeFunction",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH"
+                ]
+            }
+        }
+    ],
+    "resourceName": "newAppBuild",
+    "apiName": "newAppBuild",
+    "functionArns": [
+        {
+            "lambdaFunction": "appetizeFunction"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "amplify-prerelease-staging-212510-authRole",
+        "unAuthRoleName": "amplify-prerelease-staging-212510-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "appetizeFunction",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
