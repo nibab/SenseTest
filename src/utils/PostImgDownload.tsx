@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux"
 import { useSelector } from "../store"
 import { CreatePostMutation, GetPostQuery } from '../API'
 import { Post } from '../types'
+import Log from './Log'
 
 export class PostImgDownload {
   callback?: (progress: number) => void
@@ -17,7 +18,7 @@ export class PostImgDownload {
     this.imagePromise = AssetStorageClient.getDownloadUrl(imageId).then((url) => this.download(url))
     this.imagePromise.then((img) => {
       this.completed = true      
-      console.log('blea updated the post')
+      Log.info(`Image download for id ${imageId} completed.`)
     }).catch(() => {
       this.completed = true
     })

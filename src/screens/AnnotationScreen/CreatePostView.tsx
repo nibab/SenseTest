@@ -43,10 +43,6 @@ const CreatePostView = () => {
     const projectId = '1'
 
     useEffect(() => {
-        window.addEventListener("message", receiveMessage, false);
-    })
-
-    useEffect(() => {
         getCurrentAppBuild()
     }, [])
 
@@ -73,16 +69,6 @@ const CreatePostView = () => {
                     setCurrentAppBuild(appBuild)
                 }       
             }
-        }
-    }
-
-    const receiveMessage = (event: any) => {
-        console.log('blea')
-        if(event.data && event.data.type == 'screenshot'){
-            console.log(event.data);
-            setImageToAnnotate(event.data.data)
-            console.log("BLEA screenshot")
-            //document.getElementById("screenshot").src = event.data.data;
         }
     }
 

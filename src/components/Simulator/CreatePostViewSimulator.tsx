@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { AppBuild } from '../../types'
+import Log from '../../utils/Log'
 
 type CreatePostViewSimulatorProps = {
 	onScreenshot: (imgSrc: string) => void
@@ -15,12 +16,9 @@ const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
     })
 
     const receiveMessage = (event: any) => {
-        console.log('blea')
         if(event.data && event.data.type == 'screenshot'){
-            console.log(event.data);
-			//setImageToAnnotate(event.data.data)
+			Log.info("Received screenshot. " + event.data)
 			props.onScreenshot(event.data.data)
-            console.log("BLEA screenshot")
         }
     }
 
