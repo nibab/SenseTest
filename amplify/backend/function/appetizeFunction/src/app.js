@@ -58,50 +58,57 @@ app.get('/item/*', function(req, res) {
 * Example post method *
 ****************************/
 
-app.post('/item', function(req, res) {
-  const req = new AWS.HttpRequest(appsyncUrl, region);
+app.post('/item', async function(req, res) {
+  const appsync_req = new AWS.HttpRequest(appsyncUrl, region);
 
-  const item = {
+  const item = { 
+    input: {
       assetId: "1", 
       name: "2", 
       appetizeKey: "2", 
       version: "4",
       uploadedByUserId: "5"
+    }
   };
 
-  req.method = "POST";
-  req.headers.host = endpoint;
-  req.headers["Content-Type"] = "application/json";
-  req.body = JSON.stringify({
+  appsync_req.method = "POST";
+  appsync_req.headers.host = endpoint;
+  appsync_req.headers["Content-Type"] = "application/json";
+  appsync_req.body = JSON.stringify({
       query: graphqlQuery,
-      operationName: "createTodo",
+      operationName: "createAppBuild",
       variables: item
   });
-
-  if (apiKey) {
-      req.headers["x-api-key"] = apiKey;
-  } else {
-      const signer = new AWS.Signers.V4(req, "appsync", true);
-      signer.addAuthorization(AWS.config.credentials, AWS.util.date.getDate());
+  
+  console.log(JSON.stringify(appsync_req))
+    
+  try {
+    const signer = new AWS.Signers.V4(appsync_req, "appsync", true);
+    signer.addAuthorization(AWS.config.credentials, AWS.util.date.getDate());
+  } catch (e) {
+    console.log("ERROR when signing the request: " + e)
   }
 
   const data = await new Promise((resolve, reject) => {
-      const httpRequest = https.request({ ...req, host: endpoint }, (result) => {
-          result.on('data', (data) => {
-              resolve(JSON.parse(data.toString()));
-          });
+    const httpRequest = https.request({ ...appsync_req, host: endpoint }, (result) => {
+      result.on('data', (_data) => {
+        resolve(JSON.parse(_data.toString()));
       });
+      result.on('error', (e) => {
+        console.error(e);
+        reject(JSON.parse(e.toString()))
+      });
+    });
 
-      httpRequest.write(req.body);
+    httpRequest.write(appsync_req.body);
       httpRequest.end();
   });
+  
+  res.json({
+    statusCode: 200,
+    body: data
+  })
 
-  return {
-      statusCode: 200,
-      body: data
-  };
-  // Add your code here
-  res.json({success: 'post call succeed!', url: req.url, body: req.body})
 });
 
 app.post('/item/*', function(req, res) {

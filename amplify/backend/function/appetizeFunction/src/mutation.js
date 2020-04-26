@@ -1,6 +1,6 @@
 module.exports = {
-    mutation: ` mutation CreateAppBuild { 
-        createAppBuild(input:{assetId: $assetId, name:$name, appetizeKey:$appetizeKey, version:$version ,uploadedByUserId:$uploadedByUserId }) 
+    mutation: ` mutation createAppBuild($input:CreateAppBuildInput!) { 
+        createAppBuild(input: $input) 
             {
                 id
             }
