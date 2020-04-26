@@ -14,6 +14,7 @@ var region = process.env.REGION
 
 Amplify Params - DO NOT EDIT */
 
+const request = require('axios')
 const https = require('https');
 const AWS = require("aws-sdk");
 const urlParse = require("url").URL;
@@ -26,6 +27,8 @@ const graphqlQuery = require('./mutation.js').mutation;
 var express = require('express')
 var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
+
+const APPETIZE_API_TOKEN = "tok_z8gprz7vfgdgqudeu8gtnvvetr"
 
 // declare a new express app
 var app = express()
@@ -111,9 +114,28 @@ app.post('/item', async function(req, res) {
 
 });
 
-app.post('/item/*', function(req, res) {
+app.post('/itemAppetize', async function(req, res) {
+  const data = {
+    "url": "https://appetizetest.s3.amazonaws.com/MovieSwift.zip",
+    "platform": "ios",
+    "timeout": 300,
+    "note": "CI build #42"
+  }
+  
+  const response = await new Promise((resolve, reject) => {
+    request.post(`https://${APPETIZE_API_TOKEN}@api.appetize.io/v1/apps`, data).then((response) => {
+      console.log(response.data)
+      resolve(response.data)
+    }).catch((error) => {
+       if (error) {
+          console.error(error)
+          reject(error)
+        }
+    })
+  })
+
   // Add your code here
-  res.json({success: 'post call succeed!', url: req.url, body: req.body})
+  res.json({statusCode:200, body: response})
 });
 
 /****************************

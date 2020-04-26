@@ -82,7 +82,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-prerelease-staging-212510-deployment",
-					"S3Key": "amplify-builds/appetizeFunction-45695272495763504d6a-build.zip"
+					"S3Key": "amplify-builds/appetizeFunction-6178796458614a4f6859-build.zip"
 				}
 			}
 		},
