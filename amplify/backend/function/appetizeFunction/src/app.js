@@ -14,6 +14,15 @@ var region = process.env.REGION
 
 Amplify Params - DO NOT EDIT */
 
+const https = require('https');
+const AWS = require("aws-sdk");
+const urlParse = require("url").URL;
+var apiSenseTestApiGraphQLAPIIdOutput = process.env.API_SENSETESTAPI_GRAPHQLAPIIDOUTPUT
+var apiSenseTestApiGraphQLAPIEndpointOutput = process.env.API_SENSETESTAPI_GRAPHQLAPIENDPOINTOUTPUT
+const appsyncUrl = apiSenseTestApiGraphQLAPIEndpointOutput;
+const region = process.env.REGION;
+const endpoint = new urlParse(appsyncUrl).hostname.toString();
+const graphqlQuery = require('./mutation.js').mutation;
 var express = require('express')
 var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
@@ -50,6 +59,47 @@ app.get('/item/*', function(req, res) {
 ****************************/
 
 app.post('/item', function(req, res) {
+  const req = new AWS.HttpRequest(appsyncUrl, region);
+
+  const item = {
+      assetId: "1", 
+      name: "2", 
+      appetizeKey: "2", 
+      version: "4",
+      uploadedByUserId: "5"
+  };
+
+  req.method = "POST";
+  req.headers.host = endpoint;
+  req.headers["Content-Type"] = "application/json";
+  req.body = JSON.stringify({
+      query: graphqlQuery,
+      operationName: "createTodo",
+      variables: item
+  });
+
+  if (apiKey) {
+      req.headers["x-api-key"] = apiKey;
+  } else {
+      const signer = new AWS.Signers.V4(req, "appsync", true);
+      signer.addAuthorization(AWS.config.credentials, AWS.util.date.getDate());
+  }
+
+  const data = await new Promise((resolve, reject) => {
+      const httpRequest = https.request({ ...req, host: endpoint }, (result) => {
+          result.on('data', (data) => {
+              resolve(JSON.parse(data.toString()));
+          });
+      });
+
+      httpRequest.write(req.body);
+      httpRequest.end();
+  });
+
+  return {
+      statusCode: 200,
+      body: data
+  };
   // Add your code here
   res.json({success: 'post call succeed!', url: req.url, body: req.body})
 });
