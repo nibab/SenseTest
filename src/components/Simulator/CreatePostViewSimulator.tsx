@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { AppBuild } from '../../types'
 import Log from '../../utils/Log'
+import VersionTag from '../VersionTag'
 
 type CreatePostViewSimulatorProps = {
 	onScreenshot: (imgSrc: string) => void
@@ -34,12 +35,7 @@ const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
 					<span className="mr-1 inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-gray-100 text-gray-800">
 						Simulator
 					</span>
-					<span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-indigo-100 text-indigo-800">
-						<svg className="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
-							<circle cx="4" cy="4" r="3" />
-						</svg>
-						{ props.appBuild.version }
-					</span>
+					<VersionTag version={props.appBuild.version} />
 				</div> 
 			</div>
 		)

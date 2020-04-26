@@ -222,7 +222,7 @@ const PostView = ({ post }: PostViewProps) => {
 				{ renderPostTitle() }
 				<div className='flex flex-row pt-1 pb-1 pl-2 pr-2 overflow-scroll'> 				
 					{ renderToolbar() }	
-					{ displayState === 'Simulator' ? <Simulator/> : <></> }
+					{/* { displayState === 'Simulator' ? <Simulator/> : <></> } */}
 					{ displayState === 'Attachment' ? <Attachment/> : <></> }
 					<div className='ml-3'>
 						<PostScreenshot post={post} />

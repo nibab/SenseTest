@@ -1,6 +1,13 @@
 import React, { useRef, useState } from 'react'
+import { AppBuild } from '../../types'
+import VersionTag from '../VersionTag'
 
-export const PostViewSimulator = () => {
+type PostViewSimulatorProps = {
+	onScreenshot: (imgSrc: string) => void
+	appBuild: AppBuild
+}
+
+export const PostViewSimulator = (props: PostViewSimulatorProps) => {
 	const iframeRef = useRef<HTMLIFrameElement>(null)
 	const [iframeLoaded, setIframeLoaded] = useState(false)
 
@@ -11,12 +18,7 @@ export const PostViewSimulator = () => {
 					<span className="inline-flex mr-1 items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-gray-100 text-gray-800">
 						Simulator
 					</span>
-					<span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-indigo-100 text-indigo-800">
-						<svg className="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
-							<circle cx="4" cy="4" r="3" />
-						</svg>
-						v 1.0.1.b
-					</span>
+					<VersionTag version={props.appBuild.version} />
 				</div> 
 			</div>
 		)

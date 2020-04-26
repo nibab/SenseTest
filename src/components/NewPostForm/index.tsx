@@ -6,6 +6,7 @@ import { CommentsSection } from '../Comments'
 import { Comment as CommentType, Annotation, Post, PostTag, SubComment, AppBuild } from '../../types'
 import { useDispatch } from 'react-redux'
 import { addComment, addsubComment } from '../../store/comment/actions'
+import VersionTag from '../VersionTag'
 
 type NewPostFormProps = {
 	imageToAnnotate: Blob
@@ -115,12 +116,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 							<div className=''>
 								New Issue
 							</div>
-							<span className="ml-2 inline-flex flex-shrink-0 items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-indigo-100 text-indigo-800">
-								<svg className="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
-									<circle cx="4" cy="4" r="3" />
-								</svg>
-								{ props.appBuild.version }
-							</span>
+							<VersionTag version={props.appBuild.version} />
 						</h3>
 						</div>
 						<div className="grid grid-cols-1 row-gap-6 col-gap-4 mt-6 sm:grid-cols-6">
