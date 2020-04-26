@@ -114,28 +114,99 @@ app.post('/item', async function(req, res) {
 
 });
 
-app.post('/itemAppetize', async function(req, res) {
+app.post('/addAppBuild', async function(req, res) {
+  const assetId = req.body["assetId"] // 1
+  const assetUrl = req.body["assetUrl"] // "https://appetizetest.s3.amazonaws.com/MovieSwift.zip"
+  const appName = req.body["appName"] // 'testName'
+  const appVersion = req.body["appVersion"] //  'testVersion'
+  const userId = req["cognitoUserId"]
+  
   const data = {
-    "url": "https://appetizetest.s3.amazonaws.com/MovieSwift.zip",
+    "url": assetUrl,
     "platform": "ios",
     "timeout": 300,
     "note": "CI build #42"
   }
   
-  const response = await new Promise((resolve, reject) => {
-    request.post(`https://${APPETIZE_API_TOKEN}@api.appetize.io/v1/apps`, data).then((response) => {
-      console.log(response.data)
-      resolve(response.data)
-    }).catch((error) => {
-       if (error) {
-          console.error(error)
-          reject(error)
-        }
-    })
-  })
+  const persistAppBuildMetadata = async function(item) {
+    const appsync_req = new AWS.HttpRequest(appsyncUrl, region);
 
-  // Add your code here
-  res.json({statusCode:200, body: response})
+    appsync_req.method = "POST";
+    appsync_req.headers.host = endpoint;
+    appsync_req.headers["Content-Type"] = "application/json";
+    appsync_req.body = JSON.stringify({
+        query: graphqlQuery,
+        operationName: "createAppBuild",
+        variables: {
+          input: item
+        }
+    });
+    
+    console.log(JSON.stringify(appsync_req))
+      
+    try {
+      const signer = new AWS.Signers.V4(appsync_req, "appsync", true);
+      signer.addAuthorization(AWS.config.credentials, AWS.util.date.getDate());
+    } catch (e) {
+      console.log("ERROR when signing the request: " + e)
+    }
+  
+    const _data = await new Promise((resolve, reject) => {
+      const httpRequest = https.request({ ...appsync_req, host: endpoint }, (result) => {
+        result.on('data', (_data) => {
+          resolve(JSON.parse(_data.toString()));
+        });
+        result.on('error', (e) => {
+          console.error(e);
+          reject(JSON.parse(e.toString()))
+        });
+      });
+  
+      httpRequest.write(appsync_req.body);
+        httpRequest.end();
+    });
+    return _data
+  }
+  
+  const newItem = {
+    assetId: assetId, 
+    name: appName, 
+    version: appVersion,
+    uploadedByUserId: userId !== undefined ? userId : 'noCognitoCredentials'
+  }
+  
+  if (userId !== undefined) {
+    const response = await new Promise((resolve, reject) => {
+      request.post(`https://${APPETIZE_API_TOKEN}@api.appetize.io/v1/apps`, data).then(async (response) => {
+        const item = {
+          ...newItem,
+          appetizeKey: response.data['publicKey'] 
+        }
+        
+        const graphqlResponse = await persistAppBuildMetadata(item)
+        const _response = {
+          ...response.data,
+          graphqlQueryResponse: graphqlResponse
+        }
+        
+        resolve(_response)
+      }).catch((error) => {
+         if (error) {
+            console.error(error)
+            reject(error)
+          }
+      })
+    })
+    // Add your code here
+    res.json({statusCode:response["statusCode"], body: response})
+  } else {
+    // Add your code here
+    res.json({statusCode:200, body: req.body})
+  }
+  
+  
+
+  
 });
 
 /****************************

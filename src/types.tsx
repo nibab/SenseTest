@@ -96,3 +96,11 @@ export type SubComment = {
   text: string,
   parentCommentId: string
 }
+
+// Adding new app builds
+type AppBuildRequestBodyType = {
+  assetId: string, 
+  appName: string,
+  appVersion: string,
+  assetUrl: string //"https://appetizetest.s3.amazonaws.com/MovieSwift.zip"
+}
