@@ -113,7 +113,7 @@ export const AnnotationScreen = ({ }) => {
         //     assetUrl: "https://appetizetest.s3.amazonaws.com/MovieSwift.zip"
         // })
         getPostsAndStoreInRedux('1')
-    }, [])
+    }, [])    
 
     const renderPostDetailView = () => {
         if (!displayCreateNewPost) {

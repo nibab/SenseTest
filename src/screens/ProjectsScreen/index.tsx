@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { API, graphqlOperation } from 'aws-amplify'
 import { createProject } from '../../graphql/mutations'
-import { CreateProjectInput, CreateProjectMutation } from "../../API"
+import { CreateProjectInput, CreateProjectMutation, GetProjectQuery } from "../../API"
 import { v4 as uuidv4 } from 'uuid'
 import { Project } from '../../types'
 import Log from '../../utils/Log'
+import { getProject } from '../../graphql/queries'
 
 const ProjectsScreen = () => {
 	const [currentProjects, setCurrentProjects] = useState<string[]>()
@@ -55,9 +56,17 @@ const ProjectsScreen = () => {
 		
 	}
 
+	const getProjectInfo = async () => {
+		const project = await API.graphql(graphqlOperation(getProject, {id: '68134e24-ed27-494e-b0bb-8a14f2b3167f'})) as {data: GetProjectQuery}
+		console.log(project.data)
+		
+
+    }
+
 	return (<>
 		<p> Hello Basterd </p>
 		<button className='bg-green-300' onClick={async () => await createNewProject()}> Create Project </button>
+		<button className='bg-blue-300' onClick={async () => await getProjectInfo()}> Get Project </button>
 	</>)
 }
 
