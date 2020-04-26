@@ -17,6 +17,7 @@ export const createProject = /* GraphQL */ `
           imageId
           projectId
           text
+          appVersion
           createdAt
           updatedAt
           status
@@ -36,6 +37,31 @@ export const createProject = /* GraphQL */ `
         }
         nextToken
       }
+      appBuilds {
+        items {
+          id
+          project {
+            id
+            name
+            posts {
+              nextToken
+            }
+            appBuilds {
+              nextToken
+            }
+            currentAppBuild
+          }
+          name
+          assetId
+          appetizeKey
+          version
+          uploadedByUserId
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      currentAppBuild
     }
   }
 `;
@@ -50,6 +76,7 @@ export const createPost = /* GraphQL */ `
       imageId
       projectId
       text
+      appVersion
       createdAt
       updatedAt
       status
@@ -80,6 +107,7 @@ export const createPost = /* GraphQL */ `
             imageId
             projectId
             text
+            appVersion
             createdAt
             updatedAt
             status
@@ -120,6 +148,7 @@ export const updatePost = /* GraphQL */ `
       imageId
       projectId
       text
+      appVersion
       createdAt
       updatedAt
       status
@@ -150,6 +179,7 @@ export const updatePost = /* GraphQL */ `
             imageId
             projectId
             text
+            appVersion
             createdAt
             updatedAt
             status
@@ -190,6 +220,7 @@ export const deletePost = /* GraphQL */ `
       imageId
       projectId
       text
+      appVersion
       createdAt
       updatedAt
       status
@@ -220,6 +251,7 @@ export const deletePost = /* GraphQL */ `
             imageId
             projectId
             text
+            appVersion
             createdAt
             updatedAt
             status
@@ -278,6 +310,7 @@ export const createComment = /* GraphQL */ `
         imageId
         projectId
         text
+        appVersion
         createdAt
         updatedAt
         status
@@ -295,6 +328,7 @@ export const createComment = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -328,6 +362,7 @@ export const createComment = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -379,6 +414,7 @@ export const updateComment = /* GraphQL */ `
         imageId
         projectId
         text
+        appVersion
         createdAt
         updatedAt
         status
@@ -396,6 +432,7 @@ export const updateComment = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -429,6 +466,7 @@ export const updateComment = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -480,6 +518,7 @@ export const deleteComment = /* GraphQL */ `
         imageId
         projectId
         text
+        appVersion
         createdAt
         updatedAt
         status
@@ -497,6 +536,7 @@ export const deleteComment = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -530,6 +570,7 @@ export const deleteComment = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -587,6 +628,7 @@ export const createSubComment = /* GraphQL */ `
           imageId
           projectId
           text
+          appVersion
           createdAt
           updatedAt
           status
@@ -667,6 +709,7 @@ export const updateSubComment = /* GraphQL */ `
           imageId
           projectId
           text
+          appVersion
           createdAt
           updatedAt
           status
@@ -747,6 +790,7 @@ export const deleteSubComment = /* GraphQL */ `
           imageId
           projectId
           text
+          appVersion
           createdAt
           updatedAt
           status
@@ -787,6 +831,183 @@ export const deleteSubComment = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteAppBuild = /* GraphQL */ `
+  mutation DeleteAppBuild(
+    $input: DeleteAppBuildInput!
+    $condition: ModelAppBuildConditionInput
+  ) {
+    deleteAppBuild(input: $input, condition: $condition) {
+      id
+      project {
+        id
+        name
+        posts {
+          items {
+            id
+            title
+            imageId
+            projectId
+            text
+            appVersion
+            createdAt
+            updatedAt
+            status
+            tags
+            attachments
+            comments {
+              nextToken
+            }
+          }
+          nextToken
+        }
+        appBuilds {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+            }
+            name
+            assetId
+            appetizeKey
+            version
+            uploadedByUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        currentAppBuild
+      }
+      name
+      assetId
+      appetizeKey
+      version
+      uploadedByUserId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createAppBuild = /* GraphQL */ `
+  mutation CreateAppBuild(
+    $input: CreateAppBuildInput!
+    $condition: ModelAppBuildConditionInput
+  ) {
+    createAppBuild(input: $input, condition: $condition) {
+      id
+      project {
+        id
+        name
+        posts {
+          items {
+            id
+            title
+            imageId
+            projectId
+            text
+            appVersion
+            createdAt
+            updatedAt
+            status
+            tags
+            attachments
+            comments {
+              nextToken
+            }
+          }
+          nextToken
+        }
+        appBuilds {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+            }
+            name
+            assetId
+            appetizeKey
+            version
+            uploadedByUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        currentAppBuild
+      }
+      name
+      assetId
+      appetizeKey
+      version
+      uploadedByUserId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateAppBuild = /* GraphQL */ `
+  mutation UpdateAppBuild(
+    $input: UpdateAppBuildInput!
+    $condition: ModelAppBuildConditionInput
+  ) {
+    updateAppBuild(input: $input, condition: $condition) {
+      id
+      project {
+        id
+        name
+        posts {
+          items {
+            id
+            title
+            imageId
+            projectId
+            text
+            appVersion
+            createdAt
+            updatedAt
+            status
+            tags
+            attachments
+            comments {
+              nextToken
+            }
+          }
+          nextToken
+        }
+        appBuilds {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+            }
+            name
+            assetId
+            appetizeKey
+            version
+            uploadedByUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        currentAppBuild
+      }
+      name
+      assetId
+      appetizeKey
+      version
+      uploadedByUserId
       createdAt
       updatedAt
     }

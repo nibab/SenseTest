@@ -10,6 +10,7 @@ export const getPost = /* GraphQL */ `
       imageId
       projectId
       text
+      appVersion
       createdAt
       updatedAt
       status
@@ -40,6 +41,7 @@ export const getPost = /* GraphQL */ `
             imageId
             projectId
             text
+            appVersion
             createdAt
             updatedAt
             status
@@ -81,6 +83,7 @@ export const getProject = /* GraphQL */ `
           imageId
           projectId
           text
+          appVersion
           createdAt
           updatedAt
           status
@@ -100,6 +103,31 @@ export const getProject = /* GraphQL */ `
         }
         nextToken
       }
+      appBuilds {
+        items {
+          id
+          project {
+            id
+            name
+            posts {
+              nextToken
+            }
+            appBuilds {
+              nextToken
+            }
+            currentAppBuild
+          }
+          name
+          assetId
+          appetizeKey
+          version
+          uploadedByUserId
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      currentAppBuild
     }
   }
 `;
@@ -120,6 +148,7 @@ export const listProjects = /* GraphQL */ `
             imageId
             projectId
             text
+            appVersion
             createdAt
             updatedAt
             status
@@ -131,6 +160,25 @@ export const listProjects = /* GraphQL */ `
           }
           nextToken
         }
+        appBuilds {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+            }
+            name
+            assetId
+            appetizeKey
+            version
+            uploadedByUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        currentAppBuild
       }
       nextToken
     }
@@ -149,6 +197,7 @@ export const listPosts = /* GraphQL */ `
         imageId
         projectId
         text
+        appVersion
         createdAt
         updatedAt
         status
@@ -166,6 +215,7 @@ export const listPosts = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -211,6 +261,7 @@ export const getComment = /* GraphQL */ `
         imageId
         projectId
         text
+        appVersion
         createdAt
         updatedAt
         status
@@ -228,6 +279,7 @@ export const getComment = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -261,6 +313,7 @@ export const getComment = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -314,6 +367,7 @@ export const listComments = /* GraphQL */ `
           imageId
           projectId
           text
+          appVersion
           createdAt
           updatedAt
           status
@@ -390,6 +444,7 @@ export const getSubComment = /* GraphQL */ `
           imageId
           projectId
           text
+          appVersion
           createdAt
           updatedAt
           status
@@ -472,6 +527,7 @@ export const listSubComments = /* GraphQL */ `
             imageId
             projectId
             text
+            appVersion
             createdAt
             updatedAt
             status
@@ -503,6 +559,117 @@ export const listSubComments = /* GraphQL */ `
     }
   }
 `;
+export const getAppBuild = /* GraphQL */ `
+  query GetAppBuild($id: ID!) {
+    getAppBuild(id: $id) {
+      id
+      project {
+        id
+        name
+        posts {
+          items {
+            id
+            title
+            imageId
+            projectId
+            text
+            appVersion
+            createdAt
+            updatedAt
+            status
+            tags
+            attachments
+            comments {
+              nextToken
+            }
+          }
+          nextToken
+        }
+        appBuilds {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+            }
+            name
+            assetId
+            appetizeKey
+            version
+            uploadedByUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        currentAppBuild
+      }
+      name
+      assetId
+      appetizeKey
+      version
+      uploadedByUserId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listAppBuilds = /* GraphQL */ `
+  query ListAppBuilds(
+    $filter: ModelAppBuildFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listAppBuilds(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        project {
+          id
+          name
+          posts {
+            items {
+              id
+              title
+              imageId
+              projectId
+              text
+              appVersion
+              createdAt
+              updatedAt
+              status
+              tags
+              attachments
+            }
+            nextToken
+          }
+          appBuilds {
+            items {
+              id
+              name
+              assetId
+              appetizeKey
+              version
+              uploadedByUserId
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          currentAppBuild
+        }
+        name
+        assetId
+        appetizeKey
+        version
+        uploadedByUserId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const projectPostsByTime = /* GraphQL */ `
   query ProjectPostsByTime(
     $projectId: ID
@@ -526,6 +693,7 @@ export const projectPostsByTime = /* GraphQL */ `
         imageId
         projectId
         text
+        appVersion
         createdAt
         updatedAt
         status
@@ -543,6 +711,7 @@ export const projectPostsByTime = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -609,6 +778,7 @@ export const subCommentByTime = /* GraphQL */ `
             imageId
             projectId
             text
+            appVersion
             createdAt
             updatedAt
             status

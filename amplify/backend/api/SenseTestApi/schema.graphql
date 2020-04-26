@@ -2,7 +2,8 @@ type Project @model(queries: null, mutations: null) {
   id: ID!
   name: String!
   posts: [Post] @connection(keyName: "byProject", fields: ["id"])
-  appBuilds: [AppBuild] @connection(keyName: "projectAppBuilds")
+  appBuilds: [AppBuild] @connection(name: "projectAppBuilds")
+  currentAppBuild: String
 }
 type Post @model(queries: {list: "listPosts"})  
   @key(name: "byProject", fields:["projectId", "title"])
@@ -58,7 +59,7 @@ type SubComment @model
   updatedAt: AWSDateTime
 }
 
-type AppBuild @model {
+type AppBuild @model @auth (rules: [{ allow: private, provider: iam, operations: [create, update] }]) {
 	id: ID!
 	project: Project @connection(name: "projectAppBuilds")
 	name: String!

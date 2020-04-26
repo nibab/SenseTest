@@ -10,6 +10,7 @@ export const onCreatePost = /* GraphQL */ `
       imageId
       projectId
       text
+      appVersion
       createdAt
       updatedAt
       status
@@ -40,6 +41,7 @@ export const onCreatePost = /* GraphQL */ `
             imageId
             projectId
             text
+            appVersion
             createdAt
             updatedAt
             status
@@ -77,6 +79,7 @@ export const onUpdatePost = /* GraphQL */ `
       imageId
       projectId
       text
+      appVersion
       createdAt
       updatedAt
       status
@@ -107,6 +110,7 @@ export const onUpdatePost = /* GraphQL */ `
             imageId
             projectId
             text
+            appVersion
             createdAt
             updatedAt
             status
@@ -144,6 +148,7 @@ export const onDeletePost = /* GraphQL */ `
       imageId
       projectId
       text
+      appVersion
       createdAt
       updatedAt
       status
@@ -174,6 +179,7 @@ export const onDeletePost = /* GraphQL */ `
             imageId
             projectId
             text
+            appVersion
             createdAt
             updatedAt
             status
@@ -229,6 +235,7 @@ export const onCreateComment = /* GraphQL */ `
         imageId
         projectId
         text
+        appVersion
         createdAt
         updatedAt
         status
@@ -246,6 +253,7 @@ export const onCreateComment = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -279,6 +287,7 @@ export const onCreateComment = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -327,6 +336,7 @@ export const onUpdateComment = /* GraphQL */ `
         imageId
         projectId
         text
+        appVersion
         createdAt
         updatedAt
         status
@@ -344,6 +354,7 @@ export const onUpdateComment = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -377,6 +388,7 @@ export const onUpdateComment = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -425,6 +437,7 @@ export const onDeleteComment = /* GraphQL */ `
         imageId
         projectId
         text
+        appVersion
         createdAt
         updatedAt
         status
@@ -442,6 +455,7 @@ export const onDeleteComment = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -475,6 +489,7 @@ export const onDeleteComment = /* GraphQL */ `
               imageId
               projectId
               text
+              appVersion
               createdAt
               updatedAt
               status
@@ -529,6 +544,7 @@ export const onCreateSubComment = /* GraphQL */ `
           imageId
           projectId
           text
+          appVersion
           createdAt
           updatedAt
           status
@@ -606,6 +622,7 @@ export const onUpdateSubComment = /* GraphQL */ `
           imageId
           projectId
           text
+          appVersion
           createdAt
           updatedAt
           status
@@ -683,6 +700,7 @@ export const onDeleteSubComment = /* GraphQL */ `
           imageId
           projectId
           text
+          appVersion
           createdAt
           updatedAt
           status
@@ -723,6 +741,174 @@ export const onDeleteSubComment = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteAppBuild = /* GraphQL */ `
+  subscription OnDeleteAppBuild {
+    onDeleteAppBuild {
+      id
+      project {
+        id
+        name
+        posts {
+          items {
+            id
+            title
+            imageId
+            projectId
+            text
+            appVersion
+            createdAt
+            updatedAt
+            status
+            tags
+            attachments
+            comments {
+              nextToken
+            }
+          }
+          nextToken
+        }
+        appBuilds {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+            }
+            name
+            assetId
+            appetizeKey
+            version
+            uploadedByUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        currentAppBuild
+      }
+      name
+      assetId
+      appetizeKey
+      version
+      uploadedByUserId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateAppBuild = /* GraphQL */ `
+  subscription OnCreateAppBuild {
+    onCreateAppBuild {
+      id
+      project {
+        id
+        name
+        posts {
+          items {
+            id
+            title
+            imageId
+            projectId
+            text
+            appVersion
+            createdAt
+            updatedAt
+            status
+            tags
+            attachments
+            comments {
+              nextToken
+            }
+          }
+          nextToken
+        }
+        appBuilds {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+            }
+            name
+            assetId
+            appetizeKey
+            version
+            uploadedByUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        currentAppBuild
+      }
+      name
+      assetId
+      appetizeKey
+      version
+      uploadedByUserId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateAppBuild = /* GraphQL */ `
+  subscription OnUpdateAppBuild {
+    onUpdateAppBuild {
+      id
+      project {
+        id
+        name
+        posts {
+          items {
+            id
+            title
+            imageId
+            projectId
+            text
+            appVersion
+            createdAt
+            updatedAt
+            status
+            tags
+            attachments
+            comments {
+              nextToken
+            }
+          }
+          nextToken
+        }
+        appBuilds {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+            }
+            name
+            assetId
+            appetizeKey
+            version
+            uploadedByUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        currentAppBuild
+      }
+      name
+      assetId
+      appetizeKey
+      version
+      uploadedByUserId
       createdAt
       updatedAt
     }
