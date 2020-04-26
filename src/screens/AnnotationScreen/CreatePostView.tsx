@@ -1,76 +1,30 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import TextArea from 'antd/lib/input/TextArea'
-import { Input, Form } from 'antd'
-import { AnnotationScreenshot } from './Screenshot'
-import { CreatePostInput, PostStatus, GetProjectQuery } from '../../API'
+import { PostStatus } from '../../API'
 import { DataLayerClient } from '../../clients/DataLayerClient'
 import { addPost } from '../../store/post/actions'
 import uuid, { v4 as uuidv4 } from "uuid"
 import CreatePostViewSimulator from '../../components/Simulator/CreatePostViewSimulator'
 import NewPostForm from '../../components/NewPostForm'
-import PostScreenshot from '../../components/PostScreenshot'
 import { Post, postTagToGraphQLType, AppBuild } from '../../types'
-import { addComment } from '../../store/comment/actions'
 import { AssetStorageClient } from '../../clients/AssetStorageClient'
 import Log from '../../utils/Log'
-import { API, graphqlOperation } from 'aws-amplify'
-import { getProject } from '../../graphql/queries'
-
-type CreatePostViewProps = {
-    onPostCreated: () => void
-}
+import { AppBuildClient } from '../../clients/AppBuildClient'
 
 type Mode = 'CREATE_ISSUE' | 'BROWSE'
 
 const CreatePostView = () => {
-    const iframeRef = useRef<HTMLIFrameElement>(null)
-    const canvasRef = useRef<HTMLCanvasElement>(null)
-
     const [currentMode, setCurrentMode] = useState<Mode>('BROWSE')
     const [imageToAnnotate, setImageToAnnotate] = useState<Blob>()
     const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
     
     const dispatch = useDispatch()
-
-    // Form
-    const textAreaRef= useRef<TextArea>(null)
-    const titleRef= useRef<Input>(null)
-    const assignToRef = useRef<Input>(null)
-    const reproStepsRef = useRef<TextArea>(null)
-
     // Hardcoded projectId
     const projectId = '1'
 
     useEffect(() => {
-        getCurrentAppBuild()
+        AppBuildClient.getCurrentAppBuildForProjectId('68134e24-ed27-494e-b0bb-8a14f2b3167f').then((appBuild) => setCurrentAppBuild(appBuild))
     }, [])
-
-    const getCurrentAppBuild = async () => {
-        const project = await API.graphql(graphqlOperation(getProject, {id: '68134e24-ed27-494e-b0bb-8a14f2b3167f'})) as {data: GetProjectQuery}
-        const currentAppBuildId = project.data.getProject?.currentAppBuild
-        const appBuilds = project.data.getProject?.appBuilds
-        if (appBuilds !== undefined) {
-            // should return an array of only one item
-            const _currentAppBuildArray = [appBuilds?.items![0]] //.filter(item => item !== null && item.id === currentAppBuildId) 
-            if (_currentAppBuildArray?.length !== 0 && _currentAppBuildArray !== undefined) {
-                const currentAppBuild = _currentAppBuildArray[0]
-                if (currentAppBuild !== undefined && currentAppBuild !== null) {
-                    const appBuild: AppBuild = {
-                        id: currentAppBuild.id,
-                        appetizeKey: currentAppBuild.appetizeKey,
-                        name: currentAppBuild.name,
-                        assetId: currentAppBuild.assetId,
-                        version: currentAppBuild.version,
-                        uploadedByUserId: currentAppBuild.uploadedByUserId,
-                        createdAt: currentAppBuild.createdAt !== null ? currentAppBuild.createdAt : 'not available',
-                        project: currentAppBuild.project.id
-                    }
-                    setCurrentAppBuild(appBuild)
-                }       
-            }
-        }
-    }
 
     const onCreatePostClicked = async (imageId: string, post: Post) => {
         setCurrentMode('BROWSE')

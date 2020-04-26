@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Post } from '../../../types'
+import { Post, AppBuild } from '../../../types'
 import { PostViewSimulator as Simulator } from '../../../components/Simulator/PostViewSimulator'
 import Attachment from './Attachment'
 import PostScreenshot from '../../../components/PostScreenshot'
+import { AppBuildClient } from '../../../clients/AppBuildClient'
 
 type PostViewProps = {
     post: Post
@@ -13,11 +14,16 @@ type DisplayState = 'None' | 'Simulator' | 'Attachment'
 const PostView = ({ post }: PostViewProps) => {
 	const [displayState, setDisplayState] = useState<DisplayState>('None')
 	const [warningVisible, setWarningVisible] = useState(true)
+	const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
 
     useEffect(() => {
 		setDisplayState('None')
 		setWarningVisible(true)
 	}, [post])
+
+	useEffect(() => {
+		AppBuildClient.getCurrentAppBuildForProjectId('68134e24-ed27-494e-b0bb-8a14f2b3167f').then((appBuild) => setCurrentAppBuild(appBuild))
+	}, [])
 	
 	const renderWarningMessage = () => {
 		if (warningVisible) {
@@ -222,8 +228,8 @@ const PostView = ({ post }: PostViewProps) => {
 				{ renderPostTitle() }
 				<div className='flex flex-row pt-1 pb-1 pl-2 pr-2 overflow-scroll'> 				
 					{ renderToolbar() }	
-					{/* { displayState === 'Simulator' ? <Simulator/> : <></> } */}
-					{ displayState === 'Attachment' ? <Attachment/> : <></> }
+					{ displayState === 'Simulator'  && currentAppBuild !== undefined ? <div className="ml-3"><Simulator appBuild={currentAppBuild}/></div> : <></> }
+					{ displayState === 'Attachment' ? <div className="ml-3"><Attachment/></div> : <></> }
 					<div className='ml-3'>
 						<PostScreenshot post={post} />
 					</div>

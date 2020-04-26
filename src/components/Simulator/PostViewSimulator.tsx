@@ -3,7 +3,6 @@ import { AppBuild } from '../../types'
 import VersionTag from '../VersionTag'
 
 type PostViewSimulatorProps = {
-	onScreenshot: (imgSrc: string) => void
 	appBuild: AppBuild
 }
 
@@ -72,7 +71,7 @@ export const PostViewSimulator = (props: PostViewSimulatorProps) => {
 					{/* <div className='absolute z-0 w-full h-full'>
 						<img className="object-contain w-full h-full" src='iphonexBlack.png'></img>
 					</div>	 */}
-					<iframe onLoad={() => iFrameLoaded()} ref={iframeRef} src="https://appetize.io/embed/fczxctdk32wb17vabzd3k2wq9w?device=iphonex&scale=69&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true" width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
+					<iframe onLoad={() => iFrameLoaded()} ref={iframeRef} src={`https://appetize.io/embed/${props.appBuild.appetizeKey}?device=iphonex&scale=69&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true`} width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
 				</div>							
 			</div>
 		)
