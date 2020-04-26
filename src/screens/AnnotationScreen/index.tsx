@@ -16,6 +16,7 @@ import PostFooterBar from "./PostsFooterBar.tsx"
 import { ReleaseStatusBar } from "./ReleaseStatusBar"
 import { PostToolbar } from "./PostToolbar"
 import { addComment } from "../../store/comment/actions"
+import { AppBuildClient } from "../../clients/AppBuildClient"
 
 export const AnnotationScreen = ({ }) => {
     // Posts
@@ -105,6 +106,12 @@ export const AnnotationScreen = ({ }) => {
     }
 
     useEffect(() => {
+        AppBuildClient.createAppBuildClient({
+            assetId: '1',
+            appVersion: '2',
+            appName: 'wha',
+            assetUrl: "https://appetizetest.s3.amazonaws.com/MovieSwift.zip"
+        })
         getPostsAndStoreInRedux('1')
     }, [])
 

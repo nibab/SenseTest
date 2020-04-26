@@ -1,7 +1,8 @@
 import { AppBuildRequestBodyType } from '../types'
 import { Auth, API } from 'aws-amplify';
+import Log from '../utils/Log';
 
-const APP_BUILD_API_NAME = 'https://5m965rfer6.execute-api.us-east-1.amazonaws.com/staging'
+const APP_BUILD_API_NAME = 'https://5m965rfer6.execute-api.us-east-1.amazonaws.com/staging/'
 const NEW_APP_BUILD_PATH = '/addAppBuild'
 
 export class AppBuildClient {
@@ -16,15 +17,18 @@ export class AppBuildClient {
                         }
                     }
 
-                    API.post(APP_BUILD_API_NAME, NEW_APP_BUILD_PATH, myInit).then(response => {
-                        console.log(response);
+                    API.post("newAppBuild", NEW_APP_BUILD_PATH, myInit).then(response => {
+                        Log.info(response);
                         resolve(response);
                     }).catch(error => {
-                        console.log(error.response);
+                        Log.error(error.response);
                         reject(error);
                     });
                 })
-                .catch(err => console.log(err));
+                .catch(error => {
+                    Log.error(error.response);
+                    reject(error);
+                });
         }) 
     }
 }

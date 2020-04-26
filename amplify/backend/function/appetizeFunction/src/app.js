@@ -115,11 +115,13 @@ app.post('/item', async function(req, res) {
 });
 
 app.post('/addAppBuild', async function(req, res) {
+  //var context = req.apiGateway.context;
+  
   const assetId = req.body["assetId"] // 1
   const assetUrl = req.body["assetUrl"] // "https://appetizetest.s3.amazonaws.com/MovieSwift.zip"
   const appName = req.body["appName"] // 'testName'
   const appVersion = req.body["appVersion"] //  'testVersion'
-  const userId = req["cognitoUserId"]
+  const userId =  req.apiGateway.event.requestContext.authorizer.claims.sub
   
   const data = {
     "url": assetUrl,
@@ -186,7 +188,7 @@ app.post('/addAppBuild', async function(req, res) {
         const graphqlResponse = await persistAppBuildMetadata(item)
         const _response = {
           ...response.data,
-          graphqlQueryResponse: graphqlResponse
+          appBuildId: graphqlResponse.data.createAppBuild.id
         }
         
         resolve(_response)
@@ -201,7 +203,7 @@ app.post('/addAppBuild', async function(req, res) {
     res.json({statusCode:response["statusCode"], body: response})
   } else {
     // Add your code here
-    res.json({statusCode:200, body: req.body})
+    res.json({statusCode:401, body: 'Missing authentication data'})
   }
   
   
