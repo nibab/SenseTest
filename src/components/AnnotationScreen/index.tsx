@@ -4,6 +4,7 @@ import {
 	PointSelector
 } from 'react-image-annotation/lib/selectors'
 import Annotation from 'react-image-annotation'
+import uuid from 'uuid'
 
 type AnnotationScreenProps = {
     imageBlob: Blob
@@ -77,7 +78,7 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 		if (!geometry) return null
 	  
 		return (
-			<Dot geometry={geometry} />
+			<Dot key={uuid()} geometry={geometry} />
 		)
 	}
 
@@ -87,7 +88,7 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 		if (!geometry) return null
 
 		return (
-			<Dot annotationId={`${params.annotation.data.id}`} geometry={geometry} />
+			<Dot key={uuid()} annotationId={`${params.annotation.data.id}`} geometry={geometry} />
 		)
 	}
 
