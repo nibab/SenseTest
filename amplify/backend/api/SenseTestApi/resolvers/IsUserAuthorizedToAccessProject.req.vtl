@@ -1,7 +1,7 @@
 {
     "operation": "GetItem",
     "key": {
-        "projectId": $util.dynamodb.toDynamoDBJson($ctx.prev.result.projectId),
+        "projectId": $util.dynamodb.toDynamoDBJson($ctx.prev.result.id),
         "userId": $util.dynamodb.toDynamoDBJson($ctx.stash.userId)
     }
 }
