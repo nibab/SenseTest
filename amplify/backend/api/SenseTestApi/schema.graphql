@@ -2,6 +2,7 @@ type Project @model(queries: null, mutations: null) {
   id: ID!
   name: String!
   posts: [Post] @connection(keyName: "byProject", fields: ["id"])
+  appBuilds: [AppBuild] @connection(keyName: "projectAppBuilds")
 }
 type Post @model(queries: {list: "listPosts"})  
   @key(name: "byProject", fields:["projectId", "title"])
@@ -12,6 +13,7 @@ type Post @model(queries: {list: "listPosts"})
   imageId: ID!
   projectId: ID!
   text: String!
+  appVersion: String!
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
   status: PostStatus!
@@ -54,6 +56,18 @@ type SubComment @model
 	parentComment: Comment! @connection(name: "SubComments")
 	createdAt: AWSDateTime
   updatedAt: AWSDateTime
+}
+
+type AppBuild @model {
+	id: ID!
+	project: Project @connection(name: "projectAppBuilds")
+	name: String!
+	assetId: ID!
+	appetizeKey: String!
+	version: String!
+	uploadedByUserId: String!
+	createdAt: AWSDateTime
+  	updatedAt: AWSDateTime
 }
 
 type Annotation {
