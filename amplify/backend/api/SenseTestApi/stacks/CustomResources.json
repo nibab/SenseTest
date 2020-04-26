@@ -145,6 +145,63 @@
 				}
 			}
 		},
+		"IsUserAuthorizedToAccessPost": {
+			"Type" : "AWS::AppSync::FunctionConfiguration",
+			"Properties" : {
+				"ApiId" : {
+					"Ref": "AppSyncApiId"
+				},
+				"DataSourceName" : "ProjectAuthTable",
+				"FunctionVersion" : "2018-05-29",
+				"Name" : "Is_user_authorized_to_access_project",
+				"RequestMappingTemplateS3Location" : {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"IsUserAuthorizedToAccessPost",
+										"req",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				},
+				"ResponseMappingTemplateS3Location" : {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"IsUserAuthorizedToAccessPost",
+										"res",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				}
+			}
+		},
 		"QueryGetPostResolver": {
 			"Type": "AWS::AppSync::Resolver",
 			"DependsOn" : "QueryGetPostFunction",
@@ -165,7 +222,7 @@
 						},
 						{
 							"Fn::GetAtt": [
-								"IsUserAuthorizedToAccessProject",
+								"IsUserAuthorizedToAccessPost",
 								"FunctionId"
 							]
 						}
