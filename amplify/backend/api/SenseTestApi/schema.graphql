@@ -59,7 +59,7 @@ type SubComment @model
   updatedAt: AWSDateTime
 }
 
-type AppBuild @model @auth (rules: [{ allow: private, provider: iam, operations: [create, update] }]) {
+type AppBuild @model @aws_iam @aws_cognito_user_pools @auth (rules: [{ allow: private, provider: iam, operations: [create, update] }]) {
 	id: ID!
 	project: Project! @connection(name: "projectAppBuilds")
 	name: String!

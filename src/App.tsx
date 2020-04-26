@@ -22,6 +22,7 @@ import { rootReducer } from './store'
 import { Provider } from 'react-redux'
 import TeamScreen from './screens/TeamScreen';
 import ProjectsScreen from './screens/ProjectsScreen';
+import AppBuildScreen from './screens/AppBuildScreen';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -107,6 +108,12 @@ class App extends Component<{}, AppState> {
           component={AnnotationScreen}
         ></ProtectedRoute>
         <ProtectedRoute
+          path='/builds'
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
+          component={AppBuildScreen}
+        ></ProtectedRoute>
+        <ProtectedRoute
           path='/team'
           isLoggedIn={isLoggedIn}
           isLoading={isLoading}
@@ -139,7 +146,7 @@ class App extends Component<{}, AppState> {
   renderRouter = (isLoggedIn: boolean, isLoading: boolean) => {
     return (
       <Router>
-        <div className="bg-white h-screen w-screen flex flex-col antialiased">
+        <div className="flex flex-col w-screen h-screen antialiased bg-white">
           {/* <div className={`${!isLoggedIn ? 'hidden' : ''} flex-shrink-0 flex h-16 w-full flex-row`}>
             <NavBar width={256} signOut={this.signOut}/>
           </div>  

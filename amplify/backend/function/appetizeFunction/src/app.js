@@ -115,13 +115,12 @@ app.post('/item', async function(req, res) {
 });
 
 app.post('/addAppBuild', async function(req, res) {
-  //var context = req.apiGateway.context;
-  
   const assetId = req.body["assetId"] // 1
   const assetUrl = req.body["assetUrl"] // "https://appetizetest.s3.amazonaws.com/MovieSwift.zip"
   const appName = req.body["appName"] // 'testName'
   const appVersion = req.body["appVersion"] //  'testVersion'
   const userId =  req.apiGateway.event.requestContext.authorizer.claims.sub
+  const projectId = req.body["projectId"]
   
   const data = {
     "url": assetUrl,
@@ -144,8 +143,6 @@ app.post('/addAppBuild', async function(req, res) {
         }
     });
     
-    console.log(JSON.stringify(appsync_req))
-      
     try {
       const signer = new AWS.Signers.V4(appsync_req, "appsync", true);
       signer.addAuthorization(AWS.config.credentials, AWS.util.date.getDate());
@@ -174,7 +171,8 @@ app.post('/addAppBuild', async function(req, res) {
     assetId: assetId, 
     name: appName, 
     version: appVersion,
-    uploadedByUserId: userId !== undefined ? userId : 'noCognitoCredentials'
+    uploadedByUserId: userId !== undefined ? userId : 'noCognitoCredentials',
+    appBuildProjectId: projectId
   }
   
   if (userId !== undefined) {
@@ -184,8 +182,10 @@ app.post('/addAppBuild', async function(req, res) {
           ...newItem,
           appetizeKey: response.data['publicKey'] 
         }
-        
+        console.log("Graphql item " + JSON.stringify(item))
         const graphqlResponse = await persistAppBuildMetadata(item)
+        console.log("Graphql response: " + JSON.stringify(graphqlResponse))
+        
         const _response = {
           ...response.data,
           appBuildId: graphqlResponse.data.createAppBuild.id

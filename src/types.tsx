@@ -124,5 +124,6 @@ export type AppBuildRequestBodyType = {
   assetId: string, 
   appName: string,
   appVersion: string,
-  assetUrl: string //"https://appetizetest.s3.amazonaws.com/MovieSwift.zip"
+  assetUrl: string, //"https://appetizetest.s3.amazonaws.com/MovieSwift.zip"
+  projectId: string
 }

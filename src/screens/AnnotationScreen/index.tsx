@@ -106,12 +106,6 @@ export const AnnotationScreen = ({ }) => {
     }
 
     useEffect(() => {
-        // AppBuildClient.createAppBuildClient({
-        //     assetId: '1',
-        //     appVersion: '2',
-        //     appName: 'wha',
-        //     assetUrl: "https://appetizetest.s3.amazonaws.com/MovieSwift.zip"
-        // })
         getPostsAndStoreInRedux('1')
     }, [])    
 
