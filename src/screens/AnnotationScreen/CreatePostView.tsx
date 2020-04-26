@@ -3,17 +3,19 @@ import { useDispatch } from 'react-redux'
 import TextArea from 'antd/lib/input/TextArea'
 import { Input, Form } from 'antd'
 import { AnnotationScreenshot } from './Screenshot'
-import { CreatePostInput, PostStatus } from '../../API'
+import { CreatePostInput, PostStatus, GetProjectQuery } from '../../API'
 import { DataLayerClient } from '../../clients/DataLayerClient'
 import { addPost } from '../../store/post/actions'
 import uuid, { v4 as uuidv4 } from "uuid"
 import CreatePostViewSimulator from '../../components/Simulator/CreatePostViewSimulator'
 import NewPostForm from '../../components/NewPostForm'
 import PostScreenshot from '../../components/PostScreenshot'
-import { Post, postTagToGraphQLType } from '../../types'
+import { Post, postTagToGraphQLType, AppBuild } from '../../types'
 import { addComment } from '../../store/comment/actions'
 import { AssetStorageClient } from '../../clients/AssetStorageClient'
 import Log from '../../utils/Log'
+import { API, graphqlOperation } from 'aws-amplify'
+import { getProject } from '../../graphql/queries'
 
 type CreatePostViewProps = {
     onPostCreated: () => void
@@ -27,7 +29,7 @@ const CreatePostView = () => {
 
     const [currentMode, setCurrentMode] = useState<Mode>('BROWSE')
     const [imageToAnnotate, setImageToAnnotate] = useState<Blob>()
-    const [appVersionForImageToAnnotate, setAppVersionForImageToAnnotate] = useState('testAppVersion')
+    const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
     
     const dispatch = useDispatch()
 
@@ -43,6 +45,36 @@ const CreatePostView = () => {
     useEffect(() => {
         window.addEventListener("message", receiveMessage, false);
     })
+
+    useEffect(() => {
+        getCurrentAppBuild()
+    }, [])
+
+    const getCurrentAppBuild = async () => {
+        const project = await API.graphql(graphqlOperation(getProject, {id: '68134e24-ed27-494e-b0bb-8a14f2b3167f'})) as {data: GetProjectQuery}
+        const currentAppBuildId = project.data.getProject?.currentAppBuild
+        const appBuilds = project.data.getProject?.appBuilds
+        if (appBuilds !== undefined) {
+            // should return an array of only one item
+            const _currentAppBuildArray = [appBuilds?.items![0]] //.filter(item => item !== null && item.id === currentAppBuildId) 
+            if (_currentAppBuildArray?.length !== 0 && _currentAppBuildArray !== undefined) {
+                const currentAppBuild = _currentAppBuildArray[0]
+                if (currentAppBuild !== undefined && currentAppBuild !== null) {
+                    const appBuild: AppBuild = {
+                        id: currentAppBuild.id,
+                        appetizeKey: currentAppBuild.appetizeKey,
+                        name: currentAppBuild.name,
+                        assetId: currentAppBuild.assetId,
+                        version: currentAppBuild.version,
+                        uploadedByUserId: currentAppBuild.uploadedByUserId,
+                        createdAt: currentAppBuild.createdAt !== null ? currentAppBuild.createdAt : 'not available',
+                        project: currentAppBuild.project.id
+                    }
+                    setCurrentAppBuild(appBuild)
+                }       
+            }
+        }
+    }
 
     const receiveMessage = (event: any) => {
         console.log('blea')
@@ -66,7 +98,7 @@ const CreatePostView = () => {
             text: post.text,
             status: PostStatus.OPEN,
             tags: post.tags === undefined ? [] : post.tags.map(postTag => postTagToGraphQLType(postTag)),
-            appVersion: appVersionForImageToAnnotate      
+            appVersion: post.appVersion      
         })
 
         post.comments?.forEach(async (comment) => {
@@ -193,13 +225,13 @@ const CreatePostView = () => {
     }
     
     const renderCreateIssue = () => {
-        if (currentMode === 'CREATE_ISSUE' && imageToAnnotate !== undefined) {
+        if (currentMode === 'CREATE_ISSUE' && imageToAnnotate !== undefined && currentAppBuild !== undefined) {
             return (
                 <NewPostForm 
                     postId={uuid()}
                     projectId={projectId}
                     imageToAnnotate={imageToAnnotate} 
-                    appVersion={appVersionForImageToAnnotate}
+                    appBuild={currentAppBuild}
                     imagePromise={createImagePromise(imageToAnnotate)}
                     onCreatePostClicked={onCreatePostClicked} 
                     onCancel={() => {setCurrentMode('BROWSE')}} />
@@ -219,7 +251,7 @@ const CreatePostView = () => {
 					{/* RenderPostToolBar is contained because otherwise it stretches for the whole height. */}
 					
                     <div className='flex flex-row justify-center w-full pt-1 pb-1 pl-2 pr-2 mx-auto overflow-scroll'> 
-                        { currentMode === 'BROWSE' && <CreatePostViewSimulator onScreenshot={(img) => {
+                        { currentMode === 'BROWSE' && currentAppBuild !== undefined && <CreatePostViewSimulator appBuild={currentAppBuild} onScreenshot={(img) => {
                             setImageToAnnotate(b64toBlob(img)); 
                             setTimeout(() => {setCurrentMode('CREATE_ISSUE')}, 100)
                         }}/> }

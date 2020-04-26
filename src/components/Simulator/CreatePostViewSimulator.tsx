@@ -1,7 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react'
+import { AppBuild } from '../../types'
 
 type CreatePostViewSimulatorProps = {
 	onScreenshot: (imgSrc: string) => void
+	appBuild: AppBuild
 }
 
 const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
@@ -38,7 +40,7 @@ const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
 						<svg className="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
 							<circle cx="4" cy="4" r="3" />
 						</svg>
-						v 1.0.1.b
+						{ props.appBuild.version }
 					</span>
 				</div> 
 			</div>
@@ -97,7 +99,7 @@ const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
 					{/* <div className='absolute z-0 w-full h-full'>
 						<img className="object-contain w-full h-full" src='iphonexBlack.png'></img>
 					</div>	 */}
-					<iframe onLoad={() => iFrameLoaded()} ref={iframeRef} src="https://appetize.io/embed/y5vcfgm9gxf1xbcvfg2wmx2wg4?device=iphonex&scale=69&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true" width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
+					<iframe onLoad={() => iFrameLoaded()} ref={iframeRef} src={`https://appetize.io/embed/${props.appBuild.appetizeKey}?device=iphonex&scale=69&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true`} width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
 				</div>							
 			</div>
 		)

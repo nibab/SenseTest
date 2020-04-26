@@ -3,13 +3,13 @@ import React, { useState, useRef } from 'react'
 import uuid from 'uuid'
 import AnnotationScreen from '../AnnotationScreen'
 import { CommentsSection } from '../Comments'
-import { Comment as CommentType, Annotation, Post, PostTag, SubComment } from '../../types'
+import { Comment as CommentType, Annotation, Post, PostTag, SubComment, AppBuild } from '../../types'
 import { useDispatch } from 'react-redux'
 import { addComment, addsubComment } from '../../store/comment/actions'
 
 type NewPostFormProps = {
 	imageToAnnotate: Blob
-	appVersion: string
+	appBuild: AppBuild
 	imagePromise: Promise<string> // resolves with the imageId of the uploaded imageToAnnotate.
 	postId: string
 	projectId: string
@@ -119,7 +119,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 								<svg className="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
 									<circle cx="4" cy="4" r="3" />
 								</svg>
-								{ props.appVersion }
+								{ props.appBuild.version }
 							</span>
 						</h3>
 						</div>
@@ -214,7 +214,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 			text: 'text',
 			comments: comments,
 			tags: tagArray,
-			appVersion: props.appVersion
+			appVersion: props.appBuild.version
 		})
 	}
 
