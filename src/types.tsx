@@ -33,18 +33,24 @@ export type Post = {
   tags?: PostTag[]
   status?: PostStatus // this indicates whether the issue has been resolved or is still pending
   attachments?: string[] // A list of assetIds or Blobs.
+  appVersion: string
 }
 
-// This is basically the raw type that we get from AppSync.
-export type PostGraphQl = {
-  id: string,
-  title: string,
-  imageId: string,
-  projectId: string,
-  text: string,
-  createdAt: string | null, // This is introduced by Amplify at the resolver level.
-  updatedAt: string | null// This is introduced by Amplify at the resolver level.
-}
+// // This is basically the raw type that we get from AppSync.
+// export type PostGraphQl = {
+//   id: string,
+//   title: string,
+//   imageId: string,
+//   projectId: string,
+//   text: string,
+//   createdAt: string | null, // This is introduced by Amplify at the resolver level.
+//   updatedAt: string | null// This is introduced by Amplify at the resolver level.
+//   comments?: Comment[]
+//   tags?: PostTag[]
+//   status?: PostStatus // this indicates whether the issue has been resolved or is still pending
+//   attachments?: string[] // A list of assetIds or Blobs.
+//   appVersion: string
+// }
 
 export type Project = {
   id: string,
@@ -98,7 +104,7 @@ export type SubComment = {
 }
 
 // Adding new app builds
-type AppBuildRequestBodyType = {
+export type AppBuildRequestBodyType = {
   assetId: string, 
   appName: string,
   appVersion: string,

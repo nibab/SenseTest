@@ -2,21 +2,19 @@ import { AssetStorageClient } from '../clients/AssetStorageClient'
 import { addPost } from '../store/post/actions'
 import { useDispatch } from "react-redux"
 import { useSelector } from "../store"
-import { PostGraphQl, Post } from '../types'
-
+import { CreatePostMutation, GetPostQuery } from '../API'
+import { Post } from '../types'
 
 export class PostImgDownload {
   callback?: (progress: number) => void
-  imagePromise: Promise<Post>
+  imagePromise: Promise<Blob>
   completed: boolean
-  fetchedPost: PostGraphQl
   image?: Blob
   private onDone: (blob: Blob) => void
   
-  constructor(fetchedPost: PostGraphQl, onDone: (blob: Blob) => void) {
+  constructor(imageId: string, onDone: (blob: Blob) => void) {
     this.onDone = onDone
-    this.fetchedPost = fetchedPost
-    this.imagePromise = AssetStorageClient.getDownloadUrl(fetchedPost.imageId).then((url) => this.download(url))
+    this.imagePromise = AssetStorageClient.getDownloadUrl(imageId).then((url) => this.download(url))
     this.imagePromise.then((img) => {
       this.completed = true      
       console.log('blea updated the post')
@@ -26,7 +24,7 @@ export class PostImgDownload {
     this.completed = false
   }
 
-  download(url: string): Promise<Post> {
+  download(url: string): Promise<Blob> {
     return new Promise(async (resolve, reject) => {
       const response = await fetch(url, {
         method: 'GET'
@@ -75,14 +73,7 @@ export class PostImgDownload {
         const blob = new Blob([chunksAll])
         this.onDone(blob)
 
-        resolve({
-          id: this.fetchedPost.id,
-          image: blob,
-          projectId: this.fetchedPost.projectId,
-          text: this.fetchedPost.text,
-          title: this.fetchedPost.title,
-          dateCreated: this.fetchedPost.createdAt
-        })
+        resolve(blob)
       }
     }) 
   }

@@ -22,7 +22,8 @@ export class DataLayerClient {
 					image: imageBlob,
 					projectId: newPost.projectId,
 					text: newPost.text,
-					dateCreated: newPost.createdAt
+					dateCreated: newPost.createdAt,
+					appVersion: newPost.appVersion
 				}
 				Log.info("Succeeded in creating post.", "AppetizeScreen")
 				resolve(_newPost)

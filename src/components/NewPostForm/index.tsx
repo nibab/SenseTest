@@ -9,6 +9,7 @@ import { addComment, addsubComment } from '../../store/comment/actions'
 
 type NewPostFormProps = {
 	imageToAnnotate: Blob
+	appVersion: string
 	imagePromise: Promise<string> // resolves with the imageId of the uploaded imageToAnnotate.
 	postId: string
 	projectId: string
@@ -118,7 +119,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 								<svg className="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
 									<circle cx="4" cy="4" r="3" />
 								</svg>
-								v 1.0.1.b
+								{ props.appVersion }
 							</span>
 						</h3>
 						</div>
@@ -212,7 +213,8 @@ const NewPostForm = (props: NewPostFormProps) => {
 			projectId: props.projectId,
 			text: 'text',
 			comments: comments,
-			tags: tagArray
+			tags: tagArray,
+			appVersion: props.appVersion
 		})
 	}
 

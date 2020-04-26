@@ -77,7 +77,7 @@ export const AnnotationScreen = ({ }) => {
                 const posts = response.data.projectPostsByTime?.items
                 posts?.forEach(async (post) => {
                     if (post !== null) {
-                        const postImgDownload = new PostImgDownload(post, (blob) => {})
+                        const postImgDownload = new PostImgDownload(post.imageId, (blob) => {})
                         
                         const newPost = {
                             id: post.id,
@@ -86,10 +86,11 @@ export const AnnotationScreen = ({ }) => {
                             text: post.text,
                             title: post.title,
                             dateCreated: post.createdAt,
-                            tags: post.tags.filter((tag) => tag !== null).map((tag) => postTagGraphQLToLocalType(tag!) )
+                            tags: post.tags.filter((tag) => tag !== null).map((tag) => postTagGraphQLToLocalType(tag!) ),
+                            appVersion: post.appVersion
                         }
-                        postImgDownload.imagePromise.then((post) => {
-                            dispatch(updateImageForPost(newPost, post.image as Blob))
+                        postImgDownload.imagePromise.then((blob) => {
+                            dispatch(updateImageForPost(newPost, blob))
                             Log.info("Downloaded post with title " + post.title)
                         })
                         //const newPost = await postImgDownload.imagePromise

@@ -27,6 +27,7 @@ const CreatePostView = () => {
 
     const [currentMode, setCurrentMode] = useState<Mode>('BROWSE')
     const [imageToAnnotate, setImageToAnnotate] = useState<Blob>()
+    const [appVersionForImageToAnnotate, setAppVersionForImageToAnnotate] = useState('testAppVersion')
     
     const dispatch = useDispatch()
 
@@ -64,7 +65,8 @@ const CreatePostView = () => {
             projectId: post.projectId,
             text: post.text,
             status: PostStatus.OPEN,
-            tags: post.tags === undefined ? [] : post.tags.map(postTag => postTagToGraphQLType(postTag))         
+            tags: post.tags === undefined ? [] : post.tags.map(postTag => postTagToGraphQLType(postTag)),
+            appVersion: appVersionForImageToAnnotate      
         })
 
         post.comments?.forEach(async (comment) => {
@@ -197,6 +199,7 @@ const CreatePostView = () => {
                     postId={uuid()}
                     projectId={projectId}
                     imageToAnnotate={imageToAnnotate} 
+                    appVersion={appVersionForImageToAnnotate}
                     imagePromise={createImagePromise(imageToAnnotate)}
                     onCreatePostClicked={onCreatePostClicked} 
                     onCancel={() => {setCurrentMode('BROWSE')}} />
@@ -216,7 +219,10 @@ const CreatePostView = () => {
 					{/* RenderPostToolBar is contained because otherwise it stretches for the whole height. */}
 					
                     <div className='flex flex-row justify-center w-full pt-1 pb-1 pl-2 pr-2 mx-auto overflow-scroll'> 
-                        { currentMode === 'BROWSE' && <CreatePostViewSimulator onScreenshot={(img) => {setImageToAnnotate(b64toBlob(img)); setTimeout(() => {setCurrentMode('CREATE_ISSUE')}, 100)}}/> }
+                        { currentMode === 'BROWSE' && <CreatePostViewSimulator onScreenshot={(img) => {
+                            setImageToAnnotate(b64toBlob(img)); 
+                            setTimeout(() => {setCurrentMode('CREATE_ISSUE')}, 100)
+                        }}/> }
                         { renderCreateIssue() }
                         {/* <PostScreenshot post={{
                             id: '1',
