@@ -169,7 +169,7 @@ const PostView = ({ post }: PostViewProps) => {
 		}
 
 		return (
-			<div className="p-2 mx-2 mt-1 border rounded-md bg-cool-gray-50">
+			<div className="p-1.5 mx-2 mt-1 border rounded-md bg-cool-gray-50">
 				{/* <h2 className='text-base font-bold'>{post.title}</h2>
 				<div className='-mt-1 text-xs font-semibold text-gray-500 uppercase '>
 					2/20/20
@@ -226,7 +226,7 @@ const PostView = ({ post }: PostViewProps) => {
 			{ renderWarningMessage() }
            <div className='relative flex flex-col flex-auto h-full'> 
 				{ renderPostTitle() }
-				<div className='flex flex-row pt-1 pb-1 pl-2 pr-2 overflow-scroll'> 				
+				<div className='flex flex-row pt-2 pb-1 pl-2 pr-2 overflow-scroll'> 				
 					{ renderToolbar() }	
 					{ displayState === 'Simulator'  && currentAppBuild !== undefined ? <div className="ml-3"><Simulator appBuild={currentAppBuild}/></div> : <></> }
 					{ displayState === 'Attachment' ? <div className="ml-3"><Attachment/></div> : <></> }

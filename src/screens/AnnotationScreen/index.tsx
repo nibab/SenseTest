@@ -23,7 +23,7 @@ export const AnnotationScreen = ({ }) => {
     const [getPostsFetchInProgress, setGetPostsFetchInProgress] = useState(false)
     const postsSelector = useSelector(state => state.post)
     const [currentPost, setCurrentPost] = useState<Post>()
-    const [displayCreateNewPost, setDisplayCreateNewPost] = useState<boolean>(false)
+    const [displayCreateNewPost, setDisplayCreateNewPost] = useState<boolean>(true)
     const dispatch = useDispatch()
 
     const getAllCommentsForPost = async (postId: string) => { 
@@ -124,8 +124,7 @@ export const AnnotationScreen = ({ }) => {
         <div className='flex flex-row w-screen h-screen'>	
             <PostToolbar posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost}/>
             <div className='flex flex-col w-full bg-gray-50'>
-                {/* <PostHeader></PostHeader> */}
-                <ReleaseStatusBar />
+                {/* <ReleaseStatusBar /> */}
                 <div className="relative flex flex-row h-full overflow-scroll">  
                     { renderPostDetailView() }
                 </div>
