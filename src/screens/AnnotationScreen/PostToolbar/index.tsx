@@ -12,7 +12,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 	
 	const renderHeader = () => {
 		return (
-			<div id='menu' className='flex flex-col flex-shrink-0 pb-5 '>
+			<div id='menu' className='flex flex-col flex-shrink-0 pb-2 '>
 				<div className="flex flex-shrink-0 px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-200">
 					<div className="flex-shrink-0 block group focus:outline-none ">
 						<div className="flex items-center">
@@ -30,8 +30,19 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 						</div>
 					</div>
 				</div>
+
+				<div  onClick={() => setDisplayCreateNewPost(true)} className="relative flex flex-row pt-1 pb-1 pr-3 mx-2 mt-2 font-bold text-gray-700 rounded-lg cursor-pointer hover:bg-gray-200">
+					<div className='my-auto mr-1'>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-7 icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+
+					</div>
+
+					<div className='w-full my-auto text-sm truncate'>
+						Review App
+					</div>
+				</div>
 				
-				<div className="relative flex flex-row pt-1 pb-1 pl-3 pr-3 mx-2 mt-2 font-normal text-gray-700 rounded-lg cursor-pointer hover:bg-gray-200">
+				{/* <div className="relative flex flex-row pt-1 pb-1 pl-3 pr-3 mx-2 mt-2 font-normal text-gray-700 rounded-lg cursor-pointer hover:bg-gray-200">
 					<div className='my-auto'>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-2 icon-notification"><circle cx="12" cy="19" r="3" className="secondary"/><path className="primary" d="M10.02 4.28L10 4a2 2 0 1 1 3.98.28A7 7 0 0 1 19 11v5a1 1 0 0 0 1 1 1 1 0 0 1 0 2H4a1 1 0 0 1 0-2 1 1 0 0 0 1-1v-5a7 7 0 0 1 5.02-6.72z"/></svg>
 					</div>
@@ -53,15 +64,15 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 				</div>
 
 				<div className="relative flex flex-row pt-1 pb-1 pl-3 pr-3 mx-2 font-normal text-gray-700 rounded-lg cursor-pointer hover:bg-gray-200">
-						<div className='h-full my-auto'>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-2 icon-link"><path className="secondary" d="M19.48 13.03l-.02-.03a1 1 0 1 1 1.75-.98A6 6 0 0 1 16 21h-4a6 6 0 1 1 0-12h1a1 1 0 0 1 0 2h-1a4 4 0 1 0 0 8h4a4 4 0 0 0 3.48-5.97z"/><path className="primary" d="M4.52 10.97l.02.03a1 1 0 1 1-1.75.98A6 6 0 0 1 8 3h4a6 6 0 1 1 0 12h-1a1 1 0 0 1 0-2h1a4 4 0 1 0 0-8H8a4 4 0 0 0-3.48 5.97z"/></svg>
-						</div>
-
-						<a className='flex w-full my-auto text-sm truncate'>
-							Share App Link 							
-						</a>
-						
+					<div className='h-full my-auto'>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-2 icon-link"><path className="secondary" d="M19.48 13.03l-.02-.03a1 1 0 1 1 1.75-.98A6 6 0 0 1 16 21h-4a6 6 0 1 1 0-12h1a1 1 0 0 1 0 2h-1a4 4 0 1 0 0 8h4a4 4 0 0 0 3.48-5.97z"/><path className="primary" d="M4.52 10.97l.02.03a1 1 0 1 1-1.75.98A6 6 0 0 1 8 3h4a6 6 0 1 1 0 12h-1a1 1 0 0 1 0-2h1a4 4 0 1 0 0-8H8a4 4 0 0 0-3.48 5.97z"/></svg>
 					</div>
+
+					<a className='flex w-full my-auto text-sm truncate'>
+						Share App Link 							
+					</a>
+					
+				</div> */}
 			</div>
 		)
 	}
@@ -107,17 +118,16 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 
 	const renderCreateNewButton = () => {
 		return (
-			<div id='createNew' onClick={() => setDisplayCreateNewPost(true)} className='bottom-0 flex flex-col flex-shrink-0 h-12 text-gray-700 border-t hover:bg-gray-200 hover:text-blue-800'>
+			<div className='bottom-0 flex flex-col flex-shrink-0 h-16 text-gray-700 border-t hover:bg-gray-200 hover:text-blue-800'>
 				
-				<div className="flex flex-row h-full pl-3 pr-3 mx-2 mx-auto font-medium cursor-pointer">
-					<div className='my-auto mr-1'>
+				<div className="flex flex-row h-full pl-3 pr-3 mx-2 mx-auto cursor-pointer">
+					{/* <div className='my-auto mr-1'>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-7 icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
 
-					</div>
+					</div> */}
 
-					<div className='w-full my-auto text-sm truncate'>
-						Review App
-					</div>
+					<img className="object-contain p-2" src={'logo.png'} style={{filter: 'grayscale(100%)'}}/>
+
 					
 				</div>
 			</div>

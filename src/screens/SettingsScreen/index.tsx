@@ -8,9 +8,9 @@ const UserProfile = {
 
 const SettingsScreen = () => {
   return (
-    <div>
+    <div className='h-full bg-gray-50'>
       <PlanPanel />
-      {/* <PaymentsPanel /> */}
+      <PaymentsPanel />
     </div>
   )
 }
