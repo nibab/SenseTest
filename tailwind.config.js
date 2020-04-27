@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   theme: {
     filter: { // defaults to {}
@@ -5,7 +7,7 @@ module.exports = {
       'grayscale': 'grayscale(1)',
     },
     fontFamily: {
-      body: ['Roboto', 'sans-serif'],
+      sans: ['Inter var', ...defaultTheme.fontFamily.sans]
     },
     spinner: (theme) => ({
       default: {
