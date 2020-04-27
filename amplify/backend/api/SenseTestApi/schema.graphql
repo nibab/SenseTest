@@ -4,7 +4,23 @@ type Project @model(queries: null, mutations: null) {
   posts: [Post] @connection(keyName: "byProject", fields: ["id"])
   appBuilds: [AppBuild]! @connection(name: "projectAppBuilds")
   currentAppBuild: String
+  admin: String ##This is a value being populated by the resolver
+  members: [ProjectUserEdge] @connection(name: "ProjectRelationship") 
+  active: Boolean!
 }
+
+type ProjectUserEdge @model(queries: null) @aws_iam @aws_cognito_user_pools @auth (rules: [{ allow: private, provider: iam, operations: [create, update] }]) {
+	id: ID!
+	project: Project! @connection(name: "ProjectRelationship")
+	user: User! @connection(name: "UserRelationship")
+}
+
+type User @model @aws_iam @aws_cognito_user_pools @auth (rules: [{ allow: private, provider: iam, operations: [create, update] }]) {
+  id: ID!
+  name: String!
+  projects: [ProjectUserEdge] @connection(name: "UserRelationship") 
+}
+
 type Post @model(queries: {list: "listPosts"})  
   @key(name: "byProject", fields:["projectId", "title"])
   @key(name: "byProjectAndTime", fields:["projectId", "createdAt"], queryField:"projectPostsByTime")  

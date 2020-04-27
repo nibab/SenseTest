@@ -116,6 +116,11 @@ export const getProject = /* GraphQL */ `
               nextToken
             }
             currentAppBuild
+            admin
+            members {
+              nextToken
+            }
+            active
           }
           name
           assetId
@@ -128,6 +133,37 @@ export const getProject = /* GraphQL */ `
         nextToken
       }
       currentAppBuild
+      admin
+      members {
+        items {
+          id
+          project {
+            id
+            name
+            posts {
+              nextToken
+            }
+            appBuilds {
+              nextToken
+            }
+            currentAppBuild
+            admin
+            members {
+              nextToken
+            }
+            active
+          }
+          user {
+            id
+            name
+            projects {
+              nextToken
+            }
+          }
+        }
+        nextToken
+      }
+      active
     }
   }
 `;
@@ -167,6 +203,8 @@ export const listProjects = /* GraphQL */ `
               id
               name
               currentAppBuild
+              admin
+              active
             }
             name
             assetId
@@ -179,6 +217,94 @@ export const listProjects = /* GraphQL */ `
           nextToken
         }
         currentAppBuild
+        admin
+        members {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            user {
+              id
+              name
+            }
+          }
+          nextToken
+        }
+        active
+      }
+      nextToken
+    }
+  }
+`;
+export const getUser = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      id
+      name
+      projects {
+        items {
+          id
+          project {
+            id
+            name
+            posts {
+              nextToken
+            }
+            appBuilds {
+              nextToken
+            }
+            currentAppBuild
+            admin
+            members {
+              nextToken
+            }
+            active
+          }
+          user {
+            id
+            name
+            projects {
+              nextToken
+            }
+          }
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const listUsers = /* GraphQL */ `
+  query ListUsers(
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        projects {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            user {
+              id
+              name
+            }
+          }
+          nextToken
+        }
       }
       nextToken
     }
@@ -592,6 +718,8 @@ export const getAppBuild = /* GraphQL */ `
               id
               name
               currentAppBuild
+              admin
+              active
             }
             name
             assetId
@@ -604,6 +732,25 @@ export const getAppBuild = /* GraphQL */ `
           nextToken
         }
         currentAppBuild
+        admin
+        members {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            user {
+              id
+              name
+            }
+          }
+          nextToken
+        }
+        active
       }
       name
       assetId
@@ -657,6 +804,14 @@ export const listAppBuilds = /* GraphQL */ `
             nextToken
           }
           currentAppBuild
+          admin
+          members {
+            items {
+              id
+            }
+            nextToken
+          }
+          active
         }
         name
         assetId

@@ -50,6 +50,11 @@ export const createProject = /* GraphQL */ `
               nextToken
             }
             currentAppBuild
+            admin
+            members {
+              nextToken
+            }
+            active
           }
           name
           assetId
@@ -62,6 +67,171 @@ export const createProject = /* GraphQL */ `
         nextToken
       }
       currentAppBuild
+      admin
+      members {
+        items {
+          id
+          project {
+            id
+            name
+            posts {
+              nextToken
+            }
+            appBuilds {
+              nextToken
+            }
+            currentAppBuild
+            admin
+            members {
+              nextToken
+            }
+            active
+          }
+          user {
+            id
+            name
+            projects {
+              nextToken
+            }
+          }
+        }
+        nextToken
+      }
+      active
+    }
+  }
+`;
+export const deleteProjectUserEdge = /* GraphQL */ `
+  mutation DeleteProjectUserEdge(
+    $input: DeleteProjectUserEdgeInput!
+    $condition: ModelProjectUserEdgeConditionInput
+  ) {
+    deleteProjectUserEdge(input: $input, condition: $condition) {
+      id
+      project {
+        id
+        name
+        posts {
+          items {
+            id
+            title
+            imageId
+            projectId
+            text
+            appVersion
+            createdAt
+            updatedAt
+            status
+            tags
+            attachments
+            comments {
+              nextToken
+            }
+          }
+          nextToken
+        }
+        appBuilds {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            name
+            assetId
+            appetizeKey
+            version
+            uploadedByUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        currentAppBuild
+        admin
+        members {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            user {
+              id
+              name
+            }
+          }
+          nextToken
+        }
+        active
+      }
+      user {
+        id
+        name
+        projects {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            user {
+              id
+              name
+            }
+          }
+          nextToken
+        }
+      }
+    }
+  }
+`;
+export const deleteUser = /* GraphQL */ `
+  mutation DeleteUser(
+    $input: DeleteUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    deleteUser(input: $input, condition: $condition) {
+      id
+      name
+      projects {
+        items {
+          id
+          project {
+            id
+            name
+            posts {
+              nextToken
+            }
+            appBuilds {
+              nextToken
+            }
+            currentAppBuild
+            admin
+            members {
+              nextToken
+            }
+            active
+          }
+          user {
+            id
+            name
+            projects {
+              nextToken
+            }
+          }
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -872,6 +1042,8 @@ export const deleteAppBuild = /* GraphQL */ `
               id
               name
               currentAppBuild
+              admin
+              active
             }
             name
             assetId
@@ -884,6 +1056,25 @@ export const deleteAppBuild = /* GraphQL */ `
           nextToken
         }
         currentAppBuild
+        admin
+        members {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            user {
+              id
+              name
+            }
+          }
+          nextToken
+        }
+        active
       }
       name
       assetId
@@ -892,6 +1083,274 @@ export const deleteAppBuild = /* GraphQL */ `
       uploadedByUserId
       createdAt
       updatedAt
+    }
+  }
+`;
+export const createProjectUserEdge = /* GraphQL */ `
+  mutation CreateProjectUserEdge(
+    $input: CreateProjectUserEdgeInput!
+    $condition: ModelProjectUserEdgeConditionInput
+  ) {
+    createProjectUserEdge(input: $input, condition: $condition) {
+      id
+      project {
+        id
+        name
+        posts {
+          items {
+            id
+            title
+            imageId
+            projectId
+            text
+            appVersion
+            createdAt
+            updatedAt
+            status
+            tags
+            attachments
+            comments {
+              nextToken
+            }
+          }
+          nextToken
+        }
+        appBuilds {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            name
+            assetId
+            appetizeKey
+            version
+            uploadedByUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        currentAppBuild
+        admin
+        members {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            user {
+              id
+              name
+            }
+          }
+          nextToken
+        }
+        active
+      }
+      user {
+        id
+        name
+        projects {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            user {
+              id
+              name
+            }
+          }
+          nextToken
+        }
+      }
+    }
+  }
+`;
+export const updateProjectUserEdge = /* GraphQL */ `
+  mutation UpdateProjectUserEdge(
+    $input: UpdateProjectUserEdgeInput!
+    $condition: ModelProjectUserEdgeConditionInput
+  ) {
+    updateProjectUserEdge(input: $input, condition: $condition) {
+      id
+      project {
+        id
+        name
+        posts {
+          items {
+            id
+            title
+            imageId
+            projectId
+            text
+            appVersion
+            createdAt
+            updatedAt
+            status
+            tags
+            attachments
+            comments {
+              nextToken
+            }
+          }
+          nextToken
+        }
+        appBuilds {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            name
+            assetId
+            appetizeKey
+            version
+            uploadedByUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        currentAppBuild
+        admin
+        members {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            user {
+              id
+              name
+            }
+          }
+          nextToken
+        }
+        active
+      }
+      user {
+        id
+        name
+        projects {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            user {
+              id
+              name
+            }
+          }
+          nextToken
+        }
+      }
+    }
+  }
+`;
+export const createUser = /* GraphQL */ `
+  mutation CreateUser(
+    $input: CreateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    createUser(input: $input, condition: $condition) {
+      id
+      name
+      projects {
+        items {
+          id
+          project {
+            id
+            name
+            posts {
+              nextToken
+            }
+            appBuilds {
+              nextToken
+            }
+            currentAppBuild
+            admin
+            members {
+              nextToken
+            }
+            active
+          }
+          user {
+            id
+            name
+            projects {
+              nextToken
+            }
+          }
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const updateUser = /* GraphQL */ `
+  mutation UpdateUser(
+    $input: UpdateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    updateUser(input: $input, condition: $condition) {
+      id
+      name
+      projects {
+        items {
+          id
+          project {
+            id
+            name
+            posts {
+              nextToken
+            }
+            appBuilds {
+              nextToken
+            }
+            currentAppBuild
+            admin
+            members {
+              nextToken
+            }
+            active
+          }
+          user {
+            id
+            name
+            projects {
+              nextToken
+            }
+          }
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -931,6 +1390,8 @@ export const createAppBuild = /* GraphQL */ `
               id
               name
               currentAppBuild
+              admin
+              active
             }
             name
             assetId
@@ -943,6 +1404,25 @@ export const createAppBuild = /* GraphQL */ `
           nextToken
         }
         currentAppBuild
+        admin
+        members {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            user {
+              id
+              name
+            }
+          }
+          nextToken
+        }
+        active
       }
       name
       assetId
@@ -990,6 +1470,8 @@ export const updateAppBuild = /* GraphQL */ `
               id
               name
               currentAppBuild
+              admin
+              active
             }
             name
             assetId
@@ -1002,6 +1484,25 @@ export const updateAppBuild = /* GraphQL */ `
           nextToken
         }
         currentAppBuild
+        admin
+        members {
+          items {
+            id
+            project {
+              id
+              name
+              currentAppBuild
+              admin
+              active
+            }
+            user {
+              id
+              name
+            }
+          }
+          nextToken
+        }
+        active
       }
       name
       assetId
