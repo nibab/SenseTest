@@ -118,7 +118,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 
 	const renderCreateNewButton = () => {
 		return (
-			<div className='bottom-0 flex flex-col flex-shrink-0 h-16 text-gray-700 border-t hover:bg-gray-200 hover:text-blue-800'>
+			<div className='bottom-0 flex flex-col flex-shrink-0 h-16 text-gray-700 border-t'>
 				
 				<div className="flex flex-row h-full pl-3 pr-3 mx-2 mx-auto cursor-pointer">
 					{/* <div className='my-auto mr-1'>
@@ -126,7 +126,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 
 					</div> */}
 
-					<img className="object-contain p-2" src={'logo.png'} style={{filter: 'grayscale(100%)'}}/>
+					<img className="object-contain p-2 transition duration-100 ease-in-out filter-grayscale hover:filter-none" src={'logo.png'} />
 
 					
 				</div>

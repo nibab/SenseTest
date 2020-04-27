@@ -1,5 +1,9 @@
 module.exports = {
   theme: {
+    filter: { // defaults to {}
+      'none': 'none',
+      'grayscale': 'grayscale(1)',
+    },
     fontFamily: {
       body: ['Roboto', 'sans-serif'],
     },
@@ -25,11 +29,13 @@ module.exports = {
   variants: {
     backgroundColor: ['responsive', 'hover', 'focus', 'active'],
     height: ['responsive', 'hover', 'focus'],
-    spinner: ['responsive']
+    spinner: ['responsive'],
+    filter: ['responsive', 'hover']
   },
   plugins: [
     require('@tailwindcss/ui'),
     require('@tailwindcss/custom-forms'),
-    require('tailwindcss-spinner')()
+    require('tailwindcss-spinner')(),
+    require('tailwindcss-filters')
   ]
 }
