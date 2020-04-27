@@ -133,13 +133,6 @@ const CreatePostView = () => {
 		return (
             <div className='mx-auto'>
                  <div className='flex flex-row w-48 p-2 my-auto mr-3'>
-               
-                    {/* <div className={buttonContainerClassName}>
-                        <button className={unSelectedButtonClassName} style={{borderWidth: '1px'}}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-attach"><path className="secondary" d="M20.12 11.95l-6.58 6.59a5 5 0 1 1-7.08-7.07l6.59-6.6a3 3 0 0 1 4.24 4.25l-6.58 6.59a1 1 0 1 1-1.42-1.42l6.59-6.58a1 1 0 0 0-1.42-1.42l-6.58 6.59a3 3 0 0 0 4.24 4.24l6.59-6.58a5 5 0 0 0-7.08-7.08l-6.58 6.6a7 7 0 0 0 9.9 9.9l6.59-6.6a1 1 0 0 0-1.42-1.4z"/></svg>
-                        </button>
-                        <a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Attachments</a>
-                    </div> */}
                     <div className={buttonContainerClassName}>
                         <button className={unSelectedButtonClassName} style={{borderWidth: '1px'}}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
@@ -152,12 +145,6 @@ const CreatePostView = () => {
                         </button>
                         <a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>UI Mocks</a>
                     </div>
-                    {/* <div className={buttonContainerClassName}>
-                        <button className={unSelectedButtonClassName} style={{borderWidth: '1px'}}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-flag"><path className="primary" d="M3 15a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h8a1 1 0 0 1 .7.3L13.42 5H21a1 1 0 0 1 .9 1.45L19.61 11l2.27 4.55A1 1 0 0 1 21 17h-8a1 1 0 0 1-.7-.3L10.58 15H3z"/><rect width="2" height="20" x="2" y="2" className="secondary" rx="1"/></svg>
-                        </button>
-                        <a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Flag</a>
-                    </div>					 */}
                 </div>
             </div>
            
@@ -184,10 +171,10 @@ const CreatePostView = () => {
         <div className='flex flex-row flex-auto h-full'>
 			<div className='flex flex-col flex-auto h-full '> 
                 {/* when navbar is hidden this should also include justify-center */}
-                <div className='flex flex-shrink-0 w-full ml-3 overflow-hidden'>
+                {/* <div className='flex flex-shrink-0 w-full ml-3 overflow-hidden'>
                     { renderPostToolBar() }
-                </div>
-				<div className='flex flex-row my-1'> 
+                </div> */}
+				<div className='flex flex-row my-auto'> 
 					{/* RenderPostToolBar is contained because otherwise it stretches for the whole height. */}
 					
                     <div className='flex flex-row justify-center w-full pt-1 pb-1 pl-2 pr-2 mx-auto overflow-scroll'> 
