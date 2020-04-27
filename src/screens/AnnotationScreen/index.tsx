@@ -27,6 +27,7 @@ export const AnnotationScreen = ({ }) => {
     const [displayCreateNewPost, setDisplayCreateNewPost] = useState<boolean>(true)
     const location = useLocation()
     const dispatch = useDispatch()
+    const [currentProjectId, setCurrentProjectId] = useState<string>()
 
     const getAllCommentsForPost = async (postId: string) => { 
         const query = {
@@ -110,6 +111,7 @@ export const AnnotationScreen = ({ }) => {
     useEffect(() => {        
         const pathName = location.pathname
         const projectId = pathName.split("/")[2]
+        setCurrentProjectId(projectId)
         getPostsAndStoreInRedux(projectId)
     }, [])    
 
@@ -119,9 +121,8 @@ export const AnnotationScreen = ({ }) => {
                 return (<PostView post={currentPost} />) 
             }
         } else {
-            return (<CreatePostView />)
-        }
-        
+            return (<CreatePostView projectId={currentProjectId === undefined ? '1' : currentProjectId} />)
+        }   
     }
 
     return getPostsFetchInProgress ? <Loading /> : (

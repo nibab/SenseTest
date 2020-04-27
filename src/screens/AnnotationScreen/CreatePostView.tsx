@@ -13,14 +13,18 @@ import { AppBuildClient } from '../../clients/AppBuildClient'
 
 type Mode = 'CREATE_ISSUE' | 'BROWSE'
 
-const CreatePostView = () => {
+type CreatePostViewProps = {
+    projectId: string
+}
+
+const CreatePostView = (props: CreatePostViewProps) => {
     const [currentMode, setCurrentMode] = useState<Mode>('BROWSE')
     const [imageToAnnotate, setImageToAnnotate] = useState<Blob>()
     const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
     
     const dispatch = useDispatch()
     // Hardcoded projectId
-    const projectId = '1'
+    const projectId = props.projectId
 
     useEffect(() => {
         AppBuildClient.getCurrentAppBuildForProjectId('68134e24-ed27-494e-b0bb-8a14f2b3167f').then((appBuild) => setCurrentAppBuild(appBuild))

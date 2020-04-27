@@ -1,77 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { useDispatch } from 'react-redux'
-import { Comment as CommentType, Post, SubComment } from '../../types'
+import React, { useState, useRef } from 'react'
+import { Comment as CommentType, SubComment } from '../../types'
 import { v4 as uuidv4 } from 'uuid'
 
-
-const TEST_COMMENT: CommentType = {
-	postId: '1',
-	id: uuidv4(),
-	text: 'Hello world how are uy', 
-	author: 'Cezar Babin', 
-	date:'now', 
-	annotation: {
-		geometry: {
-			x: 1,
-			y: 2,
-			height: 3,
-			width: 4,
-			type: 'type'
-		},
-		data: {
-			id: '1',
-			text: 'hello'
-		}
-	},
-	subcomments: [],
-	authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-} 
-const TEST_RESPONSES: CommentType[] = [
-	{
-		postId: '1',
-		id: uuidv4(),
-		text: 'World', 
-		author: 'Cezar Babin', 
-		date:'now', 
-		annotation: {
-			geometry: {
-				x: 1,
-				y: 1,
-				height: 1,
-				width: 1,
-				type: 't'
-			},
-			data: {
-				text: 'hellp',
-				id: '1'
-			}
-		},
-		authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-		subcomments: []
-	},
-	{
-		postId: '1',
-		id: uuidv4(),
-		text: 'Hello BLEA', 
-		author: 'Cezar Babin', 
-		date:'now', 
-		annotation: {
-			geometry: {
-				x: 1,
-				y: 1,
-				height: 1,
-				width: 1,
-				type: 't'
-			},
-			data: {
-				text: 'hellp',
-				id: '1'
-			}
-		},
-		authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-		subcomments: []
-	}
-]
 const REPLY_BOX_PLACEHOLDER = 'Write comment or @mention'
 
 type CommentsSectionProps = {
@@ -81,17 +11,6 @@ type CommentsSectionProps = {
 }
 
 export const CommentsSection = (props: CommentsSectionProps) => {
-	const [displayNewCommentBox, setDisplayNewCommentBox] = useState<boolean>()
-
-	useEffect(() => {
-		
-	}, [])
-
-	useEffect(() => {
-		setDisplayNewCommentBox(props.displayNewCommentBox)
-		
-	}, [props])
-
 	const renderComments = () => {
 		const items: JSX.Element[] = []
 		props.comments.forEach((comment) => {
@@ -110,38 +29,37 @@ export const CommentsSection = (props: CommentsSectionProps) => {
 		return items
 	}
 
-	const createNewComment = () => {
-		return (
-			<>
-				<div className={`${displayNewCommentBox ? '' : 'hidden'} absolute z-30 h-full w-full pr-3`}>
-					<div className='absolute w-full h-full bg-gray-600 rounded-lg opacity-50'></div>
-				</div>
-				<div className={`${displayNewCommentBox ? '' : 'hidden'} absolute w-full h-full z-30 pr-4`}>
+	// const createNewComment = () => {
+	// 	return (
+	// 		<>
+	// 			<div className={`${displayNewCommentBox ? '' : 'hidden'} absolute z-30 h-full w-full pr-3`}>
+	// 				<div className='absolute w-full h-full bg-gray-600 rounded-lg opacity-50'></div>
+	// 			</div>
+	// 			<div className={`${displayNewCommentBox ? '' : 'hidden'} absolute w-full h-full z-30 pr-4`}>
 					
-					<div className='relative w-full p-3 mr-3 bg-white rounded-lg'>
-						<div className="flex flex-shrink-0 border-gray-200">
-							<div className="flex-shrink-0 block group focus:outline-none ">
+	// 				<div className='relative w-full p-3 mr-3 bg-white rounded-lg'>
+	// 					<div className="flex flex-shrink-0 border-gray-200">
+	// 						<div className="flex-shrink-0 block group focus:outline-none ">
 								
-							</div>
-						</div>
-						<div className='flex flex-row text-sm leading-tight text-gray-700 bg-gray-200 rounded-md font'>
-							<div className='flex-wrap w-full h-full p-1'>
-								{ REPLY_BOX_PLACEHOLDER }
-							</div>
-							<div className='inline-flex items-center h-8 px-2 py-1 m-1 text-xs font-medium leading-4 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded cursor-pointer hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700'>
-								Publish
-							</div>
-						</div>
-					</div>
+	// 						</div>
+	// 					</div>
+	// 					<div className='flex flex-row text-sm leading-tight text-gray-700 bg-gray-200 rounded-md font'>
+	// 						<div className='flex-wrap w-full h-full p-1'>
+	// 							{ REPLY_BOX_PLACEHOLDER }
+	// 						</div>
+	// 						<div className='inline-flex items-center h-8 px-2 py-1 m-1 text-xs font-medium leading-4 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded cursor-pointer hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700'>
+	// 							Publish
+	// 						</div>
+	// 					</div>
+	// 				</div>
 					
-				</div>
-			</>
-		)
-	}
+	// 			</div>
+	// 		</>
+	// 	)
+	// }
 
 	return (
 		<>
-			{ createNewComment() }
 			<div className='w-full overflow-scroll'>
 				{ renderComments() }
 			</div>

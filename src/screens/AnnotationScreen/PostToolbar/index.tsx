@@ -2,6 +2,7 @@ import React from 'react'
 import { Post } from '../../../types'
 import VersionTag from '../../../components/VersionTag'
 import appIcon from './appIcon.png'
+import { useHistory } from 'react-router-dom'
 
 type PostToolbarProps = {
 	currentPost: Post | undefined
@@ -11,6 +12,8 @@ type PostToolbarProps = {
 }
 
 export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPost, posts}: PostToolbarProps) => {
+
+	const history = useHistory()
 	
 	const renderHeader = () => {
 		return (
@@ -142,10 +145,14 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 	}
 
 	const renderCreateNewButton = () => {
+		const onClickHomeLogo = () => {
+			history.push('/projects')
+		}
+
 		return (
 			<div className='bottom-0 flex flex-col flex-shrink-0 h-16 text-gray-700 border-t'>
 				
-				<div className="flex flex-row h-full pl-3 pr-3 mx-2 mx-auto cursor-pointer">
+				<div onClick={() => onClickHomeLogo()} className="flex flex-row h-full pl-3 pr-3 mx-2 mx-auto cursor-pointer">
 					{/* <div className='my-auto mr-1'>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-7 icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
 
