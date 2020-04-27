@@ -17,6 +17,7 @@ import { ReleaseStatusBar } from "./ReleaseStatusBar"
 import { PostToolbar } from "./PostToolbar"
 import { addComment } from "../../store/comment/actions"
 import { AppBuildClient } from "../../clients/AppBuildClient"
+import { useLocation } from "react-router-dom"
 
 export const AnnotationScreen = ({ }) => {
     // Posts
@@ -24,6 +25,7 @@ export const AnnotationScreen = ({ }) => {
     const postsSelector = useSelector(state => state.post)
     const [currentPost, setCurrentPost] = useState<Post>()
     const [displayCreateNewPost, setDisplayCreateNewPost] = useState<boolean>(true)
+    const location = useLocation()
     const dispatch = useDispatch()
 
     const getAllCommentsForPost = async (postId: string) => { 
@@ -105,8 +107,10 @@ export const AnnotationScreen = ({ }) => {
         }
     }
 
-    useEffect(() => {
-        getPostsAndStoreInRedux('1')
+    useEffect(() => {        
+        const pathName = location.pathname
+        const projectId = pathName.split("/")[2]
+        getPostsAndStoreInRedux(projectId)
     }, [])    
 
     const renderPostDetailView = () => {
