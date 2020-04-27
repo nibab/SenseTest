@@ -6,6 +6,31 @@ import { PostImgDownload } from './utils/PostImgDownload';
 
 
 export class TypeConverter {
+    static getAppBuildsFromProjectQuery(projectQuery: GetProjectQuery): AppBuild[] {
+        const _project = projectQuery.getProject
+		if (_project === null) return []
+		
+		const _appBuilds = _project.appBuilds?.items
+		const appBuilds: AppBuild[] = []
+		_appBuilds?.forEach((appBuild) => {
+			if (appBuild !== null) {
+				const appBuildOfLocalType: AppBuild = {
+					id: appBuild.id,
+					project: appBuild.project.id,
+					name: appBuild.name,
+					version: appBuild.version,
+					assetId: appBuild.assetId,
+					appetizeKey: appBuild.appetizeKey,
+					uploadedByUserId: appBuild.uploadedByUserId,
+					createdAt: appBuild.createdAt !== null ? appBuild.createdAt : 'unknown'
+
+				}
+				appBuilds.push(appBuildOfLocalType)
+			}
+		})
+		return appBuilds
+    }
+
     static getPostsFromProjectQuery(appBuildClientRequest: GetProjectQuery): Post[] {
         const postsToReturn: Post[] = []
         const posts = appBuildClientRequest.getProject?.posts?.items
@@ -36,6 +61,7 @@ export class TypeConverter {
     }
 
     static getCurentAppBuildFromProjectQuery = (getProjectQuery: GetProjectQuery): AppBuild | undefined => {
+        const currentAppBuildId = getProjectQuery.getProject?.currentAppBuild
         const appBuilds = getProjectQuery.getProject?.appBuilds
         if (appBuilds !== undefined) {
             // should return an array of only one item

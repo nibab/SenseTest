@@ -1,13 +1,26 @@
-import { CreatePostInput, CreatePostMutation, ModelPostFilterInput, ListPostsQuery, CreateCommentInput, CreateCommentMutation, CreateSubCommentInput, CreateSubCommentMutation } from "../API"
-import { Post, Comment, Annotation, SubComment } from "../types"
+import { CreatePostInput, CreatePostMutation, ModelPostFilterInput, ListPostsQuery, CreateCommentInput, CreateCommentMutation, CreateSubCommentInput, CreateSubCommentMutation, GetProjectQuery, CreateProjectInput, CreateProjectMutation } from "../API"
+import { Post, Comment, Annotation, SubComment, Project, AppBuild } from "../types"
 import {AssetStorageClient} from "./AssetStorageClient"
 import { API, graphqlOperation } from "aws-amplify"
-import { createPost, createComment, createSubComment } from "../graphql/mutations"
+import { createPost, createComment, createSubComment, createProject } from "../graphql/mutations"
 import Log from "../utils/Log"
-import { listPosts } from "../graphql/queries"
+import { listPosts, getProject } from "../graphql/queries"
 import { useDispatch } from "react-redux"
 import { addPost } from "../store/post/actions"
 import { PostImgDownload } from "../utils/PostImgDownload"
+import { TypeConverter } from "../convertTypes"
+import { v4 as uuidv4 } from 'uuid'
+
+const TEST_APP_BUILD: AppBuild= {
+	id: '1',
+	project: '1',
+	name: '1',
+	assetId: '2',
+	appetizeKey: '1',
+	createdAt: 'now',
+	version: '12',
+	uploadedByUserId: '1'
+}
 
 export class DataLayerClient {
 	static createNewAnnotationPost = (imageBlob: Blob, createPostInput: CreatePostInput): Promise<Post> => {
@@ -32,6 +45,63 @@ export class DataLayerClient {
 			}
 		})
 	}
+
+	static createNewProject = (): Promise<Project> => {
+		return new Promise(async (resolve, reject) => {
+			const createProjectInput: CreateProjectInput = {
+				name: 'TestProject',
+				id: uuidv4() 
+			}
+	
+			try {
+				const createProjectResult = await API.graphql(
+					graphqlOperation(createProject, {input: createProjectInput})
+				) as { data: CreateProjectMutation }
+	
+				const newProject = createProjectResult.data.createProject!
+				// Create project that can be displayed in the app.
+				const _newProject: Project = {
+					id: newProject.id,
+					name: newProject.name,
+					posts: [],
+					appBuilds: [],
+					currentAppBuild: TEST_APP_BUILD
+				}
+
+				Log.info(`Succeeded in creating project ${JSON.stringify(_newProject)}.`, "ProjectsScreen")
+				resolve(_newProject)
+			} catch (err) {
+				Log.error(`There was an error creating a project ${JSON.stringify(err)}.`, "ProjectsScreen")
+				reject()
+			}
+		})
+		
+	}
+
+	static getProjectInfo = async (projectId: string): Promise<Project> => {
+		return new Promise(async (resolve, reject) => {
+			const projectQuery = await API.graphql(graphqlOperation(getProject, {id: projectId})) as {data: GetProjectQuery}
+			//console.log(project.data)
+			const _project = projectQuery.data.getProject
+			const posts = TypeConverter.getPostsFromProjectQuery(projectQuery.data)
+			
+			if (_project !== undefined && _project !== null) {
+				const appBuilds = TypeConverter.getAppBuildsFromProjectQuery(projectQuery.data)
+				const currentAppBuild = TypeConverter.getCurentAppBuildFromProjectQuery(projectQuery.data)
+				const project: Project = {
+					id: _project.id,
+					name: _project.name,
+					appBuilds: appBuilds,
+					posts: posts,
+					currentAppBuild: currentAppBuild !== undefined ? currentAppBuild : TEST_APP_BUILD
+				}
+				resolve(project)
+			} else {
+				reject()
+			}
+		})
+	}
+
 
 	static addSubCommentToComment = async (childComment: SubComment, parentComment: Comment) => {
 		const createSubCommentInput: CreateSubCommentInput = {

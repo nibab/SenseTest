@@ -8,20 +8,10 @@ import Log from '../../utils/Log'
 import { getProject } from '../../graphql/queries'
 import { TypeConverter } from '../../convertTypes'
 import { useHistory } from 'react-router-dom'
+import { DataLayerClient } from '../../clients/DataLayerClient'
 
 type ReleaseCardProps = {
 	project: Project
-}
-
-const TEST_APP_BUILD: AppBuild = {
-	id: '1',
-	project: '1',
-	name: '1',
-	assetId: '2',
-	appetizeKey: '1',
-	createdAt: 'now',
-	version: '12',
-	uploadedByUserId: '1'
 }
 
 const ReleaseCard = (props: ReleaseCardProps) => {
@@ -83,95 +73,8 @@ const ProjectsScreen = () => {
 	const [currentProject, setCurrentProject] = useState<Project>()
 
 	useEffect(() => {
-		getProjectInfo().then((project) => setCurrentProject(project))
-
-	}, [])
-
-
-	const getAllProjects = async () => {
-		
-	}
-
-	const createNewProject = (): Promise<Project> => {
-		return new Promise(async (resolve, reject) => {
-			const createProjectInput: CreateProjectInput = {
-				name: 'TestProject',
-				id: uuidv4() 
-			}
-	
-			try {
-				const createProjectResult = await API.graphql(
-					graphqlOperation(createProject, {input: createProjectInput})
-				) as { data: CreateProjectMutation }
-	
-				const newProject = createProjectResult.data.createProject!
-				// Create project that can be displayed in the app.
-				const _newProject: Project = {
-					id: newProject.id,
-					name: newProject.name,
-					posts: [],
-					appBuilds: [],
-					currentAppBuild: TEST_APP_BUILD
-				}
-
-				Log.info(`Succeeded in creating project ${JSON.stringify(_newProject)}.`, "ProjectsScreen")
-				resolve(_newProject)
-			} catch (err) {
-				Log.error(`There was an error creating a project ${JSON.stringify(err)}.`, "ProjectsScreen")
-				reject()
-			}
-		})
-		
-	}
-
-	const getAppBuilds = (projectQuery: GetProjectQuery): AppBuild[] => {
-		const _project = projectQuery.getProject
-		if (_project === null) return []
-		
-		const _appBuilds = _project.appBuilds?.items
-		const appBuilds: AppBuild[] = []
-		_appBuilds?.forEach((appBuild) => {
-			if (appBuild !== null) {
-				const appBuildOfLocalType: AppBuild = {
-					id: appBuild.id,
-					project: appBuild.project.id,
-					name: appBuild.name,
-					version: appBuild.version,
-					assetId: appBuild.assetId,
-					appetizeKey: appBuild.appetizeKey,
-					uploadedByUserId: appBuild.uploadedByUserId,
-					createdAt: appBuild.createdAt !== null ? appBuild.createdAt : 'unknown'
-
-				}
-				appBuilds.push(appBuildOfLocalType)
-			}
-		})
-		return appBuilds
-	}
-
-	const getProjectInfo = async (): Promise<Project> => {
-		return new Promise(async (resolve, reject) => {
-			const projectQuery = await API.graphql(graphqlOperation(getProject, {id: '68134e24-ed27-494e-b0bb-8a14f2b3167f'})) as {data: GetProjectQuery}
-			//console.log(project.data)
-			const _project = projectQuery.data.getProject
-			const posts = TypeConverter.getPostsFromProjectQuery(projectQuery.data)
-			
-			if (_project !== undefined && _project !== null) {
-				const appBuilds = getAppBuilds(projectQuery.data)
-				const currentAppBuild = await TypeConverter.getCurentAppBuildFromProjectQuery(projectQuery.data)
-				const project: Project = {
-					id: _project.id,
-					name: _project.name,
-					appBuilds: appBuilds,
-					posts: posts,
-					currentAppBuild: currentAppBuild !== undefined ? currentAppBuild : TEST_APP_BUILD
-				}
-				resolve(project)
-			} else {
-				reject()
-			}
-		})
-	}
+		DataLayerClient.getProjectInfo('68134e24-ed27-494e-b0bb-8a14f2b3167f').then((project) => setCurrentProject(project))
+	}, [])	
 
 	return (
 		<div className='w-screen h-screen font-sans bg-gray-100'>

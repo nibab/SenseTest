@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Post, Comment, postTagGraphQLToLocalType, SubComment } from "../../types"
+import { Post, Comment, postTagGraphQLToLocalType, SubComment, Project } from "../../types"
 import { Loading } from "aws-amplify-react"
 import { useSelector } from "../../store"
 import { DataLayerClient } from "../../clients/DataLayerClient"
@@ -28,7 +28,7 @@ export const AnnotationScreen = ({ }) => {
     const [displayCreateNewPost, setDisplayCreateNewPost] = useState<boolean>(true)
     const location = useLocation()
     const dispatch = useDispatch()
-    const [currentProjectId, setCurrentProjectId] = useState<string>()
+    const [currentProject, setCurrentProject] = useState<Project>()
 
     const getAllCommentsForPost = async (postId: string) => { 
         const query = {
@@ -113,32 +113,40 @@ export const AnnotationScreen = ({ }) => {
     useEffect(() => {        
         const pathName = location.pathname
         const projectId = pathName.split("/")[2]
-        setCurrentProjectId(projectId)
+        DataLayerClient.getProjectInfo(projectId).then((project) => setCurrentProject(project))
         getPostsAndStoreInRedux(projectId)
     }, [])    
 
-    const renderPostDetailView = () => {
+    const renderPostDetailView = (projectId: string) => {
         if (!displayCreateNewPost) {
             if (currentPost) {
                 return (<PostView post={currentPost} />) 
             }
         } else {
-            return (<CreatePostView projectId={currentProjectId === undefined ? '1' : currentProjectId} />)
+            return (<CreatePostView projectId={projectId} />)
         }   
     }
 
-    return getPostsFetchInProgress ? <Loading /> : (
-        <div className='flex flex-row w-screen h-screen'>	
-            <PostToolbar posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost}/>
-            <div className='flex flex-col w-full bg-gray-50'>
-                {/* <ReleaseStatusBar /> */}
-                <div className="relative flex flex-row h-full overflow-scroll">  
-                    { renderPostDetailView() }
+    const render = () => {
+        if (currentProject !== undefined) {
+            return (
+                <div className='flex flex-row w-screen h-screen'>	
+                    <PostToolbar project={currentProject} posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost}/>
+                    <div className='flex flex-col w-full bg-gray-50'>
+                        {/* <ReleaseStatusBar /> */}
+                        <div className="relative flex flex-row h-full overflow-scroll">  
+                            { renderPostDetailView(currentProject.id) }
+                        </div>
+                        {/* <PostFooterBar posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost} /> */}
+                    </div>
                 </div>
-                {/* <PostFooterBar posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost} /> */}
-            </div>
-        </div>
-    )
+            )
+        } else {
+            return <Loading />
+        }
+    }
+
+    return (<>{render()}</>)
 }
 
 export default AnnotationScreen;
