@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { AppBuild } from '../../types'
 import VersionTag from '../VersionTag'
+import Log from '../../utils/Log'
 
 type PostViewSimulatorProps = {
 	appBuild: AppBuild
@@ -9,6 +10,19 @@ type PostViewSimulatorProps = {
 export const PostViewSimulator = (props: PostViewSimulatorProps) => {
 	const iframeRef = useRef<HTMLIFrameElement>(null)
 	const [iframeLoaded, setIframeLoaded] = useState(false)
+	const [iframeActive, setIframeActive] = useState(false)
+	const [requestingApp, setRequestingApp] = useState(false)
+
+	useEffect(() => {
+        window.addEventListener("message", receiveMessage, false);
+    })
+
+	const receiveMessage = (event: any) => {
+        if(event.data === 'sessionRequested'){
+			Log.info("Received first frame. " + event.data)
+			setTimeout(() => setIframeActive(true), 100)
+        }
+    }
 
 	const renderTag = () => {
 		return (
@@ -23,11 +37,19 @@ export const PostViewSimulator = (props: PostViewSimulatorProps) => {
 		)
 	}
 
+	const onPlayButtonClick = (event: any) => {
+		//setRequestingApp(true)
+		iframeRef.current?.contentWindow?.postMessage('requestSession', '*')
+	}
+
 	const renderButtons = () => {
+		const buttonIFrameActive = "whitespace-no-wrap mr-1 w-auto inline-flex items-center px-2.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+		const buttonIFrameInActive = "cursor-not-allowed whitespace-no-wrap mr-1 w-auto inline-flex items-center px-2.5 border border-gray-300 text-xs font-medium rounded text-gray-600 bg-gray-300 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150"
+
 		return (
 			<div className='flex w-full h-8 my-1'>
 				<div className='mx-auto p-0.5 flex'>
-					<button className="whitespace-no-wrap mr-1 w-auto inline-flex items-center px-2.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
+					<button disabled={!iframeActive} className={iframeActive ? buttonIFrameActive: buttonIFrameInActive}>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-1 icon-view-visible"><path className="primary" d="M17.56 17.66a8 8 0 0 1-11.32 0L1.3 12.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95zM11.9 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><circle cx="12" cy="12" r="3" className="secondary"/></svg>
 						Visual diff
 					</button>
@@ -54,20 +76,31 @@ export const PostViewSimulator = (props: PostViewSimulatorProps) => {
 	}
 	
 	const renderLoadingScreen = () => {
-		return (
+		const buttonClassName = "p-2 px-4 mt-3 font-bold text-gray-700 bg-gray-200 border border-white rounded-lg cursor-pointer text-md hover:bg-gray-400 hover:border-gray-800"
+		
+		return (<>
 			<div className='absolute z-0 w-full h-full'>
 				<img className="object-contain w-full h-full" src='iphonexBlack.png'></img>
 			</div>
-		)
-	}
+			<div className='absolute z-20 flex w-full h-full'>
+				<div className='flex flex-col mx-auto my-auto '>
+					<div className='w-full'>
+						<img className="w-20 h-20 mx-auto rounded-lg" src="appIcon.png" alt="" />
+					</div>
 
+					{ iframeLoaded && <div onClick={(e) => onPlayButtonClick(e) } className={buttonClassName}> Start Application</div>}
+					{ !iframeLoaded && <div className={"mt-5 spinner"}> </div>}					
+				</div>
+			</div>	
+		</>)
+	}
 
 	const renderScreen = () => {
 		return (
 			<div className='flex-col flex-shrink-0 w-64 mx-auto mb-3 ' style={{height: '583px', width: '281px'}}> 
 				
 				<div className='relative flex object-contain w-full h-full'>
-					{ !iframeLoaded ? renderLoadingScreen() : <></> }
+					{ !iframeActive ? renderLoadingScreen() : <></> }
 					{/* <div className='absolute z-0 w-full h-full'>
 						<img className="object-contain w-full h-full" src='iphonexBlack.png'></img>
 					</div>	 */}
