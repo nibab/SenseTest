@@ -35,6 +35,7 @@ export class DataLayerClient {
 
 	static addSubCommentToComment = async (childComment: SubComment, parentComment: Comment) => {
 		const createSubCommentInput: CreateSubCommentInput = {
+			id: childComment.id,
 			postId: parentComment.postId,
 			author: childComment.author,
 			authorAvatar: childComment.authorAvatarSrc,

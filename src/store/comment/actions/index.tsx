@@ -5,7 +5,8 @@ export const ADD_SUBCOMMENT = "ADD_SUBCOMMENT"
 export const REMOVE_COMMENT = "REMOVE_COMMENT"
 
 export type CommentState = {
-  comments: Record<string, Comment[]>
+  // The comments map maps from posId to a dict of comment id to comment map.
+  comments: Record<string, Record<string, Comment>>
 }
 
 interface AddCommentAction {
@@ -13,15 +14,7 @@ interface AddCommentAction {
   payload: Comment
 }
 
-interface AddSubCommentAction {
-    type: typeof ADD_SUBCOMMENT
-    payload: {
-      parentComment: Comment,
-      childComment: SubComment
-    }
-}
-
-export type CommentActionTypes = AddCommentAction | AddSubCommentAction
+export type CommentActionTypes = AddCommentAction 
 
 export function addComment(newComment: Comment): CommentActionTypes {
   return {
@@ -29,13 +22,3 @@ export function addComment(newComment: Comment): CommentActionTypes {
     payload: newComment
   }
 }
-
-export function addsubComment(parentComment: Comment, childComment: SubComment): CommentActionTypes {
-    return {
-      type: ADD_SUBCOMMENT,
-      payload: {
-          parentComment: parentComment,
-          childComment: childComment
-      }
-    }
-  }

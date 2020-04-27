@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Comment as CommentType, SubComment } from '../../types'
 import { v4 as uuidv4 } from 'uuid'
+import { useSelector } from '../../store'
 
 const REPLY_BOX_PLACEHOLDER = 'Write comment or @mention'
 
@@ -167,6 +168,8 @@ type CommentGroupProps = {
 }
 
 const CommentGroup = (props: CommentGroupProps) => {
+	const subComments = useSelector(state => state.subcomment.commentsMap[props.comment.id])
+
 	const addResponse = (text: string) => {
 		let newResponse: SubComment = {
 			id:  uuidv4(),
@@ -182,11 +185,13 @@ const CommentGroup = (props: CommentGroupProps) => {
 	const renderSubComments = () => {
 		const items = []
 
-		const responses = props.comment.subcomments
+		
 
-		if (responses === undefined) {
+		if (subComments === null || subComments === undefined) {
 			return (<></>)
 		}
+
+		const responses = Object.values(subComments)
 
 		for (var _i = 0; _i < responses.length; _i++) {
 			let response = responses[_i]

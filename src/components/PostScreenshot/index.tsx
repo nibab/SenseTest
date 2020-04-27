@@ -4,7 +4,7 @@ import { useSelector } from '../../store'
 import { Comment as CommentType } from '../../types'
 
 import { useDispatch } from 'react-redux'
-import { addComment, addsubComment } from '../../store/comment/actions'
+import { addComment } from '../../store/comment/actions'
 
 import uuid from 'uuid'
 import { CommentsSection } from '../Comments'
@@ -12,6 +12,7 @@ import AnnotationScreen from '../AnnotationScreen'
 import { PostImgDownload } from '../../utils/PostImgDownload'
 import { DataLayerClient } from '../../clients/DataLayerClient'
 import VersionTag from '../VersionTag'
+import { addsubComment } from '../../store/subcomment/actions'
 
 
 type PostScreenshotProps = {
@@ -63,14 +64,14 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 			DataLayerClient.addSubCommentToComment(childComment, parentComment)
 		}
 
-		if (commentsSelector !== undefined && commentsSelector.length > 0) {
+		if (commentsSelector !== undefined && Object.keys(commentsSelector).length > 0) {
 			return (
 				<div className='flex flex-col rounded-lg' >
 					<div className='flex w-full h-8 my-1'>
 						<div className='mx-auto flex flex-row p-0.5'></div>
 					</div>
 					<div className='relative flex flex-col w-full p-2 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: '583px'}}>
-						{ post !== undefined ? <CommentsSection comments={commentsSelector} addSubComent={_addsubComment} displayNewCommentBox={false} /> : <></>}
+						{ post !== undefined ? <CommentsSection comments={Object.values(commentsSelector)} addSubComent={_addsubComment} displayNewCommentBox={false} /> : <></>}
 					</div>
 				</div>
 			)
@@ -85,7 +86,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 				return []
 			}
 			const annotations: Annotation[] = []
-			commentsSelector.forEach((comment) => {
+			Object.values(commentsSelector).forEach((comment) => {
 				if (comment.annotation !== undefined) {
 					annotations.push(comment.annotation)
 				}

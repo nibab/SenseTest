@@ -5,8 +5,9 @@ import AnnotationScreen from '../AnnotationScreen'
 import { CommentsSection } from '../Comments'
 import { Comment as CommentType, Annotation, Post, PostTag, SubComment, AppBuild } from '../../types'
 import { useDispatch } from 'react-redux'
-import { addComment, addsubComment } from '../../store/comment/actions'
+import { addComment } from '../../store/comment/actions'
 import VersionTag from '../VersionTag'
+import { addsubComment } from '../../store/subcomment/actions'
 
 type NewPostFormProps = {
 	imageToAnnotate: Blob

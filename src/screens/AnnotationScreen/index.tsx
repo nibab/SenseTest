@@ -18,6 +18,7 @@ import { PostToolbar } from "./PostToolbar"
 import { addComment } from "../../store/comment/actions"
 import { AppBuildClient } from "../../clients/AppBuildClient"
 import { useLocation } from "react-router-dom"
+import { addsubComment } from "../../store/subcomment/actions"
 
 export const AnnotationScreen = ({ }) => {
     // Posts
@@ -64,6 +65,7 @@ export const AnnotationScreen = ({ }) => {
                         subcomments: subComments !== null && subComments !== undefined ?  subComments : []
                     }
                     dispatch(addComment(newComment))
+                    subComments.forEach((subcomment) => dispatch(addsubComment(newComment, subcomment)))
                 })
             }
         }
