@@ -7,6 +7,7 @@ import { Project, AppBuild, Post} from '../../types'
 import Log from '../../utils/Log'
 import { getProject } from '../../graphql/queries'
 import { TypeConverter } from '../../convertTypes'
+import { useHistory } from 'react-router-dom'
 
 type ReleaseCardProps = {
 	project: Project
@@ -24,8 +25,14 @@ const TEST_APP_BUILD: AppBuild = {
 }
 
 const ReleaseCard = (props: ReleaseCardProps) => {
+	const history = useHistory()
+
 	const countBlockers = () => {
 		return props.project.posts.filter((post) => post.tags?.includes('BLOCKER')).length
+	}
+
+	const onViewButtonClick = () => {
+		return history.push(`/project/${props.project.id}`)
 	}
 
 
@@ -60,7 +67,7 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 					<h2 className='-mt-1 text-sm font-medium text-gray-400 font'>February 20, 2020</h2>
 				</div>
 				<div className='my-auto '>
-					<button type="button" className="inline-flex items-center px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700">
+					<button onClick={() => onViewButtonClick()} type="button" className="inline-flex items-center px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700">
 						View
 					</button>
 				</div>

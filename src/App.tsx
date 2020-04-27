@@ -102,6 +102,12 @@ class App extends Component<{}, AppState> {
           component={ProjectsScreen}
         ></ProtectedRoute>
         <ProtectedRoute
+          path='/project/:id'
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
+          component={AnnotationScreen}
+        ></ProtectedRoute>
+        <ProtectedRoute
           path='/annotate'
           isLoggedIn={isLoggedIn}
           isLoading={isLoading}

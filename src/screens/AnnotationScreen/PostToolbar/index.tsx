@@ -1,6 +1,7 @@
 import React from 'react'
 import { Post } from '../../../types'
 import VersionTag from '../../../components/VersionTag'
+import appIcon from './appIcon.png'
 
 type PostToolbarProps = {
 	currentPost: Post | undefined
@@ -18,7 +19,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 					<div className="flex-shrink-0 block group focus:outline-none ">
 						<div className="flex items-center">
 							<div className='bg-red-400'>
-								<img className="inline-block rounded-md w-11 h-11" src="appIcon.png" alt="" />
+								<img className="inline-block rounded-md w-11 h-11" src={process.env.PUBLIC_URL + '/appIcon.png'} alt="" />
 							</div>
 							<div className="ml-1.5">
 								<p className="pt-1 text-sm font-bold leading-3 text-gray-700 group-hover:text-gray-900">
@@ -150,7 +151,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 
 					</div> */}
 
-					<img className="object-contain p-2 transition duration-100 ease-in-out filter-grayscale hover:filter-none" src={'logo.png'} />
+					<img className="object-contain p-2 transition duration-100 ease-in-out filter-grayscale hover:filter-none" src={process.env.PUBLIC_URL + '/logo.png'} />
 
 					
 				</div>
