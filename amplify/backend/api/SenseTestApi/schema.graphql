@@ -138,6 +138,9 @@ input ModelProjectConditionInput {
 input CreateProjectInput {
 	id: ID
 	name: String!
+	currentAppBuild: String
+  	admin: String ##This is a value being populated by the resolver
+	active: Boolean!
 }
 
 ## Generic

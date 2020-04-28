@@ -5,6 +5,9 @@
 export type CreateProjectInput = {
   id?: string | null,
   name: string,
+  currentAppBuild?: string | null,
+  admin?: string | null,
+  active: boolean,
 };
 
 export type ModelProjectConditionInput = {

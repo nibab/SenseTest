@@ -73,7 +73,7 @@ const ProjectsScreen = () => {
 	const [currentProject, setCurrentProject] = useState<Project>()
 
 	useEffect(() => {
-		DataLayerClient.getProjectInfo('68134e24-ed27-494e-b0bb-8a14f2b3167f').then((project) => setCurrentProject(project))
+		DataLayerClient.getProjectInfo('4bcf1985-fce6-44b0-8d1e-9087da138d91').then((project) => setCurrentProject(project))
 	}, [])	
 
 	return (

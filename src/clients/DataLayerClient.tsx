@@ -50,7 +50,8 @@ export class DataLayerClient {
 		return new Promise(async (resolve, reject) => {
 			const createProjectInput: CreateProjectInput = {
 				name: 'TestProject',
-				id: uuidv4() 
+				id: uuidv4(),
+				active: true 
 			}
 	
 			try {
