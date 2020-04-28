@@ -89,7 +89,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-prerelease-staging-212510-deployment",
-					"S3Key": "amplify-builds/projectMembershipFunction-6470324d69336f657443-build.zip"
+					"S3Key": "amplify-builds/projectMembershipFunction-3836475363623076554e-build.zip"
 				}
 			}
 		},
@@ -139,6 +139,32 @@
 			"Type": "AWS::IAM::Policy",
 			"Properties": {
 				"PolicyName": "lambda-execution-policy",
+				"Roles": [
+					{
+						"Ref": "LambdaExecutionRole"
+					}
+				],
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": [
+								"ses:SendEmail"
+							],
+							"Resource": "arn:aws:ses:us-east-1:051794589936:identity/prerelease.io"
+						}
+					]
+				}
+			}
+		},
+		"SESPolicy": {
+			"DependsOn": [
+				"LambdaExecutionRole"
+			],
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"PolicyName": "ses-email-sending-policy",
 				"Roles": [
 					{
 						"Ref": "LambdaExecutionRole"

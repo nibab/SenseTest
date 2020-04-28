@@ -28,9 +28,40 @@ const endpoint = new urlParse(appsyncUrl).hostname.toString();
 const createUserMutation = require('./createUserMutation.js').mutation;
 const createUserProjectMutation = require('./createProjectUserMutation.js').mutation;
 const cognito = new AWS.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'})
+const ses = new AWS.SES({apiVersion: '2010-12-01'})
 // Exceptions
 const USERNAME_EXISTS_EXCEPTION = "UsernameExistsException"
 const GRAPH_QL_ERROR = "TransactionError"
+// 
+const email_params = {
+  Destination: { /* required */
+    ToAddresses: [
+      "czbabin@gmail.com",
+      /* more items */
+    ]
+  },
+  Message: { /* required */
+    Body: { /* required */
+      Html: {
+       Charset: "UTF-8",
+       Data: "HTML_FORMAT_BODY"
+      },
+      Text: {
+       Charset: "UTF-8",
+       Data: "TEXT_FORMAT_BODY"
+      }
+     },
+     Subject: {
+      Charset: 'UTF-8',
+      Data: 'Test email'
+     }
+    },
+  Source: 'admin@prerelease.io', /* required */
+  ReplyToAddresses: [
+     'support@prerelease.io',
+  ],
+};
+
 
 var express = require('express')
 var bodyParser = require('body-parser')
@@ -116,6 +147,11 @@ const createUser = function(email) {
   })
 }
 
+const sendEmail = async function(email, text) {
+  const emailResult = await ses.sendEmail(email_params).promise()
+  console.log('BLEA ' + JSON.stringify(emailResult))
+}
+
 // Enable CORS for all methods
 app.use(function(req, res, next) {
   if (!res.headersSent) {
@@ -148,6 +184,12 @@ app.get('/item/*', function(req, res) {
 /****************************
 * Example post method *
 ****************************/
+
+app.post('/testEmail', async function(req, res) {
+  await sendEmail('cz', 'tst')
+  // Add your code here
+  res.json({success: 'post call succeed!', url: req.url, body: req.body})
+});
 
 app.post('/testUserCreation', async function(req, res, next) {
   
