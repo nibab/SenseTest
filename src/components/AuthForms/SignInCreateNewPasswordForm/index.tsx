@@ -79,7 +79,10 @@ const SignInCreateNewPasswordForm = ({ userObject, handleStateChange}: SignInCre
 	return (
 		<form onSubmit={completeSignIn}>
 			<InputField name={"Password"} ref={passwordRef} type={'password'} onInputChange={() => setError(undefined)}/>
-			<InputField name={"Repeat Password"} ref={repeatPasswordRef} type={'password'} onInputChange={() => setError(undefined)} />
+			<div className='mt-3'>
+				<InputField name={"Repeat Password"} ref={repeatPasswordRef} type={'password'} onInputChange={() => setError(undefined)} />
+			</div>
+			
 			<ValidationErrorBubble errorText={error}/>
 
 			<div className="mt-6">
