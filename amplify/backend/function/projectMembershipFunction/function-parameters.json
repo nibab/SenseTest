@@ -1,0 +1,12 @@
+{
+    "permissions": {
+        "api": {
+            "SenseTestApi": [
+                "create",
+                "read",
+                "update",
+                "delete"
+            ]
+        }
+    }
+}
