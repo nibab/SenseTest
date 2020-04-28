@@ -127,3 +127,13 @@ export type AppBuildRequestBodyType = {
   assetUrl: string, //"https://appetizetest.s3.amazonaws.com/MovieSwift.zip"
   projectId: string
 }
+
+export type InviteUserRequestType = {
+  userId: string,
+  projectId: string
+}
+
+export type CreateAndInviteUserRequestType = {
+  userEmail: string,
+  projectId: string
+}

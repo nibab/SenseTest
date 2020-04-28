@@ -1,7 +1,21 @@
 {
     "paths": [
         {
-            "name": "/users",
+            "name": "/createAndInviteUser",
+            "lambdaFunction": "projectMembershipFunction",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            }
+        },
+        {
+            "name": "/inviteUser",
             "lambdaFunction": "projectMembershipFunction",
             "privacy": {
                 "private": true,
@@ -23,7 +37,7 @@
         }
     ],
     "privacy": {
-        "auth": 1,
+        "auth": 2,
         "unauth": 0,
         "authRoleName": "amplify-prerelease-staging-212510-authRole",
         "unAuthRoleName": "amplify-prerelease-staging-212510-unauthRole"
@@ -37,5 +51,6 @@
                 "Arn"
             ]
         }
-    ]
+    ],
+    "uuid": "1b1a8875"
 }
