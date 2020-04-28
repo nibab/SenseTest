@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { API, graphqlOperation } from 'aws-amplify'
+import { API, graphqlOperation, Auth } from 'aws-amplify'
 import { createProject } from '../../graphql/mutations'
 import { CreateProjectInput, CreateProjectMutation, GetProjectQuery } from "../../API"
 import { v4 as uuidv4 } from 'uuid'
@@ -77,7 +77,17 @@ const ProjectsScreen = () => {
 		// get user - to show all projects that you are a member of
 	}
 
+	const temp = async () => {
+		const user = await Auth.currentAuthenticatedUser();
+		const userInfo = await Auth.currentUserInfo();
+		debugger
+		const result = await Auth.updateUserAttributes(user, {
+			'custom:name': 'Cezar Babin'
+		});
+	}
+
 	useEffect(() => {
+		
 		DataLayerClient.getProjectInfo('4bcf1985-fce6-44b0-8d1e-9087da138d91').then((project) => setCurrentProject(project))
 	}, [])	
 
@@ -94,7 +104,7 @@ const ProjectsScreen = () => {
 						Releases
 					</h1>
 					<div className='h-full px-2 pt-6 mx-auto overflow-scroll'>
-						<div onClick={() => DataLayerClient.createNewProject()} className='inline-flex items-center px-4 py-1 my-auto mb-5 mr-5 text-xs font-medium text-gray-700 whitespace-no-wrap transition ease-in-out bg-gray-200 rounded rounded-full cursor-pointer hover:bg-gray-300 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
+						<div onClick={() => { temp()}} className='inline-flex items-center px-4 py-1 my-auto mb-5 mr-5 text-xs font-medium text-gray-700 whitespace-no-wrap transition ease-in-out bg-gray-200 rounded rounded-full cursor-pointer hover:bg-gray-300 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-10 h-10 mr-1 icon-add"><path className="secondary" fill-rule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
 							<h2 className='mr-4 text-lg font-semibold text-gray-800 '>Create New</h2>
 						</div>

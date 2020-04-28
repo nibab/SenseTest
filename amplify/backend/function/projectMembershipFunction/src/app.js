@@ -33,34 +33,7 @@ const ses = new AWS.SES({apiVersion: '2010-12-01'})
 const USERNAME_EXISTS_EXCEPTION = "UsernameExistsException"
 const GRAPH_QL_ERROR = "TransactionError"
 // 
-const email_params = {
-  Destination: { /* required */
-    ToAddresses: [
-      "czbabin@gmail.com",
-      /* more items */
-    ]
-  },
-  Message: { /* required */
-    Body: { /* required */
-      Html: {
-       Charset: "UTF-8",
-       Data: "HTML_FORMAT_BODY"
-      },
-      Text: {
-       Charset: "UTF-8",
-       Data: "TEXT_FORMAT_BODY"
-      }
-     },
-     Subject: {
-      Charset: 'UTF-8',
-      Data: 'Test email'
-     }
-    },
-  Source: 'admin@prerelease.io', /* required */
-  ReplyToAddresses: [
-     'support@prerelease.io',
-  ],
-};
+
 
 
 var express = require('express')
@@ -147,7 +120,38 @@ const createUser = function(email) {
   })
 }
 
-const sendEmail = async function(email, text) {
+const sendEmail = async function(sender, email, subject, text) {
+  const email_params = {
+    Destination: { /* required */
+      ToAddresses: [
+        email,
+      ]
+    },
+    Message: { /* required */
+      Body: { /* required */
+        Html: {
+         Charset: "UTF-8",
+         Data: `
+          <h3>Invite</h3>
+          <p>
+            <b>${sender}</b> has invited you to a project on <a href='https://prerelease.io'>prerelease.io</a>. 
+          </p>
+          <p>
+            <a href='https://prerelease.io'>Click here to view it</a>
+          </p>
+        `
+        }
+       },
+       Subject: {
+        Charset: 'UTF-8',
+        Data: subject
+       }
+      },
+    Source: 'prerelease.io <admin@prerelease.io>', /* required */
+    ReplyToAddresses: [
+       'support@prerelease.io',
+    ],
+  };
   const emailResult = await ses.sendEmail(email_params).promise()
   console.log('BLEA ' + JSON.stringify(emailResult))
 }
@@ -161,11 +165,6 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
   next()
 });
-
-app.use(function(err, req, res, next) {
-  console.log("LLLLLLELDs")
-});
-
 
 /**********************
  * Example get method *
@@ -186,15 +185,27 @@ app.get('/item/*', function(req, res) {
 ****************************/
 
 app.post('/testEmail', async function(req, res) {
-  await sendEmail('cz', 'tst')
+  await sendEmail('Cezar Babin', 'czbabin@gmail.com', 'Cezar Babin invited you to prerelease.io')
   // Add your code here
   res.json({success: 'post call succeed!', url: req.url, body: req.body})
 });
 
 app.post('/testUserCreation', async function(req, res, next) {
+  const creatorUserId =  req.apiGateway.event.requestContext.authorizer.claims.sub
   
   try {
-    const email = 'czbabin+12@gmail.com'
+    const creator = await getUser('274e5f13-9d4e-41cd-8a78-d96517a62534')
+    const creatorAttributes = creator['UserAttributes']
+    let creatorName
+    for (let i in creatorAttributes) {
+      let attribute = creatorAttributes[i]
+      if (attribute['Name'] === 'custom:name') {
+        creatorName = attribute['Value']
+      }
+    }
+    console.log(creatorName)
+    console.log('Creator ' + JSON.stringify(creator['UserAttributes']))
+    const email = 'czbabin+15@gmail.com'
     const createUserResult = await createUser(email)  
     const userId = createUserResult["User"]["Username"]
     const user = {
@@ -202,8 +213,8 @@ app.post('/testUserCreation', async function(req, res, next) {
       name: email,
       email: email
     }
-    
     const userMutation = await graphQlQuery(user, createUserMutation, 'createUser')
+    await sendEmail(creatorName, email, `${creatorName} invited you to prerelease.io`)
   } catch(e) {
     if (e === USERNAME_EXISTS_EXCEPTION || e === GRAPH_QL_ERROR) {
       let err = new Error(e);
