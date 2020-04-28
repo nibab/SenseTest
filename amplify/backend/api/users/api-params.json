@@ -1,0 +1,41 @@
+{
+    "paths": [
+        {
+            "name": "/users",
+            "lambdaFunction": "projectMembershipFunction",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            }
+        }
+    ],
+    "resourceName": "users",
+    "apiName": "users",
+    "functionArns": [
+        {
+            "lambdaFunction": "projectMembershipFunction"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "amplify-prerelease-staging-212510-authRole",
+        "unAuthRoleName": "amplify-prerelease-staging-212510-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "projectMembershipFunction",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
