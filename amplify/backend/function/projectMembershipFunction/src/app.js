@@ -27,6 +27,10 @@ const region = process.env.REGION;
 const endpoint = new urlParse(appsyncUrl).hostname.toString();
 const createUserMutation = require('./createUserMutation.js').mutation;
 const createUserProjectMutation = require('./createProjectUserMutation.js').mutation;
+const cognito = new AWS.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'})
+// Exceptions
+const USERNAME_EXISTS_EXCEPTION = "UsernameExistsException"
+const GRAPH_QL_ERROR = "TransactionError"
 
 var express = require('express')
 var bodyParser = require('body-parser')
@@ -37,11 +41,93 @@ var app = express()
 app.use(bodyParser.json())
 app.use(awsServerlessExpressMiddleware.eventContext())
 
+// util for graphql queries
+const graphQlQuery = async function(object, query, queryName) {
+  const appsync_req = new AWS.HttpRequest(appsyncUrl, region);
+
+  appsync_req.method = "POST";
+  appsync_req.headers.host = endpoint;
+  appsync_req.headers["Content-Type"] = "application/json";
+  appsync_req.body = JSON.stringify({
+    query: query,
+    operationName: queryName,
+    variables: {
+      input: object
+    }
+  });
+  
+  try {
+    const signer = new AWS.Signers.V4(appsync_req, "appsync", true);
+    signer.addAuthorization(AWS.config.credentials, AWS.util.date.getDate());
+  } catch (e) {
+    console.log("ERROR when signing the request: " + e)
+  }
+
+  const _data = await new Promise((resolve, reject) => {
+    const httpRequest = https.request({ ...appsync_req, host: endpoint }, (result) => {
+      result.on('data', (_data) => {
+        resolve(JSON.parse(_data.toString()));
+      });
+      result.on('error', (e) => {
+        console.log("GraphQL error: " + JSON.parse(e.toString()))
+        reject(GRAPH_QL_ERROR)
+      });
+    });
+
+    httpRequest.write(appsync_req.body);
+    httpRequest.end();
+  });
+  return _data
+}
+
+const getUser = function(userId) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await cognito.adminGetUser({
+        UserPoolId: process.env.AUTH_SNAPTESTBD08BF8B_USERPOOLID,
+        Username: userId,
+      }).promise()
+      resolve(user)
+    } catch(e) {
+      reject()
+    }
+  })
+}
+
+const createUser = function(email) { 
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await cognito.adminCreateUser({
+        UserPoolId: process.env.AUTH_SNAPTESTBD08BF8B_USERPOOLID,
+        Username: email,
+        MessageAction: "SUPPRESS",
+        UserAttributes: [{"Name":"email", "Value": email}]
+      }).promise()
+      resolve(user)
+    } catch(e) {
+      if (e.code === USERNAME_EXISTS_EXCEPTION) { 
+        console.log("User already exists. Full error: " + e.toString()) 
+        reject(USERNAME_EXISTS_EXCEPTION)
+      } else { 
+        console.log("Something bad happened." + e.toString()) 
+        reject()
+      }
+    }
+  })
+}
+
 // Enable CORS for all methods
 app.use(function(req, res, next) {
+  if (!res.headersSent) {
+    console.log("blllllleeeea" + res)
+  }
   res.header("Access-Control-Allow-Origin", "*")
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
   next()
+});
+
+app.use(function(err, req, res, next) {
+  console.log("LLLLLLELDs")
 });
 
 
@@ -63,46 +149,44 @@ app.get('/item/*', function(req, res) {
 * Example post method *
 ****************************/
 
+app.post('/testUserCreation', async function(req, res, next) {
+  
+  try {
+    const email = 'czbabin+12@gmail.com'
+    const createUserResult = await createUser(email)  
+    const userId = createUserResult["User"]["Username"]
+    const user = {
+      id: userId,
+      name: email,
+      email: email
+    }
+    
+    const userMutation = await graphQlQuery(user, createUserMutation, 'createUser')
+  } catch(e) {
+    if (e === USERNAME_EXISTS_EXCEPTION || e === GRAPH_QL_ERROR) {
+      let err = new Error(e);
+      err.statusCode = 409;
+      next(err)
+      return
+    } else {
+      let err = new Error(e);
+      err.statusCode = 500;
+      next(err)
+      return
+    }
+   
+  }
+ 
+  
+  // Add your code here
+  res.json({success: 'post call succeed!', url: req.url, body: req.body})
+});
+
+
 app.post('/users/create', async function(req, res) {
   // Add your code here
 
-  const graphQlQuery = async function(object, query, queryName) {
-    const appsync_req = new AWS.HttpRequest(appsyncUrl, region);
-
-    appsync_req.method = "POST";
-    appsync_req.headers.host = endpoint;
-    appsync_req.headers["Content-Type"] = "application/json";
-    appsync_req.body = JSON.stringify({
-      query: query,
-      operationName: queryName,
-      variables: {
-        input: object
-      }
-    });
-    
-    try {
-      const signer = new AWS.Signers.V4(appsync_req, "appsync", true);
-      signer.addAuthorization(AWS.config.credentials, AWS.util.date.getDate());
-    } catch (e) {
-      console.log("ERROR when signing the request: " + e)
-    }
   
-    const _data = await new Promise((resolve, reject) => {
-      const httpRequest = https.request({ ...appsync_req, host: endpoint }, (result) => {
-        result.on('data', (_data) => {
-          resolve(JSON.parse(_data.toString()));
-        });
-        result.on('error', (e) => {
-          console.error(e);
-          reject(JSON.parse(e.toString()))
-        });
-      });
-  
-      httpRequest.write(appsync_req.body);
-        httpRequest.end();
-    });
-    return _data
-  }
 
   const user = {
     id: '2',
