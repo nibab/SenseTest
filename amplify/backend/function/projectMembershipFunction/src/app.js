@@ -11,6 +11,7 @@ See the License for the specific language governing permissions and limitations 
 You can access the following resource attributes as environment variables from your Lambda function
 var environment = process.env.ENV
 var region = process.env.REGION
+var authSnaptestbd08bf8bUserPoolId = process.env.AUTH_SNAPTESTBD08BF8B_USERPOOLID
 var apiSenseTestApiGraphQLAPIIdOutput = process.env.API_SENSETESTAPI_GRAPHQLAPIIDOUTPUT
 var apiSenseTestApiGraphQLAPIEndpointOutput = process.env.API_SENSETESTAPI_GRAPHQLAPIENDPOINTOUTPUT
 
@@ -104,8 +105,9 @@ app.post('/users/create', async function(req, res) {
   }
 
   const user = {
-    id: '1',
-    name: 'cez'
+    id: '2',
+    name: 'cez',
+    email: 'yo'
   }
   
   const userProjectEdge = {
@@ -113,10 +115,10 @@ app.post('/users/create', async function(req, res) {
     projectUserEdgeProjectId: '4bcf1985-fce6-44b0-8d1e-9087da138d91'
   }
 
-  //const userMutation = await graphQlQuery(user, createUserMutation, 'createUser')
-  const userProjectEdgeMutation = await graphQlQuery(userProjectEdge, createUserProjectMutation, 'createUserProjectEdge')
+  const userMutation = await graphQlQuery(user, createUserMutation, 'createUser')
+  //const userProjectEdgeMutation = await graphQlQuery(userProjectEdge, createUserProjectMutation, 'createUserProjectEdge')
   //const gql = await persistUserInAppSync(user)
-  console.log("BLEA response " + JSON.stringify(userProjectEdgeMutation))
+  console.log("BLEA response " + JSON.stringify(userMutation))
 
   res.json({success: 'post call succeed!', url: req.url, body: req.body})
 });

@@ -72,6 +72,11 @@ const ProjectsScreen = () => {
 	const [currentProjects, setCurrentProjects] = useState<string[]>()
 	const [currentProject, setCurrentProject] = useState<Project>()
 
+	const getProjectsForUser = () => {
+		// list projects - to show all projects that you have created
+		// get user - to show all projects that you are a member of
+	}
+
 	useEffect(() => {
 		DataLayerClient.getProjectInfo('4bcf1985-fce6-44b0-8d1e-9087da138d91').then((project) => setCurrentProject(project))
 	}, [])	

@@ -19,6 +19,7 @@ type User @model @aws_iam @aws_cognito_user_pools @auth (rules: [{ allow: privat
   id: ID!
   name: String!
   projects: [ProjectUserEdge] @connection(name: "UserRelationship") 
+  email: String!
 }
 
 type Post @model(queries: {list: "listPosts"})  
