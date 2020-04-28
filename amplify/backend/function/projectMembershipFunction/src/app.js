@@ -16,7 +16,6 @@ var apiSenseTestApiGraphQLAPIEndpointOutput = process.env.API_SENSETESTAPI_GRAPH
 
 Amplify Params - DO NOT EDIT */
 
-const request = require('axios')
 const https = require('https');
 const AWS = require("aws-sdk");
 const urlParse = require("url").URL;
@@ -25,7 +24,8 @@ var apiSenseTestApiGraphQLAPIEndpointOutput = process.env.API_SENSETESTAPI_GRAPH
 const appsyncUrl = apiSenseTestApiGraphQLAPIEndpointOutput;
 const region = process.env.REGION;
 const endpoint = new urlParse(appsyncUrl).hostname.toString();
-const graphqlQuery = require('./createUserMutation.js').mutation;
+const createUserMutation = require('./createUserMutation.js').mutation;
+const createUserProjectMutation = require('./createProjectUserMutation.js').mutation;
 
 var express = require('express')
 var bodyParser = require('body-parser')
@@ -62,20 +62,20 @@ app.get('/item/*', function(req, res) {
 * Example post method *
 ****************************/
 
-app.post('/users/create', function(req, res) {
+app.post('/users/create', async function(req, res) {
   // Add your code here
 
-  const persistUserInAppSync = async function(user) {
+  const graphQlQuery = async function(object, query, queryName) {
     const appsync_req = new AWS.HttpRequest(appsyncUrl, region);
 
     appsync_req.method = "POST";
     appsync_req.headers.host = endpoint;
     appsync_req.headers["Content-Type"] = "application/json";
     appsync_req.body = JSON.stringify({
-      query: graphqlQuery,
-      operationName: "createUser",
+      query: query,
+      operationName: queryName,
       variables: {
-        input: user
+        input: object
       }
     });
     
@@ -107,9 +107,16 @@ app.post('/users/create', function(req, res) {
     id: '1',
     name: 'cez'
   }
+  
+  const userProjectEdge = {
+    projectUserEdgeUserId: '1',
+    projectUserEdgeProjectId: '4bcf1985-fce6-44b0-8d1e-9087da138d91'
+  }
 
-  const gql = await persistUserInAppSync(user)
-  console.log("BLEA response " + JSON.stringify(gql))
+  //const userMutation = await graphQlQuery(user, createUserMutation, 'createUser')
+  const userProjectEdgeMutation = await graphQlQuery(userProjectEdge, createUserProjectMutation, 'createUserProjectEdge')
+  //const gql = await persistUserInAppSync(user)
+  console.log("BLEA response " + JSON.stringify(userProjectEdgeMutation))
 
   res.json({success: 'post call succeed!', url: req.url, body: req.body})
 });
