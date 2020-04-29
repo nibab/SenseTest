@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="../../styles/main.css">
+        <link rel="stylesheet" href="../../styles/icons.css">
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <script src="" async defer></script>
+        <div class="fixed inset-x-0 bottom-0 px-4 pb-6 sm:inset-0 sm:p-0 sm:flex sm:items-center sm:justify-center">
+            <!--
+              Background overlay, show/hide based on modal state.
+          
+              Entering: "ease-out duration-300"
+                From: "opacity-0"
+                To: "opacity-100"
+              Leaving: "ease-in duration-200"
+                From: "opacity-100"
+                To: "opacity-0"
+            -->
+            <div class="fixed inset-0 transition-opacity">
+              <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+          
+            <!--
+              Modal panel, show/hide based on modal state.
+          
+              Entering: "ease-out duration-300"
+                From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                To: "opacity-100 translate-y-0 sm:scale-100"
+              Leaving: "ease-in duration-200"
+                From: "opacity-100 translate-y-0 sm:scale-100"
+                To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            -->
+            <div class="px-4 pt-5 pb-4 overflow-hidden transition-all transform bg-white rounded-lg shadow-xl sm:max-w-lg sm:w-full sm:p-6">
+              <div>
+               
+                <div class='flex flex-row '> 
+                    <div class="flex-auto h-full px-1 overflow-scroll ">
+                      <form>
+                          <div>
+                            <div>
+                              <div>
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">
+                                  Create Release
+                                </h3>
+                               
+                              </div>
+                              <div class="grid grid-cols-1 row-gap-6 col-gap-4 mt-3 sm:grid-cols-6">
+                                <div class="sm:col-span-3">
+                                    <label for="city" class="block text-sm font-medium leading-5 text-gray-700">
+                                    App Name
+                                    </label>
+                                    <div class="mt-1 rounded-md shadow-sm">
+                                    <input id="city" class="block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5" />
+                                    </div>
+                                </div>
+                                <div class="sm:col-span-3">
+                                    <label for="city" class="block text-sm font-medium leading-5 text-gray-700">
+                                    Version
+                                    </label>
+                                    <div class="mt-1 rounded-md shadow-sm">
+                                    <input id="city" class="block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5" />
+                                    </div>
+                                </div>
+                        
+                        
+                                <!-- <div class="sm:col-span-6">
+                                  <label for="about" class="block text-sm font-medium leading-5 text-gray-700">
+                                    Repro Steps
+                                  </label>
+                                  <div class="mt-1 rounded-md shadow-sm">
+                                    <textarea id="about" rows="3" class="block w-full transition duration-150 ease-in-out form-textarea sm:text-sm sm:leading-5"></textarea>
+                                  </div>
+                                  <p class="mt-2 text-sm text-gray-500">Help others reproduce the issue.</p>
+                                </div> -->
+                        
+                                
+                                <div class="sm:col-span-6">
+                                  <label for="cover_photo" class="block text-sm font-medium leading-5 text-gray-700">
+                                    .app bundle
+                                  </label>
+                                  <div class="flex justify-center px-6 pt-5 pb-6 mt-2 border-2 border-gray-300 border-dashed rounded-md">
+                                    <div class="text-center">
+                                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mx-auto w-14 icon-box"><g><path class="secondary" d="M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2zm4 5a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H9z"/><path class="primary" d="M4 3h16a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5c0-1.1.9-2 2-2z"/></g></svg>
+                                      <p class="mt-1 text-sm text-gray-600">
+                                        <button type="button" class="font-medium text-indigo-600 transition duration-150 ease-in-out hover:text-indigo-500 focus:outline-none focus:underline">
+                                          Upload a file
+                                        </button>
+                                        or drag and drop
+                                      </p>
+                                      <p class="mt-1 text-xs text-gray-500">
+                                        Upload a .zip or .tar.gz file containing your compressed .app bundle.
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div class="mt-6 border-gray-200 ">
+                                <fieldset class="mt-6">
+                                    <label class="block text-sm font-medium leading-5 text-gray-700">
+                                        Invite 
+                                    </label>
+
+                                    <div class='flex flex-row mt-2 mb-1 text-sm leading-tight text-gray-700 bg-white border rounded-md font'>
+                                        <div class='flex-wrap w-full h-full p-3'>
+                                            Write comment or @mention
+                                        </div>
+                                        <div class='inline-flex items-center h-8 px-2 py-1 m-1 text-xs font-medium leading-4 text-indigo-600 transition duration-150 ease-in-out bg-white border border-indigo-500 rounded cursor-pointer hover:text-indigo-800 hover:border-indigo-700 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-gray-300'>
+                                            Add
+                                        </div>
+                                    </div>
+
+                                    <div class='inline-block inline mt-3'>
+                                        
+                                        <div class="mt-1 bg-gray-100 align-top whitespace-no-wrap inline-flex items-center mr-1 pl-2.5 text-sm font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue ">
+                                            <h2 class='mr-1 text-gray-700'><a>czbabin@gmail.com</h2>
+                                            <div class='transition ease-in-out cursor-pointer active:text-gray-800 active:bg-gray-100 duration-15'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class=" m-0.5 w-5  icon-close"><path class="secondary" fill-rule="evenodd" d="M15.78 14.36a1 1 0 0 1-1.42 1.42l-2.82-2.83-2.83 2.83a1 1 0 1 1-1.42-1.42l2.83-2.82L7.3 8.7a1 1 0 0 1 1.42-1.42l2.83 2.83 2.82-2.83a1 1 0 0 1 1.42 1.42l-2.83 2.83 2.83 2.82z"/></svg>
+                                            </div>
+                                        </div>
+                                        <div class="mt-1 my-auto align-top bg-gray-100 whitespace-no-wrap inline-flex items-center mr-1 pl-2.5 text-sm font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue ">
+                                            <h2 class='mr-1 text-gray-700'><a>czbabin@gmail.com</h2>
+                                            <div class='transition ease-in-out cursor-pointer active:text-gray-800 active:bg-gray-100 duration-15'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class=" m-0.5 w-5  icon-close"><path class="secondary" fill-rule="evenodd" d="M15.78 14.36a1 1 0 0 1-1.42 1.42l-2.82-2.83-2.83 2.83a1 1 0 1 1-1.42-1.42l2.83-2.82L7.3 8.7a1 1 0 0 1 1.42-1.42l2.83 2.83 2.82-2.83a1 1 0 0 1 1.42 1.42l-2.83 2.83 2.83 2.82z"/></svg>
+                                            </div>
+                                        </div>
+                                        <div class="mt-1 my-auto align-top  bg-gray-100 whitespace-no-wrap inline-flex items-center mr-1 pl-2.5 text-sm font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue ">
+                                            <h2 class='mr-1 text-gray-700'><a>czbabin@gmail.com</h2>
+                                            <div class='transition ease-in-out cursor-pointer active:text-gray-800 active:bg-gray-100 duration-15'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class=" m-0.5 w-5  icon-close"><path class="secondary" fill-rule="evenodd" d="M15.78 14.36a1 1 0 0 1-1.42 1.42l-2.82-2.83-2.83 2.83a1 1 0 1 1-1.42-1.42l2.83-2.82L7.3 8.7a1 1 0 0 1 1.42-1.42l2.83 2.83 2.82-2.83a1 1 0 0 1 1.42 1.42l-2.83 2.83 2.83 2.82z"/></svg>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                    
+                                    
+                                    <div class='flex-col inline-block mt-2'>
+                                        <p class="text-xs text-gray-500 ">Recent collaborators</p>
+                                        <div class="mt-1 my-auto align-top bg-gray-100 whitespace-no-wrap inline-flex items-center mr-1 pl-2.5 pr-1 text-sm font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue ">
+                                            <h2 class='mr-1 text-gray-700'><a>czbabin@gmail.com</h2>
+                                            <div class='transition ease-in-out cursor-pointer active:text-gray-800 active:bg-gray-100 duration-15'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="m-0.5 w-5 icon-add"><path class="secondary" fill-rule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg> 
+                                            </div>
+                                        </div>
+                                        <div class="mt-1 my-auto align-top bg-gray-100 whitespace-no-wrap inline-flex items-center mr-1 pl-2.5 pr-1 text-sm font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue ">
+                                            <h2 class='mr-1 text-gray-700'><a>czbabin@gmail.com</h2>
+                                            <div class='transition ease-in-out cursor-pointer active:text-gray-800 active:bg-gray-100 duration-15'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="m-0.5 w-5 icon-add"><path class="secondary" fill-rule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg> 
+                                            </div>
+                                        </div>
+                                        <div class="mt-1 my-auto align-top bg-gray-100 whitespace-no-wrap inline-flex items-center mr-1 pl-2.5 pr-1 text-sm font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue ">
+                                            <h2 class='mr-1 text-gray-700'><a>czbabin@gmail.com</h2>
+                                            <div class='transition ease-in-out cursor-pointer active:text-gray-800 active:bg-gray-100 duration-15'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="m-0.5 w-5 icon-add"><path class="secondary" fill-rule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg> 
+                                            </div>
+                                        </div>
+                                        <div class="mt-1 my-auto align-top bg-gray-100 whitespace-no-wrap inline-flex items-center mr-1 pl-2.5 pr-1 text-sm font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue ">
+                                            <h2 class='mr-1 text-gray-700'><a>czbabin@gmail.com</h2>
+                                            <div class='transition ease-in-out cursor-pointer active:text-gray-800 active:bg-gray-100 duration-15'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="m-0.5 w-5 icon-add"><path class="secondary" fill-rule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg> 
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    </div>
+                                    
+                              </fieldset>
+                          
+                              
+                            </div>
+                          </div>
+                        
+                      </form>
+                    </div>
+
+              </div>
+              <div class="px-1 mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                <span class="flex w-full rounded-md shadow-sm sm:col-start-2">
+                  <button type="button" class="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5">
+                    Create
+                  </button>
+                </span>
+                <span class="flex w-full mt-3 rounded-md shadow-sm sm:mt-0 sm:col-start-1">
+                  <button type="button" class="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5">
+                    Cancel
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+    </body>
+</html>
