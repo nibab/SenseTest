@@ -9,7 +9,7 @@ type Project @model(queries: null, mutations: null) {
   active: Boolean!
 }
 
-type ProjectUserEdge @model(queries: null) @aws_iam @aws_cognito_user_pools @auth (rules: [{ allow: private, provider: iam, operations: [create, update] }]) {
+type ProjectUserEdge @model(queries: null, mutations: {update: "updateProjectUserEdge"}) @aws_iam @aws_cognito_user_pools @auth (rules: [{ allow: private, provider: iam, operations: [create, update] }]) {
 	id: ID!
 	project: Project! @connection(name: "ProjectRelationship")
 	user: User! @connection(name: "UserRelationship")
@@ -114,6 +114,8 @@ type Query {
 
 type Mutation {
   createProject(input: CreateProjectInput!, condition: ModelProjectConditionInput): Project
+  createProjectUserEdge(input: CreateProjectUserEdgeInput!, condition: ModelProjectUserEdgeConditionInput): ProjectUserEdge
+	@aws_iam
 }
 
 ## Project
@@ -143,6 +145,18 @@ input CreateProjectInput {
   	admin: String ##This is a value being populated by the resolver
 	active: Boolean!
 }
+input CreateProjectUserEdgeInput {
+	id: ID
+	projectUserEdgeProjectId: ID!
+	projectUserEdgeUserId: ID!
+}
+
+input ModelProjectUserEdgeConditionInput {
+	and: [ModelProjectUserEdgeConditionInput]
+	or: [ModelProjectUserEdgeConditionInput]
+	not: ModelProjectUserEdgeConditionInput
+}
+
 
 ## Generic
 enum ModelAttributeTypes {

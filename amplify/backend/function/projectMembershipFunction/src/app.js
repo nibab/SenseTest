@@ -205,7 +205,7 @@ app.post('/testUserCreation', async function(req, res, next) {
     }
     console.log(creatorName)
     console.log('Creator ' + JSON.stringify(creator['UserAttributes']))
-    const email = 'czbabin+15@gmail.com'
+    const email = 'ilarionababii@gmail.com'
     const createUserResult = await createUser(email)  
     const userId = createUserResult["User"]["Username"]
     const user = {
@@ -248,14 +248,14 @@ app.post('/users/create', async function(req, res) {
   }
   
   const userProjectEdge = {
-    projectUserEdgeUserId: '1',
+    projectUserEdgeUserId: 'eee52550-e1bf-401c-8482-c4a87e0bf07e',
     projectUserEdgeProjectId: '4bcf1985-fce6-44b0-8d1e-9087da138d91'
   }
 
-  const userMutation = await graphQlQuery(user, createUserMutation, 'createUser')
-  //const userProjectEdgeMutation = await graphQlQuery(userProjectEdge, createUserProjectMutation, 'createUserProjectEdge')
+  //const userMutation = await graphQlQuery(user, createUserMutation, 'createUser')
+  const userProjectEdgeMutation = await graphQlQuery(userProjectEdge, createUserProjectMutation, 'createUserProjectEdge')
   //const gql = await persistUserInAppSync(user)
-  console.log("BLEA response " + JSON.stringify(userMutation))
+  console.log("BLEA response " + JSON.stringify(userProjectEdgeMutation))
 
   res.json({success: 'post call succeed!', url: req.url, body: req.body})
 });

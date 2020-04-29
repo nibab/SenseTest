@@ -70,8 +70,10 @@ export enum PostTag {
 }
 
 
-export type DeleteProjectUserEdgeInput = {
+export type CreateProjectUserEdgeInput = {
   id?: string | null,
+  projectUserEdgeProjectId: string,
+  projectUserEdgeUserId: string,
 };
 
 export type ModelProjectUserEdgeConditionInput = {
@@ -86,6 +88,7 @@ export type DeleteUserInput = {
 
 export type ModelUserConditionInput = {
   name?: ModelStringInput | null,
+  email?: ModelStringInput | null,
   and?: Array< ModelUserConditionInput | null > | null,
   or?: Array< ModelUserConditionInput | null > | null,
   not?: ModelUserConditionInput | null,
@@ -277,12 +280,6 @@ export type ModelAppBuildConditionInput = {
   not?: ModelAppBuildConditionInput | null,
 };
 
-export type CreateProjectUserEdgeInput = {
-  id?: string | null,
-  projectUserEdgeProjectId: string,
-  projectUserEdgeUserId: string,
-};
-
 export type UpdateProjectUserEdgeInput = {
   id: string,
   projectUserEdgeProjectId?: string | null,
@@ -292,11 +289,13 @@ export type UpdateProjectUserEdgeInput = {
 export type CreateUserInput = {
   id?: string | null,
   name: string,
+  email: string,
 };
 
 export type UpdateUserInput = {
   id: string,
   name?: string | null,
+  email?: string | null,
 };
 
 export type CreateAppBuildInput = {
@@ -334,6 +333,7 @@ export type ModelProjectFilterInput = {
 export type ModelUserFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
+  email?: ModelStringInput | null,
   and?: Array< ModelUserFilterInput | null > | null,
   or?: Array< ModelUserFilterInput | null > | null,
   not?: ModelUserFilterInput | null,
@@ -522,6 +522,7 @@ export type CreateProjectMutation = {
             __typename: "ModelProjectUserEdgeConnection",
             nextToken: string | null,
           } | null,
+          email: string,
         },
       } | null > | null,
       nextToken: string | null,
@@ -530,13 +531,13 @@ export type CreateProjectMutation = {
   } | null,
 };
 
-export type DeleteProjectUserEdgeMutationVariables = {
-  input: DeleteProjectUserEdgeInput,
+export type CreateProjectUserEdgeMutationVariables = {
+  input: CreateProjectUserEdgeInput,
   condition?: ModelProjectUserEdgeConditionInput | null,
 };
 
-export type DeleteProjectUserEdgeMutation = {
-  deleteProjectUserEdge:  {
+export type CreateProjectUserEdgeMutation = {
+  createProjectUserEdge:  {
     __typename: "ProjectUserEdge",
     id: string,
     project:  {
@@ -607,6 +608,7 @@ export type DeleteProjectUserEdgeMutation = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,
@@ -634,10 +636,12 @@ export type DeleteProjectUserEdgeMutation = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,
       } | null,
+      email: string,
     },
   } | null,
 };
@@ -685,10 +689,12 @@ export type DeleteUserMutation = {
             __typename: "ModelProjectUserEdgeConnection",
             nextToken: string | null,
           } | null,
+          email: string,
         },
       } | null > | null,
       nextToken: string | null,
     } | null,
+    email: string,
   } | null,
 };
 
@@ -1654,6 +1660,7 @@ export type DeleteAppBuildMutation = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,
@@ -1667,118 +1674,6 @@ export type DeleteAppBuildMutation = {
     uploadedByUserId: string,
     createdAt: string | null,
     updatedAt: string | null,
-  } | null,
-};
-
-export type CreateProjectUserEdgeMutationVariables = {
-  input: CreateProjectUserEdgeInput,
-  condition?: ModelProjectUserEdgeConditionInput | null,
-};
-
-export type CreateProjectUserEdgeMutation = {
-  createProjectUserEdge:  {
-    __typename: "ProjectUserEdge",
-    id: string,
-    project:  {
-      __typename: "Project",
-      id: string,
-      name: string,
-      posts:  {
-        __typename: "ModelPostConnection",
-        items:  Array< {
-          __typename: "Post",
-          id: string,
-          title: string,
-          imageId: string,
-          projectId: string,
-          text: string,
-          appVersion: string,
-          createdAt: string | null,
-          updatedAt: string | null,
-          status: PostStatus,
-          tags: Array< PostTag | null >,
-          attachments: Array< string | null > | null,
-          comments:  {
-            __typename: "ModelCommentConnection",
-            nextToken: string | null,
-          } | null,
-        } | null > | null,
-        nextToken: string | null,
-      } | null,
-      appBuilds:  {
-        __typename: "ModelAppBuildConnection",
-        items:  Array< {
-          __typename: "AppBuild",
-          id: string,
-          project:  {
-            __typename: "Project",
-            id: string,
-            name: string,
-            currentAppBuild: string | null,
-            admin: string | null,
-            active: boolean,
-          },
-          name: string,
-          assetId: string,
-          appetizeKey: string,
-          version: string,
-          uploadedByUserId: string,
-          createdAt: string | null,
-          updatedAt: string | null,
-        } | null > | null,
-        nextToken: string | null,
-      } | null,
-      currentAppBuild: string | null,
-      admin: string | null,
-      members:  {
-        __typename: "ModelProjectUserEdgeConnection",
-        items:  Array< {
-          __typename: "ProjectUserEdge",
-          id: string,
-          project:  {
-            __typename: "Project",
-            id: string,
-            name: string,
-            currentAppBuild: string | null,
-            admin: string | null,
-            active: boolean,
-          },
-          user:  {
-            __typename: "User",
-            id: string,
-            name: string,
-          },
-        } | null > | null,
-        nextToken: string | null,
-      } | null,
-      active: boolean,
-    },
-    user:  {
-      __typename: "User",
-      id: string,
-      name: string,
-      projects:  {
-        __typename: "ModelProjectUserEdgeConnection",
-        items:  Array< {
-          __typename: "ProjectUserEdge",
-          id: string,
-          project:  {
-            __typename: "Project",
-            id: string,
-            name: string,
-            currentAppBuild: string | null,
-            admin: string | null,
-            active: boolean,
-          },
-          user:  {
-            __typename: "User",
-            id: string,
-            name: string,
-          },
-        } | null > | null,
-        nextToken: string | null,
-      } | null,
-    },
   } | null,
 };
 
@@ -1859,6 +1754,7 @@ export type UpdateProjectUserEdgeMutation = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,
@@ -1886,10 +1782,12 @@ export type UpdateProjectUserEdgeMutation = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,
       } | null,
+      email: string,
     },
   } | null,
 };
@@ -1937,10 +1835,12 @@ export type CreateUserMutation = {
             __typename: "ModelProjectUserEdgeConnection",
             nextToken: string | null,
           } | null,
+          email: string,
         },
       } | null > | null,
       nextToken: string | null,
     } | null,
+    email: string,
   } | null,
 };
 
@@ -1987,10 +1887,12 @@ export type UpdateUserMutation = {
             __typename: "ModelProjectUserEdgeConnection",
             nextToken: string | null,
           } | null,
+          email: string,
         },
       } | null > | null,
       nextToken: string | null,
     } | null,
+    email: string,
   } | null,
 };
 
@@ -2071,6 +1973,7 @@ export type CreateAppBuildMutation = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,
@@ -2164,6 +2067,7 @@ export type UpdateAppBuildMutation = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,
@@ -2372,6 +2276,7 @@ export type GetProjectQuery = {
             __typename: "ModelProjectUserEdgeConnection",
             nextToken: string | null,
           } | null,
+          email: string,
         },
       } | null > | null,
       nextToken: string | null,
@@ -2457,6 +2362,7 @@ export type ListProjectsQuery = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,
@@ -2509,10 +2415,12 @@ export type GetUserQuery = {
             __typename: "ModelProjectUserEdgeConnection",
             nextToken: string | null,
           } | null,
+          email: string,
         },
       } | null > | null,
       nextToken: string | null,
     } | null,
+    email: string,
   } | null,
 };
 
@@ -2546,10 +2454,12 @@ export type ListUsersQuery = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,
       } | null,
+      email: string,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -3067,6 +2977,7 @@ export type GetAppBuildQuery = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,
@@ -3300,113 +3211,6 @@ export type SubCommentByTimeQuery = {
   } | null,
 };
 
-export type OnDeleteProjectUserEdgeSubscription = {
-  onDeleteProjectUserEdge:  {
-    __typename: "ProjectUserEdge",
-    id: string,
-    project:  {
-      __typename: "Project",
-      id: string,
-      name: string,
-      posts:  {
-        __typename: "ModelPostConnection",
-        items:  Array< {
-          __typename: "Post",
-          id: string,
-          title: string,
-          imageId: string,
-          projectId: string,
-          text: string,
-          appVersion: string,
-          createdAt: string | null,
-          updatedAt: string | null,
-          status: PostStatus,
-          tags: Array< PostTag | null >,
-          attachments: Array< string | null > | null,
-          comments:  {
-            __typename: "ModelCommentConnection",
-            nextToken: string | null,
-          } | null,
-        } | null > | null,
-        nextToken: string | null,
-      } | null,
-      appBuilds:  {
-        __typename: "ModelAppBuildConnection",
-        items:  Array< {
-          __typename: "AppBuild",
-          id: string,
-          project:  {
-            __typename: "Project",
-            id: string,
-            name: string,
-            currentAppBuild: string | null,
-            admin: string | null,
-            active: boolean,
-          },
-          name: string,
-          assetId: string,
-          appetizeKey: string,
-          version: string,
-          uploadedByUserId: string,
-          createdAt: string | null,
-          updatedAt: string | null,
-        } | null > | null,
-        nextToken: string | null,
-      } | null,
-      currentAppBuild: string | null,
-      admin: string | null,
-      members:  {
-        __typename: "ModelProjectUserEdgeConnection",
-        items:  Array< {
-          __typename: "ProjectUserEdge",
-          id: string,
-          project:  {
-            __typename: "Project",
-            id: string,
-            name: string,
-            currentAppBuild: string | null,
-            admin: string | null,
-            active: boolean,
-          },
-          user:  {
-            __typename: "User",
-            id: string,
-            name: string,
-          },
-        } | null > | null,
-        nextToken: string | null,
-      } | null,
-      active: boolean,
-    },
-    user:  {
-      __typename: "User",
-      id: string,
-      name: string,
-      projects:  {
-        __typename: "ModelProjectUserEdgeConnection",
-        items:  Array< {
-          __typename: "ProjectUserEdge",
-          id: string,
-          project:  {
-            __typename: "Project",
-            id: string,
-            name: string,
-            currentAppBuild: string | null,
-            admin: string | null,
-            active: boolean,
-          },
-          user:  {
-            __typename: "User",
-            id: string,
-            name: string,
-          },
-        } | null > | null,
-        nextToken: string | null,
-      } | null,
-    },
-  } | null,
-};
-
 export type OnDeleteUserSubscription = {
   onDeleteUser:  {
     __typename: "User",
@@ -3445,10 +3249,12 @@ export type OnDeleteUserSubscription = {
             __typename: "ModelProjectUserEdgeConnection",
             nextToken: string | null,
           } | null,
+          email: string,
         },
       } | null > | null,
       nextToken: string | null,
     } | null,
+    email: string,
   } | null,
 };
 
@@ -4364,6 +4170,7 @@ export type OnDeleteAppBuildSubscription = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,
@@ -4377,113 +4184,6 @@ export type OnDeleteAppBuildSubscription = {
     uploadedByUserId: string,
     createdAt: string | null,
     updatedAt: string | null,
-  } | null,
-};
-
-export type OnCreateProjectUserEdgeSubscription = {
-  onCreateProjectUserEdge:  {
-    __typename: "ProjectUserEdge",
-    id: string,
-    project:  {
-      __typename: "Project",
-      id: string,
-      name: string,
-      posts:  {
-        __typename: "ModelPostConnection",
-        items:  Array< {
-          __typename: "Post",
-          id: string,
-          title: string,
-          imageId: string,
-          projectId: string,
-          text: string,
-          appVersion: string,
-          createdAt: string | null,
-          updatedAt: string | null,
-          status: PostStatus,
-          tags: Array< PostTag | null >,
-          attachments: Array< string | null > | null,
-          comments:  {
-            __typename: "ModelCommentConnection",
-            nextToken: string | null,
-          } | null,
-        } | null > | null,
-        nextToken: string | null,
-      } | null,
-      appBuilds:  {
-        __typename: "ModelAppBuildConnection",
-        items:  Array< {
-          __typename: "AppBuild",
-          id: string,
-          project:  {
-            __typename: "Project",
-            id: string,
-            name: string,
-            currentAppBuild: string | null,
-            admin: string | null,
-            active: boolean,
-          },
-          name: string,
-          assetId: string,
-          appetizeKey: string,
-          version: string,
-          uploadedByUserId: string,
-          createdAt: string | null,
-          updatedAt: string | null,
-        } | null > | null,
-        nextToken: string | null,
-      } | null,
-      currentAppBuild: string | null,
-      admin: string | null,
-      members:  {
-        __typename: "ModelProjectUserEdgeConnection",
-        items:  Array< {
-          __typename: "ProjectUserEdge",
-          id: string,
-          project:  {
-            __typename: "Project",
-            id: string,
-            name: string,
-            currentAppBuild: string | null,
-            admin: string | null,
-            active: boolean,
-          },
-          user:  {
-            __typename: "User",
-            id: string,
-            name: string,
-          },
-        } | null > | null,
-        nextToken: string | null,
-      } | null,
-      active: boolean,
-    },
-    user:  {
-      __typename: "User",
-      id: string,
-      name: string,
-      projects:  {
-        __typename: "ModelProjectUserEdgeConnection",
-        items:  Array< {
-          __typename: "ProjectUserEdge",
-          id: string,
-          project:  {
-            __typename: "Project",
-            id: string,
-            name: string,
-            currentAppBuild: string | null,
-            admin: string | null,
-            active: boolean,
-          },
-          user:  {
-            __typename: "User",
-            id: string,
-            name: string,
-          },
-        } | null > | null,
-        nextToken: string | null,
-      } | null,
-    },
   } | null,
 };
 
@@ -4559,6 +4259,7 @@ export type OnUpdateProjectUserEdgeSubscription = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,
@@ -4586,10 +4287,12 @@ export type OnUpdateProjectUserEdgeSubscription = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,
       } | null,
+      email: string,
     },
   } | null,
 };
@@ -4632,10 +4335,12 @@ export type OnCreateUserSubscription = {
             __typename: "ModelProjectUserEdgeConnection",
             nextToken: string | null,
           } | null,
+          email: string,
         },
       } | null > | null,
       nextToken: string | null,
     } | null,
+    email: string,
   } | null,
 };
 
@@ -4677,10 +4382,12 @@ export type OnUpdateUserSubscription = {
             __typename: "ModelProjectUserEdgeConnection",
             nextToken: string | null,
           } | null,
+          email: string,
         },
       } | null > | null,
       nextToken: string | null,
     } | null,
+    email: string,
   } | null,
 };
 
@@ -4756,6 +4463,7 @@ export type OnCreateAppBuildSubscription = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,
@@ -4844,6 +4552,7 @@ export type OnUpdateAppBuildSubscription = {
             __typename: "User",
             id: string,
             name: string,
+            email: string,
           },
         } | null > | null,
         nextToken: string | null,

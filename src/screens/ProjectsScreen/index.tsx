@@ -88,7 +88,7 @@ const ProjectsScreen = () => {
 	}
 
 	useEffect(() => {
-		DataLayerClient.getProjectInfo('9003ac5d-025d-4288-b0ef-252a4a03165c').then((project) => setCurrentProject(project))
+		DataLayerClient.getProjectInfo('b5f5c81d-648e-4138-98bc-317833370980').then((project) => setCurrentProject(project))
 	}, [])	
 
 	return (

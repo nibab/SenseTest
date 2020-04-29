@@ -159,6 +159,7 @@ export const getProject = /* GraphQL */ `
             projects {
               nextToken
             }
+            email
           }
         }
         nextToken
@@ -231,6 +232,7 @@ export const listProjects = /* GraphQL */ `
             user {
               id
               name
+              email
             }
           }
           nextToken
@@ -271,10 +273,12 @@ export const getUser = /* GraphQL */ `
             projects {
               nextToken
             }
+            email
           }
         }
         nextToken
       }
+      email
     }
   }
 `;
@@ -301,10 +305,12 @@ export const listUsers = /* GraphQL */ `
             user {
               id
               name
+              email
             }
           }
           nextToken
         }
+        email
       }
       nextToken
     }
@@ -746,6 +752,7 @@ export const getAppBuild = /* GraphQL */ `
             user {
               id
               name
+              email
             }
           }
           nextToken

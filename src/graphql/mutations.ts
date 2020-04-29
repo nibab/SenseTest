@@ -93,6 +93,7 @@ export const createProject = /* GraphQL */ `
             projects {
               nextToken
             }
+            email
           }
         }
         nextToken
@@ -101,12 +102,12 @@ export const createProject = /* GraphQL */ `
     }
   }
 `;
-export const deleteProjectUserEdge = /* GraphQL */ `
-  mutation DeleteProjectUserEdge(
-    $input: DeleteProjectUserEdgeInput!
+export const createProjectUserEdge = /* GraphQL */ `
+  mutation CreateProjectUserEdge(
+    $input: CreateProjectUserEdgeInput!
     $condition: ModelProjectUserEdgeConditionInput
   ) {
-    deleteProjectUserEdge(input: $input, condition: $condition) {
+    createProjectUserEdge(input: $input, condition: $condition) {
       id
       project {
         id
@@ -165,6 +166,7 @@ export const deleteProjectUserEdge = /* GraphQL */ `
             user {
               id
               name
+              email
             }
           }
           nextToken
@@ -187,10 +189,12 @@ export const deleteProjectUserEdge = /* GraphQL */ `
             user {
               id
               name
+              email
             }
           }
           nextToken
         }
+        email
       }
     }
   }
@@ -228,10 +232,12 @@ export const deleteUser = /* GraphQL */ `
             projects {
               nextToken
             }
+            email
           }
         }
         nextToken
       }
+      email
     }
   }
 `;
@@ -1070,6 +1076,7 @@ export const deleteAppBuild = /* GraphQL */ `
             user {
               id
               name
+              email
             }
           }
           nextToken
@@ -1083,100 +1090,6 @@ export const deleteAppBuild = /* GraphQL */ `
       uploadedByUserId
       createdAt
       updatedAt
-    }
-  }
-`;
-export const createProjectUserEdge = /* GraphQL */ `
-  mutation CreateProjectUserEdge(
-    $input: CreateProjectUserEdgeInput!
-    $condition: ModelProjectUserEdgeConditionInput
-  ) {
-    createProjectUserEdge(input: $input, condition: $condition) {
-      id
-      project {
-        id
-        name
-        posts {
-          items {
-            id
-            title
-            imageId
-            projectId
-            text
-            appVersion
-            createdAt
-            updatedAt
-            status
-            tags
-            attachments
-            comments {
-              nextToken
-            }
-          }
-          nextToken
-        }
-        appBuilds {
-          items {
-            id
-            project {
-              id
-              name
-              currentAppBuild
-              admin
-              active
-            }
-            name
-            assetId
-            appetizeKey
-            version
-            uploadedByUserId
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        currentAppBuild
-        admin
-        members {
-          items {
-            id
-            project {
-              id
-              name
-              currentAppBuild
-              admin
-              active
-            }
-            user {
-              id
-              name
-            }
-          }
-          nextToken
-        }
-        active
-      }
-      user {
-        id
-        name
-        projects {
-          items {
-            id
-            project {
-              id
-              name
-              currentAppBuild
-              admin
-              active
-            }
-            user {
-              id
-              name
-            }
-          }
-          nextToken
-        }
-      }
     }
   }
 `;
@@ -1244,6 +1157,7 @@ export const updateProjectUserEdge = /* GraphQL */ `
             user {
               id
               name
+              email
             }
           }
           nextToken
@@ -1266,10 +1180,12 @@ export const updateProjectUserEdge = /* GraphQL */ `
             user {
               id
               name
+              email
             }
           }
           nextToken
         }
+        email
       }
     }
   }
@@ -1307,10 +1223,12 @@ export const createUser = /* GraphQL */ `
             projects {
               nextToken
             }
+            email
           }
         }
         nextToken
       }
+      email
     }
   }
 `;
@@ -1347,10 +1265,12 @@ export const updateUser = /* GraphQL */ `
             projects {
               nextToken
             }
+            email
           }
         }
         nextToken
       }
+      email
     }
   }
 `;
@@ -1418,6 +1338,7 @@ export const createAppBuild = /* GraphQL */ `
             user {
               id
               name
+              email
             }
           }
           nextToken
@@ -1498,6 +1419,7 @@ export const updateAppBuild = /* GraphQL */ `
             user {
               id
               name
+              email
             }
           }
           nextToken
