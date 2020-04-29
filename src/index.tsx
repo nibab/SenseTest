@@ -6,6 +6,9 @@ import './styles/icons.css'
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import createStore from 'antd/lib/table/createStore';
+import { rootReducer } from './store';
+import { Provider } from 'react-redux';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

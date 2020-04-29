@@ -32,7 +32,7 @@ const signUpConfig = {
 }
 
 type AuthProps = {
-  onUserSignIn: Function,
+  onUserSignIn: () => void,
 }
 
 type AuthStateHistory = {

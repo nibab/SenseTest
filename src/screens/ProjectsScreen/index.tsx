@@ -9,6 +9,8 @@ import { getProject } from '../../graphql/queries'
 import { TypeConverter } from '../../convertTypes'
 import { useHistory } from 'react-router-dom'
 import { DataLayerClient } from '../../clients/DataLayerClient'
+import { logout } from '../../store/authentication/actions'
+import { useDispatch } from 'react-redux'
 
 type ReleaseCardProps = {
 	project: Project
@@ -71,6 +73,7 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 const ProjectsScreen = () => {
 	const [currentProjects, setCurrentProjects] = useState<string[]>()
 	const [currentProject, setCurrentProject] = useState<Project>()
+	const dispatch = useDispatch()
 
 	const getProjectsForUser = () => {
 		// list projects - to show all projects that you have created
@@ -92,7 +95,7 @@ const ProjectsScreen = () => {
 	}, [])	
 
 	const onSignOutButtonClick = async (e: any) => {
-		await Auth.signOut()
+		await Auth.signOut().then(() => dispatch(logout()))
 	}
 
 	return (

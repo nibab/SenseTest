@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -18,11 +18,12 @@ import ZeplinAuth from './utils/ZeplinAuth';
 import { Layout } from 'antd';
 import AnnotationScreen from './screens/AnnotationScreen';
 import { createStore } from 'redux'
-import { rootReducer } from './store'
-import { Provider } from 'react-redux'
+import { rootReducer, useSelector } from './store'
+import { Provider, useDispatch } from 'react-redux'
 import TeamScreen from './screens/TeamScreen';
 import ProjectsScreen from './screens/ProjectsScreen';
 import AppBuildScreen from './screens/AppBuildScreen';
+import { login } from './store/authentication/actions';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -58,92 +59,80 @@ type AppState = {
   }
 }
 
-class App extends Component<{}, AppState> {
-  state = {
-    authState: {
-      isLoggedIn: false,
-      isLoading: true
-    }
-  };
+const Main = () => {
+  const dispatch = useDispatch()
+  const authSelector = useSelector(state => state.auth)
+  const [isLoading, setIsLoading] = useState(false)
 
-  componentDidMount = () => {
+  useEffect(() => {
     AmplifyAuth.currentAuthenticatedUser({
-        bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
+      bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
     }).then((user: object) => {
       console.log(user);
-      this.setState({ authState: { isLoggedIn: true, isLoading: false } })
+      dispatch(login())
+      //this.setState({ authState: { isLoggedIn: true, isLoading: false } })
     }).catch((err: object) => {
+      //dispatch(login())
       console.log(err)
-      this.setState({ authState: { isLoggedIn: false, isLoading: false } })
+      //this.setState({ authState: { isLoggedIn: false, isLoading: false } })
     })
-  }
+  }, [])
 
-  signOut = () => {
-    AmplifyAuth.signOut()
-      .then(data => console.log(data))
-      .catch(err => console.log(err));
-    this.setState({ authState: { isLoggedIn: false, isLoading: false }})
-  }
+  // signOut = () => {
+  //   AmplifyAuth.signOut()
+  //     .then(data => console.log(data))
+  //     .catch(err => console.log(err));
+  //   this.setState({ authState: { isLoggedIn: false, isLoading: false }})
+  // }
 
-  handleUserSignIn = () => {
-    this.setState({ authState: { isLoggedIn: true, isLoading: false } });
-  };
+  // handleUserSignIn = () => {
+  //   this.setState({ authState: { isLoggedIn: true, isLoading: false } });
+  // };
 
-  renderContent = (isLoggedIn: boolean, isLoading: boolean) => {
+  const renderContent = (isLoggedIn: boolean, isLoading: boolean) => {
     return (
       <Switch>
-        <Route path='/login' render={(props) => (
-          <AuthForm onUserSignIn={this.handleUserSignIn} />
-        )}/>
-        <ProtectedRoute
+        <Route path='/login'>
+          {isLoggedIn || isLoading ?
+            (<Redirect to='/projects'/>) :
+            <AuthForm onUserSignIn={() => {dispatch(login())}} />
+          }
+        </Route>
+        <Route
           path='/projects'
-          isLoggedIn={isLoggedIn}
-          isLoading={isLoading}
           component={ProjectsScreen}
-        ></ProtectedRoute>
-        <ProtectedRoute
+        ></Route>
+        <Route
           path='/project/:id'
-          isLoggedIn={isLoggedIn}
-          isLoading={isLoading}
           component={AnnotationScreen}
-        ></ProtectedRoute>
-        <ProtectedRoute
+        ></Route>
+        <Route
           path='/builds'
-          isLoggedIn={isLoggedIn}
-          isLoading={isLoading}
           component={AppBuildScreen}
-        ></ProtectedRoute>
-        <ProtectedRoute
+        ></Route>
+        <Route
           path='/team'
-          isLoggedIn={isLoggedIn}
-          isLoading={isLoading}
           component={TeamScreen}
-        ></ProtectedRoute>
-        <ProtectedRoute
-          exact
+        ></Route>
+        <Route
           path='/settings'
-          isLoggedIn={isLoggedIn}
-          isLoading={isLoading}
           component={SettingsScreen}
-        ></ProtectedRoute>
-        <ProtectedRoute
-          exact
+        ></Route>
+        <Route
           path='/onboarding'
-          isLoggedIn={isLoggedIn}
-          isLoading={isLoading}
           component={OnboardingScreen}
-        ></ProtectedRoute>          
+        ></Route>          
         <Route path='/'>
           {isLoggedIn || isLoading ?
             (<Redirect to='/projects'/>) :
-            (<AuthForm onUserSignIn={this.handleUserSignIn} />)
+            (<AuthForm onUserSignIn={() => dispatch(login())} />)
           }
         </Route>
       </Switch>
     )
   }
 
-  renderRouter = (isLoggedIn: boolean, isLoading: boolean) => {
+  const renderRouter = (isLoggedIn: boolean, isLoading: boolean) => {
     return (
       <Router>
         <div className="flex flex-col w-screen h-screen font-sans antialiased bg-white">
@@ -151,25 +140,30 @@ class App extends Component<{}, AppState> {
             <NavBar width={256} signOut={this.signOut}/>
           </div>  
            */}
-          
-          <Provider  store={store}>
-            {this.renderContent(isLoggedIn, isLoading)}
-          </Provider>
-          
+          { 
+            //isLoggedIn ? 
+            renderContent(isLoggedIn, isLoading) //: 
+            //<Redirect to='/login'>
+            //å<AuthForm onUserSignIn={() => {dispatch(login())}} />//</Redirect>
+          }
         </div>  
       </Router>
     )
   }
 
-  render() {
+  return (
+    <>
+      { renderRouter(authSelector.authenticated, isLoading) }
+    </>
+  )
+}
 
-    const { isLoggedIn, isLoading } = this.state.authState;
-    return (
-      <>
-        {this.renderRouter(isLoggedIn, isLoading)}
-      </>
-    );  
-  }
+const App = () => {
+  return (
+    <Provider  store={store}>
+      <Main/>
+    </Provider>
+  )
 }
 
 export default App;
