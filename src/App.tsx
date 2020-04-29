@@ -62,16 +62,19 @@ type AppState = {
 const Main = () => {
   const dispatch = useDispatch()
   const authSelector = useSelector(state => state.auth)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    setIsLoading(true)
     AmplifyAuth.currentAuthenticatedUser({
       bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
     }).then((user: object) => {
-      console.log(user);
       dispatch(login())
+      setIsLoading(false)
+      console.log(user);   
       //this.setState({ authState: { isLoggedIn: true, isLoading: false } })
     }).catch((err: object) => {
+      setIsLoading(false)
       //dispatch(login())
       console.log(err)
       //this.setState({ authState: { isLoggedIn: false, isLoading: false } })
@@ -98,36 +101,49 @@ const Main = () => {
             <AuthForm onUserSignIn={() => {dispatch(login())}} />
           }
         </Route>
-        <Route
+        <ProtectedRoute
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
           path='/projects'
           component={ProjectsScreen}
-        ></Route>
-        <Route
+        ></ProtectedRoute>
+        <ProtectedRoute
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
           path='/project/:id'
           component={AnnotationScreen}
-        ></Route>
-        <Route
+        ></ProtectedRoute>
+        <ProtectedRoute
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
           path='/builds'
           component={AppBuildScreen}
-        ></Route>
-        <Route
+        ></ProtectedRoute>
+        <ProtectedRoute
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
           path='/team'
           component={TeamScreen}
-        ></Route>
-        <Route
+        ></ProtectedRoute>
+        <ProtectedRoute
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
           path='/settings'
           component={SettingsScreen}
-        ></Route>
-        <Route
+        ></ProtectedRoute>
+        <ProtectedRoute
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
           path='/onboarding'
           component={OnboardingScreen}
-        ></Route>          
-        <Route path='/'>
-          {isLoggedIn || isLoading ?
-            (<Redirect to='/projects'/>) :
-            (<AuthForm onUserSignIn={() => dispatch(login())} />)
-          }
-        </Route>
+        ></ProtectedRoute>          
+        <ProtectedRoute 
+          path='/'
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
+        >
+          <Redirect to='/projects'/>
+        </ProtectedRoute>
       </Switch>
     )
   }
@@ -140,12 +156,7 @@ const Main = () => {
             <NavBar width={256} signOut={this.signOut}/>
           </div>  
            */}
-          { 
-            //isLoggedIn ? 
-            renderContent(isLoggedIn, isLoading) //: 
-            //<Redirect to='/login'>
-            //å<AuthForm onUserSignIn={() => {dispatch(login())}} />//</Redirect>
-          }
+          { renderContent(isLoggedIn, isLoading) }
         </div>  
       </Router>
     )
@@ -153,7 +164,7 @@ const Main = () => {
 
   return (
     <>
-      { renderRouter(authSelector.authenticated, isLoading) }
+      { isLoading ? <></> : renderRouter(authSelector.authenticated, isLoading)}
     </>
   )
 }
