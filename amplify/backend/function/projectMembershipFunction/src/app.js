@@ -191,10 +191,12 @@ app.post('/testEmail', async function(req, res) {
 });
 
 app.post('/testUserCreation', async function(req, res, next) {
-  const creatorUserId =  req.apiGateway.event.requestContext.authorizer.claims.sub
-  
+  const projectId = 'tst'
+  const email = 'ilarionababii+1@gmail.com'
+  const creatorUserId = req.apiGateway.event.requestContext.authorizer.claims.sub
+
   try {
-    const creator = await getUser('274e5f13-9d4e-41cd-8a78-d96517a62534')
+    const creator = await getUser('eee52550-e1bf-401c-8482-c4a87e0bf07e')
     const creatorAttributes = creator['UserAttributes']
     let creatorName
     for (let i in creatorAttributes) {
@@ -205,8 +207,8 @@ app.post('/testUserCreation', async function(req, res, next) {
     }
     console.log(creatorName)
     console.log('Creator ' + JSON.stringify(creator['UserAttributes']))
-    const email = 'ilarionababii@gmail.com'
     const createUserResult = await createUser(email)  
+    console.log('User result is ' + JSON.stringify(createUserResult))
     const userId = createUserResult["User"]["Username"]
     const user = {
       id: userId,
@@ -215,8 +217,15 @@ app.post('/testUserCreation', async function(req, res, next) {
     }
     const userMutation = await graphQlQuery(user, createUserMutation, 'createUser')
     await sendEmail(creatorName, email, `${creatorName} invited you to prerelease.io`)
+    
+    const userProjectEdge = {
+      projectUserEdgeUserId: userId,
+      projectUserEdgeProjectId: projectId
+    }
+    const userProjectEdgeMutation = await graphQlQuery(userProjectEdge, createUserProjectMutation, 'createUserProjectEdge')
+    
   } catch(e) {
-    if (e === USERNAME_EXISTS_EXCEPTION || e === GRAPH_QL_ERROR) {
+    if (e === USERNAME_EXISTS_EXCEPTION) {
       let err = new Error(e);
       err.statusCode = 409;
       next(err)
@@ -230,7 +239,6 @@ app.post('/testUserCreation', async function(req, res, next) {
    
   }
  
-  
   // Add your code here
   res.json({success: 'post call succeed!', url: req.url, body: req.body})
 });
