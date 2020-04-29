@@ -135,7 +135,7 @@ class App extends Component<{}, AppState> {
         ></ProtectedRoute>          
         <Route path='/'>
           {isLoggedIn || isLoading ?
-            (<Redirect to='/annotate'/>) :
+            (<Redirect to='/projects'/>) :
             (<AuthForm onUserSignIn={this.handleUserSignIn} />)
           }
         </Route>
