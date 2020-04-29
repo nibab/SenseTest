@@ -45,6 +45,17 @@ var app = express()
 app.use(bodyParser.json())
 app.use(awsServerlessExpressMiddleware.eventContext())
 
+//Generate temp password
+const generateTempPassword = (length) => {
+   var result           = '';
+   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   var charactersLength = characters.length;
+   for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return result;
+}
+
 // util for graphql queries
 const graphQlQuery = async function(object, query, queryName) {
   const appsync_req = new AWS.HttpRequest(appsyncUrl, region);
@@ -98,12 +109,13 @@ const getUser = function(userId) {
   })
 }
 
-const createUser = function(email) { 
+const createUser = function(email, temporaryPassword) { 
   return new Promise(async (resolve, reject) => {
     try {
       const user = await cognito.adminCreateUser({
         UserPoolId: process.env.AUTH_SNAPTESTBD08BF8B_USERPOOLID,
         Username: email,
+        TemporaryPassword: temporaryPassword,
         MessageAction: "SUPPRESS",
         UserAttributes: [{"Name":"email", "Value": email}]
       }).promise()
@@ -120,7 +132,7 @@ const createUser = function(email) {
   })
 }
 
-const sendEmail = async function(sender, email, subject, text) {
+const sendEmail = async function(sender, email, subject, temporaryPassword) {
   const email_params = {
     Destination: { /* required */
       ToAddresses: [
@@ -136,6 +148,11 @@ const sendEmail = async function(sender, email, subject, text) {
           <p>
             <b>${sender}</b> has invited you to a project on <a href='https://prerelease.io'>prerelease.io</a>. 
           </p>
+          <p>
+          Your temporary password is: ${temporaryPassword}
+          
+          </p>
+          
           <p>
             <a href='https://prerelease.io'>Click here to view it</a>
           </p>
@@ -191,8 +208,8 @@ app.post('/testEmail', async function(req, res) {
 });
 
 app.post('/testUserCreation', async function(req, res, next) {
-  const projectId = 'tst'
-  const email = 'ilarionababii+1@gmail.com'
+  const projectId = 'b5f5c81d-648e-4138-98bc-317833370980'
+  const email = 'ilarionababii+9@gmail.com'
   const creatorUserId = req.apiGateway.event.requestContext.authorizer.claims.sub
 
   try {
@@ -207,7 +224,8 @@ app.post('/testUserCreation', async function(req, res, next) {
     }
     console.log(creatorName)
     console.log('Creator ' + JSON.stringify(creator['UserAttributes']))
-    const createUserResult = await createUser(email)  
+    const temporaryPassword = generateTempPassword(8)
+    const createUserResult = await createUser(email, temporaryPassword)  
     console.log('User result is ' + JSON.stringify(createUserResult))
     const userId = createUserResult["User"]["Username"]
     const user = {
@@ -216,7 +234,7 @@ app.post('/testUserCreation', async function(req, res, next) {
       email: email
     }
     const userMutation = await graphQlQuery(user, createUserMutation, 'createUser')
-    await sendEmail(creatorName, email, `${creatorName} invited you to prerelease.io`)
+    await sendEmail(creatorName, email, `${creatorName} invited you to prerelease.io`, temporaryPassword)
     
     const userProjectEdge = {
       projectUserEdgeUserId: userId,
@@ -233,6 +251,7 @@ app.post('/testUserCreation', async function(req, res, next) {
     } else {
       let err = new Error(e);
       err.statusCode = 500;
+      console.log(e)
       next(err)
       return
     }

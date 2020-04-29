@@ -3,6 +3,7 @@ import { Auth } from 'aws-amplify'
 import { AuthState } from '../../../types'
 import InputField from '../InputField'
 import Header from '../Header'
+import ValidationErrorBubble from '../../ValidationErrorBubble'
 
 type SignInFormProps = {
 	handleStateChange: (authState: AuthState, userObject: any) => void
@@ -12,6 +13,7 @@ const SignInForm = ({ handleStateChange }: SignInFormProps) => {
 	const emailRef = useRef<HTMLInputElement>(null)
 	const passwordRef = useRef<HTMLInputElement>(null)
 	const [signingIn, setSigningIn] = useState(false)
+	const [error, setError] = useState<string>()
 
 	const signIn = (e: any) => {
 		e.preventDefault()
@@ -33,16 +35,19 @@ const SignInForm = ({ handleStateChange }: SignInFormProps) => {
 				setSigningIn(false)
 			}).catch(e => {
 				console.log(e);
+				setError(e.message)
 				setSigningIn(false)
 			});
 	}
 
 	return (
 		<form onSubmit={signIn}>
-			<InputField name={"Email address"} ref={emailRef} type={'email'} />
+			<InputField onInputChange={() => setError(undefined)} name={"Email address"} ref={emailRef} type={'email'} />
 			<div className='mt-3'>	
-				<InputField name={"Password"} ref={passwordRef} type={'password'} />
+				<InputField onInputChange={() => setError(undefined)} name={"Password"} ref={passwordRef} type={'password'} />
 			</div>
+
+			<ValidationErrorBubble errorText={error} />
 			
 			<div className="flex items-center justify-between mt-6">
 				<div className="flex items-center">
