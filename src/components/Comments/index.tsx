@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react'
-import { Comment as CommentType, SubComment } from '../../types'
+import { Comment as CommentType, SubComment, Annotation } from '../../types'
 import { v4 as uuidv4 } from 'uuid'
 import { useSelector } from '../../store'
 
-const REPLY_BOX_PLACEHOLDER = 'Write comment or @mention'
+const REPLY_BOX_PLACEHOLDER = 'Write comment'
 
 type CommentsSectionProps = {
 	displayNewCommentBox: boolean
@@ -69,59 +69,38 @@ export const CommentsSection = (props: CommentsSectionProps) => {
 }
 
 type CommentProps = {
+	annotation?: Annotation
 	comment: CommentType | SubComment
 	onReply: (text: string) => void
 }
 
-const Comment = ({comment, onReply}: CommentProps) => {
+const Comment = (props: CommentProps) => {
 	const [replyInProgress, setReplyInProgress] = useState(false)
-	const replyBoxRef = useRef<HTMLDivElement>(null)
+	const replyBoxRef = useRef<HTMLTextAreaElement>(null)
+	const [replyBoxFirstTouch, setReplyBoxFirstTouch] = useState(false)
 
-	const commentHeader = () => {
-		return (
-			<div className="flex flex-shrink-0 border-gray-200">
-				<div className="flex-shrink-0 block group focus:outline-none ">
-					<div className="flex items-center">
-						<div className=''>
-							<img className="inline-block w-8 h-8 rounded-full" src={comment.authorAvatarSrc} alt="" />
-						</div>
-						<div className="ml-2 ">
-							<p className="pt-2 text-sm font-medium leading-3 text-gray-700 group-hover:text-gray-900">
-								{ comment.author }
-							</p>
-							<p className="text-xs leading-5 text-gray-500 transition duration-150 ease-in-out font group-hover:text-gray-700 group-focus:underline">
-								{ comment.date }
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		)
-	}
-
-	const commentMessage = () => {
-		return (
-			<p className='flex-wrap mt-2 text-sm leading-tight text-gray-700 font'>
-				{ comment.text } 
-			</p>
-		)
+	const onFirstReplyBoxTouch = () => {
+		if (!replyBoxFirstTouch) {
+			(replyBoxRef.current)!.value = ''
+			setReplyBoxFirstTouch(true)
+		}
 	}
 
 	const onReplyButtonClick = () => {
-		const replyBoxContent = replyBoxRef.current?.innerText
+		const replyBoxContent = replyBoxRef.current?.value
 		
 		if (replyBoxContent !== undefined && replyBoxContent !== null) {
-			onReply(replyBoxContent)
+			props.onReply(replyBoxContent)
 			setReplyInProgress(false)
 		}
 	}
 
 	const replyBox = () => {
 		return (
-			<div className='relative flex flex-row mt-1 text-sm leading-tight text-gray-700 bg-gray-200 rounded-md font'>
-				<div ref={replyBoxRef} contentEditable="true" style={{outline: 'none'}} className='flex-wrap w-full h-full p-1'>
-					{ REPLY_BOX_PLACEHOLDER }
-				</div>
+			<div className='relative flex flex-row mt-1 text-sm leading-tight text-gray-700 bg-white rounded-md font'>
+				<textarea placeholder={REPLY_BOX_PLACEHOLDER } ref={replyBoxRef} contentEditable="true" onChange={() => onFirstReplyBoxTouch()} style={{outline: 'none'}} className='flex w-full h-full p-1 rounded-md'>
+					{/* { REPLY_BOX_PLACEHOLDER } */}
+				</textarea>
 				<button onClick={onReplyButtonClick} className='inline-flex items-center h-8 px-2 py-1 m-1 text-xs font-medium leading-4 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded cursor-pointer hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700'>
 					Publish
 				</button>
@@ -132,7 +111,7 @@ const Comment = ({comment, onReply}: CommentProps) => {
 	const renderReplySection = () => {
 		if (replyInProgress) {
 			return (
-				<div className='mt-2 mb-3'>
+				<div className='mb-3 '>
 					<a onClick={() => setReplyInProgress(false)} className='flex-wrap mt-3 text-xs font-medium leading-tight text-red-800 cursor-pointer'>
 						Cancel Reply
 					</a>
@@ -142,7 +121,7 @@ const Comment = ({comment, onReply}: CommentProps) => {
 			)
 		} else {
 			return (
-				<div className='mt-2 mb-3'>
+				<div className=''>
 					<a onClick={() => setReplyInProgress(true)} className='flex-wrap mt-3 text-xs font-medium leading-tight text-indigo-700 cursor-pointer'>
 						Reply
 					</a>
@@ -153,9 +132,38 @@ const Comment = ({comment, onReply}: CommentProps) => {
 
 	return (
 		<div className='relative w-full'>
-			{ commentHeader() }
-			{ commentMessage() }
-			{ renderReplySection() }
+			<div className='flex flex-row rounded-lg'>
+				<div className='justify-start flex-shrink-0 pt-0.5 pl-2 '>
+					{/* <div className=''>
+						<img className="inline-block w-8 h-8 rounded-full" src={props.comment.authorAvatarSrc} alt="" />
+					</div> */}
+					{ props.annotation && <div className='flex items-center justify-center w-6 h-6 mx-auto mt-1 text-sm font-medium text-gray-300 bg-indigo-600 rounded-full cursor-pointer mx-2uto hover:bg-indigo-400'>
+						{props.annotation.data.id}
+					</div>}
+					
+				</div> 
+				<div className='relative w-full pt-0.5 pl-2'>
+					<div className="flex flex-shrink-0 border-gray-200">
+						<div className="flex-shrink-0 block group focus:outline-none ">
+							<div className="flex items-center">
+							
+							<div className="">
+								<p className="text-sm font-medium leading-3 text-gray-700 group-hover:text-gray-900">
+								{ props.comment.author } <a className="ml-1 text-xs leading-5 text-gray-500 transition duration-150 ease-in-out font group-hover:text-gray-700 group-focus:underline">
+								{ props.comment.date }
+									</a>
+								</p>
+								
+							</div>
+							</div>
+						</div>
+					</div>
+					{<p className='flex-wrap p-2 text-sm leading-tight text-gray-700 bg-white rounded-md font'>
+						{props.comment.text}
+					</p>}
+					{ renderReplySection()}
+				</div>
+			</div>
 		</div>
 	)
 }
@@ -196,7 +204,7 @@ const CommentGroup = (props: CommentGroupProps) => {
 		for (var _i = 0; _i < responses.length; _i++) {
 			let response = responses[_i]
 			items.push(
-				<div className={`pt-4 px-4 ${_i == responses.length - 1 ? '' : 'border-b' } w-full relative`}>
+				<div className={`pl-10 ${_i == responses.length - 1 ? '' : 'border-b' } w-full relative`}>
 					<Comment comment={response} onReply={(text) => addResponse(text)} />												
 				</div>
 			)
@@ -238,11 +246,11 @@ const CommentGroup = (props: CommentGroupProps) => {
 	}
 
 	return (
-		<div className='flex flex-col w-full mb-3 bg-white rounded-lg'>
+		<div className='flex flex-col w-full pt-1.5 rounded-lg'>
 			<div className={getComentClassName()}>
-				{ props.comment.annotation !== undefined ? renderAnnotation() : ''}
-				<div className={`${ props.comment.annotation !== undefined ? 'pl-2 pr-4' : 'p-4'} pt-4 w-full relative`}>
-					<Comment comment={props.comment} onReply={(text) => addResponse(text)} />											
+				{/* { props.comment.annotation !== undefined ? renderAnnotation() : ''} */}
+				<div className={`${ props.comment.annotation !== undefined ? '' : ''} w-full relative`}>
+					<Comment annotation={props.comment.annotation} comment={props.comment} onReply={(text) => addResponse(text)} />											
 				</div>
 			</div>
 			{ renderSubComments() }
