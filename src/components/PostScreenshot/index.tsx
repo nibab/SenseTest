@@ -24,7 +24,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 	const [post, setPost] = useState<Post>()
 	const commentsSelector = useSelector(state => state.comment.comments[props.post.id])
 
-	const postsSelector = useSelector(state => state.post.posts[props.post.id])
+	const postsSelector = useSelector(state => state.post.posts[props.post.projectId][props.post.id])
 	const dispatch = useDispatch()
 	const authState = useSelector(state => state.auth)
 
@@ -108,16 +108,6 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 			}
 			dispatch(addComment(newComment))
 			DataLayerClient.createCommentForPost(props.post, newComment)
-		}
-
-		const getImage = (): Blob => {
-			const img = postsSelector.image
-			if (isPostImgDownload(img)) {
-				// TODO: Show loading screen
-				return new Blob()
-			} else {
-				return img
-			}
 		}
 
 		if (post !== undefined) {

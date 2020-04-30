@@ -7,18 +7,22 @@ const initialState: PostState = {
 export function postReducer(state = initialState, action: PostActionTypes): PostState {
   switch (action.type) {
     case ADD_POST:
-      const newPosts = state.posts
-      newPosts[action.payload.id] = action.payload
+      const mainMapCopy = {...state.posts}
+      const newProjectPosts = {...state.posts[action.payload.projectId]}
+      newProjectPosts[action.payload.id] = action.payload
+      mainMapCopy[action.payload.projectId] = newProjectPosts
       return {
-        posts: newPosts
+        posts: mainMapCopy
       }
     case UPDATE_POST_IMAGE:
-      const _newPosts = state.posts
-      const newPost =_newPosts[action.payload.post.id]
+      const mainMapCopy2 = {...state.posts}
+      const newProjectPosts2 = {...state.posts[action.payload.post.projectId]}
+      const newPost = newProjectPosts2[action.payload.post.id]
       newPost.image = action.payload.image 
-      _newPosts[action.payload.post.id] = newPost
+      newProjectPosts2[action.payload.post.id] = newPost
+      mainMapCopy2[action.payload.post.projectId] = newProjectPosts2
       return {
-        posts: _newPosts
+        posts: mainMapCopy2
       }
     default: 
       return state

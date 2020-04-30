@@ -29,6 +29,7 @@ export const AnnotationScreen = ({ }) => {
     const location = useLocation()
     const dispatch = useDispatch()
     const [currentProject, setCurrentProject] = useState<Project>()
+    const [isLoading, setIsLoading] = useState(false)
 
     const getAllCommentsForPost = async (postId: string) => { 
         const query = {
@@ -113,8 +114,12 @@ export const AnnotationScreen = ({ }) => {
     useEffect(() => {  
         const pathName = location.pathname
         const projectId = pathName.split("/")[2]
-        DataLayerClient.getProjectInfo(projectId).then((project) => setCurrentProject(project))
-        getPostsAndStoreInRedux(projectId)
+        setIsLoading(true)
+        DataLayerClient.getProjectInfo(projectId).then( async (project) => {
+            setCurrentProject(project); 
+            await getPostsAndStoreInRedux(projectId) // TODO: This call should not be made again. We already have all the information.
+            setIsLoading(false)
+        })
     }, [])    
 
     const renderPostDetailView = (projectId: string) => {
@@ -128,10 +133,10 @@ export const AnnotationScreen = ({ }) => {
     }
 
     const render = () => {
-        if (currentProject !== undefined) {
+        if (currentProject !== undefined && !isLoading) {
             return (
                 <div className='flex flex-row w-screen h-screen'>	
-                    <PostToolbar project={currentProject} posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost}/>
+                    <PostToolbar project={currentProject} posts={postsSelector.posts[currentProject?.id]} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost}/>
                     <div className='flex flex-col w-full bg-gray-50'>
                         {/* <ReleaseStatusBar /> */}
                         <div className="relative flex flex-row h-full overflow-scroll">  
@@ -142,7 +147,7 @@ export const AnnotationScreen = ({ }) => {
                 </div>
             )
         } else {
-            return <Loading />
+            return <div className='flex w-screen h-screen'> <div className='mx-auto my-auto spinner-large'/></div>
         }
     }
 

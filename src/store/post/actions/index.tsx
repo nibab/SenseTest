@@ -5,7 +5,7 @@ export const UPDATE_POST_IMAGE = "UPDATE_POST_IMAGE"
 export const REMOVE_POST = "REMOVE_POST"
 
 export type PostState = {
-  posts: Record<string, Post>
+  posts: Record<string, Record<string, Post>>
 }
 
 interface AddPostAction {
