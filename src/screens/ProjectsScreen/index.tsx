@@ -129,7 +129,7 @@ const ProjectsScreen = () => {
 	return (
 		<>
 			{ createProjectModalVisible && <CreateProjectModal onSubmit={(projectId) => onModalSubmitButtonClick(projectId)} onCancel={() => setCreateProjectModalVisible(false)} />}
-			<div className='w-screen h-screen font-sans bg-gray-100'>
+			<div className='w-screen h-auto font-sans bg-gray-100'>
 				<div className='flex flex-row w-full h-20 bg-white shadow-md'>
 					<div className='justify-center flex-shrink-0 w-48 my-auto'>
 						<img className="object-contain p-2 transition duration-100 ease-in-out cursor-pointer filter-grayscale hover:filter-none" src='logo.png' />
