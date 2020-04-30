@@ -66,7 +66,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 
 		if (commentsSelector !== undefined && Object.keys(commentsSelector).length > 0) {
 			return (
-				<div className='flex flex-col rounded-lg' >
+				<div className='flex flex-col w-full rounded-lg' >
 					<div className='flex w-full h-8 my-1'>
 						<div className='mx-auto flex flex-row p-0.5'></div>
 					</div>
@@ -144,7 +144,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 	}
 
 	return (
-		<div className='flex flex-col max-w-full ' > 
+		<div className='flex flex-col' > 
 			{ renderTag() }
 			<div className='flex flex-row pb-3 pl-3 pr-3 border-2 border-gray-400 border-dashed rounded-lg'>
 				<div className='relative flex-col flex-shrink-0 mb-3' >
