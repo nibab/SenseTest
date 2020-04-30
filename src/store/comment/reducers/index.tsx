@@ -10,7 +10,7 @@ export function commentReducer(state = initialState, action: CommentActionTypes)
   switch (action.type) {
     case ADD_COMMENT:
         const commentsCopy = state.comments
-        const commentsForPostId: Record<string, Comment> = state.comments[action.payload.postId] === undefined ? {} : state.comments[action.payload.postId]     
+        const commentsForPostId: Record<string, Comment> = state.comments[action.payload.postId] === undefined ? {} : {...state.comments[action.payload.postId]}     
         commentsForPostId[action.payload.id] = action.payload
         
         //currentPostComments.push(action.payload)
