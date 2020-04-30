@@ -56,7 +56,7 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 	return (
 		<div key={props.project.id} className='flex flex-col bg-white rounded-lg shadow-lg'>
 			<div className='flex flex-row p-3 border border-2 border-t-0 border-l-0 border-r-0'>
-				<div className='flex-shrink-0 w-16 h-16 bg-red-300 rounded-lg'>
+				<div className='flex-shrink-0 w-16 h-16 rounded-lg'>
 					<img className="inline-block rounded-md" src="appIcon.png" alt="" />
 				</div>
 				<div className='w-full h-full my-auto ml-2'>
@@ -127,7 +127,7 @@ const ProjectsScreen = () => {
 	}
 
 	return (
-		<>
+		<div className='w-full h-full bg-gray-100'>
 			{ createProjectModalVisible && <CreateProjectModal onSubmit={(projectId) => onModalSubmitButtonClick(projectId)} onCancel={() => setCreateProjectModalVisible(false)} />}
 			<div className='w-screen h-auto font-sans bg-gray-100'>
 				<div className='flex flex-row w-full h-20 bg-white shadow-md'>
@@ -141,7 +141,7 @@ const ProjectsScreen = () => {
 							{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1 icon-user"><path className="primary" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><path className="secondary" d="M21 20v-1a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v1c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2z"/></svg> */}
 							{ auth.email }
 						</div> 
-						<button onClick={onSignOutButtonClick} className="inline-flex items-center px-5 py-2 my-auto font-medium text-gray-700 whitespace-no-wrap transition duration-150 ease-in-out bg-white border border-gray-300 rounded rounded-md text-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50">
+						<button onClick={onSignOutButtonClick} className="inline-flex items-center px-5 py-2 my-auto text-sm font-medium text-gray-700 whitespace-no-wrap transition duration-150 ease-in-out bg-white border border-gray-300 rounded rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50">
 							{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1 icon-user"><path className="primary" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><path className="secondary" d="M21 20v-1a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v1c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2z"/></svg> */}
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1.5 icon-door-exit"><path className="primary" d="M11 4h3a1 1 0 0 1 1 1v3a1 1 0 0 1-2 0V6h-2v12h2v-2a1 1 0 0 1 2 0v3a1 1 0 0 1-1 1h-3v1a1 1 0 0 1-1.27.96l-6.98-2A1 1 0 0 1 2 19V5a1 1 0 0 1 .75-.97l6.98-2A1 1 0 0 1 11 3v1z"/><path className="secondary" d="M18.59 11l-1.3-1.3c-.94-.94.47-2.35 1.42-1.4l3 3a1 1 0 0 1 0 1.4l-3 3c-.95.95-2.36-.46-1.42-1.4l1.3-1.3H14a1 1 0 0 1 0-2h4.59z"/></svg>
 							Sign out
@@ -158,7 +158,7 @@ const ProjectsScreen = () => {
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-10 h-10 mr-1 icon-add"><path className="secondary" fillRule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
 								<h2 className='mr-4 text-lg font-semibold text-gray-800 '>Create New</h2>
 							</div>
-							<div className='flex flex-col justify-center mt-1 '>
+							<div className='flex flex-col justify-center pb-10 mt-1'>
 								<h2 className='mb-3 text-sm font-semibold tracking-wide text-gray-500 uppercase'>Current</h2>
 								{ isLoading && <div className="h-20 spinner-large"></div>}
 								{ !isLoading && renderReleases() } 
@@ -169,7 +169,7 @@ const ProjectsScreen = () => {
 					</div>	
 				</div>
 			</div>
-		</>	
+		</div>	
 	)
 }
 

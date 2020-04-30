@@ -287,7 +287,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 								<AnnotationScreen 
 									annotations={annotations} 
 									onSubmit={onSubmitAnnotation} 
-									key={uuid()} 
+									key={props.projectId} 
 									imageBlob={props.imageToAnnotate} 
 								/>
 							</div>

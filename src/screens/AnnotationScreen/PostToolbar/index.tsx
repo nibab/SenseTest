@@ -22,7 +22,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 				<div className="flex flex-row flex-shrink-0 p-3 border-b border-gray-200 cursor-pointer">
 					<div className="flex-shrink-0 block group focus:outline-none ">
 						<div className="flex items-center">
-							<div className='bg-red-400'>
+							<div className=''>
 								<img className="inline-block rounded-md w-11 h-11" src={process.env.PUBLIC_URL + '/appIcon.png'} alt="" />
 							</div>
 							<div className="ml-1.5">

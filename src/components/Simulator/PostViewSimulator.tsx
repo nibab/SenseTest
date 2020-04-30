@@ -76,21 +76,25 @@ export const PostViewSimulator = (props: PostViewSimulatorProps) => {
 	}
 	
 	const renderLoadingScreen = () => {
-		const buttonClassName = "p-2 px-4 mt-3 font-bold text-gray-700 bg-gray-200 border border-white rounded-lg cursor-pointer text-md hover:bg-gray-400 hover:border-gray-800"
+		const buttonClassName = "p-2 px-4 mt-3 font-semibold text-indigo-700 bg-white border border-white rounded-lg cursor-pointer text-md hover:bg-gray-100"
 		
+
 		return (<>
 			<div className='absolute z-0 w-full h-full'>
 				<img className="object-contain w-full h-full" src={process.env.PUBLIC_URL + '/iphonexBlack.png'}></img>
 			</div>
-			<div className='absolute z-20 flex w-full h-full'>
+			<div className='absolute z-10 flex w-full h-full'>
 				<div className='flex flex-col mx-auto my-auto '>
 					<div className='w-full'>
 						<img className="w-20 h-20 mx-auto rounded-lg" src={process.env.PUBLIC_URL + '/appIcon.png'} alt="" />
 					</div>
 
 					{ iframeLoaded && <div onClick={(e) => onPlayButtonClick(e) } className={buttonClassName}> Start Application</div>}
-					{ !iframeLoaded && <div className={"mt-5 spinner"}> </div>}					
+					{ !iframeLoaded && <div className={"mt-5 spinner"}> </div>}
+					
+					{/* <div onClick={(e) => onPlayButtonClick(e) } className={iframeLoaded ? buttonClassName: 'spinner'}> Start Application</div> */}
 				</div>
+				
 			</div>	
 		</>)
 	}
