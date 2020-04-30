@@ -82,7 +82,6 @@ export class AssetStorageClient {
                     // Request finished. Do processing here.
                     resolve()
                 } else {
-                    debugger
                     reject()
                 }
             }

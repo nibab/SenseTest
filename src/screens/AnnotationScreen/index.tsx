@@ -110,7 +110,7 @@ export const AnnotationScreen = ({ }) => {
         }
     }
 
-    useEffect(() => {        
+    useEffect(() => {  
         const pathName = location.pathname
         const projectId = pathName.split("/")[2]
         DataLayerClient.getProjectInfo(projectId).then((project) => setCurrentProject(project))
