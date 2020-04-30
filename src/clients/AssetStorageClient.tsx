@@ -1,5 +1,6 @@
 import { Auth } from "aws-amplify";
 import request, { Options } from "request";
+import Log from "../utils/Log";
 
 export type PresignedUrlFields = {
   url: string,
@@ -67,6 +68,40 @@ export class AssetStorageClient {
                 })
             })
         })
+    }
+
+    static uploadDataToUrlWithProgress = (data: Blob, presignedUrlFields: PresignedUrlFields, onUploadProgress: (progress: number) => void): Promise<void> => {
+        return new Promise((resolve, reject) => {
+            const oReq = new XMLHttpRequest()
+            oReq.open("POST", presignedUrlFields.url, true)
+            oReq.onload = (oEvent) => {
+                Log.info("Finished upload.")
+            }
+            oReq.onreadystatechange = function() { // Call a function when the state changes.
+                if (this.status === 204) {
+                    // Request finished. Do processing here.
+                    resolve()
+                } else {
+                    debugger
+                    reject()
+                }
+            }
+            oReq.addEventListener('error', (e) => {
+                Log.error("Something bad happened during uploading file with progress.")
+                reject()
+            })
+            oReq.upload.onprogress = (evt: any) => {
+                if (evt.lengthComputable) {
+                    var percentComplete = (evt.loaded / evt.total) * 100
+                    onUploadProgress(percentComplete)
+                }
+            }
+        
+            const formData = presignedUrlFields.formData
+            formData.append('file', data)        
+            oReq.send(formData)
+        })
+        
     }
 
     static uploadDataToUrl(data: Blob, presignedUrlFields: PresignedUrlFields): Promise<void> {
