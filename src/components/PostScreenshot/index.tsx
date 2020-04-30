@@ -71,7 +71,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 					<div className='flex w-full h-8 my-1'>
 						<div className='mx-auto flex flex-row p-0.5'></div>
 					</div>
-					<div className='relative flex flex-col w-full pt-1 pr-0.5 -ml-1 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: '583px'}}>
+					<div className='relative flex flex-col w-full pt-1 pr-2 -ml-1 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: '583px'}}>
 						{ post !== undefined ? <CommentsSection comments={Object.values(commentsSelector)} addSubComent={_addsubComment} displayNewCommentBox={false} /> : <></>}
 					</div>
 				</div>
