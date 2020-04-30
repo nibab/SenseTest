@@ -27,7 +27,7 @@ const CreatePostView = (props: CreatePostViewProps) => {
     const projectId = props.projectId
 
     useEffect(() => {
-        AppBuildClient.getCurrentAppBuildForProjectId('68134e24-ed27-494e-b0bb-8a14f2b3167f').then((appBuild) => setCurrentAppBuild(appBuild))
+        AppBuildClient.getCurrentAppBuildForProjectId(projectId).then((appBuild) => setCurrentAppBuild(appBuild))
     }, [])
 
     const onCreatePostClicked = async (imageId: string, post: Post) => {

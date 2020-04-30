@@ -120,7 +120,7 @@ export const AnnotationScreen = ({ }) => {
     const renderPostDetailView = (projectId: string) => {
         if (!displayCreateNewPost) {
             if (currentPost) {
-                return (<PostView post={currentPost} />) 
+                return (<PostView projectId={projectId} post={currentPost} />) 
             }
         } else {
             return (<CreatePostView projectId={projectId} />)

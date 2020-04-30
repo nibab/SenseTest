@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Post, AppBuild } from '../../../types'
+import { Post, AppBuild, Project } from '../../../types'
 import { PostViewSimulator as Simulator } from '../../../components/Simulator/PostViewSimulator'
 import Attachment from './Attachment'
 import PostScreenshot from '../../../components/PostScreenshot'
 import { AppBuildClient } from '../../../clients/AppBuildClient'
 
 type PostViewProps = {
-    post: Post
+	post: Post
+	projectId: string
 }
 
 type DisplayState = 'None' | 'Simulator' | 'Attachment'
 
-const PostView = ({ post }: PostViewProps) => {
+const PostView = (props: PostViewProps) => {
 	const [displayState, setDisplayState] = useState<DisplayState>('None')
 	const [warningVisible, setWarningVisible] = useState(true)
 	const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
@@ -19,10 +20,10 @@ const PostView = ({ post }: PostViewProps) => {
     useEffect(() => {
 		setDisplayState('None')
 		setWarningVisible(true)
-	}, [post])
+	}, [props.post])
 
 	useEffect(() => {
-		AppBuildClient.getCurrentAppBuildForProjectId('68134e24-ed27-494e-b0bb-8a14f2b3167f').then((appBuild) => setCurrentAppBuild(appBuild))
+		AppBuildClient.getCurrentAppBuildForProjectId(props.projectId).then((appBuild) => setCurrentAppBuild(appBuild))
 	}, [])
 	
 	const renderWarningMessage = () => {
@@ -121,7 +122,7 @@ const PostView = ({ post }: PostViewProps) => {
 		}
 
 		const renderTags = () => {
-			if (post.tags?.includes('BLOCKER')) {
+			if (props.post.tags?.includes('BLOCKER')) {
 				return (
 					<span className="my-auto ml-3 mr-2 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
 						Blocker
@@ -144,10 +145,10 @@ const PostView = ({ post }: PostViewProps) => {
 								</div>
 								<div>
 									<h2 className="pt-2 font-medium leading-3 text-gray-800 text-md group-hover:text-gray-900">
-										{ post.title }
+										{ props.post.title }
 									</h2>
 									<p className="text-xs font-normal leading-5 text-gray-500 transition duration-150 ease-in-out font group-hover:text-gray-700 group-focus:underline">
-										{ post.dateCreated }
+										{ props.post.dateCreated }
 									</p>
 								</div>
 								
@@ -187,7 +188,7 @@ const PostView = ({ post }: PostViewProps) => {
 					{ displayState === 'Simulator'  && currentAppBuild !== undefined ? <div className="ml-3"><Simulator appBuild={currentAppBuild}/></div> : <></> }
 					{ displayState === 'Attachment' ? <div className="ml-3"><Attachment/></div> : <></> }
 					<div className='ml-3'>
-						<PostScreenshot post={post} />
+						<PostScreenshot post={props.post} />
 					</div>
 					
 				</div>
