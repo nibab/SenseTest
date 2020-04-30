@@ -252,39 +252,67 @@ const NewPostForm = (props: NewPostFormProps) => {
 	}
 
 	return (
-		<div className='flex flex-col w-auto mx-auto mb-3 ml-3 mr-3 bg-white rounded-md shadow-lg'>
-			{/* padding left is only 4 because form has a margin of 1 so that the field outline shadow shows properly */}
-			<div className='flex flex-row pt-5 pb-2 pl-4 pr-5'> 
-				{renderForm()}
-				<div className='flex flex-row my-auto border-dashed rounded-lg '>
-					<div className='relative flex-col flex-shrink-0 mb-3' >
-						{renderButtons()}
+		<div className="fixed inset-x-0 bottom-0 z-20 sm:inset-0 sm:p-0 sm:flex sm:items-center sm:justify-center">
+              {/* Background overlay, show/hide based on modal state.
+          
+              Entering: "ease-out duration-300"
+                From: "opacity-0"
+                To: "opacity-100"
+              Leaving: "ease-in duration-200"
+                From: "opacity-100"
+                To: "opacity-0" */}
+            <div className="fixed inset-0 transition-opacity">
+              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+          
+              {/* Modal panel, show/hide based on modal state.
+          
+              Entering: "ease-out duration-300"
+                From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                To: "opacity-100 translate-y-0 sm:scale-100"
+              Leaving: "ease-in duration-200"
+                From: "opacity-100 translate-y-0 sm:scale-100"
+                To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" */}
+            <div className="transition-all transform rounded-lg shadow-xl ">
+		
+		
+				<div className='flex flex-col mx-auto bg-white rounded-lg '>
+					{/* padding left is only 4 because form has a margin of 1 so that the field outline shadow shows properly */}
+					<div className='flex flex-row p-8 pb-0'> 
+						{renderForm()}
+						<div className='flex flex-row pl-2 my-auto border-dashed rounded-lg '>
+							<div className='relative flex flex-col flex-shrink-0 mb-3' >
+								{renderButtons()}
 
-						<AnnotationScreen 
-							annotations={annotations} 
-							onSubmit={onSubmitAnnotation} 
-							key={uuid()} 
-							imageBlob={props.imageToAnnotate} 
-						/>
+								<AnnotationScreen 
+									annotations={annotations} 
+									onSubmit={onSubmitAnnotation} 
+									key={uuid()} 
+									imageBlob={props.imageToAnnotate} 
+								/>
+							</div>
+							{ renderComments() }
+						</div>
 					</div>
-					{ renderComments() }
+					<div className="p-8 pt-5 pb-5 border-t border-gray-200">
+						<div className="flex justify-end">
+							<span className="inline-flex rounded-md shadow-sm">
+							<button onClick={onCancelButtonClick} type="button" className="px-4 py-2 text-sm font-medium leading-5 text-gray-700 transition duration-150 ease-in-out border border-gray-300 rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800">
+								Cancel
+							</button>
+							</span>
+							<span className="inline-flex ml-3 rounded-md shadow-sm">
+							<button onClick={onCreateButtonClick} type="submit" className="inline-flex justify-center px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700">
+								Create
+							</button>
+							</span>
+						</div>
+					</div>
 				</div>
+	
 			</div>
-			<div className="p-5 border-t border-gray-200">
-				<div className="flex justify-end">
-					<span className="inline-flex rounded-md shadow-sm">
-					<button onClick={onCancelButtonClick} type="button" className="px-4 py-2 text-sm font-medium leading-5 text-gray-700 transition duration-150 ease-in-out border border-gray-300 rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800">
-						Cancel
-					</button>
-					</span>
-					<span className="inline-flex ml-3 rounded-md shadow-sm">
-					<button onClick={onCreateButtonClick} type="submit" className="inline-flex justify-center px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700">
-						Create
-					</button>
-					</span>
-				</div>
-			</div>
-		</div>
+	</div>
+	
 	)
 }
 

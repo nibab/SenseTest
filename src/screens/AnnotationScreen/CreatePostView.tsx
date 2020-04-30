@@ -18,7 +18,7 @@ type CreatePostViewProps = {
 }
 
 const CreatePostView = (props: CreatePostViewProps) => {
-    const [currentMode, setCurrentMode] = useState<Mode>('BROWSE')
+    const [currentMode, setCurrentMode] = useState<Mode>('CREATE_ISSUE')
     const [imageToAnnotate, setImageToAnnotate] = useState<Blob>()
     const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
     
@@ -27,6 +27,8 @@ const CreatePostView = (props: CreatePostViewProps) => {
     const projectId = props.projectId
 
     useEffect(() => {
+        // DEBUG
+        // loadXHR(process.env.PUBLIC_URL + '/iphonexBlack.png').then((blob) => {console.log('yo'); setImageToAnnotate(blob)})
         AppBuildClient.getCurrentAppBuildForProjectId(projectId).then((appBuild) => setCurrentAppBuild(appBuild))
     }, [])
 
@@ -48,6 +50,24 @@ const CreatePostView = (props: CreatePostViewProps) => {
         post.comments?.forEach(async (comment) => {
             await DataLayerClient.createCommentForPost(newPost, comment)
         })
+    }
+
+    function loadXHR(url: string): Promise<Blob> {
+
+        return new Promise(function(resolve, reject) {
+            try {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", url);
+                xhr.responseType = "blob";
+                xhr.onerror = function() {reject("Network error.")};
+                xhr.onload = function() {
+                    if (xhr.status === 200) {resolve(xhr.response)}
+                    else {reject("Loading error:" + xhr.statusText)}
+                };
+                xhr.send();
+            }
+            catch(err) {reject(err.message)}
+        });
     }
 
     function b64toBlob(dataURI: string): Blob {
@@ -182,28 +202,14 @@ const CreatePostView = (props: CreatePostViewProps) => {
 					{/* RenderPostToolBar is contained because otherwise it stretches for the whole height. */}
 					
                     <div className='flex flex-row justify-center w-full pt-1 pb-1 pl-2 pr-2 mx-auto overflow-scroll'> 
-                        { currentMode === 'BROWSE' && currentAppBuild !== undefined && <CreatePostViewSimulator appBuild={currentAppBuild} onScreenshot={(img) => {
+                        { currentAppBuild !== undefined && <CreatePostViewSimulator appBuild={currentAppBuild} onScreenshot={(img) => {
                             setImageToAnnotate(b64toBlob(img)); 
                             setTimeout(() => {setCurrentMode('CREATE_ISSUE')}, 100)
                         }}/> }
                         { renderCreateIssue() }
-                        {/* <PostScreenshot post={{
-                            id: '1',
-                            .image: window.URL.createObjectURL('newsScreenshot.png'),
-
-                        }
-                            
-                        }></PostScreenshot> */}
                     </div>
 					{/* { renderAppetizeScreen() } 					
 					<AnnotationScreenshot src={imageToAnnotate} ref={canvasRef}/>  */}
-                   
-					
-					{/* <div className='flex flex-col max-h-full ml-3'>
-                        <div className="w-64 h-auto p-3 bg-gray-100 rounded-lg shadow-lg">
-                            { renderForm() }
-                        </div>
-                    </div> */}
 				</div>
 				{/* This is here to act as a pad placeholder for the screenshot navigator. */}
 				<div className="flex-shrink-0 w-full h-10"></div> 

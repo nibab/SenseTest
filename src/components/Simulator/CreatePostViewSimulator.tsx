@@ -96,7 +96,7 @@ const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
 			<div className='absolute z-0 w-full h-full'>
 				<img className="object-contain w-full h-full" src={process.env.PUBLIC_URL + '/iphonexBlack.png'}></img>
 			</div>
-			<div className='absolute z-20 flex w-full h-full'>
+			<div className='absolute z-10 flex w-full h-full'>
 				<div className='flex flex-col mx-auto my-auto '>
 					<div className='w-full'>
 						<img className="w-20 h-20 mx-auto rounded-lg" src={process.env.PUBLIC_URL + '/appIcon.png'} alt="" />
