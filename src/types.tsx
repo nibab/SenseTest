@@ -68,7 +68,7 @@ export type ProjectMember = {
 }
 
 const stringLitArray = <L extends string>(arr: L[]) => arr
-const authStates = stringLitArray(["signedIn", "signedUp", "signUp", "signedUpAfterInvite"])
+const authStates = stringLitArray(["signedIn", "signedUp", "signUp", "signedUpAfterInvite", "firstSignIn"])
 export type AuthState = (typeof authStates)[number]
 export const isAuthState = (x: any): x is AuthState => authStates.includes(x);
 
