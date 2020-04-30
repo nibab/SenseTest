@@ -64,12 +64,18 @@ const Main = () => {
   const authSelector = useSelector(state => state.auth)
   const [isLoading, setIsLoading] = useState(true)
 
+  const getUserInfoAndSetLogin = (currentUser: any) => {
+    const userName = currentUser["attributes"]['custom:name']
+    const userEmail = currentUser["attributes"]['email']
+    dispatch(login({userName: userName, email: userEmail}))
+  }
+
   useEffect(() => {
     setIsLoading(true)
     AmplifyAuth.currentAuthenticatedUser({
       bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-    }).then((user: object) => {
-      dispatch(login())
+    }).then(async (user: object) => {
+      getUserInfoAndSetLogin(user)
       setIsLoading(false)
       console.log(user);   
       //this.setState({ authState: { isLoggedIn: true, isLoading: false } })
@@ -98,7 +104,7 @@ const Main = () => {
         <Route path='/login'>
           {isLoggedIn || isLoading ?
             (<Redirect to='/projects'/>) :
-            <AuthForm onUserSignIn={() => {dispatch(login())}} />
+            <AuthForm onUserSignIn={async (user) => {getUserInfoAndSetLogin(user)}} />
           }
         </Route>
         <ProtectedRoute

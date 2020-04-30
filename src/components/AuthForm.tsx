@@ -32,7 +32,7 @@ const signUpConfig = {
 }
 
 type AuthProps = {
-  onUserSignIn: () => void,
+  onUserSignIn: (userObject: any) => void,
 }
 
 type AuthStateHistory = {
@@ -54,7 +54,7 @@ class AuthForm extends Component<AuthProps, AuthStateHistory> {
     this.setState({currentState: state, previousState })
 
     if (state === 'signedIn') {
-      this.props.onUserSignIn();
+      this.props.onUserSignIn(this.state.userObject);
     }
 
     
@@ -81,8 +81,8 @@ class AuthForm extends Component<AuthProps, AuthStateHistory> {
         }}> */}
 
             { this.state.currentState === null && <SignIn handleStateChange={(authState, userObject) => {
-              this.handleStateChange(authState)
               this.setState({ userObject: userObject})
+              this.handleStateChange(authState)
             }}/>}
             
             { this.state.currentState === 'signedUpAfterInvite' && 

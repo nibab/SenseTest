@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { addComment } from '../../store/comment/actions'
 import VersionTag from '../VersionTag'
 import { addsubComment } from '../../store/subcomment/actions'
+import { useSelector } from '../../store'
 
 type NewPostFormProps = {
 	imageToAnnotate: Blob
@@ -28,6 +29,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 	// Page name input
 	const pageNameRef = useRef<HTMLInputElement>(null)
 	const [validationState, setValidationState] = useState<ValidationState>('None')
+	const authState = useSelector(state => state.auth)
 
 
 
@@ -205,7 +207,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 		props.onCreatePostClicked(imageId, {
 			id: props.postId,
 			title: pageName!,
-			dateCreated: 'now',
+			dateCreated: (new Date()).toISOString(),
 			image: props.imageToAnnotate,
 			projectId: props.projectId,
 			text: 'text',
@@ -222,8 +224,8 @@ const NewPostForm = (props: NewPostFormProps) => {
 			authorAvatarSrc: 'newsScreenshot.png',
 			text: annotation.data.text !== null ? annotation.data.text : "",
 			id: uuid(),
-			date: 'now',
-			author: 'Cezbabs',
+			date: (new Date()).toISOString(),
+			author: authState.authenticated ? authState.userName! : 'invalid',
 			annotation: annotation,
 			subcomments: []
 		}

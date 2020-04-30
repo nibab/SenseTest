@@ -60,7 +60,7 @@ export const AnnotationScreen = ({ }) => {
                         author: comment!.author,
                         id: comment!.id,
                         authorAvatarSrc: comment!.authorAvatar,
-                        date: 'now',
+                        date: comment !== null && comment.createdAt !== null? comment.createdAt : '' ,
                         annotation: comment?.annotation !== null ? comment?.annotation : undefined,
                         subcomments: subComments !== null && subComments !== undefined ?  subComments : []
                     }

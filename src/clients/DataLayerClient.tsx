@@ -152,7 +152,7 @@ export class DataLayerClient {
 					id: newComment.id,
 					author: newComment.author!,
 					authorAvatarSrc: newComment.authorAvatar!,
-					date: 'now',
+					date: newComment.createdAt === null ? '' : newComment.createdAt,
 					text: newComment.content === null ? '' : newComment.content,
 					subcomments: []// newComment.subComments
 				}

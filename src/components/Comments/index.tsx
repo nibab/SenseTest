@@ -141,13 +141,14 @@ type CommentGroupProps = {
 
 const CommentGroup = (props: CommentGroupProps) => {
 	const subComments = useSelector(state => state.subcomment.commentsMap[props.comment.id])
+	const authState = useSelector(state => state.auth)
 
 	const addResponse = (text: string) => {
 		let newResponse: SubComment = {
 			id:  uuidv4(),
 			text: text,
-			author: 'Cezar Babin',
-			date: 'now',
+			author: authState.authenticated ? authState.userName! : 'invalid',
+			date: (new Date()).toISOString(),
 			authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 			parentCommentId: props.comment.id
 		}

@@ -9,7 +9,10 @@ export function authReducer(state = initialState, action: AuthActionTypes): Auth
     switch (action.type) {
         case LOGIN:
             return {
-                authenticated: true
+                authenticated: true,
+                email: action.payload.email,
+                userName: action.payload.userName
+
             }
         case LOGOUT:
             return {

@@ -26,6 +26,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 
 	const postsSelector = useSelector(state => state.post.posts[props.post.id])
 	const dispatch = useDispatch()
+	const authState = useSelector(state => state.auth)
 
 	useEffect(() => {
 		setPost(props.post)
@@ -98,9 +99,9 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 			const newComment: CommentType = {
 				postId: props.post.id,
 				id: uuid(),
-				author: 'Test',
+				author: authState.authenticated ? authState.userName! : 'invalid',
 				text: annotation.data.text ? annotation.data.text : '',
-				date: 'right now',
+				date: (new Date()).toISOString(),
 				authorAvatarSrc: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 				annotation: annotation,
 				subcomments: []

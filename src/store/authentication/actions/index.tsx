@@ -5,10 +5,18 @@ export const LOGOUT = "LOGOUT"
 
 export type AuthState = {
   authenticated: boolean
+  email?: string
+  userName?: string
+}
+
+type UserInfo = {
+    email: string
+    userName: string
 }
 
 interface LoginAction {
     type: typeof LOGIN
+    payload: UserInfo
 }
 
 interface LogoutAction {
@@ -17,9 +25,10 @@ interface LogoutAction {
 
 export type AuthActionTypes = LoginAction | LogoutAction
 
-export function login(): AuthActionTypes {
+export function login(userInfo: UserInfo): AuthActionTypes {
     return {
-        type: LOGIN
+        type: LOGIN,
+        payload: userInfo
     }
 }
 
