@@ -4,6 +4,7 @@ import uuid from 'uuid'
 import {useDropzone, DropzoneOptions } from 'react-dropzone'
 import { AssetStorageClient } from '../../clients/AssetStorageClient'
 import Log from '../../utils/Log'
+import { DropDownProps } from 'antd/lib/dropdown'
 
 type CreateProjectModalProps = {
     onCancel: () => void
@@ -33,7 +34,15 @@ const emailRegex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]
 const CreateProjectModal = (props: CreateProjectModalProps) => {
     const [recentCollaborators, setRecentCollaborators] = useState<Record<string, RecentCollaborator>>()
     const [currentInvitees, setCurrentInvitees] = useState<Record<string, CurrentInvitee>>()
+    // Refs
     const inviteInputRef = useRef<HTMLInputElement>(null)
+    const appNameRef = useRef<HTMLInputElement>(null)
+    const versionRef = useRef<HTMLInputElement>(null)
+    const [confirmAppBundleUploaded, setAppBundleUploaded] = useState(false)
+    const [confirmButtonActive, setConfirmButtonActive] = useState(false)
+    
+    const [projectId, setProjectId] = useState<string>()
+    const [bundleId, setBundleId] = useState<string>()
 
     useEffect(() => {
         const _currentInvitees: typeof currentInvitees = {}
@@ -43,7 +52,21 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
         const _recentCollaborators: typeof recentCollaborators = {}
         _recentCollaborators[testCollaborator.email] = testCollaborator
         setRecentCollaborators(_recentCollaborators)
+
+        setProjectId(uuid())
+        setBundleId(uuid())
     }, [])
+
+    useEffect(() => {
+        const appNameFilled = appNameRef.current?.value !== undefined
+        const versionNameFilled = versionRef.current?.value !== undefined
+        const appBuildUploaded = confirmAppBundleUploaded
+
+        if (appNameFilled && versionNameFilled && appBuildUploaded) {
+            setConfirmButtonActive(true)
+        }
+
+    }, [inviteInputRef, appNameRef, versionRef, confirmAppBundleUploaded])
 
     const renderRecentCollaborators = () => {
         const onRecentCollaboratorAddedAsInvitee = (collaboratorId: string) => {
@@ -135,6 +158,26 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
         inviteInputRef.current.value = ''
     }
 
+    const renderButtons = () => {
+        const activeButtonClass = "inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5"
+        const inactiveButtonClass = "inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white border border-transparent bg-indigo-300 rounded-md shadow-sm cursor-not-allowed sm:text-sm sm:leading-5"
+
+        return (
+            <div className="px-1 mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                <span className="flex w-full rounded-md shadow-sm sm:col-start-2">
+                    <button type="button" disabled={true} className={confirmButtonActive ? activeButtonClass : inactiveButtonClass}>
+                        Create
+                    </button>
+                </span>
+                <span className="flex w-full mt-3 rounded-md shadow-sm sm:mt-0 sm:col-start-1">
+                    <button onClick={props.onCancel} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5">
+                        Cancel
+                    </button>
+                </span>
+            </div>
+        )
+    }
+
  
     return(
             <div className="fixed inset-x-0 bottom-0 px-4 pb-6 sm:inset-0 sm:p-0 sm:flex sm:items-center sm:justify-center">
@@ -174,24 +217,24 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
                                 <div className="grid grid-cols-1 row-gap-6 col-gap-4 mt-3 sm:grid-cols-6">
                                     <div className="sm:col-span-3">
                                         <label className="block text-sm font-medium leading-5 text-gray-700">
-                                        App Name
+                                            App Name
                                         </label>
                                         <div className="mt-1 rounded-md shadow-sm">
-                                        <input  className="block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5" />
+                                        <input ref={appNameRef} className="block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5" />
                                         </div>
                                     </div>
                                     <div className="sm:col-span-3">
                                         <label  className="block text-sm font-medium leading-5 text-gray-700">
-                                        Version
+                                            Version
                                         </label>
                                         <div className="mt-1 rounded-md shadow-sm">
-                                        <input id="city" className="block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5" />
+                                        <input ref={versionRef} className="block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5" />
                                         </div>
                                     </div>
                             
                                     
                                     <div className="sm:col-span-6">
-                                        <DropZone />
+                                        { projectId && bundleId && <DropZone projectId={projectId} bundleId={bundleId} onBundleUploaded={() => setAppBundleUploaded(true)}/>}
                                     </div>
                                 </div>
                                 </div>
@@ -223,26 +266,19 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
                     </div>
 
                 </div>
-                <div className="px-1 mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                    <span className="flex w-full rounded-md shadow-sm sm:col-start-2">
-                        <button type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5">
-                            Create
-                        </button>
-                    </span>
-                    <span className="flex w-full mt-3 rounded-md shadow-sm sm:mt-0 sm:col-start-1">
-                        <button onClick={props.onCancel} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5">
-                            Cancel
-                        </button>
-                    </span>
-                </div>
+                { renderButtons() }
             </div>
         </div>
     )
 }
 
 type DropZoneState = 'WAITING' | 'UPLOADING' | 'DONE' | 'ERROR'
-
-const DropZone = () => {
+type DropZoneProps = {
+    projectId: string
+    bundleId: string
+    onBundleUploaded: () => void
+}
+const DropZone = (props: DropZoneProps) => {
     const onDrop: DropzoneOptions["onDrop"] = (acceptedFiles) => {
         console.log("BLEA dropped file")
         acceptedFiles.forEach((file) => {
@@ -258,11 +294,12 @@ const DropZone = () => {
 
             setFileInputName(file.name)
 
-            AssetStorageClient.createUploadUrl(uuid(), uuid()).then((presignedUrlFields) => {
+            AssetStorageClient.createUploadUrl(props.bundleId, props.projectId).then((presignedUrlFields) => {
                 Log.info("Presigned url for get " + presignedUrlFields)
                 return AssetStorageClient.uploadDataToUrlWithProgress(file, presignedUrlFields, (p) => setCounter(p))
             }).then(() => {
                 setVisualState('DONE')
+                props.onBundleUploaded()
             }).catch(() => {
                 console.log("Something bad happened")
             })
