@@ -39,7 +39,7 @@ export class AppBuildClient {
     static getCurrentAppBuildForProjectId = async (projectId: string): Promise<AppBuild> => {
         return new Promise(async (resolve, reject) => {
             const project = await API.graphql(graphqlOperation(getProject, {id: projectId})) as {data: GetProjectQuery}
-            const appBuild: AppBuild | undefined = TypeConverter.getCurentAppBuildFromProjectQuery(project.data)
+            const appBuild: AppBuild | undefined = TypeConverter.getCurentAppBuildFromProjectItem(project.data.getProject)
             if (appBuild === undefined) {
                 reject()
             } else {

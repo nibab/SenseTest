@@ -1,13 +1,13 @@
 import React from 'react'
-import { GetProjectQuery } from './API';
-import { Post, postTagGraphQLToLocalType, AppBuild } from './types';
+import { GetProjectQuery, ListProjectsQuery } from './API';
+import { Post, postTagGraphQLToLocalType, AppBuild, ProjectMember } from './types';
 import Log from './utils/Log';
 import { PostImgDownload } from './utils/PostImgDownload';
 
 
 export class TypeConverter {
-    static getAppBuildsFromProjectQuery(projectQuery: GetProjectQuery): AppBuild[] {
-        const _project = projectQuery.getProject
+    static getAppBuildsFromProjectItem(item: GetProjectQuery['getProject']): AppBuild[] {
+        const _project = item
 		if (_project === null) return []
 		
 		const _appBuilds = _project.appBuilds?.items
@@ -31,9 +31,9 @@ export class TypeConverter {
 		return appBuilds
     }
 
-    static getPostsFromProjectQuery(appBuildClientRequest: GetProjectQuery): Post[] {
+    static getPostsFromProjectItem(item: GetProjectQuery['getProject']): Post[] {
         const postsToReturn: Post[] = []
-        const posts = appBuildClientRequest.getProject?.posts?.items
+        const posts = item?.posts?.items
         posts?.forEach(async (post) => {
             if (post !== null) {
                 const postImgDownload = new PostImgDownload(post.imageId, () => {})
@@ -60,9 +60,27 @@ export class TypeConverter {
         return postsToReturn
     }
 
-    static getCurentAppBuildFromProjectQuery = (getProjectQuery: GetProjectQuery): AppBuild | undefined => {
-        const currentAppBuildId = getProjectQuery.getProject?.currentAppBuild
-        const appBuilds = getProjectQuery.getProject?.appBuilds
+    static getMembersFromProjectItem(item: GetProjectQuery['getProject']): ProjectMember[] {
+        const membersToReturn: ProjectMember[] = []
+        const members =  item?.members?.items
+        members?.forEach(async (member) => {
+            if (member !== null) {
+                const newMember: ProjectMember = {
+                    id: member?.user.id,
+                    name: member?.user.name,
+                    email: member?.user.email
+                }
+                membersToReturn.push(newMember)
+            }
+        })
+        return membersToReturn
+    }
+
+
+
+    static getCurentAppBuildFromProjectItem = (item: GetProjectQuery['getProject']): AppBuild | undefined => {
+        const currentAppBuildId = item?.currentAppBuild
+        const appBuilds =item?.appBuilds
         if (appBuilds !== undefined) {
             // should return an array of only one item
             const _currentAppBuildArray = [appBuilds?.items![0]] //.filter(item => item !== null && item.id === currentAppBuildId) 

@@ -57,7 +57,14 @@ export type Project = {
   name: string,
   posts: Post[]
   appBuilds: AppBuild[],
-  currentAppBuild: AppBuild
+  currentAppBuild: AppBuild,
+  members: ProjectMember[]
+}
+
+export type ProjectMember = {
+  email: string
+  id: string
+  name: string
 }
 
 const stringLitArray = <L extends string>(arr: L[]) => arr
