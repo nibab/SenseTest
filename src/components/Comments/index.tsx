@@ -3,6 +3,7 @@ import { Comment as CommentType, SubComment, Annotation } from '../../types'
 import { v4 as uuidv4 } from 'uuid'
 import { useSelector } from '../../store'
 import { type } from 'os'
+import moment from 'moment'
 
 const REPLY_BOX_PLACEHOLDER = 'Write comment'
 
@@ -119,7 +120,7 @@ const Comment = (props: CommentProps) => {
 						<div className='flex-shrink-0 w-auto mb-0.5 my-auto text-sm font-semibold leading-tight text-gray-700 '>
 							{ props.comment.author }
 						</div>
-						<div className="flex-shrink-0 my-auto ml-1 text-xs text-gray-500"> { props.comment.date  }  </div>
+						<div className="flex-shrink-0 my-auto ml-1 text-xs text-gray-500"> { moment(props.comment.date).fromNow() }  </div>
 					</div>
 					
 

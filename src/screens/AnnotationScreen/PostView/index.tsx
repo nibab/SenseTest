@@ -4,6 +4,7 @@ import { PostViewSimulator as Simulator } from '../../../components/Simulator/Po
 import Attachment from './Attachment'
 import PostScreenshot from '../../../components/PostScreenshot'
 import { AppBuildClient } from '../../../clients/AppBuildClient'
+import moment from 'moment'
 
 type PostViewProps = {
 	post: Post
@@ -148,7 +149,7 @@ const PostView = (props: PostViewProps) => {
 										{ props.post.title }
 									</h2>
 									<p className="text-xs font-normal leading-5 text-gray-500 transition duration-150 ease-in-out font group-hover:text-gray-700 group-focus:underline">
-										{ props.post.dateCreated }
+										{  props.post.dateCreated !== null ? moment(props.post.dateCreated).fromNow(): ''}
 									</p>
 								</div>
 								
