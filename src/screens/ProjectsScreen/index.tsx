@@ -126,7 +126,7 @@ const ProjectsScreen = () => {
 						</h1>
 						<div className='h-full px-2 pt-6 mx-auto overflow-scroll'>
 							<div onClick={() => {DataLayerClient.createNewProject()}} className='inline-flex items-center px-4 py-1 my-auto mb-5 mr-5 text-xs font-medium text-gray-700 whitespace-no-wrap transition ease-in-out bg-gray-200 rounded rounded-full cursor-pointer hover:bg-gray-300 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-10 h-10 mr-1 icon-add"><path className="secondary" fill-rule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-10 h-10 mr-1 icon-add"><path className="secondary" fillRule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
 								<h2 className='mr-4 text-lg font-semibold text-gray-800 '>Create New</h2>
 							</div>
 							<div className='flex flex-col justify-center mt-1 '>
