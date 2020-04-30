@@ -187,7 +187,7 @@ const PostView = (props: PostViewProps) => {
 					{ renderToolbar() }	
 					{ displayState === 'Simulator'  && currentAppBuild !== undefined ? <div className="ml-3"><Simulator appBuild={currentAppBuild}/></div> : <></> }
 					{ displayState === 'Attachment' ? <div className="ml-3"><Attachment/></div> : <></> }
-					<div className='ml-3'>
+					<div className='ml-3 '>
 						<PostScreenshot post={props.post} />
 					</div>
 					

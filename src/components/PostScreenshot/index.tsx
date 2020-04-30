@@ -70,7 +70,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 					<div className='flex w-full h-8 my-1'>
 						<div className='mx-auto flex flex-row p-0.5'></div>
 					</div>
-					<div className='relative flex flex-col w-full pt-2 pr-2 -ml-1 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: '583px'}}>
+					<div className='relative flex flex-col w-full pt-1 pr-0.5 -ml-1 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: '583px'}}>
 						{ post !== undefined ? <CommentsSection comments={Object.values(commentsSelector)} addSubComent={_addsubComment} displayNewCommentBox={false} /> : <></>}
 					</div>
 				</div>
@@ -147,7 +147,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 		<div className='flex flex-col' > 
 			{ renderTag() }
 			<div className='flex flex-row pl-3 pr-2 border-2 border-gray-400 border-dashed rounded-lg'>
-				<div className='relative flex-col flex-shrink-0 mb-3' >
+				<div className='flex-col flex-shrink-0 mb-3' >
 					{ renderButtons() }
 					{ renderAnnotationScreen() }
 				</div>
