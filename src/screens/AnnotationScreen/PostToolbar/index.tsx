@@ -167,6 +167,25 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 		)
 	}
 
+	const renderNoPosts = () => {
+		return (
+			<div className='w-full h-48 px-3'>
+				<div className='w-full p-3 my-auto text-center rounded-lg bg-blue-50'>
+					<p className="mt-1 text-sm font-bold text-gray-600">
+						{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-14 icon-box"><g><path className="secondary" d="M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2zm4 5a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H9z"/><path className="primary" d="M4 3h16a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5c0-1.1.9-2 2-2z"/></g></svg> */}
+						<svg className="w-10 mx-auto text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+						</svg>
+						No issues found!
+					</p>
+					<p className="mt-1 text-xs text-blue-700">
+						You can create a new issue by starting the aplication in the simulator and taking a screenshot.
+					</p>
+				</div>
+			</div>
+		)
+	}
+
 	return (
 		<div className='flex flex-col flex-shrink-0 w-3/12 h-screen my-auto overflow-scroll shadow-lg bg-gray-50'>
 			{ renderHeader() }
@@ -176,7 +195,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 					<h2 className='px-3 text-xs font-normal font-medium tracking-wider text-gray-600 uppercase '>Issues</h2>
 				</div>
 				<div className='h-full overflow-scroll '>
-					{ renderPosts() }
+					{ posts === undefined || Object.keys(posts).length === 0 ? renderNoPosts(): renderPosts() }
 				</div>
 			</div>
 			{ renderCreateNewButton() }

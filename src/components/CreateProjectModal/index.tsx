@@ -10,6 +10,7 @@ import { AppBuildClient } from '../../clients/AppBuildClient'
 
 type CreateProjectModalProps = {
     onCancel: () => void
+    onSubmit: (projectId: string) => void
 }
 
 type RecentCollaborator = {
@@ -42,6 +43,7 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
     const versionRef = useRef<HTMLInputElement>(null)
     const [confirmAppBundleUploaded, setAppBundleUploaded] = useState(false)
     const [confirmButtonActive, setConfirmButtonActive] = useState(false)
+    const [confirmButtonLoading, setConfirmButtonLoading] = useState(false)
     
     const [projectId, setProjectId] = useState<string>()
     const [bundleId, setBundleId] = useState<string>()
@@ -80,6 +82,7 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
         // Both inputs are forced unwrapped since otherwise confirm button is not active
         const appName = (appNameRef.current?.value)!
         const appVersion = (versionRef.current?.value)!
+        setConfirmButtonLoading(true)
         DataLayerClient.createNewProject(projectId!, appName).then((project) => {
            return AssetStorageClient.getDownloadUrl(bundleId!)
         }).then((url) => {
@@ -91,7 +94,9 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
                 assetUrl: url
             })
         }).then(() => {
-            console.log("BLEA SULA DONE")
+            setConfirmButtonLoading(false)
+            props.onSubmit(projectId!)
+            Log.info("Created new project.")
         })
     }
 
@@ -189,12 +194,18 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
         const activeButtonClass = "inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5"
         const inactiveButtonClass = "inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white border border-transparent bg-indigo-300 rounded-md shadow-sm cursor-not-allowed sm:text-sm sm:leading-5"
 
+        const renderConfirmButton = () => {
+            return(
+                <button onClick={() => onConfirmButtonClicked()} type="button" disabled={!confirmButtonActive} className={confirmButtonActive ? activeButtonClass : inactiveButtonClass}>
+                    { confirmButtonLoading ? <div className='spinner'></div> : 'Create'}
+                </button>
+            )
+        }
+
         return (
             <div className="px-1 mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                 <span className="flex w-full rounded-md shadow-sm sm:col-start-2">
-                    <button onClick={() => onConfirmButtonClicked()} type="button" disabled={!confirmButtonActive} className={confirmButtonActive ? activeButtonClass : inactiveButtonClass}>
-                        Create
-                    </button>
+                    { renderConfirmButton() }
                 </span>
                 <span className="flex w-full mt-3 rounded-md shadow-sm sm:mt-0 sm:col-start-1">
                     <button onClick={props.onCancel} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5">

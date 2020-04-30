@@ -54,7 +54,7 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 	}
 
 	return (
-		<div className='flex flex-col bg-white rounded-lg shadow-lg'>
+		<div key={props.project.id} className='flex flex-col bg-white rounded-lg shadow-lg'>
 			<div className='flex flex-row p-3 border border-2 border-t-0 border-l-0 border-r-0'>
 				<div className='flex-shrink-0 w-16 h-16 bg-red-300 rounded-lg'>
 					<img className="inline-block rounded-md" src="appIcon.png" alt="" />
@@ -82,6 +82,7 @@ const ProjectsScreen = () => {
 	const [createProjectModalVisible, setCreateProjectModalVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
 	const auth = useSelector(state => state.auth)
+	const history = useHistory()
 
 
 	const getProjectsForUser = () => {
@@ -121,9 +122,13 @@ const ProjectsScreen = () => {
 		return items
 	}
 
+	const onModalSubmitButtonClick = (projectId: string) => {
+		return history.push(`/project/${projectId}`)
+	}
+
 	return (
 		<>
-			{ createProjectModalVisible && <CreateProjectModal onCancel={() => setCreateProjectModalVisible(false)} />}
+			{ createProjectModalVisible && <CreateProjectModal onSubmit={(projectId) => onModalSubmitButtonClick(projectId)} onCancel={() => setCreateProjectModalVisible(false)} />}
 			<div className='w-screen h-screen font-sans bg-gray-100'>
 				<div className='flex flex-row w-full h-20 bg-white shadow-md'>
 					<div className='justify-center flex-shrink-0 w-48 my-auto'>
@@ -143,12 +148,12 @@ const ProjectsScreen = () => {
 						</button>
 					</div>
 				</div>
-				<div className="h-full max-w-2xl pt-6 mx-auto sm:px-6 lg:px-8">
+				<div className="max-w-2xl pt-6 mx-auto sm:px-6 lg:px-8">
 					<div className="h-full max-w-3xl mx-auto ">
 						<h1 className="px-2 text-3xl font-bold leading-tight text-gray-900">
 							Releases
 						</h1>
-						<div className='h-full px-2 pt-6 mx-auto overflow-scroll'>
+						<div className='px-2 pt-6 mx-auto overflow-scroll '>
 							<div onClick={() => {setCreateProjectModalVisible(true)}} className='inline-flex items-center px-4 py-1 my-auto mb-5 mr-5 text-xs font-medium text-gray-700 whitespace-no-wrap transition ease-in-out bg-gray-200 rounded rounded-full cursor-pointer hover:bg-gray-300 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-10 h-10 mr-1 icon-add"><path className="secondary" fillRule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
 								<h2 className='mr-4 text-lg font-semibold text-gray-800 '>Create New</h2>
