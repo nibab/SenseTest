@@ -10,13 +10,23 @@ type AuthProps = {
 
 const AuthForm = (props: AuthProps) => {
     const [userObject, setUserObject] = useState()
-    const [currentState, setCurrentState] = useState<AuthState| null>('firstSignIn')
+    const [currentState, setCurrentState] = useState<AuthState| null>(null)
 
     useEffect(() => {
         if (currentState === 'signedIn') {
             props.onUserSignIn(userObject)
         }
     }, [currentState])
+
+    const onTestButtonClick = () => {
+        const states: AuthState[] = ['signedUpAfterInvite', 'firstSignIn' ]
+        if (currentState === null) {
+            setCurrentState('signedUpAfterInvite')
+        }
+        if (currentState === 'signedUpAfterInvite') {
+            setCurrentState('firstSignIn')
+        }
+    }
 
     return (
         <div className='relative'>
@@ -25,7 +35,10 @@ const AuthForm = (props: AuthProps) => {
                     <img className="object-contain p-2 transition duration-100 ease-in-out cursor-pointer" src='logo.png' />
                 </div>
                 <div className='w-full '>
+                {/* for debugging */}
+                <button onClick={() => onTestButtonClick()} className='bg-red-200'> CLICK ME</button>
                 </div>
+                
             </div>
 
             {currentState === null && <SignIn handleStateChange={(authState, userObject) => {
