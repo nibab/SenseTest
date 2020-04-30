@@ -46,11 +46,11 @@ export class DataLayerClient {
 		})
 	}
 
-	static createNewProject = (): Promise<Project> => {
+	static createNewProject = (projectId: string, name: string): Promise<Project> => {
 		return new Promise(async (resolve, reject) => {
 			const createProjectInput: CreateProjectInput = {
-				name: 'TestProject',
-				id: uuidv4(),
+				name: name,
+				id: projectId,
 				active: true 
 			}
 	

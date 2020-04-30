@@ -5,6 +5,8 @@ import {useDropzone, DropzoneOptions } from 'react-dropzone'
 import { AssetStorageClient } from '../../clients/AssetStorageClient'
 import Log from '../../utils/Log'
 import { DropDownProps } from 'antd/lib/dropdown'
+import { DataLayerClient } from '../../clients/DataLayerClient'
+import { AppBuildClient } from '../../clients/AppBuildClient'
 
 type CreateProjectModalProps = {
     onCancel: () => void
@@ -55,18 +57,43 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
 
         setProjectId(uuid())
         setBundleId(uuid())
+
     }, [])
 
-    useEffect(() => {
-        const appNameFilled = appNameRef.current?.value !== undefined
-        const versionNameFilled = versionRef.current?.value !== undefined
+    const onRequiredInputChange = () => {
+        const appNameFilled = appNameRef.current?.value !== undefined && appNameRef.current?.value !== ''
+        const versionNameFilled = versionRef.current?.value !== undefined &&  versionRef.current?.value !== ''
         const appBuildUploaded = confirmAppBundleUploaded
 
         if (appNameFilled && versionNameFilled && appBuildUploaded) {
             setConfirmButtonActive(true)
+        } else {
+            setConfirmButtonActive(false)
         }
+    }
 
+    useEffect(() => {
+        onRequiredInputChange()
     }, [inviteInputRef, appNameRef, versionRef, confirmAppBundleUploaded])
+
+    const onConfirmButtonClicked = () => {
+        // Both inputs are forced unwrapped since otherwise confirm button is not active
+        const appName = (appNameRef.current?.value)!
+        const appVersion = (versionRef.current?.value)!
+        DataLayerClient.createNewProject(projectId!, appName).then((project) => {
+           return AssetStorageClient.getDownloadUrl(bundleId!)
+        }).then((url) => {
+            return AppBuildClient.createAppBuildClient({
+                projectId: projectId!,
+                assetId: bundleId!,
+                appName: appName,
+                appVersion: appVersion,
+                assetUrl: url
+            })
+        }).then(() => {
+            console.log("BLEA SULA DONE")
+        })
+    }
 
     const renderRecentCollaborators = () => {
         const onRecentCollaboratorAddedAsInvitee = (collaboratorId: string) => {
@@ -165,7 +192,7 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
         return (
             <div className="px-1 mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                 <span className="flex w-full rounded-md shadow-sm sm:col-start-2">
-                    <button type="button" disabled={true} className={confirmButtonActive ? activeButtonClass : inactiveButtonClass}>
+                    <button onClick={() => onConfirmButtonClicked()} type="button" disabled={!confirmButtonActive} className={confirmButtonActive ? activeButtonClass : inactiveButtonClass}>
                         Create
                     </button>
                 </span>
@@ -220,7 +247,7 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
                                             App Name
                                         </label>
                                         <div className="mt-1 rounded-md shadow-sm">
-                                        <input ref={appNameRef} className="block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5" />
+                                        <input ref={appNameRef} onChange={() => onRequiredInputChange()} className="block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5" />
                                         </div>
                                     </div>
                                     <div className="sm:col-span-3">
@@ -228,7 +255,7 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
                                             Version
                                         </label>
                                         <div className="mt-1 rounded-md shadow-sm">
-                                        <input ref={versionRef} className="block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5" />
+                                        <input ref={versionRef} onChange={() => onRequiredInputChange()} className="block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5" />
                                         </div>
                                     </div>
                             
