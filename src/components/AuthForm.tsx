@@ -36,7 +36,7 @@ const AuthForm = (props: AuthProps) => {
                     <img className="object-contain p-2 transition duration-100 ease-in-out cursor-pointer" src='logo.png' />
                 </div>
                 <div className='w-full '>
-                <button onClick={() => onTestButtonClick()} className='bg-red-200'> CLICK ME</button>
+                {/* <button onClick={() => onTestButtonClick()} className='bg-red-200'> CLICK ME</button> */}
                 </div>                
             </div>
             <div className=''>
