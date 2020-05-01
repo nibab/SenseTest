@@ -129,7 +129,7 @@ const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
 	return (
 		<div className='flex flex-col '>
 			{ renderTag() }
-			<div className='pb-3 pl-3 pr-3 border-2 border-gray-400 border-dashed rounded-lg'>
+			<div className='pl-3 pr-3 border-2 border-gray-400 border-dashed rounded-lg '>
 				<div className='h-full'>
 					{ renderButtons() }
 					{ renderScreen() }
