@@ -3,6 +3,7 @@ import { AuthState } from '../types';
 import SignInCreateNewPassword from './AuthForms/SignInCreateNewPassword';
 import SignIn from './AuthForms/SignIn';
 import NewName from './AuthForms/NewName';
+import Attachment from '../screens/AnnotationScreen/PostView/Attachment';
 
 type AuthProps = {
     onUserSignIn: (userObject: any) => void,
@@ -35,26 +36,30 @@ const AuthForm = (props: AuthProps) => {
                     <img className="object-contain p-2 transition duration-100 ease-in-out cursor-pointer" src='logo.png' />
                 </div>
                 <div className='w-full '>
-                {/* for debugging */}
                 <button onClick={() => onTestButtonClick()} className='bg-red-200'> CLICK ME</button>
-                </div>
-                
+                </div>                
             </div>
+            <div className=''>
+           
 
-            {currentState === null && <SignIn handleStateChange={(authState, userObject) => {
-                setUserObject(userObject)
-                setCurrentState(authState)
-            }} />}
-
-            {currentState === 'signedUpAfterInvite' &&
-                <SignInCreateNewPassword userObject={userObject} handleStateChange={(authState) => {
+                {currentState === null && <SignIn handleStateChange={(authState, userObject) => {
+                    setUserObject(userObject)
                     setCurrentState(authState)
                 }} />}
 
-            {currentState === 'firstSignIn' &&
-                <NewName handleStateChange={(authState) => {
-                    setCurrentState(authState)
-                }} />}
+
+                {currentState === 'signedUpAfterInvite' &&   
+                    <SignInCreateNewPassword userObject={userObject} handleStateChange={(authState) => {
+                        setCurrentState(authState)
+                    }} />
+                }
+
+                {currentState === 'firstSignIn' &&
+                    <NewName handleStateChange={(authState) => {
+                        setCurrentState(authState)
+                    }} />
+                }           
+            </div>
         </div>
     );
 

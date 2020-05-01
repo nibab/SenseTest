@@ -6,52 +6,46 @@ import ValidationErrorBubble from '../ValidationErrorBubble'
 import Header from './Header'
 
 type NewNameProps = {
-	handleStateChange: (authState: AuthState, userObject: any) => void
+	handleStateChange: (authState: AuthState) => void
 }
 
 const NewName = ({ handleStateChange }: NewNameProps) => {
-	const emailRef = useRef<HTMLInputElement>(null)
-	const passwordRef = useRef<HTMLInputElement>(null)
-	const [signingIn, setSigningIn] = useState(false)
+	const userName = useRef<HTMLInputElement>(null)
+	const [loading, setIsLoading] = useState(false)
 	const [error, setError] = useState<string>()
 
-	const signIn = (e: any) => {
+	const setName = (e: any) => {
 		e.preventDefault()
-		const email = emailRef.current?.value
-		const password = passwordRef.current?.value
-		setSigningIn(true)
+		const name = userName.current?.value
 
-		if (email === undefined || password === undefined) {
+		if (name === undefined) {
 			return
-		}
-
-		Auth.signIn(email, password)
-			.then(user => {
-				if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-					handleStateChange('signedUpAfterInvite', user)
-					return
-				}
-				handleStateChange('signedIn', user)
-				setSigningIn(false)
-			}).catch(e => {
-				console.log(e);
-				setError(e.message)
-				setSigningIn(false)
-			});
+        }
+        
+        setIsLoading(true)
+        Auth.currentAuthenticatedUser().then((user) =>  {
+            return Auth.updateUserAttributes(user, {
+                'custom:name': name
+            })
+        }).then(() => {
+            setIsLoading(false)
+            handleStateChange('signedIn')
+        }).catch((error) => {
+            setError(e.message)
+            setIsLoading(false)
+        })
 	}
 
 	const renderForm = () => {
 		return (
-			<form onSubmit={signIn}>
-				<InputField onInputChange={() => setError(undefined)} name={"Name"} ref={emailRef} type={'name'} />
+			<form onSubmit={setName}>
+				<InputField onInputChange={() => setError(undefined)} name={"Name"} ref={userName} type={'name'} />
 				
 				<ValidationErrorBubble errorText={error} />
 				
-
-
 				<div className="mt-3">
 					<span className="block w-full rounded-md shadow-sm">
-						<button type="submit" className={`${signingIn? 'spinner': ''} flex justify-center w-full px-4 py-2 text-sm font-medium text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700`}>
+						<button type="submit" className={`${loading? 'spinner': ''} flex justify-center w-full px-4 py-2 text-sm font-medium text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700`}>
                             Continue
 						</button>
 					</span>

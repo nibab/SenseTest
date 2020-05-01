@@ -5,6 +5,7 @@ import { Auth } from 'aws-amplify'
 import InputField from './InputField'
 import ValidationErrorBubble from '../ValidationErrorBubble'
 import Log from '../../utils/Log'
+import { motion } from 'framer-motion'
 
 type SignInCreateNewPasswordProps = {
 	userObject: any

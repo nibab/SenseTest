@@ -74,29 +74,15 @@ const Main = () => {
     setIsLoading(true)
     AmplifyAuth.currentAuthenticatedUser({
       bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-    }).then(async (user: object) => {
+    }).then(async () => {
+      const user = await AmplifyAuth.currentUserInfo()
       getUserInfoAndSetLogin(user)
       setIsLoading(false)
-      console.log(user);   
-      //this.setState({ authState: { isLoggedIn: true, isLoading: false } })
     }).catch((err: object) => {
       setIsLoading(false)
-      //dispatch(login())
       console.log(err)
-      //this.setState({ authState: { isLoggedIn: false, isLoading: false } })
     })
   }, [])
-
-  // signOut = () => {
-  //   AmplifyAuth.signOut()
-  //     .then(data => console.log(data))
-  //     .catch(err => console.log(err));
-  //   this.setState({ authState: { isLoggedIn: false, isLoading: false }})
-  // }
-
-  // handleUserSignIn = () => {
-  //   this.setState({ authState: { isLoggedIn: true, isLoading: false } });
-  // };
 
   const renderContent = (isLoggedIn: boolean, isLoading: boolean) => {
     return (
@@ -104,7 +90,7 @@ const Main = () => {
         <Route path='/login'>
           {isLoggedIn || isLoading ?
             (<Redirect to='/projects'/>) :
-            <AuthForm onUserSignIn={async (user) => {getUserInfoAndSetLogin(user)}} />
+            <AuthForm onUserSignIn={async () => {const user = await AmplifyAuth.currentUserInfo(); getUserInfoAndSetLogin(user)}} />
           }
         </Route>
         <ProtectedRoute
