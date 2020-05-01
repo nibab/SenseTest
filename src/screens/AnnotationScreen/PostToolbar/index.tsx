@@ -187,7 +187,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 	}
 
 	return (
-		<div className='flex flex-col flex-shrink-0 h-screen my-auto overflow-scroll shadow-md w-84 bg-gray-50'>
+		<div className='flex flex-col flex-shrink-0 h-screen my-auto overflow-scroll border border-t-0 border-b-0 border-l-0 w-84 bg-gray-50'>
 			{ renderHeader() }
 
 			<div id='issues' className='flex flex-col h-full'>
