@@ -28,7 +28,7 @@ const CreatePostView = (props: CreatePostViewProps) => {
 
     useEffect(() => {
         // DEBUG
-        loadXHR(process.env.PUBLIC_URL + '/iphonexBlack.png').then((blob) => {console.log('yo'); setImageToAnnotate(blob)})
+        // loadXHR(process.env.PUBLIC_URL + '/iphonexBlack.png').then((blob) => {console.log('yo'); setImageToAnnotate(blob)})
         AppBuildClient.getCurrentAppBuildForProjectId(projectId).then((appBuild) => setCurrentAppBuild(appBuild))
     }, [])
 

@@ -135,7 +135,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 	}
 
 	return (
-		<div className='flex flex-col' > 
+		<div className='flex flex-col pb-10' > 
 			{ renderTag() }
 			<div className='flex flex-row pl-3 pr-2 border-2 border-gray-400 border-dashed rounded-lg'>
 				<div className='flex-col flex-shrink-0 mb-3' >

@@ -91,12 +91,12 @@ const PostView = (props: PostViewProps) => {
 			<div className='flex-shrink-0 mx-1'>
 				<div className='flex-shrink-0 rounded-full'>
 					<div className='flex-col w-full'> 
-						<div className={buttonContainerClassName}>
+						{/* <div className={buttonContainerClassName}>
 							<button onClick={() => {handleButtonClick('Attachment')}} className={displayState === 'Attachment' ? selectedButtonClassName : unSelectedButtonClassName} style={{borderWidth: '1px'}}>
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-attach"><path className="secondary" d="M20.12 11.95l-6.58 6.59a5 5 0 1 1-7.08-7.07l6.59-6.6a3 3 0 0 1 4.24 4.25l-6.58 6.59a1 1 0 1 1-1.42-1.42l6.59-6.58a1 1 0 0 0-1.42-1.42l-6.58 6.59a3 3 0 0 0 4.24 4.24l6.59-6.58a5 5 0 0 0-7.08-7.08l-6.58 6.6a7 7 0 0 0 9.9 9.9l6.59-6.6a1 1 0 0 0-1.42-1.4z"/></svg>
 							</button>
 							<a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Attachments</a>
-						</div>
+						</div> */}
 						<div className={buttonContainerClassName}>
 							<button onClick={() => {handleButtonClick('Simulator')}} className={displayState === 'Simulator' ? selectedButtonClassName : unSelectedButtonClassName} style={{borderWidth: '1px'}}>
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
@@ -188,10 +188,9 @@ const PostView = (props: PostViewProps) => {
 					{ renderToolbar() }	
 					{ displayState === 'Simulator'  && currentAppBuild !== undefined ? <div className="ml-3"><Simulator appBuild={currentAppBuild}/></div> : <></> }
 					{ displayState === 'Attachment' ? <div className="ml-3"><Attachment/></div> : <></> }
-					<div className='ml-3 '>
+					<div className='ml-3'>
 						<PostScreenshot post={props.post} />
 					</div>
-					
 				</div>
 			</div>
         </div>
