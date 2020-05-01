@@ -134,7 +134,7 @@ const PostView = (props: PostViewProps) => {
 		}
 
 		return (
-			<div className="p-1.5 mx-2 mt-1 border rounded-md bg-cool-gray-50">
+			<div className="p-1.5 mx-2 mt-1 border rounded-md bg-gray-100">
 				<div className="flex-shrink-0 block group focus:outline-none ">
 					<div className="flex items-center">
 						
