@@ -39,7 +39,7 @@ const NewName = ({ handleStateChange }: NewNameProps) => {
 	const renderForm = () => {
 		return (
 			<form onSubmit={setName}>
-				<InputField onInputChange={() => setError(undefined)} name={"Name"} ref={userName} type={'name'} />
+				<InputField onInputChange={() => setError(undefined)} ref={userName} placeholder={'e.g. John Smith'} type={'name'} />
 				
 				<ValidationErrorBubble errorText={error} />
 				
@@ -56,7 +56,7 @@ const NewName = ({ handleStateChange }: NewNameProps) => {
 
 	return (
 		<div className="flex flex-col justify-center min-h-screen bg-gray-50 sm:px-6 lg:px-8">
-			<Header text={"What is your name?"} />
+			<Header text={"How should we greet you?"} />
 			<div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
 				<div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
 					{renderForm()}
