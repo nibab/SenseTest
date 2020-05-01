@@ -93,8 +93,8 @@ const NewPostForm = (props: NewPostFormProps) => {
 		}
 
 		return (
-			<fieldset className="mt-6">
-				<legend className="text-base font-medium text-gray-900">
+			<fieldset className="">
+				<legend className="text-sm font-medium leading-5 text-gray-700 ">
 				Tags
 				</legend>
 				{/* <p className="text-sm leading-5 text-gray-500">Does this issue block the release ?</p> */}
@@ -130,13 +130,13 @@ const NewPostForm = (props: NewPostFormProps) => {
 								Repro Steps
 								</label>
 								<div className="mt-1 rounded-md shadow-sm">
-								<textarea id="about" rows={4} className="block w-full transition duration-150 ease-in-out form-textarea sm:text-sm sm:leading-5"></textarea>
+								<textarea id="about" rows={10} className="block w-full transition duration-150 ease-in-out form-textarea sm:text-sm sm:leading-5"></textarea>
 								</div>
 								<p className="mt-2 text-sm text-gray-500">Help others reproduce the issue.</p>
 							</div>
 					
 							
-							<div className="sm:col-span-6">
+							{/* <div className="sm:col-span-6">
 								<label htmlFor="cover_photo" className="block text-sm font-medium leading-5 text-gray-700">
 								Attachments
 								</label>
@@ -156,10 +156,11 @@ const NewPostForm = (props: NewPostFormProps) => {
 									</p>
 								</div>
 								</div>
-							</div>
+							</div> */}
+
 							</div>
 						</div>
-						<div className="mt-8 border-gray-200">
+						<div className="mt-6 border-gray-200">
 							{ renderBlockerSelection()}
 						</div>
 					
