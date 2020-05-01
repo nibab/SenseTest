@@ -33,7 +33,7 @@ const AuthForm = (props: AuthProps) => {
         <div className='relative'>
             <div className='absolute flex flex-row w-full h-20 bg-white shadow-md'>
                 <div className='justify-center flex-shrink-0 w-48 my-auto'>
-                    <img className="object-contain p-2 transition duration-100 ease-in-out cursor-pointer" src='logo.png' />
+                    <img className="object-contain p-2 transition duration-100 ease-in-out cursor-pointer filter-grayscale hover:filter-none" src={process.env.PUBLIC_URL + '/logo.png'} />
                 </div>
                 <div className='w-full '>
                 {/* <button onClick={() => onTestButtonClick()} className='bg-red-200'> CLICK ME</button> */}

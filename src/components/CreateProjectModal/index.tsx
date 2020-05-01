@@ -7,6 +7,7 @@ import Log from '../../utils/Log'
 import { DropDownProps } from 'antd/lib/dropdown'
 import { DataLayerClient } from '../../clients/DataLayerClient'
 import { AppBuildClient } from '../../clients/AppBuildClient'
+import { UsersClient } from '../../clients/UsersClient'
 
 type CreateProjectModalProps = {
     onCancel: () => void
@@ -50,8 +51,8 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
 
     useEffect(() => {
         const _currentInvitees: typeof currentInvitees = {}
-        _currentInvitees[testInvitee.email] = testInvitee
-        setCurrentInvitees(_currentInvitees)
+        //_currentInvitees[testInvitee.email] = testInvitee
+        //setCurrentInvitees(_currentInvitees)
 
         const _recentCollaborators: typeof recentCollaborators = {}
         _recentCollaborators[testCollaborator.email] = testCollaborator
@@ -93,7 +94,13 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
                 appVersion: appVersion,
                 assetUrl: url
             })
-        }).then(() => {
+        }).then(async () => {
+            if (currentInvitees !== undefined) {
+                Object.keys(currentInvitees).forEach(async (email) => {
+                    const response = await UsersClient.createAndInviteUser({userEmail: email, projectId: projectId!})
+                })
+            }
+            
             setConfirmButtonLoading(false)
             props.onSubmit(projectId!)
             Log.info("Created new project.")

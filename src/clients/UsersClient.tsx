@@ -32,12 +32,12 @@ const makeRequest = (request: any, path: string) => {
     })
 }
 
-export class Users {
+export class UsersClient {
     static inviteUser(inviteUserRequest: InviteUserRequestType) {
-        makeRequest(inviteUserRequest, INVITE_USER_PATH)
+        return makeRequest(inviteUserRequest, INVITE_USER_PATH)
     }
 
-    static createUser(inviteUserRequest: CreateAndInviteUserRequestType) {
-        makeRequest(inviteUserRequest, CREATE_AND_INVITE_USER_PATH)
+    static createAndInviteUser(inviteUserRequest: CreateAndInviteUserRequestType) {
+        return makeRequest(inviteUserRequest, CREATE_AND_INVITE_USER_PATH)
     }    
 }

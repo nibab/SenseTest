@@ -9,7 +9,7 @@ export const PostNavigator = () => {
 					<div className="flex-shrink-0 block group focus:outline-none ">
 						<div className="flex items-center">
 						<div className=''>
-							<img className="inline-block w-8 h-8 rounded-md" src="appIcon.png" alt="" />
+							<img className="inline-block w-8 h-8 rounded-md" src={process.env.PUBLIC_URL + "appIcon.png"} alt="" />
 						</div>
 						<div className="ml-2 ">
 							<p className="pt-2 text-sm font-medium leading-3 text-gray-700 group-hover:text-gray-900">

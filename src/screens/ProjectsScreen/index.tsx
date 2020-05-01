@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { API, graphqlOperation, Auth } from 'aws-amplify'
-import { createProject } from '../../graphql/mutations'
-import { CreateProjectInput, CreateProjectMutation, GetProjectQuery } from "../../API"
-import { v4 as uuidv4 } from 'uuid'
 import { Project, AppBuild, Post} from '../../types'
-import Log from '../../utils/Log'
-import { getProject } from '../../graphql/queries'
-import { TypeConverter } from '../../convertTypes'
 import { useHistory } from 'react-router-dom'
 import { DataLayerClient } from '../../clients/DataLayerClient'
 import { logout } from '../../store/authentication/actions'
@@ -32,17 +26,17 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 
 	const renderFooter = () => {
 		const blockers = countBlockers()
-		const members = props.project.members.length
+		const members = props.project.members.length + 1 // admin is never counted
 		const versions = props.project.appBuilds.length
 		return (
 			<div className="flex flex-row p-1 mx-auto">
 				<div className='my-auto whitespace-no-wrap inline-flex items-center mr-1 inline-flex items-center pr-2.5 py-1 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-15'>
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-1 w-7 icon-important "><path className="primary" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/><path className="secondary" d="M12 18a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm1-5.9c-.13 1.2-1.88 1.2-2 0l-.5-5a1 1 0 0 1 1-1.1h1a1 1 0 0 1 1 1.1l-.5 5z"/></svg>
-					<h2 className='mr-4 text-xs text-gray-800 uppercase '><a className='font-bold'>{blockers}</a> {`Blocker${blockers > 1 ? 's' : ''}`}</h2>
+					<h2 className='mr-4 text-xs text-gray-800 uppercase '><a className='font-bold'>{blockers}</a> {`Blocker${blockers > 1 || blockers === 0 ? 's' : ''}`}</h2>
 				</div>
 				<div className="my-auto whitespace-no-wrap inline-flex items-center mr-1 inline-flex items-center px-2.5 py-1 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-15">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-1 w-7 icon-user-group"><path className="primary" d="M12 13a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1 1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3zM7 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm10 0a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/><path className="secondary" d="M12 13a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm-3 1h6a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3z"/></svg>
-					<h2 className='mr-4 text-xs text-gray-800 uppercase'><a className='font-bold'>{members}</a> {`member${members > 1 ? 's' : ''}`}</h2>
+					<h2 className='mr-4 text-xs text-gray-800 uppercase'><a className='font-bold'>{members}</a> {`member${members > 1 || members === 0 ? 's' : ''}`}</h2>
 				</div>
 				
 				<div className="my-auto whitespace-no-wrap inline-flex items-center mr-1 inline-flex items-center px-2.5 py-1 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
@@ -57,7 +51,7 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 		<div key={props.project.id} className='flex flex-col bg-white rounded-lg shadow-lg'>
 			<div className='flex flex-row p-3 border border-2 border-t-0 border-l-0 border-r-0'>
 				<div className='flex-shrink-0 w-16 h-16 rounded-lg'>
-					<img className="inline-block rounded-md" src="appIcon.png" alt="" />
+					<img className="inline-block rounded-md" src={process.env.PUBLIC_URL + "appIcon.png"} alt="" />
 				</div>
 				<div className='w-full h-full my-auto ml-2'>
 					<h1 className='font-semibold text-gray-800 text-md'>{props.project.name}</h1>
@@ -76,29 +70,12 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 }
 
 const ProjectsScreen = () => {
-	//const [currentProjects, setCurrentProjects] = useState<string[]>()
 	const [currentProjects, setCurrentProjects] = useState<Project[]>()
 	const dispatch = useDispatch()
 	const [createProjectModalVisible, setCreateProjectModalVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
 	const auth = useSelector(state => state.auth)
 	const history = useHistory()
-
-
-	const getProjectsForUser = () => {
-		// list projects - to show all projects that you have created
-		// get user - to show all projects that you are a member of
-	}
-
-	const temp = async () => {
-		const user = await Auth.currentAuthenticatedUser();
-		const userInfo = await Auth.currentUserInfo();
-		const name = userInfo['attributes']['custom:name']
-		debugger
-		const result = await Auth.updateUserAttributes(user, {
-			'custom:name': 'Cezar Babin'
-		});
-	}
 
 	useEffect(() => {
 		setIsLoading(true)
@@ -126,13 +103,30 @@ const ProjectsScreen = () => {
 		return history.push(`/project/${projectId}`)
 	}
 
+	const renderNoProjects = () => {
+		return (
+			<div className='w-full p-3 my-auto text-center rounded-lg bg-blue-50'>
+				<p className="mt-1 text-sm font-bold text-gray-600">
+					{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-14 icon-box"><g><path className="secondary" d="M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2zm4 5a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H9z"/><path className="primary" d="M4 3h16a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5c0-1.1.9-2 2-2z"/></g></svg> */}
+					<svg className="w-10 mx-auto text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+						<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+					</svg>
+					No releases found !
+				</p>
+				<p className="mt-1 text-xs text-blue-700">
+					You can create a new release by clicking the <b>Create New</b> button above.
+				</p>
+			</div>
+		)
+	}
+
 	return (
 		<div className='w-full h-full bg-gray-100'>
 			{ createProjectModalVisible && <CreateProjectModal onSubmit={(projectId) => onModalSubmitButtonClick(projectId)} onCancel={() => setCreateProjectModalVisible(false)} />}
 			<div className='w-screen h-auto font-sans bg-gray-100'>
 				<div className='flex flex-row w-full h-20 bg-white shadow-md'>
 					<div className='justify-center flex-shrink-0 w-48 my-auto'>
-						<img className="object-contain p-2 transition duration-100 ease-in-out cursor-pointer filter-grayscale hover:filter-none" src='logo.png' />
+						<img className="object-contain p-2 transition duration-100 ease-in-out cursor-pointer filter-grayscale hover:filter-none" src={process.env.PUBLIC_URL + '/logo.png'} />
 					</div>
 					<div className='w-full '>
 					</div>
@@ -162,6 +156,7 @@ const ProjectsScreen = () => {
 								<h2 className='mb-3 text-sm font-semibold tracking-wide text-gray-500 uppercase'>Current</h2>
 								{ isLoading && <div className="h-20 spinner-large"></div>}
 								{ !isLoading && renderReleases() } 
+								{ !isLoading && currentProjects?.length === 0 && renderNoProjects()}
 								{/* <h2 className='mt-10 mb-3 text-sm font-semibold tracking-wide text-gray-500 uppercase text-md'>Previous</h2> */}
 								{/* <ReleaseCard /> */}
 							</div>

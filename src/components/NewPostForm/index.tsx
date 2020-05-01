@@ -182,7 +182,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 					<div className='flex w-full h-8'>
 						<div className='mx-auto flex flex-row p-0.5'></div>
 					</div>
-					<div className='relative flex flex-col w-auto p-2 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: '583px'}}>
+					<div className='relative flex flex-col w-auto py-2 pr-2 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: '583px'}}>
 						<CommentsSection comments={comments} addSubComent={_addsubComment} displayNewCommentBox={false} />
 					</div>
 				</div>
@@ -280,7 +280,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 					{/* padding left is only 4 because form has a margin of 1 so that the field outline shadow shows properly */}
 					<div className='flex flex-row p-8 pb-0'> 
 						{renderForm()}
-						<div className='flex flex-row pl-2 my-auto border-dashed rounded-lg '>
+						<div className='flex flex-row my-auto border-dashed rounded-lg '>
 							<div className='relative flex flex-col flex-shrink-0 mb-3' >
 								{renderButtons()}
 
