@@ -54,9 +54,9 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
         //_currentInvitees[testInvitee.email] = testInvitee
         //setCurrentInvitees(_currentInvitees)
 
-        const _recentCollaborators: typeof recentCollaborators = {}
-        _recentCollaborators[testCollaborator.email] = testCollaborator
-        setRecentCollaborators(_recentCollaborators)
+        // const _recentCollaborators: typeof recentCollaborators = {}
+        // _recentCollaborators[testCollaborator.email] = testCollaborator
+        // setRecentCollaborators(_recentCollaborators)
 
         setProjectId(uuid())
         setBundleId(uuid())
