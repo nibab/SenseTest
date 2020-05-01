@@ -252,7 +252,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 	}
 
 	return (
-		<div className="fixed inset-x-0 bottom-0 z-20 sm:inset-0 sm:p-0 sm:flex sm:items-center sm:justify-center">
+		<div className="fixed inset-x-0 bottom-0 z-20 overflow-scroll sm:inset-0 sm:p-0 sm:flex sm:justify-center">
               {/* Background overlay, show/hide based on modal state.
           
               Entering: "ease-out duration-300"
@@ -273,7 +273,7 @@ const NewPostForm = (props: NewPostFormProps) => {
               Leaving: "ease-in duration-200"
                 From: "opacity-100 translate-y-0 sm:scale-100"
                 To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" */}
-            <div className="transition-all transform rounded-lg shadow-xl ">
+            <div className="pt-3 pb-3 my-auto transition-all transform rounded-lg shadow-xl ">
 		
 		
 				<div className='flex flex-col mx-auto bg-white rounded-lg '>
