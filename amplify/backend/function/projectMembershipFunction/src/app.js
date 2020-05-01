@@ -170,14 +170,10 @@ const sendEmail = async function(sender, email, subject, temporaryPassword) {
     ],
   };
   const emailResult = await ses.sendEmail(email_params).promise()
-  console.log('BLEA ' + JSON.stringify(emailResult))
 }
 
 // Enable CORS for all methods
 app.use(function(req, res, next) {
-  if (!res.headersSent) {
-    console.log("blllllleeeea" + res)
-  }
   res.header("Access-Control-Allow-Origin", "*")
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
   next()
@@ -207,13 +203,15 @@ app.post('/testEmail', async function(req, res) {
   res.json({success: 'post call succeed!', url: req.url, body: req.body})
 });
 
-app.post('/testUserCreation', async function(req, res, next) {
-  const projectId = 'b5f5c81d-648e-4138-98bc-317833370980'
-  const email = 'ilarionababii+9@gmail.com'
+app.post('/createAndInviteUser', async function(req, res, next) {
+  //const projectId = 'b5f5c81d-648e-4138-98bc-317833370980'
+  //const email = 'ilarionababii+9@gmail.com'
+  const email = req.body["userEmail"] // 1
+  const projectId = req.body["projectId"] 
   const creatorUserId = req.apiGateway.event.requestContext.authorizer.claims.sub
 
   try {
-    const creator = await getUser('eee52550-e1bf-401c-8482-c4a87e0bf07e')
+    const creator = await getUser(creatorUserId)
     const creatorAttributes = creator['UserAttributes']
     let creatorName
     for (let i in creatorAttributes) {
@@ -259,7 +257,7 @@ app.post('/testUserCreation', async function(req, res, next) {
   }
  
   // Add your code here
-  res.json({success: 'post call succeed!', url: req.url, body: req.body})
+  res.json({success: 'post call succeed!'})
 });
 
 

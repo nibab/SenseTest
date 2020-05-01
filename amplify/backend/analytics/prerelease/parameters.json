@@ -1,0 +1,21 @@
+{
+    "appName": "prerelease",
+    "roleName": "pinpointLambdaRole48c15c3f",
+    "cloudformationPolicyName": "cloudformationPolicy48c15c3f",
+    "cloudWatchPolicyName": "cloudWatchPolicy48c15c3f",
+    "pinpointPolicyName": "pinpointPolicy48c15c3f",
+    "authPolicyName": "pinpoint_amplify_48c15c3f",
+    "unauthPolicyName": "pinpoint_amplify_48c15c3f",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    }
+}

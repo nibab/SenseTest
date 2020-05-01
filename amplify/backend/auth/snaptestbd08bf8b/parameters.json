@@ -1,6 +1,6 @@
 {
     "identityPoolName": "snaptest7df76806_identitypool_7df76806",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "snaptebd08bf8b",
     "userPoolName": "snaptestbd08bf8b_userpool_bd08bf8b",
     "autoVerifiedAttributes": [
