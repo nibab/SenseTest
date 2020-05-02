@@ -51,7 +51,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 
 				<div className='p-3 mx-auto'>
 					<div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined) }} className='inline-flex items-center py-2 mx-auto text-gray-700 whitespace-no-wrap transition ease-in-out bg-white border rounded-md cursor-pointer px-9 text-md hover:bg-gray-200 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-8 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto mr-1 w-7 icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
 						<h2 className='mx-auto font-bold text-gray-800 '>Review App</h2>
 					</div>
 				</div>
@@ -170,15 +170,15 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 	const renderNoPosts = () => {
 		return (
 			<div className='w-full h-48 px-3'>
-				<div className='w-full p-3 my-auto text-center rounded-lg bg-blue-50'>
-					<p className="mt-1 text-sm font-bold text-gray-600">
+				<div className='w-full p-5 my-auto text-center rounded-lg bg-teal-50'>
+					<p className="mt-1 text-lg font-bold text-gray-800">
 						{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-14 icon-box"><g><path className="secondary" d="M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2zm4 5a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H9z"/><path className="primary" d="M4 3h16a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5c0-1.1.9-2 2-2z"/></g></svg> */}
-						<svg className="w-10 mx-auto text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+						<svg className="w-10 mx-auto text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
 							<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
 						</svg>
 						No issues found !
 					</p>
-					<p className="mt-1 text-xs text-blue-700">
+					<p className="mt-1 text-sm font-medium text-gray-700">
 						You can create a new issue by starting the aplication in the simulator and taking a screenshot.
 					</p>
 				</div>

@@ -55,7 +55,7 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 					<img className="inline-block rounded-md" src={process.env.PUBLIC_URL + "appIcon.png"} alt="" />
 				</div>
 				<div className='w-full h-full my-auto ml-2'>
-					<h1 className='font-medium text-gray-800 text-md'>{props.project.name}</h1>
+					<h1 className='font-bold text-gray-800 text-md'>{props.project.name}</h1>
 					<h2 className='-mt-1 font-mono text-xs font-semibold text-gray-400 uppercase font'>February 20th, 2020</h2>
 				</div>
 				<div className='my-auto '>
@@ -106,15 +106,15 @@ const ProjectsScreen = () => {
 
 	const renderNoProjects = () => {
 		return (
-			<div className='w-full p-3 my-auto text-center rounded-lg bg-blue-50'>
-				<p className="mt-1 text-sm font-bold text-gray-600">
+			<div className='w-full p-5 py-8 my-auto text-center rounded-lg bg-teal-50'>
+				<p className="mt-1 text-lg font-bold text-gray-800">
 					{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-14 icon-box"><g><path className="secondary" d="M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2zm4 5a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H9z"/><path className="primary" d="M4 3h16a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5c0-1.1.9-2 2-2z"/></g></svg> */}
-					<svg className="w-10 mx-auto text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+					<svg className="w-10 mx-auto text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
 						<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
 					</svg>
 					No releases found !
 				</p>
-				<p className="mt-1 text-xs text-blue-700">
+				<p className="mt-1 text-sm font-medium text-gray-700">
 					You can create a new release by clicking the <b>Create New</b> button above.
 				</p>
 			</div>
@@ -149,7 +149,7 @@ const ProjectsScreen = () => {
 							Releases
 						</h1>
 						<div className='px-2 pt-6 mx-auto overflow-scroll '>
-							<div onClick={() => {setCreateProjectModalVisible(true)}} className='inline-flex items-center px-4 py-1 my-auto mb-5 mr-5 text-xs font-medium text-gray-700 whitespace-no-wrap transition ease-in-out bg-gray-200 rounded-md cursor-pointer hover:bg-gray-300 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
+							<div onClick={() => {setCreateProjectModalVisible(true)}} className='inline-flex items-center px-4 py-1 my-auto mb-5 mr-5 text-xs font-medium text-gray-700 whitespace-no-wrap transition ease-in-out bg-white border border-gray-200 rounded-md cursor-pointer hover:bg-gray-300 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-10 h-10 mr-1 icon-add"><path className="secondary" fillRule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
 								<h2 className='mr-4 text-lg font-bold text-gray-800 '>Create New</h2>
 							</div>
