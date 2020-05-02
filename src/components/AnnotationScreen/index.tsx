@@ -20,7 +20,7 @@ type DotProps = {
 const Dot = ({geometry, annotationId}: DotProps) => {
 	if (annotationId !== undefined) {
 		return (
-			<div className='flex items-center justify-center w-6 h-6 -mt-3 -ml-3 text-sm font-medium text-gray-300 bg-indigo-600 border-2 border-white border-solid rounded-full cursor-pointer hover:bg-indigo-400' style={{
+			<div className='flex items-center justify-center -mt-3 -ml-3 font-mono text-sm font-semibold text-gray-300 bg-indigo-600 border-2 border-white border-solid rounded-full cursor-pointer w-7 h-7 hover:bg-indigo-400' style={{
 				position: 'absolute',
 				left: `${geometry.x}%`,
 				top: `${geometry.y}%`,

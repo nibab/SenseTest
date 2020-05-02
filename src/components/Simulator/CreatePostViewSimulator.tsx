@@ -41,7 +41,7 @@ const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
 		return (
 			<div className='flex w-full h-8 '>
 				<div className=' pb-1 mx-auto flex flex-row p-0.5'>
-					<span className="mr-1 inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-gray-100 text-gray-800">
+					<span className="mr-1 inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-extrabold leading-5 bg-cool-gray-100  text-gray-800">
 						Simulator
 					</span>
 					<VersionTag version={props.appBuild.version} />
@@ -89,7 +89,7 @@ const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
 	}
 	
 	const renderLoadingScreen = () => {
-		const buttonClassName = "p-2 px-4 mt-3 font-bold text-indigo-700 bg-white border border-white rounded-md cursor-pointer text-md hover:bg-gray-100"
+		const buttonClassName = "p-3 px-6 mt-3 font-extrabold text-gray-800 bg-yellow-300 rounded-md cursor-pointer text-md hover:bg-yellow-200"
 		
 
 		return (<>

@@ -59,7 +59,7 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 					<h2 className='-mt-1 font-mono text-xs font-semibold text-gray-400 uppercase font'>February 20th, 2020</h2>
 				</div>
 				<div className='my-auto '>
-					<button onClick={() => onViewButtonClick()} type="button" className="inline-flex items-center px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700">
+					<button onClick={() => onViewButtonClick()} type="button" className="inline-flex items-center px-4 py-2 text-sm font-bold leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700">
 						View
 					</button>
 				</div>
@@ -125,7 +125,7 @@ const ProjectsScreen = () => {
 		<div className='w-full h-full bg-gray-100'>
 			{ createProjectModalVisible && <CreateProjectModal onSubmit={(projectId) => onModalSubmitButtonClick(projectId)} onCancel={() => setCreateProjectModalVisible(false)} />}
 			<div className='w-screen h-auto bg-gray-100'>
-				<div className='flex flex-row w-full h-20 bg-white shadow-md'>
+				<div className='flex flex-row w-full p-3 bg-white shadow-sm'>
 					<div className='justify-center flex-shrink-0 w-48 my-auto'>
 						<img className="object-contain p-2 transition duration-100 ease-in-out cursor-pointer filter-grayscale hover:filter-none" src={process.env.PUBLIC_URL + '/logo.png'} />
 					</div>
@@ -136,16 +136,16 @@ const ProjectsScreen = () => {
 							{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1 icon-user"><path className="primary" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><path className="secondary" d="M21 20v-1a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v1c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2z"/></svg> */}
 							{ auth.email }
 						</div> 
-						<button onClick={onSignOutButtonClick} className="inline-flex items-center px-5 py-2 my-auto text-sm font-medium text-gray-700 whitespace-no-wrap transition duration-150 ease-in-out bg-white border border-gray-300 rounded rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50">
+						<button onClick={onSignOutButtonClick} className="inline-flex items-center px-5 py-2 my-auto mr-2 text-sm font-medium text-gray-700 whitespace-no-wrap transition duration-150 ease-in-out bg-white border border-gray-300 rounded hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50">
 							{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1 icon-user"><path className="primary" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><path className="secondary" d="M21 20v-1a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v1c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2z"/></svg> */}
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1.5 icon-door-exit"><path className="primary" d="M11 4h3a1 1 0 0 1 1 1v3a1 1 0 0 1-2 0V6h-2v12h2v-2a1 1 0 0 1 2 0v3a1 1 0 0 1-1 1h-3v1a1 1 0 0 1-1.27.96l-6.98-2A1 1 0 0 1 2 19V5a1 1 0 0 1 .75-.97l6.98-2A1 1 0 0 1 11 3v1z"/><path className="secondary" d="M18.59 11l-1.3-1.3c-.94-.94.47-2.35 1.42-1.4l3 3a1 1 0 0 1 0 1.4l-3 3c-.95.95-2.36-.46-1.42-1.4l1.3-1.3H14a1 1 0 0 1 0-2h4.59z"/></svg>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6  mx-auto mr-1.5 icon-door-exit"><path className="primary" d="M11 4h3a1 1 0 0 1 1 1v3a1 1 0 0 1-2 0V6h-2v12h2v-2a1 1 0 0 1 2 0v3a1 1 0 0 1-1 1h-3v1a1 1 0 0 1-1.27.96l-6.98-2A1 1 0 0 1 2 19V5a1 1 0 0 1 .75-.97l6.98-2A1 1 0 0 1 11 3v1z"/><path className="secondary" d="M18.59 11l-1.3-1.3c-.94-.94.47-2.35 1.42-1.4l3 3a1 1 0 0 1 0 1.4l-3 3c-.95.95-2.36-.46-1.42-1.4l1.3-1.3H14a1 1 0 0 1 0-2h4.59z"/></svg>
 							Sign out
 						</button>
 					</div>
 				</div>
 				<div className="max-w-2xl pt-6 mx-auto sm:px-6 lg:px-8">
 					<div className="h-full max-w-3xl mx-auto ">
-						<h1 className="px-2 text-3xl font-bold leading-tight text-gray-900">
+						<h1 className="px-2 text-3xl font-extrabold leading-tight text-gray-900">
 							Releases
 						</h1>
 						<div className='px-2 pt-6 mx-auto overflow-scroll '>
@@ -154,7 +154,7 @@ const ProjectsScreen = () => {
 								<h2 className='mr-4 text-lg font-bold text-gray-800 '>Create New</h2>
 							</div>
 							<div className='flex flex-col justify-center pb-10 mt-1'>
-								<h2 className='mb-3 text-sm font-semibold tracking-wide text-gray-500 uppercase'>Current</h2>
+								<h2 className='mb-3 text-sm font-bold tracking-wider text-gray-500 uppercase'>Current</h2>
 								{ isLoading && <div className="h-20 spinner-large"></div>}
 								{ !isLoading && renderReleases() } 
 								{ !isLoading && currentProjects?.length === 0 && renderNoProjects()}

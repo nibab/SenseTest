@@ -74,8 +74,8 @@ const PostView = (props: PostViewProps) => {
 	}
 
 	const renderToolbar = () => {
-		const buttonContainerClassName = 'w-full h-16 my-1 flex flex-col'
-		const buttonClassName = 'focus:outline-none active:shadow-sm active:bg-gray-300 w-10 h-10 rounded-full mx-auto'
+		const buttonContainerClassName = 'w-full h-18 my-1 flex flex-col'
+		const buttonClassName = 'focus:outline-none active:shadow-sm active:bg-gray-300 w-12 h-12 rounded-md mx-auto'
 		const unSelectedButtonClassName = 'bg-white shadow-lg border-gray-400 ' + ' ' + buttonClassName
 		const selectedButtonClassName = 'bg-gray-200' + ' ' + buttonClassName
 
@@ -99,9 +99,9 @@ const PostView = (props: PostViewProps) => {
 						</div> */}
 						<div className={buttonContainerClassName}>
 							<button onClick={() => {handleButtonClick('Simulator')}} className={displayState === 'Simulator' ? selectedButtonClassName : unSelectedButtonClassName} style={{borderWidth: '1px'}}>
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-8 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
 							</button>
-							<a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Simulator</a>
+							<a className="mt-0.5 font-bold text-center text-gray-900 text-md " style={{fontSize: '13px'}}>Simulator</a>
 						</div>
 					</div>
 				</div>
@@ -125,9 +125,10 @@ const PostView = (props: PostViewProps) => {
 		const renderTags = () => {
 			if (props.post.tags?.includes('BLOCKER')) {
 				return (
-					<span className="my-auto ml-3 mr-2 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
+					<span className="my-auto font-bold uppercase ml-3 mr-2 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
 						Blocker
 					</span>
+					
 				)
 			}
 				
@@ -164,8 +165,8 @@ const PostView = (props: PostViewProps) => {
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1 icon-flag"><path className="primary" d="M3 15a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h8a1 1 0 0 1 .7.3L13.42 5H21a1 1 0 0 1 .9 1.45L19.61 11l2.27 4.55A1 1 0 0 1 21 17h-8a1 1 0 0 1-.7-.3L10.58 15H3z"/><rect width="2" height="20" x="2" y="2" className="secondary" rx="1"/></svg>
 									Status
 								</button> */}
-								<button className=" my-auto inline-flex items-center mr-2 inline-flex items-center px-2.5 py-1 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1 icon-check"><circle cx="12" cy="12" r="10" className="primary"/><path className="secondary" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
+								<button className="inline-flex items-center px-5 py-2 my-auto mr-2 text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto mr-1 icon-check"><circle cx="12" cy="12" r="10" className="checkmark"/><path className="secondary" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
 									Resolve
 								</button>
 							</div>

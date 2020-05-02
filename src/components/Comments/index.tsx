@@ -109,7 +109,7 @@ const Comment = (props: CommentProps) => {
 					{/* <div className=''>
 						<img className="inline-block w-8 h-8 rounded-full" src={props.comment.authorAvatarSrc} alt="" />
 					</div> */}
-					{ props.annotation && <div className='flex items-center justify-center w-6 h-6 mx-auto mt-1 text-sm font-medium text-gray-300 bg-indigo-600 rounded-full cursor-pointer mx-2uto hover:bg-indigo-400'>
+					{ props.annotation && <div className='flex items-center justify-center w-6 h-6 mx-auto mt-1 font-mono text-sm font-extrabold text-gray-300 bg-indigo-600 rounded-full cursor-pointer mx-2uto hover:bg-indigo-400'>
 						{props.annotation.data.id}
 					</div>}
 					
@@ -120,7 +120,7 @@ const Comment = (props: CommentProps) => {
 						<div className='flex-shrink-0 w-auto my-auto text-sm font-medium leading-tight text-gray-700 '>
 							{ props.comment.author }
 						</div>
-						<div className="flex-shrink-0 my-auto ml-1 text-xs text-gray-500" style={{marginBottom: '-1px'}}> { moment(props.comment.date).fromNow() }  </div>
+						<div className="flex-shrink-0 my-auto ml-1 text-xs font-medium text-gray-500" style={{marginBottom: '-1px'}}> { moment(props.comment.date).fromNow() }  </div>
 					</div>
 					
 

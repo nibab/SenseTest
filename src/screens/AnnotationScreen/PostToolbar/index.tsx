@@ -29,7 +29,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 								<p className="pt-1 text-sm font-bold leading-3 text-gray-700 group-hover:text-gray-900">
 									{project.name}
 								</p>
-								<span className="inline-flex items-center flex-shrink-0 px-2 mt-1 font-mono text-xs font-bold leading-5 text-indigo-800 bg-indigo-100 rounded-md ">
+								<span className="inline-flex items-center flex-shrink-0 px-2 py-0.5 mt-1 font-mono text-xs font-bold leading-5 text-indigo-800 bg-indigo-100 rounded-md ">
 									<svg className="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
 										<circle cx="4" cy="4" r="3" />
 									</svg>
@@ -50,7 +50,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 				</div>
 
 				<div className='p-3 mx-auto'>
-					<div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined) }} className='inline-flex items-center py-1 mx-auto text-gray-700 whitespace-no-wrap transition ease-in-out bg-gray-100 border rounded-md cursor-pointer px-7 text-md hover:bg-gray-300 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
+					<div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined) }} className='inline-flex items-center py-2 mx-auto text-gray-700 whitespace-no-wrap transition ease-in-out bg-white border rounded-md cursor-pointer px-9 text-md hover:bg-gray-200 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-8 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
 						<h2 className='mx-auto font-bold text-gray-800 '>Review App</h2>
 					</div>
@@ -122,21 +122,21 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 
 	const renderItem = (post: Post) => {
 		const common = 'mb-1 mx-2 pl-3 pr-3 pt-1 pb-1 flex flex-row rounded-lg cursor-pointer'
-		const selectedClassName = 'bg-blue-100 shadow-sm font-medium text-blue-800 ' + ' ' + common
-		const notSelectedClassName = 'bg-white hover:bg-gray-200 font-normal relative text-gray-700'  + ' ' + common
+		const selectedClassName = 'bg-cool-gray-200 shadow-sm font-extrabold text-gray-800 ' + ' ' + common
+		const notSelectedClassName = 'bg-white hover:bg-gray-200 font-medium relative text-gray-700'  + ' ' + common
 
 		const className = currentPost !== undefined && post.id === currentPost.id ? selectedClassName : notSelectedClassName
 
 		return (
 			<div key={post.id} onClick={() => {setDisplayCreateNewPost(false); setCurrentPost(post)}} className={className}>
 				{/* <span className="top-0 left-0 flex items-center justify-center flex-shrink-0 block w-6 h-4 my-auto mr-1 text-xs font-bold text-white bg-red-400 rounded-full">12</span> */}
-				<div className='w-full my-auto text-sm font-medium truncate '>
+				<div className='w-full my-auto text-sm truncate '>
 					{ post.title }							
 				</div>
 				<div className='flex'>
 					{
 						post.tags?.includes('BLOCKER') && 
-						<span className="ml-1 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
+						<span className="inline-flex items-center px-2 py-0.5 ml-1 text-xs font-bold text-red-800 bg-red-100 uppercase rounded">
 							Blocker
 						</span>
 					}
