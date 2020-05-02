@@ -143,7 +143,7 @@ const Main = () => {
   const renderRouter = (isLoggedIn: boolean, isLoading: boolean) => {
     return (
       <Router>
-        <div className="flex flex-col w-screen h-screen font-sans antialiased bg-white">
+        <div className="flex flex-col w-screen h-screen antialiased bg-white font-grotesk">
           {/* <div className={`${!isLoggedIn ? 'hidden' : ''} flex-shrink-0 flex h-16 w-full flex-row`}>
             <NavBar width={256} signOut={this.signOut}/>
           </div>  

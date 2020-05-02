@@ -7,6 +7,7 @@ import { logout } from '../../store/authentication/actions'
 import { useDispatch } from 'react-redux'
 import CreateProjectModal from '../../components/CreateProjectModal'
 import { useSelector } from '../../store'
+import moment from 'moment'
 
 type ReleaseCardProps = {
 	project: Project
@@ -36,7 +37,7 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 				</div>
 				<div className="my-auto whitespace-no-wrap inline-flex items-center mr-1 inline-flex items-center px-2.5 py-1 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-15">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-1 w-7 icon-user-group"><path className="primary" d="M12 13a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1 1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3zM7 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm10 0a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/><path className="secondary" d="M12 13a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm-3 1h6a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3z"/></svg>
-					<h2 className='mr-4 text-xs text-gray-800 uppercase'><a className='font-bold'>{members}</a> {`member${members > 1 || members === 0 ? 's' : ''}`}</h2>
+					<h2 className='mr-4 text-xs font-medium text-gray-800 uppercase'><a className='font-bold'>{members}</a> {`member${members > 1 || members === 0 ? 's' : ''}`}</h2>
 				</div>
 				
 				<div className="my-auto whitespace-no-wrap inline-flex items-center mr-1 inline-flex items-center px-2.5 py-1 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
@@ -54,8 +55,8 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 					<img className="inline-block rounded-md" src={process.env.PUBLIC_URL + "appIcon.png"} alt="" />
 				</div>
 				<div className='w-full h-full my-auto ml-2'>
-					<h1 className='font-semibold text-gray-800 text-md'>{props.project.name}</h1>
-					<h2 className='-mt-1 text-sm font-medium text-gray-400 font'>February 20, 2020</h2>
+					<h1 className='font-medium text-gray-800 text-md'>{props.project.name}</h1>
+					<h2 className='-mt-1 font-mono text-xs font-semibold text-gray-400 uppercase font'>February 20th, 2020</h2>
 				</div>
 				<div className='my-auto '>
 					<button onClick={() => onViewButtonClick()} type="button" className="inline-flex items-center px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700">
@@ -123,7 +124,7 @@ const ProjectsScreen = () => {
 	return (
 		<div className='w-full h-full bg-gray-100'>
 			{ createProjectModalVisible && <CreateProjectModal onSubmit={(projectId) => onModalSubmitButtonClick(projectId)} onCancel={() => setCreateProjectModalVisible(false)} />}
-			<div className='w-screen h-auto font-sans bg-gray-100'>
+			<div className='w-screen h-auto bg-gray-100'>
 				<div className='flex flex-row w-full h-20 bg-white shadow-md'>
 					<div className='justify-center flex-shrink-0 w-48 my-auto'>
 						<img className="object-contain p-2 transition duration-100 ease-in-out cursor-pointer filter-grayscale hover:filter-none" src={process.env.PUBLIC_URL + '/logo.png'} />
@@ -148,9 +149,9 @@ const ProjectsScreen = () => {
 							Releases
 						</h1>
 						<div className='px-2 pt-6 mx-auto overflow-scroll '>
-							<div onClick={() => {setCreateProjectModalVisible(true)}} className='inline-flex items-center px-4 py-1 my-auto mb-5 mr-5 text-xs font-medium text-gray-700 whitespace-no-wrap transition ease-in-out bg-gray-200 rounded rounded-full cursor-pointer hover:bg-gray-300 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
+							<div onClick={() => {setCreateProjectModalVisible(true)}} className='inline-flex items-center px-4 py-1 my-auto mb-5 mr-5 text-xs font-medium text-gray-700 whitespace-no-wrap transition ease-in-out bg-gray-200 rounded-md cursor-pointer hover:bg-gray-300 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-10 h-10 mr-1 icon-add"><path className="secondary" fillRule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
-								<h2 className='mr-4 text-lg font-semibold text-gray-800 '>Create New</h2>
+								<h2 className='mr-4 text-lg font-bold text-gray-800 '>Create New</h2>
 							</div>
 							<div className='flex flex-col justify-center pb-10 mt-1'>
 								<h2 className='mb-3 text-sm font-semibold tracking-wide text-gray-500 uppercase'>Current</h2>

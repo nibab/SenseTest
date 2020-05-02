@@ -148,7 +148,7 @@ const PostView = (props: PostViewProps) => {
 									<h2 className="pt-2 font-medium leading-3 text-gray-800 text-md group-hover:text-gray-900">
 										{ props.post.title }
 									</h2>
-									<p className="text-xs font-normal leading-5 text-gray-500 transition duration-150 ease-in-out font group-hover:text-gray-700 group-focus:underline">
+									<p className="text-xs font-medium leading-5 text-gray-500 transition duration-150 ease-in-out font group-hover:text-gray-700 group-focus:underline">
 										{  props.post.dateCreated !== null ? moment(props.post.dateCreated).fromNow(): ''}
 									</p>
 								</div>

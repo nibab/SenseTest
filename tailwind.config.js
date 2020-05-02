@@ -14,7 +14,9 @@ module.exports = {
       'grayscale': 'grayscale(1)',
     },
     fontFamily: {
-      sans: ['Inter var', ...defaultTheme.fontFamily.sans]
+      sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+      grotesk: ['Space Grotesk'],
+      mono: ['IBM Plex Mono']
     },
     spinner: (theme) => ({
       default: {

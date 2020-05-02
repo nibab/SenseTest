@@ -1,6 +1,43 @@
 
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
+@font-face {
+    font-family: Space Grotesk;
+    font-style: light;
+    font-weight: 400;
+    src: url(/fonts/SpaceGrotesk/SpaceGrotesk-Light.woff) format("woff");
+}
+
+@font-face {
+    font-family: Space Grotesk;
+    font-style: medium;
+    font-weight: 500;
+    src: url(/fonts/SpaceGrotesk/SpaceGrotesk-Medium.woff) format("woff");
+}
+
+@font-face {
+    font-family: Space Grotesk;
+    font-style: regular;
+    font-weight: 600;
+    src: url(/fonts/SpaceGrotesk/SpaceGrotesk-Regular.woff) format("woff");
+}
+
+@font-face {
+    font-family: Space Grotesk;
+    font-style: semibold;
+    font-weight: 700;
+    src: url(/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.woff) format("woff");
+}
+
+@font-face {
+    font-family: Space Grotesk;
+    font-style: bold;
+    font-weight: 800;
+    src: url(/fonts/SpaceGrotesk/SpaceGrotesk-Bold.woff) format("woff");
+}
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

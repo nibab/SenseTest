@@ -71,7 +71,7 @@ const Comment = (props: CommentProps) => {
 
 	const replyBox = () => {
 		return (
-			<div className='relative flex flex-row mt-1 text-sm leading-tight text-gray-700 bg-white rounded-md font'>
+			<div className='relative flex flex-row text-sm leading-tight text-gray-700 bg-white rounded-md font'>
 				<textarea placeholder={REPLY_BOX_PLACEHOLDER } ref={replyBoxRef} contentEditable="true" onChange={() => onFirstReplyBoxTouch()} style={{outline: 'none'}} className='flex w-full h-full p-1 rounded-md'>
 				</textarea>
 				<button onClick={onReplyButtonClick} className='inline-flex items-center h-8 px-2 py-1 m-1 text-xs font-medium leading-4 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded cursor-pointer hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700'>
@@ -84,7 +84,7 @@ const Comment = (props: CommentProps) => {
 	const renderReplySection = () => {
 		if (replyInProgress) {
 			return (
-				<div className='mb-3 '>
+				<div className='mb-1 '>
 					<a onClick={() => setReplyInProgress(false)} className='flex-wrap mt-3 text-xs font-medium leading-tight text-red-800 cursor-pointer'>
 						Cancel Reply
 					</a>
@@ -117,14 +117,14 @@ const Comment = (props: CommentProps) => {
 				<div className={`flex flex-col w-full pt-0.5 pl-2`}>
 					
 					<div className='flex flex-row inline w-full pr-2'>
-						<div className='flex-shrink-0 w-auto mb-0.5 my-auto text-sm font-semibold leading-tight text-gray-700 '>
+						<div className='flex-shrink-0 w-auto my-auto text-sm font-medium leading-tight text-gray-700 '>
 							{ props.comment.author }
 						</div>
-						<div className="flex-shrink-0 my-auto ml-1 text-xs text-gray-500"> { moment(props.comment.date).fromNow() }  </div>
+						<div className="flex-shrink-0 my-auto ml-1 text-xs text-gray-500" style={{marginBottom: '-1px'}}> { moment(props.comment.date).fromNow() }  </div>
 					</div>
 					
 
-					<div className='w-full p-2 text-sm leading-5 text-gray-700 break-all bg-white rounded-md'>
+					<div className='w-full p-2 text-sm font-semibold leading-5 text-gray-700 break-all bg-white rounded-md'>
 						{props.comment.text}
 					</div>
 					{ !props.noReply && renderReplySection()}

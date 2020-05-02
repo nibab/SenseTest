@@ -89,7 +89,7 @@ const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
 	}
 	
 	const renderLoadingScreen = () => {
-		const buttonClassName = "p-2 px-4 mt-3 font-semibold text-indigo-700 bg-white border border-white rounded-lg cursor-pointer text-md hover:bg-gray-100"
+		const buttonClassName = "p-2 px-4 mt-3 font-bold text-indigo-700 bg-white border border-white rounded-md cursor-pointer text-md hover:bg-gray-100"
 		
 
 		return (<>
