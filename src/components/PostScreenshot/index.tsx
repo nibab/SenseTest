@@ -47,13 +47,13 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 
 	const renderButtons = () => {
 		return (
-			<div className='flex w-full h-8 my-1'>
-				<div className='mx-auto flex flex-row p-0.5'>
-					<div className="inline-flex items-center mr-1 inline-flex items-center px-2.5 border-gray-300 text-xs font-medium rounded text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mr-1 icon-click-target"><path className="primary" d="M21.97 12.73c-.25-.22-.56-.4-.92-.54L20 11.8a8 8 0 1 0-8.2 8.2l.4 1.06c.12.36.3.67.53.92a10 10 0 1 1 9.25-9.25zm-10.95 5.19a6 6 0 1 1 6.9-6.9l-2.39-.9a4 4 0 1 0-5.41 5.41l.9 2.39z"/><path className="secondary" d="M17.96 16.54l3.75 3.75a1 1 0 0 1-1.42 1.42l-3.75-3.75-.57 2.28a1 1 0 0 1-1.9.11l-3-8a1 1 0 0 1 1.28-1.29l8 3a1 1 0 0 1-.1 1.91l-2.3.57z"/></svg>
-						Click On Image To Annotate
-					</div>					
-				</div>
+			<div className='mx-auto flex flex-row p-0.5 h-8'>
+				<div className="inline-flex items-center px-5 mr-1 text-sm font-medium text-gray-600 transition duration-150 ease-in-out border-gray-300 rounded hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50">
+					<div className='text-indigo-600'>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-2 fill-current icon-click-target "><path className="" d="M21.97 12.73c-.25-.22-.56-.4-.92-.54L20 11.8a8 8 0 1 0-8.2 8.2l.4 1.06c.12.36.3.67.53.92a10 10 0 1 1 9.25-9.25zm-10.95 5.19a6 6 0 1 1 6.9-6.9l-2.39-.9a4 4 0 1 0-5.41 5.41l.9 2.39z"/><path className="secondary" d="M17.96 16.54l3.75 3.75a1 1 0 0 1-1.42 1.42l-3.75-3.75-.57 2.28a1 1 0 0 1-1.9.11l-3-8a1 1 0 0 1 1.28-1.29l8 3a1 1 0 0 1-.1 1.91l-2.3.57z"/></svg>
+					</div>
+					Click on image to annotate
+				</div>					
 			</div>
 		)
 	}
@@ -68,7 +68,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 		if (commentsSelector !== undefined && Object.keys(commentsSelector).length > 0) {
 			return (
 				<div className='flex flex-col w-full rounded-lg' >
-					<div className='flex w-full h-8 my-1'>
+					<div className='flex w-full h-8 '>
 						<div className='mx-auto flex flex-row p-0.5'></div>
 					</div>
 					<div className='relative flex flex-col w-full pt-1 pr-2 -ml-1 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: '583px'}}>
