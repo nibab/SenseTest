@@ -60,7 +60,7 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 				</div>
 				<div className='my-auto '>
 					<button onClick={() => onViewButtonClick()} type="button" className="inline-flex items-center px-4 py-2 text-sm font-bold leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700">
-						View
+						Review
 					</button>
 				</div>
 			</div>
@@ -121,6 +121,23 @@ const ProjectsScreen = () => {
 		)
 	}
 
+	const renderNoApprovedProjects = () => {
+		return (
+			<div className='w-full p-5 py-8 my-auto text-center rounded-lg bg-teal-50'>
+				<p className="mt-1 text-lg font-bold text-gray-800">
+					{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-14 icon-box"><g><path className="secondary" d="M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2zm4 5a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H9z"/><path className="primary" d="M4 3h16a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5c0-1.1.9-2 2-2z"/></g></svg> */}
+					<svg className="w-10 mx-auto text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
+						<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+					</svg>
+					You have no approved releases yet
+				</p>
+				{/* <p className="mt-1 text-sm font-medium text-gray-700">
+					Your previous approved releases will show up here.
+				</p> */}
+			</div>
+		)
+	}
+
 	return (
 		<div className='w-full h-full bg-gray-100'>
 			{ createProjectModalVisible && <CreateProjectModal onSubmit={(projectId) => onModalSubmitButtonClick(projectId)} onCancel={() => setCreateProjectModalVisible(false)} />}
@@ -154,12 +171,12 @@ const ProjectsScreen = () => {
 								<h2 className='mr-4 text-lg font-bold text-gray-800 '>Create New</h2>
 							</div>
 							<div className='flex flex-col justify-center pb-10 mt-1'>
-								<h2 className='mb-3 text-sm font-bold tracking-wider text-gray-500 uppercase'>Current</h2>
+								<h2 className='mb-3 text-sm font-bold tracking-wider text-gray-500 uppercase'>Under review</h2>
 								{ isLoading && <div className="h-20 spinner-large"></div>}
 								{ !isLoading && renderReleases() } 
 								{ !isLoading && currentProjects?.length === 0 && renderNoProjects()}
-								{/* <h2 className='mt-10 mb-3 text-sm font-semibold tracking-wide text-gray-500 uppercase text-md'>Previous</h2> */}
-								{/* <ReleaseCard /> */}
+								<h2 className='mt-10 mb-3 text-sm font-bold tracking-wide text-gray-500 uppercase text-md'>Approved </h2>
+								{ renderNoApprovedProjects() }
 							</div>
 						</div>
 					</div>	
