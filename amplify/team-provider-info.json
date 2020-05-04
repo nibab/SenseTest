@@ -1,20 +1,44 @@
 {
-	"staging": {
-		"awscloudformation": {
-			"AuthRoleName": "amplify-prerelease-staging-212510-authRole",
-			"UnauthRoleArn": "arn:aws:iam::051794589936:role/amplify-prerelease-staging-212510-unauthRole",
-			"AuthRoleArn": "arn:aws:iam::051794589936:role/amplify-prerelease-staging-212510-authRole",
-			"Region": "us-east-1",
-			"DeploymentBucketName": "amplify-prerelease-staging-212510-deployment",
-			"UnauthRoleName": "amplify-prerelease-staging-212510-unauthRole",
-			"StackName": "amplify-prerelease-staging-212510",
-			"StackId": "arn:aws:cloudformation:us-east-1:051794589936:stack/amplify-prerelease-staging-212510/7604d9c0-77a5-11ea-8966-12da3ecd6186",
-			"AmplifyAppId": "d21ntmu20ohz1j"
-		},
-		"categories": {
-			"auth": {
-				"snaptestbd08bf8b": {}
-			}
-		}
-	}
+    "staging": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-prerelease-staging-212510-authRole",
+            "UnauthRoleArn": "arn:aws:iam::051794589936:role/amplify-prerelease-staging-212510-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::051794589936:role/amplify-prerelease-staging-212510-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-prerelease-staging-212510-deployment",
+            "UnauthRoleName": "amplify-prerelease-staging-212510-unauthRole",
+            "StackName": "amplify-prerelease-staging-212510",
+            "StackId": "arn:aws:cloudformation:us-east-1:051794589936:stack/amplify-prerelease-staging-212510/7604d9c0-77a5-11ea-8966-12da3ecd6186",
+            "AmplifyAppId": "d21ntmu20ohz1j"
+        },
+        "categories": {
+            "auth": {
+                "snaptestbd08bf8b": {}
+            }
+        }
+    },
+    "prod": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-prerelease-prod-181722-authRole",
+            "UnauthRoleArn": "arn:aws:iam::051794589936:role/amplify-prerelease-prod-181722-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::051794589936:role/amplify-prerelease-prod-181722-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-prerelease-prod-181722-deployment",
+            "UnauthRoleName": "amplify-prerelease-prod-181722-unauthRole",
+            "StackName": "amplify-prerelease-prod-181722",
+            "StackId": "arn:aws:cloudformation:us-east-1:051794589936:stack/amplify-prerelease-prod-181722/079d5fe0-8e55-11ea-aff6-0e765a9edd1f",
+            "AmplifyAppId": "d21ntmu20ohz1j"
+        },
+        "categories": {
+            "auth": {
+                "snaptestbd08bf8b": {}
+            },
+            "function": {
+                "appetizeFunction": {},
+                "projectMembershipFunction": {},
+                "SenseTestApi": {},
+                "snaptestbd08bf8b": {}
+            }
+        }
+    }
 }

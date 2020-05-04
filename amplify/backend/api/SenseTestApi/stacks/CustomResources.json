@@ -94,7 +94,7 @@
 				"ApiId" : {
 					"Ref": "AppSyncApiId"
 				},
-				"DataSourceName" : "ProjectMembership",
+				"DataSourceName" : "ProjectsMembership",
 				"FunctionVersion" : "2018-05-29",
 				"Name" : "Is_user_authorized_to_access_project",
 				"RequestMappingTemplateS3Location" : {
@@ -151,7 +151,7 @@
 				"ApiId" : {
 					"Ref": "AppSyncApiId"
 				},
-				"DataSourceName" : "ProjectMembership",
+				"DataSourceName" : "ProjectsMembership",
 				"FunctionVersion" : "2018-05-29",
 				"Name" : "Is_user_authorized_to_access_project",
 				"RequestMappingTemplateS3Location" : {
