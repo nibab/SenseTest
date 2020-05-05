@@ -31,16 +31,16 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 		const versions = props.project.appBuilds.length
 		return (
 			<div className="flex flex-row p-1 mx-auto">
-				<div className='my-auto whitespace-no-wrap inline-flex items-center mr-1 inline-flex items-center pr-2.5 py-1 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-15'>
+				<div className='my-auto whitespace-no-wrap inline-flex items-center mr-1 inline-flex items-center pr-2.5 py-1 text-xs font-medium rounded text-gray-700 bg-white transition ease-in-out duration-15'>
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-1 w-7 icon-important "><path className="primary" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/><path className="secondary" d="M12 18a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm1-5.9c-.13 1.2-1.88 1.2-2 0l-.5-5a1 1 0 0 1 1-1.1h1a1 1 0 0 1 1 1.1l-.5 5z"/></svg>
 					<h2 className='mr-4 text-xs text-gray-800 uppercase '><a className='font-bold'>{blockers}</a> {`Blocker${blockers > 1 || blockers === 0 ? 's' : ''}`}</h2>
 				</div>
-				<div className="my-auto whitespace-no-wrap inline-flex items-center mr-1 inline-flex items-center px-2.5 py-1 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-15">
+				<div className="my-auto whitespace-no-wrap inline-flex items-center mr-1 inline-flex items-center px-2.5 py-1 text-xs font-medium rounded text-gray-700 bg-white transition ease-in-out duration-15">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-1 w-7 icon-user-group"><path className="primary" d="M12 13a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1 1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3zM7 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm10 0a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/><path className="secondary" d="M12 13a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm-3 1h6a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3z"/></svg>
 					<h2 className='mr-4 text-xs font-medium text-gray-800 uppercase'><a className='font-bold'>{members}</a> {`member${members > 1 || members === 0 ? 's' : ''}`}</h2>
 				</div>
 				
-				<div className="my-auto whitespace-no-wrap inline-flex items-center mr-1 inline-flex items-center px-2.5 py-1 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
+				<div className="my-auto whitespace-no-wrap inline-flex items-center mr-1 inline-flex items-center px-2.5 py-1 text-xs font-medium rounded text-gray-700 bg-white transition ease-in-out duration-150">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-1 w-7 icon-tag"><path className="primary" d="M2.59 13.41A1.98 1.98 0 0 1 2 12V7a5 5 0 0 1 5-5h4.99c.53 0 1.04.2 1.42.59l8 8a2 2 0 0 1 0 2.82l-8 8a2 2 0 0 1-2.82 0l-8-8zM7 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path className="secondary" d="M12 18l6-6-4-4-6 6.01L12 18z"/></svg>
 					<h2 className='inline-block mr-4 text-xs text-gray-800 uppercase '><a className='font-bold'>{versions}</a>{` app version${versions > 1 ? 's' : ''}`}</h2>
 				</div>
@@ -49,7 +49,7 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 	}
 
 	return (
-		<div key={props.project.id} className='flex flex-col bg-white rounded-lg shadow-lg'>
+		<div key={props.project.id} onClick={onViewButtonClick} className='flex flex-col transition duration-150 ease-in-out bg-white rounded-lg shadow-md cursor-pointer hover:shadow-lg'>
 			<div className='flex flex-row p-3 border border-2 border-t-0 border-l-0 border-r-0'>
 				<div className='flex-shrink-0 w-16 h-16 rounded-lg'>
 					<img className="inline-block rounded-md" src={process.env.PUBLIC_URL + "appIcon.png"} alt="" />
