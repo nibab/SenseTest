@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Post, Project } from '../../../types'
 import VersionTag from '../../../components/VersionTag'
 import appIcon from './appIcon.png'
@@ -15,46 +15,98 @@ type PostToolbarProps = {
 export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPost, posts, project}: PostToolbarProps) => {
 
 	const history = useHistory()
+
+	const renderRunSimulatorButton = () => {
+		const commonClassName = "inline-flex items-center w-full py-1 text-sm whitespace-no-wrap transition ease-in-out border rounded-md focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15"
+
+		const selectedClassName = "text-gray-800 bg-blue-200" + " " + commonClassName
+		const unselectedClassName = "text-gray-700 bg-white cursor-pointer hover:bg-gray-200 hover:text-gray-500 " + commonClassName
+
+		return (
+			<div className='w-full px-2 pt-1 '>
+				<div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined); }} className={unselectedClassName}>
+					
+					<div className='inline-flex mx-auto '>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-1 w-7 icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+						<h2 className='my-auto font-bold text-gray-800'>View App</h2> 
+					</div>
+					
+				</div>
+			</div>
+		)
+	}
 	
 	const renderHeader = () => {
 		return (
 			<div id='menu' className='flex flex-col flex-shrink-0 '>
-				<div className="flex flex-row flex-shrink-0 p-3 border-b border-gray-200 cursor-pointer">
-					<div className="flex-shrink-0 block group focus:outline-none ">
-						<div className="flex items-center">
-							<div className=''>
-								<img className="inline-block rounded-md w-11 h-11" src={process.env.PUBLIC_URL + '/appIcon.png'} alt="" />
-							</div>
-							<div className="ml-1.5">
-								<p className="pt-1 text-sm font-bold leading-3 text-gray-700 group-hover:text-gray-900">
-									{project.name}
-								</p>
-								<span className="inline-flex items-center flex-shrink-0 px-2 py-0.5 mt-1 font-mono text-xs font-bold leading-5 text-indigo-800 bg-indigo-100 rounded-md ">
-									<svg className="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
-										<circle cx="4" cy="4" r="3" />
-									</svg>
-									{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 mr-1 icon-tag"><path className="primary" d="M2.59 13.41A1.98 1.98 0 0 1 2 12V7a5 5 0 0 1 5-5h4.99c.53 0 1.04.2 1.42.59l8 8a2 2 0 0 1 0 2.82l-8 8a2 2 0 0 1-2.82 0l-8-8zM7 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path className="secondary" d="M12 18l6-6-4-4-6 6.01L12 18z"/></svg> */}
-									{ "v " + project.currentAppBuild.version }
-								</span>
+				<div className='pt-3 border-b '>
+					<div className="flex flex-row flex-shrink-0 px-3 pb-2 border-gray-200 ">
+						<div className="flex-shrink-0 block group focus:outline-none ">
+							<div className="flex items-center">
+								<div className=''>
+									<img className="inline-block rounded-md w-11 h-11" src={process.env.PUBLIC_URL + '/appIcon.png'} alt="" />
+								</div>
+								<div className="ml-1.5">
+									<p className="pt-1 text-sm font-bold leading-3 text-gray-700 group-hover:text-gray-900">
+										{project.name}
+									</p>
+									<span className="inline-flex items-center flex-shrink-0 px-2 py-0.5 mt-1 font-mono text-xs font-bold leading-5 text-indigo-800 bg-indigo-100 rounded-md ">
+										<svg className="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
+											<circle cx="4" cy="4" r="3" />
+										</svg>
+										{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 mr-1 icon-tag"><path className="primary" d="M2.59 13.41A1.98 1.98 0 0 1 2 12V7a5 5 0 0 1 5-5h4.99c.53 0 1.04.2 1.42.59l8 8a2 2 0 0 1 0 2.82l-8 8a2 2 0 0 1-2.82 0l-8-8zM7 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path className="secondary" d="M12 18l6-6-4-4-6 6.01L12 18z"/></svg> */}
+										{ "v " + project.currentAppBuild.version }
+									</span>
+								</div>
+								
 							</div>
 						</div>
+						{/* <div className='flex justify-end w-full my-auto cursor-pointer'>
+							<div className='flex flex-row p-1 text-gray-600 hover:text-gray-800'>
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5 icon-add"><path className="secondary" fillRule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
+								<a className='my-auto text-xs font-bold tracking-tight uppercase'>New Version</a>
+							</div>							
+						</div> */}
+						<div className='flex justify-end w-full'>
+							<div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined) }} className='inline-flex items-center px-5 py-2 my-auto text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded cursor-pointer hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'>
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto mr-1 icon-check"><circle cx="12" cy="12" r="10" className="checkmark"/><path className="secondary" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
+
+								<h2 className='font-bold text-gray-800'>Approve</h2>
+							</div>
+						</div>
+						
 					</div>
-					<div className='flex justify-end w-full my-auto'>
+					<div className='flex justify-center w-full pt-1 my-auto bg-gray-200 cursor-pointer'>
 						<div className='flex flex-row p-1 text-gray-600 hover:text-gray-800'>
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5 icon-add"><path className="secondary" fillRule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
-							<a className='my-auto text-xs font-bold tracking-tight uppercase'>New Version</a>
+							<a className='my-auto text-xs font-bold tracking-tight uppercase'>Upload New App Version</a>
+						</div>							
+					</div>
+				</div>
+				
+				<div className='px-3 pt-2 pb-9 '>
+					{/* <div className='p-3'>
+						<div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined) }} className='inline-flex items-center py-2 mx-auto text-gray-700 whitespace-no-wrap transition ease-in-out bg-white rounded-md cursor-pointer px-9 text-md hover:bg-gray-200 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto mr-1 w-7 icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+							<h2 className='mx-auto font-bold text-gray-800 '>Run Simulator</h2>
 						</div>
-						{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6 mr-0.5 icon-add"><circle cx="12" cy="12" r="10" className="primary"/><path className="secondary" d="M13 11h4a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4z"/></svg> */}
-						
+					</div> */}
+					{ currentPost !== undefined ? renderRunSimulatorButton() : <></> }
+					
+
+					<div className='w-full pt-1 '>
+						<div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined) }} className='inline-flex items-center w-full py-1 text-sm text-gray-700 whitespace-no-wrap transition ease-in-out bg-white border rounded-md cursor-pointer hover:bg-gray-200 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
+							
+							<div className='inline-flex mx-auto '>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-2 w-7 icon-user-group"><path className="primary" d="M12 13a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1 1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3zM7 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm10 0a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/><path className="secondary" d="M12 13a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm-3 1h6a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3z"/></svg>
+								<h2 className='my-auto font-bold text-gray-800'>Manage Members</h2> 
+							</div>
+							
+						</div>
 					</div>
 				</div>
 
-				<div className='p-3 mx-auto'>
-					<div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined) }} className='inline-flex items-center py-2 mx-auto text-gray-700 whitespace-no-wrap transition ease-in-out bg-white border rounded-md cursor-pointer px-9 text-md hover:bg-gray-200 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto mr-1 w-7 icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
-						<h2 className='mx-auto font-bold text-gray-800 '>Review App</h2>
-					</div>
-				</div>
+				
 
 				
 
@@ -128,7 +180,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 		const className = currentPost !== undefined && post.id === currentPost.id ? selectedClassName : notSelectedClassName
 
 		return (
-			<div key={post.id} onClick={() => {setDisplayCreateNewPost(false); setCurrentPost(post)}} className={className}>
+			<div key={post.id} onClick={() => {setDisplayCreateNewPost(false); setCurrentPost(post);}} className={className}>
 				{/* <span className="top-0 left-0 flex items-center justify-center flex-shrink-0 block w-6 h-4 my-auto mr-1 text-xs font-bold text-white bg-red-400 rounded-full">12</span> */}
 				<div className='w-full my-auto text-sm truncate '>
 					{ post.title }							

@@ -75,7 +75,7 @@ const PostView = (props: PostViewProps) => {
 
 	const renderToolbar = () => {
 		const buttonContainerClassName = 'w-full h-18 my-1 flex flex-col'
-		const buttonClassName = 'focus:outline-none active:shadow-sm active:bg-gray-300 w-12 h-12 rounded-md mx-auto'
+		const buttonClassName = 'focus:outline-none active:shadow-sm active:bg-gray-300 w-12 h-12 rounded-full mx-auto'
 		const unSelectedButtonClassName = 'bg-white shadow-lg border-gray-400 ' + ' ' + buttonClassName
 		const selectedButtonClassName = 'bg-gray-200' + ' ' + buttonClassName
 
