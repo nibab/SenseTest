@@ -41,8 +41,10 @@
     "uuid": "*"
   },
   "scripts": {
-    "start": "PORT=9090 react-scripts start",
-    "build": "react-scripts build && npm run build:css",
+    "start": "PORT=9090 react-app-env --env-file=${BUILD_ENV}.env start",
+    "start:staging": "BUILD_ENV=staging yarn run start",
+    "build": "react-app-env --env-file=${BUILD_ENV}.env build",
+    "build:staging": "BUILD_ENV=staging yarn run build && npm run build:css ",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build:css": "postcss assets/tailwind.css -o src/styles/main.css",
@@ -72,6 +74,7 @@
     "babel-jest": "^24.9.0",
     "eslint-plugin-jest": "^23.1.1",
     "jest": "^24.9.0",
+    "react-app-env": "^1.2.3",
     "tailwindcss-spinner": "^1.0.0"
   },
   "jest": {
