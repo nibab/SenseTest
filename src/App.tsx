@@ -24,6 +24,7 @@ import TeamScreen from './screens/TeamScreen';
 import ProjectsScreen from './screens/ProjectsScreen';
 import AppBuildScreen from './screens/AppBuildScreen';
 import { login } from './store/authentication/actions';
+import Log from './utils/Log';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -71,7 +72,6 @@ const Main = () => {
   }
 
   useEffect(() => {
-    console.log(process.env);
     setIsLoading(true)
     AmplifyAuth.currentAuthenticatedUser({
       bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
@@ -81,7 +81,7 @@ const Main = () => {
       setIsLoading(false)
     }).catch((err: object) => {
       setIsLoading(false)
-      console.log(err)
+      Log.error(JSON.stringify(err))
     })
   }, [])
 

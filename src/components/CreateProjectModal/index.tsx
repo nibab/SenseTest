@@ -325,16 +325,14 @@ type DropZoneProps = {
 }
 const DropZone = (props: DropZoneProps) => {
     const onDrop: DropzoneOptions["onDrop"] = (acceptedFiles) => {
-        console.log("BLEA dropped file")
         acceptedFiles.forEach((file) => {
             const reader = new FileReader()
       
-            reader.onabort = () => console.log('file reading was aborted')
-            reader.onerror = () => console.log('file reading has failed')
+            reader.onabort = () => Log.info('file reading was aborted')
+            reader.onerror = () => Log.info('file reading has failed')
             reader.onload = () => {
                 // Do whatever you want with the file contents
                 const binaryStr = reader.result
-                console.log(binaryStr)
             }
 
             setFileInputName(file.name)
@@ -346,7 +344,7 @@ const DropZone = (props: DropZoneProps) => {
                 setVisualState('DONE')
                 props.onBundleUploaded()
             }).catch(() => {
-                console.log("Something bad happened")
+                Log.error("Something bad happened")
             })
 
             reader.readAsArrayBuffer(file)

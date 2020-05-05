@@ -86,7 +86,7 @@ const CreatePostView = (props: CreatePostViewProps) => {
         return new Promise((resolve, reject) => {
             const imageId = uuidv4()
             AssetStorageClient.createUploadUrl(imageId, projectId).then((presignedUrlFields) => {
-                console.log("Presigned url for get " + presignedUrlFields)
+                Log.info("Presigned url for get " + presignedUrlFields)
                 return AssetStorageClient.uploadDataToUrl(image, presignedUrlFields)
             }).then(() => {
                 resolve(imageId)

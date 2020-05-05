@@ -45,7 +45,7 @@ export class DataLayerClient {
 				Log.info("Succeeded in creating post.", "AppetizeScreen")
 				resolve(_newPost)
 			} catch (err) {
-				console.log("There has been an error in createNewAnnotationPost")
+				Log.error("There has been an error in createNewAnnotationPost")
 			}
 		})
 	}
@@ -87,7 +87,6 @@ export class DataLayerClient {
 	static getProjectInfo = async (projectId: string): Promise<Project> => {
 		return new Promise(async (resolve, reject) => {
 			const projectQuery = await API.graphql(graphqlOperation(getProject, {id: projectId})) as {data: GetProjectQuery}
-			//console.log(project.data)
 			const _project = projectQuery.data.getProject
 			
 			if (_project !== undefined && _project !== null) {
@@ -196,7 +195,7 @@ export class DataLayerClient {
 				Log.info("Succeeded in creating post.", "AppetizeScreen")
 				resolve(_newComment)
 			} catch (err) {
-				console.log("There has been an error in createNewAnnotationPost")
+				Log.error("There has been an error in createNewAnnotationPost")
 			}
 		})
 	}

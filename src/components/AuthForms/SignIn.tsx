@@ -4,6 +4,7 @@ import Header from './Header'
 import InputField from './InputField'
 import ValidationErrorBubble from '../ValidationErrorBubble'
 import { Auth } from 'aws-amplify'
+import Log from '../../utils/Log'
 
 type SignInProps = {
 	handleStateChange: (authState: AuthState, userObject: any) => void
@@ -34,7 +35,7 @@ const SignIn = ({ handleStateChange }: SignInProps) => {
 				handleStateChange('signedIn', user)
 				setSigningIn(false)
 			}).catch(e => {
-				console.log(e);
+				Log.error(e)
 				setError(e.message)
 				setSigningIn(false)
 			});

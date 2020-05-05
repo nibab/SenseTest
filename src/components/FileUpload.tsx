@@ -1,6 +1,7 @@
 import React from 'react';
 import { Upload, Icon, message } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
+import Log from '../utils/Log';
 
 const { Dragger } = Upload;
 
@@ -12,7 +13,7 @@ const FileUpload = ({ onUpload }: FileUploadProps) => {
   const onChange = (info: any) => {
     const { status } = info.file;
     if (status !== 'uploading') {
-      console.log(info.file, info.fileList);
+      Log.info(info.file)
     }
     if (status === 'done') {
       message.success(`${info.file.name} file uploaded successfully.`);

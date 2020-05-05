@@ -112,10 +112,10 @@ export class AssetStorageClient {
                 body: formData  // Coordinate the body type with 'Content-Type'
             }).then((result) => {
                 if (result['status'] === 204) {
-                    console.log("Upload succeeded.")
+                    Log.info("Upload succeeded.")
                     resolve()
                 } else {
-                    console.log("Upload failed.")
+                    Log.error("Upload failed.")
                     reject()
                 }
             })

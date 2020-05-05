@@ -1,5 +1,6 @@
 import { API, Auth } from "aws-amplify"
 import { SNAPTEST_API_NAME } from "../App"
+import Log from "./Log"
 
 export type ZeplinCredentials = {
     accessToken: string,
@@ -140,7 +141,7 @@ export default class ZeplinAuth {
             await ZeplinAuth.persistCredentials(zeplinCredentials)
             ZeplinAuth.credentials = zeplinCredentials
         }
-        console.log(data);
+        Log.info(data)
     }
 
     static refreshCredentials(credentials: ZeplinCredentials): Promise<ZeplinCredentials> {
@@ -210,7 +211,7 @@ export default class ZeplinAuth {
                     }
 
                     API.get(SNAPTEST_API_NAME, PATH + '/object/' + ZeplinAuth.configuration.projectId + '/zeplin', myInit).then(response => {
-                        console.log(response);
+                        Log.info(response);
                         const zeplinCredentials: ZeplinCredentials = {
                             accessToken: response.access_token,
                             refreshToken: response.refresh_token,
@@ -219,11 +220,11 @@ export default class ZeplinAuth {
                         }
                         resolve(zeplinCredentials);
                     }).catch(error => {
-                        console.log(error.response);
+                        Log.info(error.response);
                         reject(error);
                     });
                 })
-                .catch(err => console.log(err));
+                .catch(err => Log.error(err));
         })
     }
 
@@ -251,14 +252,14 @@ export default class ZeplinAuth {
                     }
 
                     API.post(SNAPTEST_API_NAME, PATH, myInit).then(response => {
-                        console.log(response);
+                        Log.info(response);
                         resolve(response);
                     }).catch(error => {
-                        console.log(error.response);
+                        Log.error(error.response);
                         reject(error);
                     });
                 })
-                .catch(err => console.log(err));
+                .catch(err => Log.error(err));
         }) 
     }
 
@@ -275,7 +276,7 @@ export default class ZeplinAuth {
                 }
 
                 API.get(SNAPTEST_API_NAME, PATH + '/object/' + projectId + "/zeplin", myInit).then(response => {
-                    console.log(response);
+                    Log.info(response);
                     ZeplinAuth.configuration = {
                         projectId: projectId,
                         hasZeplinIntegration: true
@@ -289,14 +290,14 @@ export default class ZeplinAuth {
                         }
                     }
                 }).catch(error => {
-                    console.log(error.response);
+                    Log.error(error.response);
                     ZeplinAuth.configuration = {
                         projectId: projectId,
                         hasZeplinIntegration: false
                     }
                 });
             })
-            .catch(err => console.log(err));
+            .catch(err => Log.error(err));
     }
 }
 

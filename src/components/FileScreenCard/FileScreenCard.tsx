@@ -3,6 +3,7 @@ import { Storage } from "aws-amplify";
 import { Card, Icon } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface';
 import './FileScreenCard.css';
+import Log from '../../utils/Log';
 
 export type S3File = {
   s3Key: string
@@ -44,10 +45,10 @@ const FileScreenCard = ({ file, onClick }: FileScreenCard) => {
     const setS3FilePreview = async () => {
       Storage.get((file as S3File).s3Key)
       .then(result => {
-        console.log(result)
+        Log.info(JSON.stringify(result))
         setPreview(result)
       })
-      .catch(error => console.log(error))
+      .catch(error => Log.error(error))
     }
 
     if ((file as S3File).s3Key) {
