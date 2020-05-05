@@ -1,9 +1,4 @@
 import { AssetStorageClient } from '../clients/AssetStorageClient'
-import { addPost } from '../store/post/actions'
-import { useDispatch } from "react-redux"
-import { useSelector } from "../store"
-import { CreatePostMutation, GetPostQuery } from '../API'
-import { Post } from '../types'
 import Log from './Log'
 
 export class PostImgDownload {

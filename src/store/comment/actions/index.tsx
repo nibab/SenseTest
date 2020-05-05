@@ -1,4 +1,4 @@
-import { Comment, SubComment } from "../../../types"
+import { Comment } from "../../../types"
 
 export const ADD_COMMENT = "ADD_COMMENT"
 export const ADD_SUBCOMMENT = "ADD_SUBCOMMENT"

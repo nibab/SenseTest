@@ -11,7 +11,6 @@ export const PostViewSimulator = (props: PostViewSimulatorProps) => {
 	const iframeRef = useRef<HTMLIFrameElement>(null)
 	const [iframeLoaded, setIframeLoaded] = useState(false)
 	const [iframeActive, setIframeActive] = useState(false)
-	const [requestingApp, setRequestingApp] = useState(false)
 
 	useEffect(() => {
         window.addEventListener("message", receiveMessage, false);

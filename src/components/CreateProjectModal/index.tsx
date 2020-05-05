@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
-import InputField from '../AuthForms/InputField'
+import React, { useState, useEffect, useRef } from 'react'
 import uuid from 'uuid'
 import {useDropzone, DropzoneOptions } from 'react-dropzone'
 import { AssetStorageClient } from '../../clients/AssetStorageClient'
 import Log from '../../utils/Log'
-import { DropDownProps } from 'antd/lib/dropdown'
 import { DataLayerClient } from '../../clients/DataLayerClient'
 import { AppBuildClient } from '../../clients/AppBuildClient'
 import { UsersClient } from '../../clients/UsersClient'
@@ -24,14 +22,14 @@ type CurrentInvitee = {
     userId?: string
 }
 
-const testCollaborator: RecentCollaborator = {
-    email: 'czbabin@gmail.com',
-    userId: '1'
-}
+// const testCollaborator: RecentCollaborator = {
+//     email: 'czbabin@gmail.com',
+//     userId: '1'
+// }
 
-const testInvitee: CurrentInvitee = {
-    email: 'invitee@gmail.com'
-}
+// const testInvitee: CurrentInvitee = {
+//     email: 'invitee@gmail.com'
+// }
 
 const emailRegex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
 
@@ -132,7 +130,7 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
                     <div className="mt-1 my-auto align-top bg-gray-100 whitespace-no-wrap inline-flex items-center mr-1 pl-2.5 pr-1 text-sm font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue ">
                         <h2 className='mr-1 text-gray-700'><a>{collaborator.email}</a></h2>
                         <div onClick={() => onRecentCollaboratorAddedAsInvitee(collaboratorId)} className='transition ease-in-out cursor-pointer active:text-gray-800 active:bg-gray-100 duration-15'>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="m-0.5 w-5 icon-add"><path className="secondary" fill-rule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg> 
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="m-0.5 w-5 icon-add"><path className="secondary" fillRule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg> 
                         </div>
                     </div>
                 )
@@ -167,7 +165,7 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
                     <div className="mt-1 bg-gray-100 align-top whitespace-no-wrap inline-flex items-center mr-1 pl-2.5 text-sm font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue ">
                         <h2 className='mr-1 text-gray-700'><a>{invitee.email}</a></h2>
                         <div onClick={() => removeInvitee(inviteeId)} className='transition ease-in-out cursor-pointer active:text-gray-800 active:bg-gray-100 duration-15'>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className=" m-0.5 w-5  icon-close"><path className="secondary" fill-rule="evenodd" d="M15.78 14.36a1 1 0 0 1-1.42 1.42l-2.82-2.83-2.83 2.83a1 1 0 1 1-1.42-1.42l2.83-2.82L7.3 8.7a1 1 0 0 1 1.42-1.42l2.83 2.83 2.82-2.83a1 1 0 0 1 1.42 1.42l-2.83 2.83 2.83 2.82z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className=" m-0.5 w-5  icon-close"><path className="secondary" fillRule="evenodd" d="M15.78 14.36a1 1 0 0 1-1.42 1.42l-2.82-2.83-2.83 2.83a1 1 0 1 1-1.42-1.42l2.83-2.82L7.3 8.7a1 1 0 0 1 1.42-1.42l2.83 2.83 2.82-2.83a1 1 0 0 1 1.42 1.42l-2.83 2.83 2.83 2.82z"/></svg>
                         </div>
                     </div>
                 )

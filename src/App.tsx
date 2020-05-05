@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,11 +11,9 @@ import awsconfig from './aws-exports.js';
 import './App.css';
 import OnboardingScreen from './screens/OnboardingScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import NavBar from './components/NavBar';
 import AuthForm from './components/AuthForm';
 import { bool } from 'aws-sdk/clients/signer';
 import ZeplinAuth from './utils/ZeplinAuth';
-import { Layout } from 'antd';
 import AnnotationScreen from './screens/AnnotationScreen';
 import { createStore } from 'redux'
 import { rootReducer, useSelector } from './store'
@@ -25,8 +23,6 @@ import ProjectsScreen from './screens/ProjectsScreen';
 import AppBuildScreen from './screens/AppBuildScreen';
 import { login } from './store/authentication/actions';
 import Log from './utils/Log';
-
-const { Header, Content, Footer, Sider } = Layout;
 
 export const currentAuthConfig = Amplify.configure(awsconfig);
 export const SNAPTEST_API_NAME = "SnapTestAPI";

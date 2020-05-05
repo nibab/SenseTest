@@ -196,7 +196,7 @@ export default class ZeplinAuth {
                 reject("ZeplinAuth not configured. Call ZeplinAuth.configure() before using any other ZeplinAuth methods.")
             }
 
-            if (!ZeplinAuth.configuration.hasZeplinIntegration == false) {
+            if (!ZeplinAuth.configuration.hasZeplinIntegration === false) {
                 reject("Zeplin integration has not been setup for this project yet.")
             }
 

@@ -1,5 +1,4 @@
-import React from 'react'
-import { GetProjectQuery, ListProjectsQuery } from './API';
+import { GetProjectQuery } from './API';
 import { Post, postTagGraphQLToLocalType, AppBuild, ProjectMember } from './types';
 import Log from './utils/Log';
 import { PostImgDownload } from './utils/PostImgDownload';

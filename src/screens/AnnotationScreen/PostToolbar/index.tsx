@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Post, Project } from '../../../types'
-import VersionTag from '../../../components/VersionTag'
-import appIcon from './appIcon.png'
 import { useHistory } from 'react-router-dom'
 
 type PostToolbarProps = {
@@ -18,8 +16,6 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 
 	const renderRunSimulatorButton = () => {
 		const commonClassName = "inline-flex items-center w-full py-1 text-sm whitespace-no-wrap transition ease-in-out border rounded-md focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15"
-
-		const selectedClassName = "text-gray-800 bg-blue-200" + " " + commonClassName
 		const unselectedClassName = "text-gray-700 bg-white cursor-pointer hover:bg-gray-200 hover:text-gray-500 " + commonClassName
 
 		return (
@@ -226,7 +222,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 					<p className="mt-1 text-lg font-bold text-gray-800">
 						{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mx-auto w-14 icon-box"><g><path className="secondary" d="M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2zm4 5a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H9z"/><path className="primary" d="M4 3h16a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5c0-1.1.9-2 2-2z"/></g></svg> */}
 						<svg className="w-10 mx-auto text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
-							<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+							<path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
 						</svg>
 						No issues found !
 					</p>

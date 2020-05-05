@@ -18,7 +18,7 @@ const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
     })
 
     const receiveMessage = (event: any) => {
-        if(event.data && event.data.type == 'screenshot'){
+        if(event.data && event.data.type === 'screenshot'){
 			Log.info("Received screenshot. " + event.data)
 			props.onScreenshot(event.data.data)
 		}

@@ -1,15 +1,10 @@
-import { CreatePostInput, CreatePostMutation, ModelPostFilterInput, ListPostsQuery, CreateCommentInput, CreateCommentMutation, CreateSubCommentInput, CreateSubCommentMutation, GetProjectQuery, CreateProjectInput, CreateProjectMutation, ListProjectsQuery } from "../API"
-import { Post, Comment, Annotation, SubComment, Project, AppBuild } from "../types"
-import {AssetStorageClient} from "./AssetStorageClient"
+import { CreatePostInput, CreatePostMutation, CreateCommentInput, CreateCommentMutation, CreateSubCommentInput, CreateSubCommentMutation, GetProjectQuery, CreateProjectInput, CreateProjectMutation, ListProjectsQuery } from "../API"
+import { Post, Comment, SubComment, Project, AppBuild } from "../types"
 import { API, graphqlOperation } from "aws-amplify"
 import { createPost, createComment, createSubComment, createProject } from "../graphql/mutations"
 import Log from "../utils/Log"
-import { listPosts, getProject, listProjects } from "../graphql/queries"
-import { useDispatch } from "react-redux"
-import { addPost } from "../store/post/actions"
-import { PostImgDownload } from "../utils/PostImgDownload"
+import { getProject, listProjects } from "../graphql/queries"
 import { TypeConverter } from "../convertTypes"
-import { v4 as uuidv4 } from 'uuid'
 
 const TEST_APP_BUILD: AppBuild= {
 	id: '1',
@@ -20,10 +15,6 @@ const TEST_APP_BUILD: AppBuild= {
 	createdAt: 'now',
 	version: '12',
 	uploadedByUserId: '1'
-}
-
-const getMembersFromProjectQuery = (query: GetProjectQuery) => {
-
 }
 
 export class DataLayerClient {
@@ -149,8 +140,7 @@ export class DataLayerClient {
 			content: childComment.text,
 			subCommentParentCommentId: parentComment.id
 		}
-		const createNewSubComment = (await API.graphql(graphqlOperation(createSubComment, {input: createSubCommentInput}))) as { data: CreateSubCommentMutation}
-
+		let _ = await API.graphql(graphqlOperation(createSubComment, {input: createSubCommentInput})) as { data: CreateSubCommentMutation}
 	}
 
 	static createCommentForPost = (post: Post, comment: Comment): Promise<Comment> => {
@@ -167,20 +157,6 @@ export class DataLayerClient {
 			try {
 				const createNewCommentResult = (await API.graphql(graphqlOperation(createComment, {input: createCommentInput}))) as { data: CreateCommentMutation }
 				const newComment = createNewCommentResult.data.createComment!
-
-				const getAnnotation = (comment: typeof newComment) => {
-					let geometry = comment.annotation?.geometry
-					let data = comment.annotation?.data
-					
-					if (geometry !== null && data !== null) {
-						return {
-							geometry: geometry,
-							data: data
-						}
-					} else {
-						Log.info("No annotation discovered for comment during comment creation.")
-					}
-				} 
 
 				// Create post that can be displayed in the app.
 				const _newComment: Comment = {
