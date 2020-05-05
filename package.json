@@ -43,8 +43,10 @@
   "scripts": {
     "start": "PORT=9090 react-app-env --env-file=${BUILD_ENV}.env start",
     "start:staging": "BUILD_ENV=staging yarn run start",
+    "start:prod": "BUILD_ENV=prod yarn run start",
     "build": "react-app-env --env-file=${BUILD_ENV}.env build",
     "build:staging": "BUILD_ENV=staging yarn run build && npm run build:css ",
+    "build:prod": "BUILD_ENV=prod yarn run build && npm run build:css ",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build:css": "postcss assets/tailwind.css -o src/styles/main.css",

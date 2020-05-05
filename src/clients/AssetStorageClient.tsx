@@ -7,7 +7,7 @@ export type PresignedUrlFields = {
   formData: FormData
 }
 
-const ASSET_STORAGE_SERVICE_URL = "https://sxg2wl76jf.execute-api.us-east-1.amazonaws.com/Alpha"
+const ASSET_STORAGE_SERVICE_URL = process.env.REACT_APP_ASSETS_SERVICE_URL
 const CREATE_UPLOAD_URL_PATH = "/createUploadUrl"
 const CREATE_DOWNLOAD_URL_PATH = "/getDownloadUrl"
 
