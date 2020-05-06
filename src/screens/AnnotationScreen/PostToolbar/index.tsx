@@ -19,7 +19,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 		const unselectedClassName = "text-gray-700 bg-white cursor-pointer hover:bg-gray-200 hover:text-gray-500 " + commonClassName
 
 		return (
-			<div className='w-full px-2 pt-1 '>
+			<div className='w-full pt-1 '>
 				<div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined); }} className={unselectedClassName}>
 					
 					<div className='inline-flex mx-auto '>
