@@ -18,7 +18,7 @@ type CreatePostViewProps = {
 }
 
 const CreatePostView = (props: CreatePostViewProps) => {
-    const [currentMode, setCurrentMode] = useState<Mode>('CREATE_ISSUE')
+    const [currentMode, setCurrentMode] = useState<Mode>('BROWSE')
     const [imageToAnnotate, setImageToAnnotate] = useState<Blob>()
     const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
     
