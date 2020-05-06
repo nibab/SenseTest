@@ -128,7 +128,7 @@ const PostView = (props: PostViewProps) => {
 
 	const reopenPost = () => {
 		setPostStatusButtonLoading(true)
-		DataLayerClient.updatePostStatus(props.post, 'RESOLVED').then(() => {
+		DataLayerClient.updatePostStatus(props.post, 'OPEN').then(() => {
 			dispatch(addPost({...props.post, status: 'OPEN'}))
 			setPostStatusButtonLoading(false)
 		})
@@ -158,20 +158,19 @@ const PostView = (props: PostViewProps) => {
 		}
 
 		const renderResolveButton = () => {
+			const buttonClassName = 'inline-flex items-center shadow-sm px-5 py-2 my-auto mr-2 text-sm font-bold text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'
+
 			if (props.post.status === 'RESOLVED') {
 				return (<>
 					<span className="my-auto font-bold uppercase ml-3 mr-2 bg-green-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 text-green-800">
 						Resolved
 					</span>
-					<button onClick={() => reopenPost()} className="inline-flex items-center px-5 py-2 my-auto mr-2 text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50">
+					<button onClick={() => reopenPost()} className={buttonClassName}>
 						{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto mr-1 icon-check"><circle cx="12" cy="12" r="10" className="checkmark"/><path className="secondary" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg> */}
 						{ postStatusButtonLoading ? <div className='spinner'>Reopen</div> : 'Reopen'}
 					</button>
 				</>)
 			}
-
-			const buttonClassName = 'inline-flex items-center shadow-sm px-5 py-2 my-auto mr-2 text-sm font-bold text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'
-
 			
 			return (
 				<button onClick={() => setDisplayResolvePostModal(true)} className={buttonClassName}>
