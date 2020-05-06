@@ -30,7 +30,7 @@ const CreatePostView = (props: CreatePostViewProps) => {
         // DEBUG
         // loadXHR(process.env.PUBLIC_URL + '/iphonexBlack.png').then((blob) => {console.log('yo'); setImageToAnnotate(blob)})
         AppBuildClient.getCurrentAppBuildForProjectId(projectId).then((appBuild) => setCurrentAppBuild(appBuild))
-    })
+    }, [])
 
     const onCreatePostClicked = async (imageId: string, post: Post) => {
         setCurrentMode('BROWSE')
