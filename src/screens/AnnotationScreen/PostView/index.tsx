@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 import { addPost } from '../../../store/post/actions'
 import { DataLayerClient } from '../../../clients/DataLayerClient'
 import ResolvePostModal from './ResolvePostModal'
+import Transition from '../../../utils/Transition'
 
 type PostViewProps = {
 	post: Post
@@ -22,7 +23,7 @@ const PostView = (props: PostViewProps) => {
 	const [warningVisible, setWarningVisible] = useState(true)
 	const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
 	const [postStatusButtonLoading, setPostStatusButtonLoading] = useState<boolean>(false)
-	const [displayResolvePostModal, setDisplayResolvePostModal] = useState(true)
+	const [displayResolvePostModal, setDisplayResolvePostModal] = useState(false)
 	const dispatch = useDispatch()
 
     useEffect(() => {
@@ -116,6 +117,22 @@ const PostView = (props: PostViewProps) => {
 		)
 	}
 
+	const resolvePost = () => {
+		setDisplayResolvePostModal(false)
+		setPostStatusButtonLoading(true)
+		DataLayerClient.updatePostStatus(props.post, 'RESOLVED').then(() => {
+			dispatch(addPost({...props.post, status: 'RESOLVED'}))
+			setPostStatusButtonLoading(false)
+		})
+	}
+
+	const reopenPost = () => {
+		setPostStatusButtonLoading(true)
+		DataLayerClient.updatePostStatus(props.post, 'RESOLVED').then(() => {
+			dispatch(addPost({...props.post, status: 'OPEN'}))
+			setPostStatusButtonLoading(false)
+		})
+	}
 	
 
 	const renderPostTitle = () => {
@@ -140,22 +157,6 @@ const PostView = (props: PostViewProps) => {
 				
 		}
 
-		const resolvePost = () => {
-			setPostStatusButtonLoading(true)
-			DataLayerClient.updatePostStatus(props.post, 'RESOLVED').then(() => {
-				dispatch(addPost({...props.post, status: 'RESOLVED'}))
-				setPostStatusButtonLoading(false)
-			})
-		}
-
-		const reopenPost = () => {
-			setPostStatusButtonLoading(true)
-			DataLayerClient.updatePostStatus(props.post, 'RESOLVED').then(() => {
-				dispatch(addPost({...props.post, status: 'OPEN'}))
-				setPostStatusButtonLoading(false)
-			})
-		}
-
 		const renderResolveButton = () => {
 			if (props.post.status === 'RESOLVED') {
 				return (<>
@@ -169,11 +170,11 @@ const PostView = (props: PostViewProps) => {
 				</>)
 			}
 
-			const buttonClassName = 'inline-flex items-center px-5 py-2 my-auto mr-2 text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'
+			const buttonClassName = 'inline-flex items-center shadow-sm px-5 py-2 my-auto mr-2 text-sm font-bold text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'
 
 			
 			return (
-				<button onClick={() => resolvePost()} className={buttonClassName}>
+				<button onClick={() => setDisplayResolvePostModal(true)} className={buttonClassName}>
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto mr-1 icon-check"><circle cx="12" cy="12" r="10" className="checkmark"/><path className="secondary" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
 					{ postStatusButtonLoading ? <div className='spinner'>Resolve</div> : 'Resolve'}
 				</button>
@@ -227,7 +228,7 @@ const PostView = (props: PostViewProps) => {
         <div className="flex flex-col w-full">
 			{/* { renderWarningMessage() } */}
            	<div className='relative flex flex-col flex-auto h-full'> 
-			   	{/* { displayResolvePostModal && <ResolvePostModal onCancel={() => setDisplayResolvePostModal(false)}></ResolvePostModal>} */}
+			   	{ <ResolvePostModal show={displayResolvePostModal} onCancel={() => setDisplayResolvePostModal(false)} onResolve={() => resolvePost()}></ResolvePostModal>}
 				{ renderPostTitle() }
 				<div className='flex flex-row pt-2 pb-1 pl-2 pr-2 overflow-scroll'> 				
 					{ renderToolbar() }	
