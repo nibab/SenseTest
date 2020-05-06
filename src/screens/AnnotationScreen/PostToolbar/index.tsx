@@ -15,16 +15,15 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 	const history = useHistory()
 
 	const renderRunSimulatorButton = () => {
-		const commonClassName = "inline-flex items-center w-full py-1 text-sm whitespace-no-wrap transition ease-in-out border rounded-md focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15"
-		const unselectedClassName = "text-gray-700 bg-white cursor-pointer hover:bg-gray-200 hover:text-gray-500 " + commonClassName
+		const buttonClassName = "inline-flex items-center w-full px-5 py-2 my-auto text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50"
 
 		return (
 			<div className='w-full pt-1 '>
-				<div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined); }} className={unselectedClassName}>
+				<div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined); }} className={buttonClassName}>
 					
 					<div className='inline-flex mx-auto '>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-1 w-7 icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
-						<h2 className='my-auto font-bold text-gray-800'>View App</h2> 
+						<h2 className='my-auto font-bold'>View App</h2> 
 					</div>
 					
 				</div>
@@ -64,11 +63,11 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 							</div>							
 						</div> */}
 						<div className='flex justify-end w-full'>
-							<div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined) }} className='inline-flex items-center px-5 py-2 my-auto text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'>
+							<button onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined) }} className='inline-flex items-center px-5 py-2 my-auto text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'>
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto mr-1 icon-check"><circle cx="12" cy="12" r="10" className="checkmark"/><path className="secondary" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
 
-								<h2 className='font-bold text-gray-800'>Approve</h2>
-							</div>
+								<h2 className='font-bold'>Approve</h2>
+							</button>
 						</div>
 						
 					</div>
@@ -91,11 +90,11 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 					
 
 					<div className='w-full pt-1 '>
-						<div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined) }} className='inline-flex items-center w-full py-1 text-sm text-gray-700 whitespace-no-wrap transition ease-in-out bg-white border rounded-md cursor-pointer hover:bg-gray-200 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
+						<div onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined) }} className='inline-flex items-center w-full px-5 py-2 my-auto text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'>
 							
 							<div className='inline-flex mx-auto '>
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-2 w-7 icon-user-group"><path className="primary" d="M12 13a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1 1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3zM7 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm10 0a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/><path className="secondary" d="M12 13a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm-3 1h6a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3z"/></svg>
-								<h2 className='my-auto font-bold text-gray-800'>Manage Members</h2> 
+								<h2 className='my-auto font-bold'>Manage Members</h2> 
 							</div>
 							
 						</div>
