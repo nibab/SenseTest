@@ -154,7 +154,7 @@ const sendEmail = async function(sender, email, subject, temporaryPassword) {
           </p>
           
           <p>
-            <a href='https://prerelease.io'>Click here to view it</a>
+            <a href='https://app.prerelease.io'>Click here to view it</a>
           </p>
         `
         }
@@ -206,7 +206,7 @@ app.post('/testEmail', async function(req, res) {
 app.post('/createAndInviteUser', async function(req, res, next) {
   //const projectId = 'b5f5c81d-648e-4138-98bc-317833370980'
   //const email = 'ilarionababii+9@gmail.com'
-  const email = req.body["userEmail"] // 1
+  const email = (req.body["userEmail"]).toLowerCase() // 1
   const projectId = req.body["projectId"] 
   const creatorUserId = req.apiGateway.event.requestContext.authorizer.claims.sub
 

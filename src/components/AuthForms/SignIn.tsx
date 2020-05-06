@@ -18,7 +18,7 @@ const SignIn = ({ handleStateChange }: SignInProps) => {
 
 	const signIn = (e: any) => {
 		e.preventDefault()
-		const email = emailRef.current?.value
+		const email = (emailRef.current?.value)?.toLowerCase()
 		const password = passwordRef.current?.value
 		setSigningIn(true)
 
