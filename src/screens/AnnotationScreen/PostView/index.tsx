@@ -8,6 +8,7 @@ import moment from 'moment'
 import { useDispatch } from 'react-redux'
 import { addPost } from '../../../store/post/actions'
 import { DataLayerClient } from '../../../clients/DataLayerClient'
+import ResolvePostModal from './ResolvePostModal'
 
 type PostViewProps = {
 	post: Post
@@ -21,6 +22,7 @@ const PostView = (props: PostViewProps) => {
 	const [warningVisible, setWarningVisible] = useState(true)
 	const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
 	const [postStatusButtonLoading, setPostStatusButtonLoading] = useState<boolean>(false)
+	const [displayResolvePostModal, setDisplayResolvePostModal] = useState(true)
 	const dispatch = useDispatch()
 
     useEffect(() => {
@@ -225,6 +227,7 @@ const PostView = (props: PostViewProps) => {
         <div className="flex flex-col w-full">
 			{/* { renderWarningMessage() } */}
            	<div className='relative flex flex-col flex-auto h-full'> 
+			   	{/* { displayResolvePostModal && <ResolvePostModal onCancel={() => setDisplayResolvePostModal(false)}></ResolvePostModal>} */}
 				{ renderPostTitle() }
 				<div className='flex flex-row pt-2 pb-1 pl-2 pr-2 overflow-scroll'> 				
 					{ renderToolbar() }	
