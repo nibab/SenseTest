@@ -5,6 +5,9 @@ import Attachment from './Attachment'
 import PostScreenshot from '../../../components/PostScreenshot'
 import { AppBuildClient } from '../../../clients/AppBuildClient'
 import moment from 'moment'
+import { useDispatch } from 'react-redux'
+import { addPost } from '../../../store/post/actions'
+import { DataLayerClient } from '../../../clients/DataLayerClient'
 
 type PostViewProps = {
 	post: Post
@@ -17,6 +20,8 @@ const PostView = (props: PostViewProps) => {
 	const [displayState, setDisplayState] = useState<DisplayState>('None')
 	const [warningVisible, setWarningVisible] = useState(true)
 	const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
+	const [postStatusButtonLoading, setPostStatusButtonLoading] = useState<boolean>(false)
+	const dispatch = useDispatch()
 
     useEffect(() => {
 		setDisplayState('None')
@@ -123,15 +128,54 @@ const PostView = (props: PostViewProps) => {
 		}
 
 		const renderTags = () => {
-			if (props.post.tags?.includes('BLOCKER')) {
+			if (props.post.tags?.includes('BLOCKER') && props.post.status !== 'RESOLVED') {
 				return (
 					<span className="my-auto font-bold uppercase ml-3 mr-2 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
 						Blocker
 					</span>
-					
 				)
 			}
 				
+		}
+
+		const resolvePost = () => {
+			setPostStatusButtonLoading(true)
+			DataLayerClient.updatePostStatus(props.post, 'RESOLVED').then(() => {
+				dispatch(addPost({...props.post, status: 'RESOLVED'}))
+				setPostStatusButtonLoading(false)
+			})
+		}
+
+		const reopenPost = () => {
+			setPostStatusButtonLoading(true)
+			DataLayerClient.updatePostStatus(props.post, 'RESOLVED').then(() => {
+				dispatch(addPost({...props.post, status: 'OPEN'}))
+				setPostStatusButtonLoading(false)
+			})
+		}
+
+		const renderResolveButton = () => {
+			if (props.post.status === 'RESOLVED') {
+				return (<>
+					<span className="my-auto font-bold uppercase ml-3 mr-2 bg-green-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 text-green-800">
+						Resolved
+					</span>
+					<button onClick={() => reopenPost()} className="inline-flex items-center px-5 py-2 my-auto mr-2 text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50">
+						{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto mr-1 icon-check"><circle cx="12" cy="12" r="10" className="checkmark"/><path className="secondary" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg> */}
+						{ postStatusButtonLoading ? <div className='spinner'>Reopen</div> : 'Reopen'}
+					</button>
+				</>)
+			}
+
+			const buttonClassName = 'inline-flex items-center px-5 py-2 my-auto mr-2 text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'
+
+			
+			return (
+				<button onClick={() => resolvePost()} className={buttonClassName}>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto mr-1 icon-check"><circle cx="12" cy="12" r="10" className="checkmark"/><path className="secondary" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
+					{ postStatusButtonLoading ? <div className='spinner'>Resolve</div> : 'Resolve'}
+				</button>
+			)
 		}
 
 		return (
@@ -165,10 +209,7 @@ const PostView = (props: PostViewProps) => {
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1 icon-flag"><path className="primary" d="M3 15a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h8a1 1 0 0 1 .7.3L13.42 5H21a1 1 0 0 1 .9 1.45L19.61 11l2.27 4.55A1 1 0 0 1 21 17h-8a1 1 0 0 1-.7-.3L10.58 15H3z"/><rect width="2" height="20" x="2" y="2" className="secondary" rx="1"/></svg>
 									Status
 								</button> */}
-								<button className="inline-flex items-center px-5 py-2 my-auto mr-2 text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto mr-1 icon-check"><circle cx="12" cy="12" r="10" className="checkmark"/><path className="secondary" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
-									Resolve
-								</button>
+								{ renderResolveButton() }
 							</div>
 							
 								

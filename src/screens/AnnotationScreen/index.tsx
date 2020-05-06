@@ -94,7 +94,8 @@ export const AnnotationScreen = ({ }) => {
                             title: post.title,
                             dateCreated: post.createdAt,
                             tags: post.tags.filter((tag) => tag !== null).map((tag) => postTagGraphQLToLocalType(tag!) ),
-                            appVersion: post.appVersion
+                            appVersion: post.appVersion,
+                            status: post.status
                         }
                         postImgDownload.imagePromise.then((blob) => {
                             dispatch(updateImageForPost(newPost, blob))
@@ -125,7 +126,7 @@ export const AnnotationScreen = ({ }) => {
     const renderPostDetailView = (projectId: string) => {
         if (!displayCreateNewPost) {
             if (currentPost) {
-                return (<PostView projectId={projectId} post={currentPost} />) 
+                return (<PostView projectId={projectId} post={postsSelector.posts[projectId][currentPost.id]} />) 
             }
         } else {
             return (<CreatePostView projectId={projectId} />)

@@ -183,9 +183,15 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 				</div>
 				<div className='flex'>
 					{
-						post.tags?.includes('BLOCKER') && 
+						post.tags?.includes('BLOCKER') && post.status !== 'RESOLVED' && 
 						<span className="inline-flex items-center px-2 py-0.5 ml-1 text-xs font-bold text-red-800 bg-red-100 uppercase rounded">
 							Blocker
+						</span>
+					}
+					{
+						post.status === 'RESOLVED' && 
+						<span className="my-auto font-bold uppercase ml-1 bg-green-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 text-green-800">
+							Resolved
 						</span>
 					}
 				</div>	

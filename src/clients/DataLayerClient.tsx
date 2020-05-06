@@ -1,7 +1,7 @@
-import { CreatePostInput, CreatePostMutation, CreateCommentInput, CreateCommentMutation, CreateSubCommentInput, CreateSubCommentMutation, GetProjectQuery, CreateProjectInput, CreateProjectMutation, ListProjectsQuery } from "../API"
-import { Post, Comment, SubComment, Project, AppBuild } from "../types"
+import { CreatePostInput, CreatePostMutation, CreateCommentInput, CreateCommentMutation, CreateSubCommentInput, CreateSubCommentMutation, GetProjectQuery, CreateProjectInput, CreateProjectMutation, ListProjectsQuery, UpdatePostInput, UpdatePostMutation, PostStatus } from "../API"
+import { Post, Comment, SubComment, Project, AppBuild, PostStatus as LocalPostStatus} from "../types"
 import { API, graphqlOperation } from "aws-amplify"
-import { createPost, createComment, createSubComment, createProject } from "../graphql/mutations"
+import { createPost, createComment, createSubComment, createProject, updatePost } from "../graphql/mutations"
 import Log from "../utils/Log"
 import { getProject, listProjects } from "../graphql/queries"
 import { TypeConverter } from "../convertTypes"
@@ -37,6 +37,34 @@ export class DataLayerClient {
 				resolve(_newPost)
 			} catch (err) {
 				Log.error("There has been an error in createNewAnnotationPost")
+				reject(err)
+			}
+		})
+	}
+
+	static updatePostStatus = (post: Post, status: LocalPostStatus): Promise<void> => {
+		return new Promise(async (resolve, reject) => {
+			const newStatus: PostStatus = ((): PostStatus => {
+				switch(status) {
+					case 'OPEN':
+						return PostStatus.OPEN
+					case 'PENDING':
+						return PostStatus.PENDING
+					case 'RESOLVED':
+						return PostStatus.RESOLVED
+				}
+			})()
+			const updatePostInput: UpdatePostInput = {
+				id: post.id,
+				status: newStatus
+			}
+
+			try {
+				const updatePostResult = (await API.graphql(graphqlOperation(updatePost, {input: updatePostInput})) as { data: UpdatePostMutation})
+				resolve()
+			} catch (err) {
+				Log.error("Failed to update post.")
+				reject(err)
 			}
 		})
 	}
