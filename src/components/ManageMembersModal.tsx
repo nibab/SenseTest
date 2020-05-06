@@ -5,6 +5,7 @@ import { ProjectMember, Project } from '../types'
 import { DataLayerClient } from '../clients/DataLayerClient'
 import { UsersClient } from '../clients/UsersClient'
 import uuid from 'uuid'
+import Log from '../utils/Log'
 
 type ManageMembersModalProps = {
     onCancel: () => void
@@ -102,11 +103,28 @@ const ManageMembersModal = (props: ManageMembersModalProps) => {
             const arrayOfPromises: Promise<any>[] = []
             const newMembers = members? [...members]: []
             currentInvitees.forEach((invitee) => {
-                const response = UsersClient.createAndInviteUser({userEmail: invitee.email, projectId: props.project.id})
-                arrayOfPromises.push(response)
-                newMembers?.push({...invitee, id: uuid(), name: invitee.email})
+                
+                const anyFound = newMembers.filter((member) => member.email === invitee.email)
+                if (anyFound.length === 0) {
+                    newMembers?.push({...invitee, id: uuid(), name: invitee.email})
+                    const response = UsersClient.createAndInviteUser({userEmail: invitee.email, projectId: props.project.id})
+                    arrayOfPromises.push(response)
+                }
+                
             })
-            Promise.all(arrayOfPromises).then((results) => {
+
+            arrayOfPromises.reduce((promiseChain, currentTask) => {
+                return promiseChain.then(chainResults =>
+                    currentTask.then(currentResult => {
+                        return [ ...chainResults, currentResult ]
+                    })
+                );
+            }, Promise.resolve([])).catch((err) => {
+                Log.error("There was an error with one of the promises.")
+            }).then(arrayOfResults => {
+                // Adding a user to a project is supposed to fail gracefully. If a user already exists in a project, nothing is
+                // going to happen. If a user with the said email already exists, nothing is going to happen, besides that 
+                // user getting an email with a link to the project.
                 setSendInvitesButtonLoading(false)
                 setMembers(newMembers)
                 setCurrentInvitees([])

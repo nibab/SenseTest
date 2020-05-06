@@ -132,7 +132,43 @@ const createUser = function(email, temporaryPassword) {
   })
 }
 
-const sendEmail = async function(sender, email, subject, temporaryPassword) {
+const sendUserInvitedToProjectEmail = async function(sender, email, subject, projectId) {
+  const email_params = {
+    Destination: { /* required */
+      ToAddresses: [
+        email,
+      ]
+    },
+    Message: { /* required */
+      Body: { /* required */
+        Html: {
+         Charset: "UTF-8",
+         Data: `
+          <h3>Invite</h3>
+          <p>
+            <b>${sender}</b> has invited you to a project on <a href='https://prerelease.io'>prerelease.io</a>. 
+          </p>
+
+          <p>
+            <a href='https://app.prerelease.io/project/${projectId}'>Click here to view the project</a>
+          </p>
+        `
+        }
+       },
+       Subject: {
+        Charset: 'UTF-8',
+        Data: subject
+       }
+      },
+    Source: 'prerelease.io <admin@prerelease.io>', /* required */
+    ReplyToAddresses: [
+       'support@prerelease.io',
+    ],
+  };
+  const emailResult = await ses.sendEmail(email_params).promise()
+}
+
+const sendNewUserEmail = async function(sender, email, subject, temporaryPassword) {
   const email_params = {
     Destination: { /* required */
       ToAddresses: [
@@ -198,8 +234,23 @@ app.get('/item/*', function(req, res) {
 ****************************/
 
 app.post('/testEmail', async function(req, res) {
-  await sendEmail('Cezar Babin', 'czbabin@gmail.com', 'Cezar Babin invited you to prerelease.io')
+  await sendNewUserEmail('Cezar Babin', 'czbabin@gmail.com', 'Cezar Babin invited you to prerelease.io')
   // Add your code here
+  res.json({success: 'post call succeed!', url: req.url, body: req.body})
+});
+
+app.post('/testUserCreation', async function(req, res) {
+  // await sendEmail('Cezar Babin', 'czbabin@gmail.com', 'Cezar Babin invited you to prerelease.io')
+  // Add your code here
+  const response = (await getUser('71543523-5157-4102-a63d-087c9cb76bf0'))['Username']
+  // let creatorEmail
+  // for (let i in response) {
+  //     let attribute = response[i]
+  //     if (attribute['Name'] === 'email') {
+  //       creatorEmail = attribute['Value']
+  //     }
+  //   }
+  console.log(response)
   res.json({success: 'post call succeed!', url: req.url, body: req.body})
 });
 
@@ -210,10 +261,11 @@ app.post('/createAndInviteUser', async function(req, res, next) {
   const projectId = req.body["projectId"] 
   const creatorUserId = req.apiGateway.event.requestContext.authorizer.claims.sub
 
+  let creatorName
   try {
     const creator = await getUser(creatorUserId)
     const creatorAttributes = creator['UserAttributes']
-    let creatorName
+    
     for (let i in creatorAttributes) {
       let attribute = creatorAttributes[i]
       if (attribute['Name'] === 'custom:name') {
@@ -232,9 +284,10 @@ app.post('/createAndInviteUser', async function(req, res, next) {
       email: email
     }
     const userMutation = await graphQlQuery(user, createUserMutation, 'createUser')
-    await sendEmail(creatorName, email, `${creatorName} invited you to prerelease.io`, temporaryPassword)
+    await sendNewUserEmail(creatorName, email, `${creatorName} invited you to prerelease.io`, temporaryPassword)
     
     const userProjectEdge = {
+      id: userId+projectId,
       projectUserEdgeUserId: userId,
       projectUserEdgeProjectId: projectId
     }
@@ -242,10 +295,22 @@ app.post('/createAndInviteUser', async function(req, res, next) {
     
   } catch(e) {
     if (e === USERNAME_EXISTS_EXCEPTION) {
-      let err = new Error(e);
-      err.statusCode = 409;
-      next(err)
-      return
+      const username = (await getUser(email))['Username']
+      const userProjectEdge = {
+        id: username+projectId,
+        projectUserEdgeUserId: username,
+        projectUserEdgeProjectId: projectId
+      }
+      try {
+        const userProjectEdgeMutation = await graphQlQuery(userProjectEdge, createUserProjectMutation, 'createUserProjectEdge')
+      
+        sendUserInvitedToProjectEmail(creatorName, email, `${creatorName} invited you to a project on prerelease.io`, projectId)
+      } catch(err) {
+        let userExistsInTheProjectError = new Error(e);
+        userExistsInTheProjectError.statusCode = 409;
+        next(userExistsInTheProjectError)
+        return
+      }
     } else {
       let err = new Error(e);
       err.statusCode = 500;
