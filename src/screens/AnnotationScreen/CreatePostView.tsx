@@ -41,7 +41,7 @@ const CreatePostView = (props: CreatePostViewProps) => {
             title: post.title,
             imageId: imageId,
             projectId: post.projectId,
-            text: post.text,
+            text: post.text.length === 0 ? 'none provided' : post.text,
             status: PostStatus.OPEN,
             tags: post.tags === undefined ? [] : post.tags.map(postTag => postTagToGraphQLType(postTag)),
             appVersion: post.appVersion,
