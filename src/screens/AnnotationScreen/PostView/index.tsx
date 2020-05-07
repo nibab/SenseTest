@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Post, AppBuild, Project } from '../../../types'
+import { Post, AppBuild, Project, postTagGraphQLToLocalType, deviceTypePretty } from '../../../types'
 import { PostViewSimulator as Simulator } from '../../../components/Simulator/PostViewSimulator'
 import Attachment from './Attachment'
 import PostScreenshot from '../../../components/PostScreenshot'
@@ -149,7 +149,7 @@ const PostView = (props: PostViewProps) => {
 		const renderTags = () => {
 			if (props.post.tags?.includes('BLOCKER') && props.post.status !== 'RESOLVED') {
 				return (
-					<span className="my-auto font-bold uppercase ml-3 mr-2 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
+					<span className="my-auto font-bold uppercase mx-0.5 bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
 						Blocker
 					</span>
 				)
@@ -158,11 +158,11 @@ const PostView = (props: PostViewProps) => {
 		}
 
 		const renderResolveButton = () => {
-			const buttonClassName = 'inline-flex items-center shadow-sm px-5 py-2 my-auto mr-2 text-sm font-bold text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'
+			const buttonClassName = 'inline-flex items-center shadow-sm px-3 text-sm py-1 my-autotext-sm font-bold text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'
 
 			if (props.post.status === 'RESOLVED') {
 				return (<>
-					<span className="my-auto font-bold uppercase ml-3 mr-2 bg-green-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 text-green-800">
+					<span className="my-auto font-bold uppercase mx-2 bg-green-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 text-green-800">
 						Resolved
 					</span>
 					<button onClick={() => reopenPost()} className={buttonClassName}>
@@ -183,26 +183,30 @@ const PostView = (props: PostViewProps) => {
 		return (
 			<div className="p-1.5 mx-2 mt-1 border rounded-md bg-gray-100">
 				<div className="flex-shrink-0 block group focus:outline-none ">
-					<div className="flex items-center">
+					<div className="flex flex-col mx-1 ">
 						
-						<div className='flex flex-row w-full'>
-							<div className="flex flex-row w-full my-auto ml-2 justift-center">
+						<div className='flex flex-row w-full pt-1.5 pb-1.5 border-b'>
+							<div className="flex flex-row w-full my-auto">
 								
-								<div className='my-auto mr-1'>
-									{/* <img className="inline-block object-center w-8 h-8 rounded-full" src={'newsScreenshot.png'} alt="" /> */}
-								</div>
-								<div>
-									<h2 className="pt-2 font-medium leading-3 text-gray-800 text-md group-hover:text-gray-900">
+								<div className='mr-1'>
+									<h2 className="font-medium leading-3 text-gray-800 text-md group-hover:text-gray-900">
 										{ props.post.title }
 									</h2>
-									<p className="text-xs font-medium leading-5 text-gray-500 transition duration-150 ease-in-out font group-hover:text-gray-700 group-focus:underline">
+									<p className="h-3 text-xs font-medium text-gray-500 transition duration-150 ease-in-out font group-focus:underline">
 										{  props.post.dateCreated !== null ? moment(props.post.dateCreated).fromNow(): ''}
 									</p>
+									<div className='flex flex-row mt-1.5'>
+										<span className="my-auto font-bold mr-0.5 bg-cool-gray-200 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 text-gray-800">
+											{ deviceTypePretty(props.post.deviceType)}
+										</span>
+										{ renderTags() }
+									</div>
+									
+									{/* <img className="inline-block object-center w-8 h-8 rounded-full" src={'newsScreenshot.png'} alt="" /> */}
 								</div>
-								
 							</div>
-							<div className='flex flex-row h-12'>
-								{ renderTags() }
+							<div className='flex flex-row my-auto'>
+								{/* { renderTags() } */}
 								{/* <button className=" my-auto whitespace-no-wrap inline-flex items-center mr-2 inline-flex items-center px-2.5 py-1 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1 icon-user"><path className="primary" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><path className="secondary" d="M21 20v-1a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v1c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2z"/></svg>
 									Assign to
@@ -216,6 +220,19 @@ const PostView = (props: PostViewProps) => {
 							
 								
 						</div>
+						<div className='mt-1'>
+							
+							<p className='my-auto text-xs font-bold text-gray-600 uppercase'>
+								Repro Steps:
+							</p>
+							<p className='text-sm'>
+								{ props.post.text }
+							</p>
+							
+						</div>
+						
+
+						
 					</div>
 				</div>
 			</div>

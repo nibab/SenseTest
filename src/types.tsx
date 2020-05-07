@@ -54,6 +54,21 @@ export const deviceTypeToGraphQLType = (deviceType: DeviceType): DeviceTypeGraph
   }
 }
 
+export const deviceTypePretty = (deviceType: DeviceType): string => {
+  switch(deviceType) {
+    case 'IPHONE_X':
+      return 'iPhone X'
+    case 'IPHONE_11':
+      return 'iPhone 11'
+    case 'IPHONE_11_PLUS':
+      return 'iPhone 11 Plus'
+    case 'IPHONE_8':
+      return 'iPhone 8'
+    case 'IPHONE_XR':
+      return 'iPhone XR'
+  }
+}
+
 export type Post = {
   id: string,
   title: string,

@@ -28,6 +28,8 @@ const NewPostForm = (props: NewPostFormProps) => {
 	const dispatch = useDispatch()
 	// Page name input
 	const pageNameRef = useRef<HTMLInputElement>(null)
+	// Repro steps input
+	const reproStepsRef = useRef<HTMLTextAreaElement>(null)
 	const [validationState, setValidationState] = useState<ValidationState>('None')
 	const authState = useSelector(state => state.auth)
 
@@ -126,11 +128,11 @@ const NewPostForm = (props: NewPostFormProps) => {
 							{renderPageNameInput()}
 				
 							<div className="sm:col-span-6">
-								<label htmlFor="about" className="block text-sm font-medium leading-5 text-gray-700">
+								<label htmlFor="repro" className="block text-sm font-medium leading-5 text-gray-700">
 								Repro Steps
 								</label>
 								<div className="mt-1 rounded-md shadow-sm">
-								<textarea id="about" rows={10} className="block w-full transition duration-150 ease-in-out form-textarea sm:text-sm sm:leading-5"></textarea>
+								<textarea id="repro" ref={reproStepsRef} rows={10} className="block w-full transition duration-150 ease-in-out form-textarea sm:text-sm sm:leading-5"></textarea>
 								</div>
 								<p className="mt-2 text-sm text-gray-500">Help others reproduce the issue.</p>
 							</div>
@@ -197,6 +199,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 
 	const onCreateButtonClick = async () => {
 		const pageName = pageNameRef.current?.value
+		const reproSteps = reproStepsRef.current?.value
 		if (pageName?.length === 0) {
 			setValidationState('PageNameFailedValidation')
 			return
@@ -211,7 +214,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 			dateCreated: (new Date()).toISOString(),
 			image: props.imageToAnnotate,
 			projectId: props.projectId,
-			text: 'text',
+			text: reproSteps ? reproSteps : 'none provided',
 			comments: comments,
 			tags: tagArray,
 			appVersion: props.appBuild.version,
