@@ -7,6 +7,7 @@ type Project @model(queries: null, mutations: null) {
   admin: String ##This is a value being populated by the resolver
   members: [ProjectUserEdge] @connection(name: "ProjectRelationship") 
   active: Boolean!
+  createdAt: AWSDateTime
 }
 
 type ProjectUserEdge @model(queries: null, mutations: {update: "updateProjectUserEdge"}) @aws_iam @aws_cognito_user_pools @auth (rules: [{ allow: private, provider: iam, operations: [create, update] }]) {
@@ -31,6 +32,8 @@ type Post @model(queries: {list: "listPosts"})
   imageId: ID!
   projectId: ID!
   text: String!
+  deviceType: DeviceType!
+  osVersion: String
   appVersion: String!
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
@@ -38,6 +41,14 @@ type Post @model(queries: {list: "listPosts"})
   tags: [PostTag]!
   attachments: [ID]
   comments: [Comment] @connection(name: "PostComments")
+}
+
+enum DeviceType {
+	IPHONE_X
+	IPHONE_11
+	IPHONE_11_PLUS
+	IPHONE_8
+	IPHONE_XR
 }
 
 enum PostStatus {
