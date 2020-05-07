@@ -25,6 +25,7 @@ export const onDeleteUser = /* GraphQL */ `
               nextToken
             }
             active
+            createdAt
           }
           user {
             id
@@ -49,6 +50,8 @@ export const onCreatePost = /* GraphQL */ `
       imageId
       projectId
       text
+      deviceType
+      osVersion
       appVersion
       createdAt
       updatedAt
@@ -80,6 +83,8 @@ export const onCreatePost = /* GraphQL */ `
             imageId
             projectId
             text
+            deviceType
+            osVersion
             appVersion
             createdAt
             updatedAt
@@ -118,6 +123,8 @@ export const onUpdatePost = /* GraphQL */ `
       imageId
       projectId
       text
+      deviceType
+      osVersion
       appVersion
       createdAt
       updatedAt
@@ -149,6 +156,8 @@ export const onUpdatePost = /* GraphQL */ `
             imageId
             projectId
             text
+            deviceType
+            osVersion
             appVersion
             createdAt
             updatedAt
@@ -187,6 +196,8 @@ export const onDeletePost = /* GraphQL */ `
       imageId
       projectId
       text
+      deviceType
+      osVersion
       appVersion
       createdAt
       updatedAt
@@ -218,6 +229,8 @@ export const onDeletePost = /* GraphQL */ `
             imageId
             projectId
             text
+            deviceType
+            osVersion
             appVersion
             createdAt
             updatedAt
@@ -274,6 +287,8 @@ export const onCreateComment = /* GraphQL */ `
         imageId
         projectId
         text
+        deviceType
+        osVersion
         appVersion
         createdAt
         updatedAt
@@ -292,6 +307,8 @@ export const onCreateComment = /* GraphQL */ `
               imageId
               projectId
               text
+              deviceType
+              osVersion
               appVersion
               createdAt
               updatedAt
@@ -326,6 +343,8 @@ export const onCreateComment = /* GraphQL */ `
               imageId
               projectId
               text
+              deviceType
+              osVersion
               appVersion
               createdAt
               updatedAt
@@ -375,6 +394,8 @@ export const onUpdateComment = /* GraphQL */ `
         imageId
         projectId
         text
+        deviceType
+        osVersion
         appVersion
         createdAt
         updatedAt
@@ -393,6 +414,8 @@ export const onUpdateComment = /* GraphQL */ `
               imageId
               projectId
               text
+              deviceType
+              osVersion
               appVersion
               createdAt
               updatedAt
@@ -427,6 +450,8 @@ export const onUpdateComment = /* GraphQL */ `
               imageId
               projectId
               text
+              deviceType
+              osVersion
               appVersion
               createdAt
               updatedAt
@@ -476,6 +501,8 @@ export const onDeleteComment = /* GraphQL */ `
         imageId
         projectId
         text
+        deviceType
+        osVersion
         appVersion
         createdAt
         updatedAt
@@ -494,6 +521,8 @@ export const onDeleteComment = /* GraphQL */ `
               imageId
               projectId
               text
+              deviceType
+              osVersion
               appVersion
               createdAt
               updatedAt
@@ -528,6 +557,8 @@ export const onDeleteComment = /* GraphQL */ `
               imageId
               projectId
               text
+              deviceType
+              osVersion
               appVersion
               createdAt
               updatedAt
@@ -583,6 +614,8 @@ export const onCreateSubComment = /* GraphQL */ `
           imageId
           projectId
           text
+          deviceType
+          osVersion
           appVersion
           createdAt
           updatedAt
@@ -661,6 +694,8 @@ export const onUpdateSubComment = /* GraphQL */ `
           imageId
           projectId
           text
+          deviceType
+          osVersion
           appVersion
           createdAt
           updatedAt
@@ -739,6 +774,8 @@ export const onDeleteSubComment = /* GraphQL */ `
           imageId
           projectId
           text
+          deviceType
+          osVersion
           appVersion
           createdAt
           updatedAt
@@ -799,6 +836,8 @@ export const onDeleteAppBuild = /* GraphQL */ `
             imageId
             projectId
             text
+            deviceType
+            osVersion
             appVersion
             createdAt
             updatedAt
@@ -820,6 +859,7 @@ export const onDeleteAppBuild = /* GraphQL */ `
               currentAppBuild
               admin
               active
+              createdAt
             }
             name
             assetId
@@ -842,6 +882,7 @@ export const onDeleteAppBuild = /* GraphQL */ `
               currentAppBuild
               admin
               active
+              createdAt
             }
             user {
               id
@@ -852,6 +893,7 @@ export const onDeleteAppBuild = /* GraphQL */ `
           nextToken
         }
         active
+        createdAt
       }
       name
       assetId
@@ -877,6 +919,8 @@ export const onUpdateProjectUserEdge = /* GraphQL */ `
             imageId
             projectId
             text
+            deviceType
+            osVersion
             appVersion
             createdAt
             updatedAt
@@ -898,6 +942,7 @@ export const onUpdateProjectUserEdge = /* GraphQL */ `
               currentAppBuild
               admin
               active
+              createdAt
             }
             name
             assetId
@@ -920,6 +965,7 @@ export const onUpdateProjectUserEdge = /* GraphQL */ `
               currentAppBuild
               admin
               active
+              createdAt
             }
             user {
               id
@@ -930,6 +976,7 @@ export const onUpdateProjectUserEdge = /* GraphQL */ `
           nextToken
         }
         active
+        createdAt
       }
       user {
         id
@@ -943,6 +990,7 @@ export const onUpdateProjectUserEdge = /* GraphQL */ `
               currentAppBuild
               admin
               active
+              createdAt
             }
             user {
               id
@@ -980,6 +1028,7 @@ export const onCreateUser = /* GraphQL */ `
               nextToken
             }
             active
+            createdAt
           }
           user {
             id
@@ -1019,6 +1068,7 @@ export const onUpdateUser = /* GraphQL */ `
               nextToken
             }
             active
+            createdAt
           }
           user {
             id
@@ -1049,6 +1099,8 @@ export const onCreateAppBuild = /* GraphQL */ `
             imageId
             projectId
             text
+            deviceType
+            osVersion
             appVersion
             createdAt
             updatedAt
@@ -1070,6 +1122,7 @@ export const onCreateAppBuild = /* GraphQL */ `
               currentAppBuild
               admin
               active
+              createdAt
             }
             name
             assetId
@@ -1092,6 +1145,7 @@ export const onCreateAppBuild = /* GraphQL */ `
               currentAppBuild
               admin
               active
+              createdAt
             }
             user {
               id
@@ -1102,6 +1156,7 @@ export const onCreateAppBuild = /* GraphQL */ `
           nextToken
         }
         active
+        createdAt
       }
       name
       assetId
@@ -1127,6 +1182,8 @@ export const onUpdateAppBuild = /* GraphQL */ `
             imageId
             projectId
             text
+            deviceType
+            osVersion
             appVersion
             createdAt
             updatedAt
@@ -1148,6 +1205,7 @@ export const onUpdateAppBuild = /* GraphQL */ `
               currentAppBuild
               admin
               active
+              createdAt
             }
             name
             assetId
@@ -1170,6 +1228,7 @@ export const onUpdateAppBuild = /* GraphQL */ `
               currentAppBuild
               admin
               active
+              createdAt
             }
             user {
               id
@@ -1180,6 +1239,7 @@ export const onUpdateAppBuild = /* GraphQL */ `
           nextToken
         }
         active
+        createdAt
       }
       name
       assetId

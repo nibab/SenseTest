@@ -1,5 +1,5 @@
 import { GetProjectQuery } from './API';
-import { Post, postTagGraphQLToLocalType, AppBuild, ProjectMember } from './types';
+import { Post, postTagGraphQLToLocalType, AppBuild, ProjectMember, deviceTypeGraphQLToLocalType } from './types';
 import Log from './utils/Log';
 import { PostImgDownload } from './utils/PostImgDownload';
 
@@ -45,7 +45,8 @@ export class TypeConverter {
                     title: post.title,
                     dateCreated: post.createdAt,
                     tags: post.tags.filter((tag) => tag !== null).map((tag) => postTagGraphQLToLocalType(tag!) ),
-                    appVersion: post.appVersion
+                    appVersion: post.appVersion,
+                    deviceType: deviceTypeGraphQLToLocalType(post.deviceType)
                 }
 
                 postImgDownload.imagePromise.then((blob) => {

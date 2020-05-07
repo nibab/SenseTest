@@ -1,5 +1,5 @@
 import { CreatePostInput, CreatePostMutation, CreateCommentInput, CreateCommentMutation, CreateSubCommentInput, CreateSubCommentMutation, GetProjectQuery, CreateProjectInput, CreateProjectMutation, ListProjectsQuery, UpdatePostInput, UpdatePostMutation, PostStatus } from "../API"
-import { Post, Comment, SubComment, Project, AppBuild, PostStatus as LocalPostStatus} from "../types"
+import { Post, Comment, SubComment, Project, AppBuild, PostStatus as LocalPostStatus, deviceTypeGraphQLToLocalType} from "../types"
 import { API, graphqlOperation } from "aws-amplify"
 import { createPost, createComment, createSubComment, createProject, updatePost } from "../graphql/mutations"
 import Log from "../utils/Log"
@@ -31,7 +31,8 @@ export class DataLayerClient {
 					projectId: newPost.projectId,
 					text: newPost.text,
 					dateCreated: newPost.createdAt,
-					appVersion: newPost.appVersion
+					appVersion: newPost.appVersion,
+					deviceType: deviceTypeGraphQLToLocalType(newPost.deviceType)
 				}
 				Log.info("Succeeded in creating post.", "AppetizeScreen")
 				resolve(_newPost)
@@ -90,7 +91,8 @@ export class DataLayerClient {
 					posts: [],
 					appBuilds: [],
 					currentAppBuild: TEST_APP_BUILD,
-					members: []
+					members: [],
+					dateCreated: newProject.createdAt ? newProject.createdAt : "unknown"
 				}
 
 				Log.info(`Succeeded in creating project ${JSON.stringify(_newProject)}.`, "ProjectsScreen")
@@ -119,7 +121,8 @@ export class DataLayerClient {
 					appBuilds: appBuilds,
 					posts: posts,
 					currentAppBuild: currentAppBuild !== undefined ? currentAppBuild : TEST_APP_BUILD,
-					members: members
+					members: members,
+					dateCreated:  _project.createdAt ? _project.createdAt : "unknown"
 				}
 				resolve(project)
 			} else {
@@ -149,7 +152,8 @@ export class DataLayerClient {
 						appBuilds: appBuilds,
 						posts: posts,
 						currentAppBuild: currentAppBuild !== undefined ? currentAppBuild : TEST_APP_BUILD,
-						members: members
+						members: members,
+						dateCreated: _project.createdAt ? _project.createdAt : "unknown"
 					}
 					projectsToReturn.push(project)
 				}

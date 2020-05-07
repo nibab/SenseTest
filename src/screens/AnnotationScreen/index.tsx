@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Post, Comment, postTagGraphQLToLocalType, SubComment, Project } from "../../types"
+import { Post, Comment, postTagGraphQLToLocalType, SubComment, Project, deviceTypeGraphQLToLocalType } from "../../types"
 import { Loading } from "aws-amplify-react"
 import { useSelector } from "../../store"
 import { DataLayerClient } from "../../clients/DataLayerClient"
@@ -95,7 +95,8 @@ export const AnnotationScreen = ({ }) => {
                             dateCreated: post.createdAt,
                             tags: post.tags.filter((tag) => tag !== null).map((tag) => postTagGraphQLToLocalType(tag!) ),
                             appVersion: post.appVersion,
-                            status: post.status
+                            status: post.status,
+                            deviceType: deviceTypeGraphQLToLocalType(post.deviceType)
                         }
                         postImgDownload.imagePromise.then((blob) => {
                             dispatch(updateImageForPost(newPost, blob))

@@ -214,7 +214,8 @@ const NewPostForm = (props: NewPostFormProps) => {
 			text: 'text',
 			comments: comments,
 			tags: tagArray,
-			appVersion: props.appBuild.version
+			appVersion: props.appBuild.version,
+			deviceType: 'IPHONE_X'
 		})
 	}
 

@@ -1,8 +1,10 @@
 import { PostImgDownload } from './utils/PostImgDownload'
 import { PostTag as PostTagGraphQL} from './API'
+import { DeviceType as DeviceTypeGraphQL} from './API'
 
 export type PostStatus = 'OPEN' | 'PENDING' | 'RESOLVED'
 export type PostTag = 'BLOCKER' | 'DESIGN'
+export type DeviceType = 'IPHONE_X' | 'IPHONE_11' | 'IPHONE_11_PLUS' | 'IPHONE_8' | 'IPHONE_XR'
 
 export const postTagToGraphQLType = (postTag: PostTag): PostTagGraphQL => {
   switch(postTag) {
@@ -22,6 +24,36 @@ export const postTagGraphQLToLocalType = (postTag: PostTagGraphQL): PostTag => {
   }
 }
 
+export const deviceTypeGraphQLToLocalType = (deviceType: DeviceTypeGraphQL): DeviceType => {
+  switch(deviceType) {
+    case DeviceTypeGraphQL.IPHONE_11:
+      return 'IPHONE_11'
+    case DeviceTypeGraphQL.IPHONE_X:
+      return 'IPHONE_X'
+    case DeviceTypeGraphQL.IPHONE_8:
+      return 'IPHONE_8'
+    case DeviceTypeGraphQL.IPHONE_11_PLUS:
+      return 'IPHONE_11_PLUS'
+    case DeviceTypeGraphQL.IPHONE_XR:
+      return 'IPHONE_XR'
+  }
+}
+
+export const deviceTypeToGraphQLType = (deviceType: DeviceType): DeviceTypeGraphQL => {
+  switch(deviceType) {
+    case 'IPHONE_X':
+      return DeviceTypeGraphQL.IPHONE_X
+    case 'IPHONE_11':
+      return DeviceTypeGraphQL.IPHONE_11
+    case 'IPHONE_11_PLUS':
+      return DeviceTypeGraphQL.IPHONE_11_PLUS
+    case 'IPHONE_8':
+      return DeviceTypeGraphQL.IPHONE_8
+    case 'IPHONE_XR':
+      return DeviceTypeGraphQL.IPHONE_XR
+  }
+}
+
 export type Post = {
   id: string,
   title: string,
@@ -33,7 +65,8 @@ export type Post = {
   tags?: PostTag[]
   status?: PostStatus // this indicates whether the issue has been resolved or is still pending
   attachments?: string[] // A list of assetIds or Blobs.
-  appVersion: string
+  appVersion: string,
+  deviceType: DeviceType
 }
 
 // // This is basically the raw type that we get from AppSync.
@@ -58,7 +91,8 @@ export type Project = {
   posts: Post[]
   appBuilds: AppBuild[],
   currentAppBuild: AppBuild,
-  members: ProjectMember[]
+  members: ProjectMember[],
+  dateCreated: string
 }
 
 export type ProjectMember = {

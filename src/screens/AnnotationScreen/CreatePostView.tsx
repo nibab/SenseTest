@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { PostStatus } from '../../API'
+import { PostStatus, DeviceType } from '../../API'
 import { DataLayerClient } from '../../clients/DataLayerClient'
 import { addPost } from '../../store/post/actions'
 import uuid, { v4 as uuidv4 } from "uuid"
@@ -44,7 +44,8 @@ const CreatePostView = (props: CreatePostViewProps) => {
             text: post.text,
             status: PostStatus.OPEN,
             tags: post.tags === undefined ? [] : post.tags.map(postTag => postTagToGraphQLType(postTag)),
-            appVersion: post.appVersion      
+            appVersion: post.appVersion,
+            deviceType: DeviceType.IPHONE_X      
         })
 
         post.comments?.forEach(async (comment) => {

@@ -10,6 +10,8 @@ export const getPost = /* GraphQL */ `
       imageId
       projectId
       text
+      deviceType
+      osVersion
       appVersion
       createdAt
       updatedAt
@@ -41,6 +43,8 @@ export const getPost = /* GraphQL */ `
             imageId
             projectId
             text
+            deviceType
+            osVersion
             appVersion
             createdAt
             updatedAt
@@ -83,6 +87,8 @@ export const getProject = /* GraphQL */ `
           imageId
           projectId
           text
+          deviceType
+          osVersion
           appVersion
           createdAt
           updatedAt
@@ -121,6 +127,7 @@ export const getProject = /* GraphQL */ `
               nextToken
             }
             active
+            createdAt
           }
           name
           assetId
@@ -152,6 +159,7 @@ export const getProject = /* GraphQL */ `
               nextToken
             }
             active
+            createdAt
           }
           user {
             id
@@ -165,6 +173,7 @@ export const getProject = /* GraphQL */ `
         nextToken
       }
       active
+      createdAt
     }
   }
 `;
@@ -185,6 +194,8 @@ export const listProjects = /* GraphQL */ `
             imageId
             projectId
             text
+            deviceType
+            osVersion
             appVersion
             createdAt
             updatedAt
@@ -206,6 +217,7 @@ export const listProjects = /* GraphQL */ `
               currentAppBuild
               admin
               active
+              createdAt
             }
             name
             assetId
@@ -228,6 +240,7 @@ export const listProjects = /* GraphQL */ `
               currentAppBuild
               admin
               active
+              createdAt
             }
             user {
               id
@@ -238,6 +251,7 @@ export const listProjects = /* GraphQL */ `
           nextToken
         }
         active
+        createdAt
       }
       nextToken
     }
@@ -266,6 +280,7 @@ export const getUser = /* GraphQL */ `
               nextToken
             }
             active
+            createdAt
           }
           user {
             id
@@ -301,6 +316,7 @@ export const listUsers = /* GraphQL */ `
               currentAppBuild
               admin
               active
+              createdAt
             }
             user {
               id
@@ -329,6 +345,8 @@ export const listPosts = /* GraphQL */ `
         imageId
         projectId
         text
+        deviceType
+        osVersion
         appVersion
         createdAt
         updatedAt
@@ -347,6 +365,8 @@ export const listPosts = /* GraphQL */ `
               imageId
               projectId
               text
+              deviceType
+              osVersion
               appVersion
               createdAt
               updatedAt
@@ -393,6 +413,8 @@ export const getComment = /* GraphQL */ `
         imageId
         projectId
         text
+        deviceType
+        osVersion
         appVersion
         createdAt
         updatedAt
@@ -411,6 +433,8 @@ export const getComment = /* GraphQL */ `
               imageId
               projectId
               text
+              deviceType
+              osVersion
               appVersion
               createdAt
               updatedAt
@@ -445,6 +469,8 @@ export const getComment = /* GraphQL */ `
               imageId
               projectId
               text
+              deviceType
+              osVersion
               appVersion
               createdAt
               updatedAt
@@ -499,6 +525,8 @@ export const listComments = /* GraphQL */ `
           imageId
           projectId
           text
+          deviceType
+          osVersion
           appVersion
           createdAt
           updatedAt
@@ -576,6 +604,8 @@ export const getSubComment = /* GraphQL */ `
           imageId
           projectId
           text
+          deviceType
+          osVersion
           appVersion
           createdAt
           updatedAt
@@ -659,6 +689,8 @@ export const listSubComments = /* GraphQL */ `
             imageId
             projectId
             text
+            deviceType
+            osVersion
             appVersion
             createdAt
             updatedAt
@@ -705,6 +737,8 @@ export const getAppBuild = /* GraphQL */ `
             imageId
             projectId
             text
+            deviceType
+            osVersion
             appVersion
             createdAt
             updatedAt
@@ -726,6 +760,7 @@ export const getAppBuild = /* GraphQL */ `
               currentAppBuild
               admin
               active
+              createdAt
             }
             name
             assetId
@@ -748,6 +783,7 @@ export const getAppBuild = /* GraphQL */ `
               currentAppBuild
               admin
               active
+              createdAt
             }
             user {
               id
@@ -758,6 +794,7 @@ export const getAppBuild = /* GraphQL */ `
           nextToken
         }
         active
+        createdAt
       }
       name
       assetId
@@ -788,6 +825,8 @@ export const listAppBuilds = /* GraphQL */ `
               imageId
               projectId
               text
+              deviceType
+              osVersion
               appVersion
               createdAt
               updatedAt
@@ -819,6 +858,7 @@ export const listAppBuilds = /* GraphQL */ `
             nextToken
           }
           active
+          createdAt
         }
         name
         assetId
@@ -855,6 +895,8 @@ export const projectPostsByTime = /* GraphQL */ `
         imageId
         projectId
         text
+        deviceType
+        osVersion
         appVersion
         createdAt
         updatedAt
@@ -873,6 +915,8 @@ export const projectPostsByTime = /* GraphQL */ `
               imageId
               projectId
               text
+              deviceType
+              osVersion
               appVersion
               createdAt
               updatedAt
@@ -940,6 +984,8 @@ export const subCommentByTime = /* GraphQL */ `
             imageId
             projectId
             text
+            deviceType
+            osVersion
             appVersion
             createdAt
             updatedAt
