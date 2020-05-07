@@ -4,6 +4,7 @@
 ##   $util.time.nowEpochMilliSeconds() for timestamps, and even List or Map helpers like
 ##   $util.list.copyAndRetainAll() $util.map.copyAndRemoveAllKeys() for shallow copies
 ## Read more: https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference.html#utility-helpers-in-util
+$util.qr($ctx.stash.put("projectId", $ctx.args.input.id))
 {
     "operation" : "PutItem",
     "key" : {

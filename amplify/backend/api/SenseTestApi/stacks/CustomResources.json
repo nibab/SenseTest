@@ -417,6 +417,12 @@
 								"PersistProjectMembership",
 								"FunctionId"
 							]
+						},
+						{
+							"Fn::GetAtt": [
+								"CreateProjectUserEdgeAfterProjectCreationFunction",
+								"FunctionId"
+							]
 						}
 					]
 				},
@@ -842,6 +848,68 @@
 									".",
 									[
 										"CreateProjectUserEdgeResolver",
+										"res",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				}
+			}
+
+		},
+		"CreateProjectUserEdgeAfterProjectCreationFunction": {
+			"Type" : "AWS::AppSync::FunctionConfiguration",
+			"Properties" : {
+				"ApiId" : {
+					"Ref": "AppSyncApiId"
+				},
+				"DataSourceName" : "ProjectUserEdgeTable",
+				"FunctionVersion" : "2018-05-29",
+				"Name" : "CreateProjectUserEdgeAfterProjectCreationFunction",
+				"RequestMappingTemplateS3Location" : {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Mutation",
+										"CreateProject",
+										"CreateUserEdge",
+										"req",
+										"vtl"
+									]
+								]
+							}
+						}
+					]
+				},
+				"ResponseMappingTemplateS3Location" : {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							},
+							"ResolverFileName": {
+								"Fn::Join": [
+									".",
+									[
+										"Mutation",
+										"CreateProject",
+										"CreateUserEdge",
 										"res",
 										"vtl"
 									]
