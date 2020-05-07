@@ -41,7 +41,7 @@ const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
 		return (
 			<div className='flex w-full h-8 '>
 				<div className=' pb-1 mx-auto flex flex-row p-0.5'>
-					<span className="mr-1 inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-extrabold leading-5 bg-cool-gray-100  text-gray-800">
+					<span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-extrabold leading-5 bg-cool-gray-100  text-gray-800">
 						Simulator
 					</span>
 					<VersionTag version={props.appBuild.version} />

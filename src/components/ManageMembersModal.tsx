@@ -48,7 +48,7 @@ const ManageMembersModal = (props: ManageMembersModalProps) => {
     }, [currentInvitees])
 
     const renderTableHeader = () => {
-        const common = 'mt-4 pt-1 mb-1 flex flex-row '
+        const common = 'mt-2 pt-1 mb-1 flex flex-row '
         const className = 'relative text-xs font-medium text-gray-500 bg-white border-t border-b'  + ' ' + common
         
         return (
@@ -201,10 +201,10 @@ const ManageMembersModal = (props: ManageMembersModalProps) => {
                                 </div>
                             </div>
                             </div>
-                            <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                            <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                                { renderSendInvitesButton() }
-                            </span>
+                            <div className="mt-3 sm:flex sm:flex-row-reverse">
+                                <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                                    { renderSendInvitesButton() }
+                                </span>
                             </div>
                         </div>
                     </Transition>
