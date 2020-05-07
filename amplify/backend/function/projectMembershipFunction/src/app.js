@@ -254,6 +254,41 @@ app.post('/testUserCreation', async function(req, res) {
   res.json({success: 'post call succeed!', url: req.url, body: req.body})
 });
 
+app.post('/createUser', async function(req, res, next) {
+  const userId = req.apiGateway.event.requestContext.authorizer.claims.sub
+ 
+  try {
+    const user = await getUser(userId)
+    const creatorAttributes = user['UserAttributes']
+    let userEmail
+    for (let i in creatorAttributes) {
+      let attribute = creatorAttributes[i]
+      if (attribute['Name'] === 'email') {
+        userEmail = attribute['Value']
+      }
+    }
+    
+    const name = (req.body["userName"])
+    const newUser = {
+      id: userId,
+      name: name,
+      email: userEmail
+    }
+    const userMutation = await graphQlQuery(newUser, createUserMutation, 'createUser') 
+  } catch (err) {
+    if (err === GRAPH_QL_ERROR) {
+      
+    } else {
+     
+    }
+    let error = new Error(err);
+    error.statusCode = 500;
+    next(error)
+  }
+ 
+  res.json({success: 'post call succeed!', url: req.url, body: req.body})
+}) 
+
 app.post('/createAndInviteUser', async function(req, res, next) {
   //const projectId = 'b5f5c81d-648e-4138-98bc-317833370980'
   //const email = 'ilarionababii+9@gmail.com'
@@ -280,7 +315,7 @@ app.post('/createAndInviteUser', async function(req, res, next) {
     const userId = createUserResult["User"]["Username"]
     const user = {
       id: userId,
-      name: email,
+      name: 'unavailable',
       email: email
     }
     const userMutation = await graphQlQuery(user, createUserMutation, 'createUser')
