@@ -26,7 +26,7 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 
 	const renderFooter = () => {
 		const blockers = countBlockers()
-		const members = props.project.members.length + 1 // admin is never counted
+		const members = props.project.members.length
 		const versions = props.project.appBuilds.length
 		return (
 			<div className="flex flex-row p-1 mx-auto">
