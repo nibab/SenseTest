@@ -4,6 +4,7 @@ import InputField from './InputField'
 import { AuthState } from '../../types'
 import ValidationErrorBubble from '../ValidationErrorBubble'
 import Header from './Header'
+import { UsersClient } from '../../clients/UsersClient'
 
 type NewNameProps = {
 	handleStateChange: (authState: AuthState) => void
@@ -22,8 +23,10 @@ const NewName = ({ handleStateChange }: NewNameProps) => {
 			return
         }
         
-        setIsLoading(true)
-        Auth.currentAuthenticatedUser().then((user) =>  {
+		setIsLoading(true)
+		UsersClient.createUser({userName: name}).then(() => {
+			return Auth.currentAuthenticatedUser()
+        }).then((user) =>  {
             return Auth.updateUserAttributes(user, {
                 'custom:name': name
             })

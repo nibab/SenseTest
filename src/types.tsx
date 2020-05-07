@@ -140,6 +140,10 @@ export type InviteUserRequestType = {
   projectId: string
 }
 
+export type CreateUserRequestType = {
+  userName: string
+}
+
 export type CreateAndInviteUserRequestType = {
   userEmail: string,
   projectId: string
