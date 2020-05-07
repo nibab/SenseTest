@@ -27,6 +27,20 @@
                     "/DELETE"
                 ]
             }
+        },
+        {
+            "name": "/createUser",
+            "lambdaFunction": "projectMembershipFunction",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            }
         }
     ],
     "resourceName": "users",
@@ -37,7 +51,7 @@
         }
     ],
     "privacy": {
-        "auth": 2,
+        "auth": 3,
         "unauth": 0,
         "authRoleName": "amplify-prerelease-staging-212510-authRole",
         "unAuthRoleName": "amplify-prerelease-staging-212510-unauthRole"
@@ -52,5 +66,5 @@
             ]
         }
     ],
-    "uuid": "1b1a8875"
+    "uuid": "74307ff0"
 }
