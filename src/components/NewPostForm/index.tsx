@@ -214,7 +214,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 			dateCreated: (new Date()).toISOString(),
 			image: props.imageToAnnotate,
 			projectId: props.projectId,
-			text: reproSteps ? reproSteps : 'none provided',
+			text: reproSteps ? reproSteps : '',
 			comments: comments,
 			tags: tagArray,
 			appVersion: props.appBuild.version,

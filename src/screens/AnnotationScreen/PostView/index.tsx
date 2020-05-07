@@ -222,11 +222,11 @@ const PostView = (props: PostViewProps) => {
 						</div>
 						<div className='mt-1'>
 							
-							<p className='my-auto text-xs font-bold text-gray-600 uppercase'>
+							<p className='h-4 my-auto text-xs font-bold text-gray-600 uppercase'>
 								Repro Steps:
 							</p>
 							<p className='text-sm'>
-								{ props.post.text }
+								{ props.post.text.length === 0 ? 'none provided' : props.post.text}
 							</p>
 							
 						</div>
