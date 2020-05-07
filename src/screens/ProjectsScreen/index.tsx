@@ -7,6 +7,7 @@ import { logout } from '../../store/authentication/actions'
 import { useDispatch } from 'react-redux'
 import CreateProjectModal from '../../components/CreateProjectModal'
 import { useSelector } from '../../store'
+import moment from 'moment'
 
 type ReleaseCardProps = {
 	project: Project
@@ -55,7 +56,7 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 				</div>
 				<div className='w-full h-full my-auto ml-2'>
 					<h1 className='font-bold text-gray-800 text-md'>{props.project.name}</h1>
-					<h2 className='-mt-1 font-mono text-xs font-semibold text-gray-400 uppercase font'>February 20th, 2020</h2>
+					<h2 className='-mt-1 font-mono text-xs font-semibold text-gray-400 uppercase font'>{moment(props.project.dateCreated).format("MMM Do YYYY")}</h2>
 				</div>
 				<div className='my-auto '>
 					<button onClick={() => onViewButtonClick()} type="button" className="inline-flex items-center px-4 py-2 text-sm font-bold leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700">
