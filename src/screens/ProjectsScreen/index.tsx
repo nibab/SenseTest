@@ -28,7 +28,7 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 	const renderFooter = () => {
 		const blockers = countBlockers()
 		const members = props.project.members.length
-		const versions = props.project.appBuilds.length
+		const versions = props.project.appBuilds.length - 1
 		return (
 			<div className="flex flex-row p-1 mx-auto">
 				<div className='my-auto whitespace-no-wrap inline-flex items-center mr-1 inline-flex items-center pr-2.5 py-1 text-xs font-medium rounded text-gray-700 bg-white transition ease-in-out duration-15'>
@@ -42,7 +42,7 @@ const ReleaseCard = (props: ReleaseCardProps) => {
 				
 				<div className="my-auto whitespace-no-wrap inline-flex items-center mr-1 inline-flex items-center px-2.5 py-1 text-xs font-medium rounded text-gray-700 bg-white transition ease-in-out duration-150">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-1 w-7 icon-tag"><path className="primary" d="M2.59 13.41A1.98 1.98 0 0 1 2 12V7a5 5 0 0 1 5-5h4.99c.53 0 1.04.2 1.42.59l8 8a2 2 0 0 1 0 2.82l-8 8a2 2 0 0 1-2.82 0l-8-8zM7 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path className="secondary" d="M12 18l6-6-4-4-6 6.01L12 18z"/></svg>
-					<h2 className='inline-block mr-4 text-xs text-gray-800 uppercase '><a className='font-bold'>{versions}</a>{` app version${versions > 1 ? 's' : ''}`}</h2>
+					<h2 className='inline-block mr-4 text-xs text-gray-800 uppercase '><a className='font-bold'>{versions}</a>{` app revision${versions > 1 || versions === 0 ? 's' : ''}`}</h2>
 				</div>
 			</div>
 		)
