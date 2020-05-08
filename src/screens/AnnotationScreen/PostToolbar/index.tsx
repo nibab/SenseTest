@@ -70,13 +70,15 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 								<a className='my-auto text-xs font-bold tracking-tight uppercase'>New Version</a>
 							</div>							
 						</div> */}
-						<div className='flex justify-end w-full'>
+
+						{/* APPROVE RELEASE */}
+						{/* <div className='flex justify-end w-full'>
 							<button onClick={() => {setDisplayCreateNewPost(true); setCurrentPost(undefined) }} className='inline-flex items-center px-3 py-1 my-auto text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'>
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto mr-1 icon-check"><circle cx="12" cy="12" r="10" className="checkmark"/><path className="secondary" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
 
 								<h2 className='font-bold'>Approve</h2>
 							</button>
-						</div>
+						</div> */}
 						
 					</div>
 					<div className='flex justify-center w-full px-3 pt-1 my-auto bg-gray-200'>
