@@ -181,9 +181,15 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
                 setConfirmButtonLoading(false)
                 if (versionRef.current === undefined || versionRef.current === null) return
                 versionRef.current.value = ''
+                // On required input change is not triggered so have to manually turn off the button
+                // this kind of sucks
+                setConfirmButtonActive(false)
+                setAppBundleUploaded(false)
                 AnalyticsClient.record('UPLOAD_NEW_REVISION', authState)
             }).catch(() => {
                 setConfirmButtonLoading(false)
+                setConfirmButtonActive(false)
+                setAppBundleUploaded(false)
             })
             
         }
