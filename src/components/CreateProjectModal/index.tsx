@@ -39,7 +39,6 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
     useEffect(() => {
         setProjectId(uuid())
         setBundleId(uuid())
-
     }, [])
 
     const onRequiredInputChange = () => {
@@ -92,9 +91,6 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
                     Log.error("Created new project with some errors.")
                 })
             }
-            
-            
-            
         })
     }
 

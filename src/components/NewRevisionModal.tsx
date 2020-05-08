@@ -52,6 +52,7 @@ type NewRevisionsModalProps = {
 const NewRevisionModal = (props: NewRevisionsModalProps) => {
     const versionRef = useRef<HTMLInputElement>(null)
     const [appBuildsLoading, setAppBuildsLoading] = useState(false)
+    const [dropZoneKeyId, setDropZoneKeyId] = useState<string>()
 
     const [confirmButtonLoading, setConfirmButtonLoading] = useState(false)
     const [confirmButtonActive, setConfirmButtonActive] = useState(false)
@@ -67,17 +68,14 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
         setNewAppBuildId(uuid())
         DataLayerClient.getProjectInfo(props.project.id).then( async (project) => {
             const currentAppBuild = project.currentAppBuild
-            if (currentAppBuild !== undefined) {
-                
+            if (currentAppBuild !== undefined) {                
                 const currentBuildArray = project.appBuilds.filter((appBuild) => 
                     appBuild.id === currentAppBuild.id
                 )
-                debugger
                 setCurrentAppBuild(currentBuildArray[0])
             }
             
             setRevisions(project.appBuilds.slice(1, project.appBuilds.length))
-            //setRevisions([...revisions, ...revisions])
             setAppBuildsLoading(false)
         })
        
@@ -157,8 +155,6 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
          
     }
 
-  
-    
     const renderSendInvitesButton = () => {
         const className = "inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5"
         const inactiveButtonClass = "inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white border border-transparent bg-indigo-300 rounded-md shadow-sm cursor-not-allowed sm:text-sm sm:leading-5"
@@ -177,12 +173,14 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
                 })
             }).then((appBuild) => {
                 setRevisions([...revisions, appBuild])
+                setDropZoneKeyId(uuid()) // Hack to update the dropzone box
                 setConfirmButtonLoading(false)
+                if (versionRef.current === undefined || versionRef.current === null) return
+                versionRef.current.value = ''
             }).catch(() => {
                 setConfirmButtonLoading(false)
             })
             
-            const arrayOfPromises: Promise<any>[] = []           
         }
 
         const buttonClass = (() => {
@@ -263,7 +261,7 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
                                                 <div className="mt-1 rounded-md shadow-sm">
                                                 <input ref={versionRef} placeholder={'e.g. 1.0.0alpha'} onChange={() => onRequiredInputChange()} className="block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5" />
                                             </div>
-                                            { newAppBuildId && <DropZone projectId={props.project.id} bundleId={newAppBuildId} onBundleUploaded={() => {setAppBundleUploaded(true)}} /> }
+                                            { newAppBuildId && <DropZone key={dropZoneKeyId} projectId={props.project.id} bundleId={newAppBuildId} onBundleUploaded={() => {setAppBundleUploaded(true)}} /> }
                                     
                                         </div>
                                     </div>
