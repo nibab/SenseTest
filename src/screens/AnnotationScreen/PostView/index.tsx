@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Post, AppBuild, Project, postTagGraphQLToLocalType, deviceTypePretty, DeviceType } from '../../../types'
-import { PostViewSimulator as Simulator } from '../../../components/Simulator/PostViewSimulator'
 import Attachment from './Attachment'
 import PostScreenshot from '../../../components/PostScreenshot'
 import { AppBuildClient } from '../../../clients/AppBuildClient'
@@ -13,6 +12,7 @@ import Transition from '../../../utils/Transition'
 import { AnalyticsClient } from '../../../utils/PRAnalytics'
 import { useSelector } from '../../../store'
 import NewSimulatorModal from '../../../components/NewSimulatorModal'
+import Simulator from '../../../components/Simulator'
 
 type PostViewProps = {
 	post: Post
@@ -273,7 +273,7 @@ const PostView = (props: PostViewProps) => {
 				{ renderPostTitle() }
 				<div className='flex flex-row pt-2 pb-1 pl-2 pr-2 overflow-scroll'> 				
 					{ renderToolbar() }	
-					{ displayState === 'Simulator'  && simulatorParams?.appBuild !== undefined ? <div className="ml-3"><Simulator appBuild={simulatorParams?.appBuild}/></div> : <></> }
+					{ displayState === 'Simulator'  && simulatorParams?.appBuild !== undefined ? <div className="ml-3"><Simulator mode={'VIEW'} appBuild={simulatorParams?.appBuild}/></div> : <></> }
 					{ displayState === 'Attachment' ? <div className="ml-3"><Attachment/></div> : <></> }
 					<div className='ml-3'>
 						<PostScreenshot post={props.post} />
