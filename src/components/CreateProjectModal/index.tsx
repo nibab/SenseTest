@@ -62,11 +62,13 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
         // Both inputs are forced unwrapped since otherwise confirm button is not active
         const appName = (appNameRef.current?.value)!
         const appVersion = (versionRef.current?.value)!
+        const appBuildId = uuid()
         setConfirmButtonLoading(true)
-        DataLayerClient.createNewProject(projectId!, appName).then((project) => {
+        DataLayerClient.createNewProject(projectId!, appName, appBuildId).then((project) => {
            return AssetStorageClient.getDownloadUrl(bundleId!)
         }).then((url) => {
             return AppBuildClient.createAppBuildClient({
+                appBuildId: appBuildId,
                 projectId: projectId!,
                 assetId: bundleId!,
                 appName: appName,

@@ -115,6 +115,7 @@ app.post('/item', async function(req, res) {
 });
 
 app.post('/addAppBuild', async function(req, res) {
+  const appBuildId = req.body['appBuildId']
   const assetId = req.body["assetId"] // 1
   const assetUrl = req.body["assetUrl"] // "https://appetizetest.s3.amazonaws.com/MovieSwift.zip"
   const appName = req.body["appName"] // 'testName'
@@ -168,6 +169,7 @@ app.post('/addAppBuild', async function(req, res) {
   }
   
   const newItem = {
+    id: appBuildId,
     assetId: assetId, 
     name: appName, 
     version: appVersion,

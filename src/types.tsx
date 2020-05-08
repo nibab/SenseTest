@@ -177,6 +177,7 @@ export type AppBuild = {
 
 // Adding new app builds
 export type AppBuildRequestBodyType = {
+  appBuildId: string,
   assetId: string, 
   appName: string,
   appVersion: string,

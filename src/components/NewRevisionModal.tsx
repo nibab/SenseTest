@@ -168,6 +168,7 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
             setConfirmButtonLoading(true)
             AssetStorageClient.getDownloadUrl(newAppBuildId!).then((url) => {
                 return AppBuildClient.createAppBuildClient({
+                    appBuildId: uuid(),
                     assetId: newAppBuildId!,
                     appName: props.project.name,
                     assetUrl: url,

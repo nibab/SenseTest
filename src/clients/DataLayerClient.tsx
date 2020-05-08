@@ -70,12 +70,13 @@ export class DataLayerClient {
 		})
 	}
 
-	static createNewProject = (projectId: string, name: string): Promise<Project> => {
+	static createNewProject = (projectId: string, name: string, appBuildId: string): Promise<Project> => {
 		return new Promise(async (resolve, reject) => {
 			const createProjectInput: CreateProjectInput = {
 				name: name,
 				id: projectId,
-				active: true 
+				active: true,
+				currentAppBuild: appBuildId 
 			}
 	
 			try {
@@ -119,7 +120,7 @@ export class DataLayerClient {
 					name: _project.name,
 					appBuilds: appBuilds,
 					posts: posts,
-					currentAppBuild: currentAppBuild !== undefined ? currentAppBuild : TEST_APP_BUILD,
+					currentAppBuild: currentAppBuild,
 					members: members,
 					dateCreated:  _project.createdAt ? _project.createdAt : "unknown"
 				}

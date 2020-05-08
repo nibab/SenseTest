@@ -5,13 +5,13 @@ import { API, graphqlOperation } from 'aws-amplify'
 const AppBuildScreen = () => {
 
     const createNewAppBuild = () => {
-        AppBuildClient.createAppBuildClient({
-            assetId: '1',
-            appVersion: '2',
-            appName: 'wha',
-            assetUrl: "https://appetizetest.s3.amazonaws.com/MovieSwift.zip",
-            projectId: '68134e24-ed27-494e-b0bb-8a14f2b3167f'
-        })
+        // AppBuildClient.createAppBuildClient({
+        //     assetId: '1',
+        //     appVersion: '2',
+        //     appName: 'wha',
+        //     assetUrl: "https://appetizetest.s3.amazonaws.com/MovieSwift.zip",
+        //     projectId: '68134e24-ed27-494e-b0bb-8a14f2b3167f'
+        // })
     }
 
     const getAppBuilds = async () => {
