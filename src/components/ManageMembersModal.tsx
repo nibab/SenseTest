@@ -165,7 +165,7 @@ const ManageMembersModal = (props: ManageMembersModalProps) => {
                 <div className="sm:flex sm:items-start">
                 
                 <div className="w-full mt-3 text-center sm:mt-0 sm:text-left">
-                    <h3 className="text-lg font-medium leading-6 text-gray-900">
+                    <h3 className="font-mono text-sm font-bold leading-6 text-gray-900">
                     Members
                     </h3>
                     <div className={`${membersLoading ? 'spinner' : ''}`}>

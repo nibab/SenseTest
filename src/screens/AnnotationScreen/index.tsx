@@ -124,13 +124,13 @@ export const AnnotationScreen = ({ }) => {
         })
     }, [])    
 
-    const renderPostDetailView = (projectId: string) => {
+    const renderPostDetailView = (project: Project) => {
         if (!displayCreateNewPost) {
             if (currentPost) {
-                return (<PostView projectId={projectId} post={postsSelector.posts[projectId][currentPost.id]} />) 
+                return (<PostView project={project} post={postsSelector.posts[project.id][currentPost.id]} />) 
             }
         } else {
-            return (<CreatePostView projectId={projectId} />)
+            return (<CreatePostView project={project} />)
         }   
     }
 
@@ -142,7 +142,7 @@ export const AnnotationScreen = ({ }) => {
                     <div className='flex flex-col w-full bg-gray-50'>
                         {/* <ReleaseStatusBar /> */}
                         <div className="relative flex flex-row h-full overflow-scroll">  
-                            { renderPostDetailView(currentProject.id) }
+                            { renderPostDetailView(currentProject) }
                         </div>
                         {/* <PostFooterBar posts={postsSelector.posts} currentPost={currentPost} setCurrentPost={setCurrentPost} setDisplayCreateNewPost={setDisplayCreateNewPost} /> */}
                     </div>

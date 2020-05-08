@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Post, AppBuild, Project, postTagGraphQLToLocalType, deviceTypePretty } from '../../../types'
+import { Post, AppBuild, Project, postTagGraphQLToLocalType, deviceTypePretty, DeviceType } from '../../../types'
 import { PostViewSimulator as Simulator } from '../../../components/Simulator/PostViewSimulator'
 import Attachment from './Attachment'
 import PostScreenshot from '../../../components/PostScreenshot'
@@ -12,18 +12,25 @@ import ResolvePostModal from './ResolvePostModal'
 import Transition from '../../../utils/Transition'
 import { AnalyticsClient } from '../../../utils/PRAnalytics'
 import { useSelector } from '../../../store'
+import NewSimulatorModal from '../../../components/NewSimulatorModal'
 
 type PostViewProps = {
 	post: Post
-	projectId: string
+	project: Project
 }
 
-type DisplayState = 'None' | 'Simulator' | 'Attachment'
+type DisplayState = 'None' | 'Create_Simulator' | 'Simulator' | 'Attachment'
 
 const PostView = (props: PostViewProps) => {
 	const [displayState, setDisplayState] = useState<DisplayState>('None')
+	const [simulatorParams, setSimulatorParams] = useState<{
+		appBuild: AppBuild
+		deviceType: DeviceType
+	}>()
+	
 	const [warningVisible, setWarningVisible] = useState(true)
 	const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
+
 	const [postStatusButtonLoading, setPostStatusButtonLoading] = useState<boolean>(false)
 	const [displayResolvePostModal, setDisplayResolvePostModal] = useState(false)
 	const authState = useSelector(state => state.auth)
@@ -35,7 +42,7 @@ const PostView = (props: PostViewProps) => {
 	}, [props.post])
 
 	useEffect(() => {
-		AppBuildClient.getCurrentAppBuildForProjectId(props.projectId).then((appBuild) => setCurrentAppBuild(appBuild))
+		AppBuildClient.getCurrentAppBuildForProjectId(props.project.id).then((appBuild) => setCurrentAppBuild(appBuild))
 	}, [])
 	
 	const renderWarningMessage = () => {
@@ -101,25 +108,36 @@ const PostView = (props: PostViewProps) => {
 			}
 		}
 
+		const handleRunSimulator = (deviceType: DeviceType, appBuild: AppBuild) => {
+			setSimulatorParams({
+				deviceType: deviceType,
+				appBuild: appBuild
+			})
+			setDisplayState('Simulator')
+		}
+
 		return (
-			<div className='flex-shrink-0 mx-1'>
-				<div className='flex-shrink-0 rounded-full'>
-					<div className='flex-col w-full'> 
-						{/* <div className={buttonContainerClassName}>
-							<button onClick={() => {handleButtonClick('Attachment')}} className={displayState === 'Attachment' ? selectedButtonClassName : unSelectedButtonClassName} style={{borderWidth: '1px'}}>
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-attach"><path className="secondary" d="M20.12 11.95l-6.58 6.59a5 5 0 1 1-7.08-7.07l6.59-6.6a3 3 0 0 1 4.24 4.25l-6.58 6.59a1 1 0 1 1-1.42-1.42l6.59-6.58a1 1 0 0 0-1.42-1.42l-6.58 6.59a3 3 0 0 0 4.24 4.24l6.59-6.58a5 5 0 0 0-7.08-7.08l-6.58 6.6a7 7 0 0 0 9.9 9.9l6.59-6.6a1 1 0 0 0-1.42-1.4z"/></svg>
-							</button>
-							<a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Attachments</a>
-						</div> */}
-						<div className={buttonContainerClassName}>
-							<button onClick={() => {handleButtonClick('Simulator')}} className={displayState === 'Simulator' ? selectedButtonClassName : unSelectedButtonClassName} style={{borderWidth: '1px'}}>
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-8 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
-							</button>
-							<a className="mt-0.5 font-bold text-center text-gray-900 text-md " style={{fontSize: '13px'}}>Simulator</a>
+			<>	
+				<NewSimulatorModal onRun={(deviceType, appBuild) =>  handleRunSimulator(deviceType, appBuild)} project={props.project} show={displayState === 'Create_Simulator'} onCancel={() => setDisplayState('None')}/>
+				<div className='flex-shrink-0 mx-1'>
+					<div className='flex-shrink-0 rounded-full'>
+						<div className='flex-col w-full'> 
+							{/* <div className={buttonContainerClassName}>
+								<button onClick={() => {handleButtonClick('Attachment')}} className={displayState === 'Attachment' ? selectedButtonClassName : unSelectedButtonClassName} style={{borderWidth: '1px'}}>
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-attach"><path className="secondary" d="M20.12 11.95l-6.58 6.59a5 5 0 1 1-7.08-7.07l6.59-6.6a3 3 0 0 1 4.24 4.25l-6.58 6.59a1 1 0 1 1-1.42-1.42l6.59-6.58a1 1 0 0 0-1.42-1.42l-6.58 6.59a3 3 0 0 0 4.24 4.24l6.59-6.58a5 5 0 0 0-7.08-7.08l-6.58 6.6a7 7 0 0 0 9.9 9.9l6.59-6.6a1 1 0 0 0-1.42-1.4z"/></svg>
+								</button>
+								<a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>Attachments</a>
+							</div> */}
+							<div className={buttonContainerClassName}>
+								<button onClick={() => {handleButtonClick('Create_Simulator')}} className={unSelectedButtonClassName} style={{borderWidth: '1px'}}>
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-8 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+								</button>
+								<a className="mt-0.5 font-bold text-center text-gray-900 text-xs " style={{fontSize: '13px'}}>Simulator</a>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</>
 		)
 	}
 
@@ -255,7 +273,7 @@ const PostView = (props: PostViewProps) => {
 				{ renderPostTitle() }
 				<div className='flex flex-row pt-2 pb-1 pl-2 pr-2 overflow-scroll'> 				
 					{ renderToolbar() }	
-					{ displayState === 'Simulator'  && currentAppBuild !== undefined ? <div className="ml-3"><Simulator appBuild={currentAppBuild}/></div> : <></> }
+					{ displayState === 'Simulator'  && simulatorParams?.appBuild !== undefined ? <div className="ml-3"><Simulator appBuild={simulatorParams?.appBuild}/></div> : <></> }
 					{ displayState === 'Attachment' ? <div className="ml-3"><Attachment/></div> : <></> }
 					<div className='ml-3'>
 						<PostScreenshot post={props.post} />

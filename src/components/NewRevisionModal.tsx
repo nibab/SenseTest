@@ -15,6 +15,7 @@ import { AnalyticsClient } from '../utils/PRAnalytics'
 import { useSelector } from '../store'
 import AppBuildTable, {AppBuildRow} from './AppBuildTable'
 import Modal from './Modal'
+import AppBuilds from './AppBuilds'
 
 type NewRevisionsModalProps = {
     onCancel: () => void
@@ -25,13 +26,14 @@ type NewRevisionsModalProps = {
 
 const NewRevisionModal = (props: NewRevisionsModalProps) => {
     const versionRef = useRef<HTMLInputElement>(null)
-    const [appBuildsLoading, setAppBuildsLoading] = useState(false)
+    
     const [dropZoneKeyId, setDropZoneKeyId] = useState<string>()
 
     const [confirmButtonLoading, setConfirmButtonLoading] = useState(false)
     const [confirmButtonActive, setConfirmButtonActive] = useState(false)
     const [appBundleUploaded, setAppBundleUploaded] = useState(false)
 
+    const [appBuildsLoading, setAppBuildsLoading] = useState(false)
     const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
     const [revisions, setRevisions] = useState<AppBuild[]>([])
 
@@ -51,7 +53,7 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
                 setCurrentAppBuild(currentBuildArray[0])
             }
             
-            setRevisions(project.appBuilds.slice(1, project.appBuilds.length))
+            setRevisions(project.appBuilds.filter(build => build.id !== currentAppBuild?.id))
             setAppBuildsLoading(false)
         })
        
@@ -65,51 +67,6 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
         } else {
             setConfirmButtonActive(false)
         }
-    }
-
-    const getSubmitterName = (appBuild: AppBuild): string => {
-        const userId = appBuild.uploadedByUserId
-        const projectMembers = props.project.members
-        const projectMembersWithUserId = projectMembers.filter((member) => member.id === userId)
-        if (projectMembersWithUserId.length === 0) {
-            return 'not available'
-        } else {
-            return  projectMembersWithUserId[0].name
-        }
-    }
-
-    const renderCurrentAppBuild = () => {
-        
-        if (currentAppBuild) {
-            return (
-                <AppBuildTable>
-                    <AppBuildRow appBuild={currentAppBuild} submitterName={getSubmitterName(currentAppBuild)}></AppBuildRow>
-                </AppBuildTable>                
-            )
-        }
-       
-    }
-
-    const renderRevisions = () => {
-        let items: JSX.Element[] = []
-        revisions?.forEach((revision) => {
-            items.push(<AppBuildRow appBuild={revision} submitterName={getSubmitterName(revision)}></AppBuildRow>)
-        })
-        if (revisions && revisions.length > 0) {
-            return (
-                <AppBuildTable>
-                    { items }
-                </AppBuildTable>
-            ) 
-        } else {
-            return (
-                <div className='w-full p-3 my-auto text-center border border-dashed rounded-lg bg-gray-50'>
-                    <div className='font-bold text-gray-400'>No revisions have been submitted yet</div> 
-                </div>
-            )
-           
-        }
-         
     }
 
     const renderConfirmBuildUpload = () => {
@@ -178,29 +135,15 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
         <Modal show={props.show}>
             <div className="relative px-4 pt-5 pb-4 my-auto transition-all transform bg-white rounded-lg shadow-xl sm:p-6">
                 <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
-                    {renderCloseButton()}
+                    {renderCloseButton() }
                 </div>
                 <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:mt-0 sm:text-left">
-                        <h3 className="text-lg font-medium leading-6 text-gray-900">
-                            Current App Version
-                        </h3>
-                        <div className={`mt-0.5 ${appBuildsLoading ? 'spinner' : ''}`}>
-                    
-                            {renderCurrentAppBuild()}
-                        </div>
-                        <h3 className="mt-6 text-lg font-medium leading-6 text-gray-900">
-                            Revisions 
-                        </h3>
-                        <div className="w-full text-xs font-semibold text-gray-500 text-wrap">(new app versions that have been submitted since the original release creation)</div>
-                        <div className={`mt-0.5 ${appBuildsLoading ? 'spinner' : ''}`}>
-                    
-                            {renderRevisions()}
-                        </div>
+                       <AppBuilds revisions={revisions} isLoading={appBuildsLoading} currentAppBuild={currentAppBuild} project={props.project} />
 
                         <div className="grid grid-cols-1">
-                            <div className="col-span-3 mt-3">
-                                <div className='block text-sm font-medium leading-5 text-gray-700'>New Revision</div>
+                            <div className="col-span-3 mt-6">
+                                <div className='block font-mono text-sm font-bold leading-5 text-gray-700'>New Revision</div>
                                     
                                     <div className="mt-1 rounded-md shadow-sm">
                                     <input ref={versionRef} placeholder={'e.g. 1.0.0alpha'} onChange={() => onRequiredInputChange()} className="block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5" />
