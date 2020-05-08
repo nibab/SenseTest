@@ -90,7 +90,6 @@ export class DataLayerClient {
 					name: newProject.name,
 					posts: [],
 					appBuilds: [],
-					currentAppBuild: TEST_APP_BUILD,
 					members: [],
 					dateCreated: newProject.createdAt ? newProject.createdAt : "unknown"
 				}

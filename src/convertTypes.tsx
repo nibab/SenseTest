@@ -83,7 +83,7 @@ export class TypeConverter {
         const appBuilds =item?.appBuilds
         if (appBuilds !== undefined) {
             // should return an array of only one item
-            const _currentAppBuildArray = [appBuilds?.items![0]] //.filter(item => item !== null && item.id === currentAppBuildId) 
+            const _currentAppBuildArray = appBuilds?.items!.filter(item => item !== null && item.id === currentAppBuildId) 
             if (_currentAppBuildArray?.length !== 0 && _currentAppBuildArray !== undefined) {
                 const currentAppBuild = _currentAppBuildArray[0]
                 if (currentAppBuild !== undefined && currentAppBuild !== null) {

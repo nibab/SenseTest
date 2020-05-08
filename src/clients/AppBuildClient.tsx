@@ -6,11 +6,10 @@ import { GetProjectQuery } from '../API';
 import { resolve } from 'dns';
 import { TypeConverter } from '../convertTypes';
 
-const APP_BUILD_API_NAME = 'https://5m965rfer6.execute-api.us-east-1.amazonaws.com/staging/'
 const NEW_APP_BUILD_PATH = '/addAppBuild'
 
 export class AppBuildClient {
-    static createAppBuildClient(appBuildClientRequest: AppBuildRequestBodyType): Promise<any> {
+    static createAppBuildClient(appBuildClientRequest: AppBuildRequestBodyType): Promise<AppBuild> {
         return new Promise((resolve, reject) => {
             Auth.currentSession()
                 .then((data) => {
@@ -23,7 +22,18 @@ export class AppBuildClient {
 
                     API.post("newAppBuild", NEW_APP_BUILD_PATH, myInit).then(response => {
                         Log.info(response);
-                        resolve(response);
+                        const newAppBuild: AppBuild = {
+                            id: response.body.appBuildId,
+                            project: appBuildClientRequest.projectId,
+                            name: appBuildClientRequest.appName,
+                            assetId: appBuildClientRequest.assetId,
+                            appetizeKey: response.publicKey,
+                            version: appBuildClientRequest.appVersion,
+                            createdAt: (new Date()).toISOString(),
+                            uploadedByUserId: data.getAccessToken().payload.sub
+
+                        }
+                        resolve(newAppBuild);
                     }).catch(error => {
                         Log.error(error.response);
                         reject(error);

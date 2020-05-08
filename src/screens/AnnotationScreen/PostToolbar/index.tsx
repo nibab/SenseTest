@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Post, Project } from '../../../types'
 import { useHistory } from 'react-router-dom'
 import ManageMembersModal from '../../../components/ManageMembersModal'
+import NewRevisionModal from '../../../components/NewRevisionModal'
 
 type PostToolbarProps = {
 	currentPost: Post | undefined
@@ -53,7 +54,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 											<circle cx="4" cy="4" r="3" />
 										</svg>
 										{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 mr-1 icon-tag"><path className="primary" d="M2.59 13.41A1.98 1.98 0 0 1 2 12V7a5 5 0 0 1 5-5h4.99c.53 0 1.04.2 1.42.59l8 8a2 2 0 0 1 0 2.82l-8 8a2 2 0 0 1-2.82 0l-8-8zM7 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path className="secondary" d="M12 18l6-6-4-4-6 6.01L12 18z"/></svg> */}
-										{ "v " + project.currentAppBuild.version }
+										{ project.currentAppBuild? "v " + project.currentAppBuild.version: 'not available' }
 									</span>
 								</div>
 								
@@ -75,6 +76,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 						
 					</div>
 					<div className='flex justify-center w-full px-3 pt-1 my-auto bg-gray-200'>
+						<NewRevisionModal project={project} show={true} onCancel={()=>{setDisplayManageMembers(false)}} onResolve={() => {}} />
 						<div className="inline-flex items-center py-1 my-auto mr-1 text-xs font-medium text-gray-700 whitespace-no-wrap transition duration-150 ease-in-out rounded">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-1 icon-tag"><path className="primary" d="M2.59 13.41A1.98 1.98 0 0 1 2 12V7a5 5 0 0 1 5-5h4.99c.53 0 1.04.2 1.42.59l8 8a2 2 0 0 1 0 2.82l-8 8a2 2 0 0 1-2.82 0l-8-8zM7 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path className="secondary" d="M12 18l6-6-4-4-6 6.01L12 18z"/></svg>
 							<h2 className='inline-block text-xs text-gray-800 uppercase '><a className='font-bold'>{versions}</a>{` revision${versions > 1 || versions === 0? 's' : ''}`}</h2>

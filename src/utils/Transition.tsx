@@ -89,7 +89,7 @@ function CSSTransition({
         removeClasses(node, [...leaveToClasses, ...leaveClasses]);
       }}
     >
-       <div>{children}</div>
+       <>{children}</>
     </ReactCSSTransition>
   );
 }

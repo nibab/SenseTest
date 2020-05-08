@@ -105,7 +105,7 @@ export type Project = {
   name: string,
   posts: Post[]
   appBuilds: AppBuild[],
-  currentAppBuild: AppBuild,
+  currentAppBuild?: AppBuild,
   members: ProjectMember[],
   dateCreated: string
 }
