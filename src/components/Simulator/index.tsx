@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { AppBuild } from '../../types'
+import { AppBuild, DeviceType } from '../../types'
 import Log from '../../utils/Log'
 import VersionTag from '../VersionTag'
 import { useSelector } from '../../store'
@@ -12,6 +12,7 @@ type SimulatorProps = {
 	onScreenshot?: (imgSrc: string) => void
 	appBuild: AppBuild
 	mode: SimulatorMode
+	deviceType: DeviceType
 
 }
 
@@ -129,7 +130,7 @@ const Simulator = (props: SimulatorProps) => {
 
 	const renderScreen = () => {
 		return (
-			<div className='flex-col flex-shrink-0 w-64 mx-auto mb-3 ' style={{height: '583px', width: '281px'}}> 
+			<div className='flex-col flex-shrink-0 w-64 mx-auto ' style={{height: '583px', width: '281px'}}> 
 				
 				<div className='relative flex object-contain w-full h-full'>
 					{ !iframeActive ? renderLoadingScreen() : <></> }

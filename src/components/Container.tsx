@@ -9,7 +9,7 @@ const Container: React.StatelessComponent<ContainerProps> = ({tag, header, child
     return (
         <div className='flex flex-col '>
 			<text className='font-mono text-xs' >{ tag }</text>
-			<div className='pl-3 pr-3 border-2 border-gray-400 border-dashed rounded-lg '>
+			<div className='pb-3 pl-3 pr-3 border-2 border-gray-400 border-dashed rounded-lg '>
 				<div className='h-full'>
                     <div className='flex w-full h-8 my-1'>
                         <div className='mx-auto p-0.5 flex'>

@@ -134,9 +134,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 	return (
 		<Container header={renderButtons()} tag={'Screenshot'}>
 			<div className='flex flex-row'>
-				<div className='flex-col flex-shrink-0 mb-3' >
-					{ renderAnnotationScreen() }
-				</div>
+				{ renderAnnotationScreen() }
 				{ renderComments() }
 			</div>
 		</Container>
