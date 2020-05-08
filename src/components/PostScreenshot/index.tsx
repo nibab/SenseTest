@@ -39,7 +39,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 					<span className="mr-1 inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-extrabold leading-5 bg-cool-gray-100 text-gray-800">
 						Screenshot
 					</span>
-					<VersionTag version={props.post.appVersion} />
+					{/* <VersionTag version={props.post.} /> */}
 				</div> 
 			</div>
 		)	

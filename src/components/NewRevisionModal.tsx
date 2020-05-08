@@ -13,36 +13,7 @@ import { AppBuildClient } from '../clients/AppBuildClient'
 import { AssetStorageClient } from '../clients/AssetStorageClient'
 import { AnalyticsClient } from '../utils/PRAnalytics'
 import { useSelector } from '../store'
-
-const AppBuildTable: React.StatelessComponent<{}> = ({children}) => {
-    return (
-        <div className="flex flex-col">
-            <div className="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-                <div className="inline-block min-w-full overflow-hidden align-middle ">
-                <table className="min-w-full">
-                    <thead className='border-b'>
-                        <tr>
-                            <th className="py-1 pr-6 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 ">
-                            Version 
-                            </th> 
-                            <th className="py-1 pr-6 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 ">
-                            Date 
-                            </th> 
-                            <th className="py-1 pr-6 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 ">
-                            Submitted By 
-                            </th> 
-                            {/* <th className="pr-6 border-gray-200 py-1border-b"></th> */}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        { children }
-                    </tbody>
-                </table>
-                </div>
-            </div>
-        </div>
-    )
-}
+import AppBuildTable, {AppBuildRow} from './AppBuildTable'
 
 type NewRevisionsModalProps = {
     onCancel: () => void
@@ -95,42 +66,23 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
         }
     }
 
-    const renderRow = (appBuild: AppBuild) => {
-        const getSubmitter = (): string => {
-            const userId = appBuild.uploadedByUserId
-            const projectMembers = props.project.members
-            const projectMembersWithUserId = projectMembers.filter((member) => member.id === userId)
-            if (projectMembersWithUserId.length === 0) {
-                return 'not available'
-            } else {
-                return  projectMembersWithUserId[0].name
-            }
+    const getSubmitterName = (appBuild: AppBuild): string => {
+        const userId = appBuild.uploadedByUserId
+        const projectMembers = props.project.members
+        const projectMembersWithUserId = projectMembers.filter((member) => member.id === userId)
+        if (projectMembersWithUserId.length === 0) {
+            return 'not available'
+        } else {
+            return  projectMembersWithUserId[0].name
         }
-
-        return (
-            <tr className="bg-white border-b border-gray-200">
-                <td className="py-1 pr-6 text-sm font-medium leading-5 text-gray-900 whitespace-no-wrap">
-                    <VersionTag version={ appBuild.version }></VersionTag>
-                </td>
-                <td className="py-1 pr-6 text-sm font-semibold leading-5 text-gray-800 whitespace-no-wrap">
-                    {moment(appBuild.createdAt).calendar() }
-                </td>
-                <td className="py-1 pr-6 text-sm font-semibold leading-5 text-gray-800 whitespace-no-wrap">
-                    {getSubmitter()} 
-                </td>
-               
-                {/* <td className="py-1 pr-6 text-sm font-medium leading-5 text-right whitespace-no-wrap">
-                    <a href="#" className="text-indigo-600 hover:text-indigo-900">Edit</a>
-                </td> */}
-            </tr>
-        )
     }
 
     const renderCurrentAppBuild = () => {
+        
         if (currentAppBuild) {
             return (
                 <AppBuildTable>
-                    { renderRow(currentAppBuild)}
+                    <AppBuildRow appBuild={currentAppBuild} submitterName={getSubmitterName(currentAppBuild)}></AppBuildRow>
                 </AppBuildTable>                
             )
         }
@@ -140,7 +92,7 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
     const renderRevisions = () => {
         let items: JSX.Element[] = []
         revisions?.forEach((revision) => {
-            items.push(renderRow(revision))
+            items.push(<AppBuildRow appBuild={revision} submitterName={getSubmitterName(revision)}></AppBuildRow>)
         })
         if (revisions && revisions.length > 0) {
             return (

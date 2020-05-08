@@ -33,8 +33,6 @@ const NewPostForm = (props: NewPostFormProps) => {
 	const [validationState, setValidationState] = useState<ValidationState>('None')
 	const authState = useSelector(state => state.auth)
 
-
-
 	const renderPageNameInput = () => {
 
 		const onInputChange = () => {
@@ -121,7 +119,7 @@ const NewPostForm = (props: NewPostFormProps) => {
 							<div className='mr-2'>
 								New Issue
 							</div>
-							<VersionTag version={props.appBuild.version} />
+							<VersionTag appBuild={props.appBuild} />
 						</h3>
 						</div>
 						<div className="grid grid-cols-1 row-gap-6 col-gap-4 mt-3 sm:grid-cols-6">

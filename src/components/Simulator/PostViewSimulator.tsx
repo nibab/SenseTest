@@ -30,7 +30,7 @@ export const PostViewSimulator = (props: PostViewSimulatorProps) => {
 					<span className="inline-flex mr-1 items-center px-2.5 py-0.5 rounded-md text-sm font-extrabold leading-5 bg-gray-100 text-gray-800">
 						Simulator
 					</span>
-					<VersionTag version={props.appBuild.version} />
+					<VersionTag appBuild={props.appBuild} />
 				</div> 
 			</div>
 		)

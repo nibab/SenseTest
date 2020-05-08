@@ -9,7 +9,7 @@ const Attachment = () => {
 					<span className="mr-1 inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-extrabold leading-5 bg-cool-gray-100  text-gray-800">
 						Attachment
 					</span>
-					<VersionTag version={"v 1.0.0b"} />
+					{/* <VersionTag version={"v 1.0.0b"} /> */}
 				</div> 
 			</div>
 		)
