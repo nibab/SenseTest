@@ -9,8 +9,10 @@ import { addComment } from '../../store/comment/actions'
 import VersionTag from '../VersionTag'
 import { addsubComment } from '../../store/subcomment/actions'
 import { useSelector } from '../../store'
+import Modal from '../Modal'
 
-type NewPostFormProps = {
+type NewPostModalProps = {
+	show: boolean
 	imageToAnnotate: Blob
 	appBuild: AppBuild
 	imagePromise: Promise<string> // resolves with the imageId of the uploaded imageToAnnotate.
@@ -22,7 +24,7 @@ type NewPostFormProps = {
 
 type ValidationState = 'PageNameFailedValidation' | 'None'
 
-const NewPostForm = (props: NewPostFormProps) => {
+const NewPostModal = (props: NewPostModalProps) => {
 	const [comments, setComments] = useState<CommentType[]>([])
 	const [annotations, setAnnotations] = useState<Annotation[]>([])
 	const dispatch = useDispatch()
@@ -260,33 +262,11 @@ const NewPostForm = (props: NewPostFormProps) => {
 	}
 
 	return (
-		<div className="fixed inset-x-0 bottom-0 z-20 overflow-scroll sm:inset-0 sm:p-0 sm:flex sm:justify-center">
-              {/* Background overlay, show/hide based on modal state.
-          
-              Entering: "ease-out duration-300"
-                From: "opacity-0"
-                To: "opacity-100"
-              Leaving: "ease-in duration-200"
-                From: "opacity-100"
-                To: "opacity-0" */}
-            <div className="fixed inset-0 transition-opacity">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-          
-              {/* Modal panel, show/hide based on modal state.
-          
-              Entering: "ease-out duration-300"
-                From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                To: "opacity-100 translate-y-0 sm:scale-100"
-              Leaving: "ease-in duration-200"
-                From: "opacity-100 translate-y-0 sm:scale-100"
-                To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" */}
-            <div className="pt-3 pb-3 my-auto transition-all transform rounded-lg shadow-xl ">
-		
-		
+		<Modal show={props.show}>
+            <div className="my-auto transition-all transform rounded-lg shadow-xl ">
 				<div className='flex flex-col mx-auto bg-white rounded-lg '>
 					{/* padding left is only 4 because form has a margin of 1 so that the field outline shadow shows properly */}
-					<div className='flex flex-row p-8 pb-0'> 
+					<div className='flex flex-row px-8 pt-8 '> 
 						{renderForm()}
 						<div className='flex flex-row my-auto border-dashed rounded-lg '>
 							<div className='relative flex flex-col flex-shrink-0 mb-3' >
@@ -317,11 +297,10 @@ const NewPostForm = (props: NewPostFormProps) => {
 						</div>
 					</div>
 				</div>
-	
-			</div>
-	</div>
+				</div>
+		</Modal>
 	
 	)
 }
 
-export default NewPostForm
+export default NewPostModal

@@ -8,6 +8,7 @@ import uuid from 'uuid'
 import Log from '../utils/Log'
 import { AnalyticsClient } from '../utils/PRAnalytics'
 import { useSelector } from '../store'
+import Modal from './Modal'
 
 type ManageMembersModalProps = {
     onCancel: () => void
@@ -152,66 +153,40 @@ const ManageMembersModal = (props: ManageMembersModalProps) => {
     }
 
     return (
-        <Transition show={props.show} appear={props.show}>
-            <div className="fixed inset-x-0 bottom-0 z-50 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center">
-                <Transition
-                    enter="ease-out duration-300"
-                    enterFrom="opacity-0"
-                    enterTo="opacity-100"
-                    leave="ease-in duration-200"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                >
-
+        <Modal show={props.show}>
+            <div className="relative px-4 pt-5 pb-4 my-auto overflow-hidden transition-all transform bg-white rounded-lg shadow-xl w-72 sm:max-w-lg sm:w-full sm:p-6">
+                <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
+                    <button onClick={() => {props.onCancel()}} type="button" className="text-gray-400 transition duration-150 ease-in-out hover:text-gray-500 focus:outline-none focus:text-gray-500">
+                        <svg className="w-6 h-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <div className="sm:flex sm:items-start">
                 
-                    <div className="fixed inset-0 transition-opacity">
-                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                <div className="w-full mt-3 text-center sm:mt-0 sm:text-left">
+                    <h3 className="text-lg font-medium leading-6 text-gray-900">
+                    Members
+                    </h3>
+                    <div className={`${membersLoading ? 'spinner' : ''}`}>
+                    { renderTableHeader() }
+                    { rendeMembers() }
                     </div>
 
-                    <Transition
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                        enterTo="opacity-100 translate-y-0 sm:scale-100"
-                        leave="ease-in duration-300"
-                        leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                        leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    >
-                        <div className="relative px-4 pt-5 pb-4 overflow-hidden transition-all transform bg-white rounded-lg shadow-xl w-72 sm:max-w-lg sm:w-full sm:p-6">
-                            <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
-                                <button onClick={() => {props.onCancel()}} type="button" className="text-gray-400 transition duration-150 ease-in-out hover:text-gray-500 focus:outline-none focus:text-gray-500">
-                                    <svg className="w-6 h-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div className="sm:flex sm:items-start">
-                            
-                            <div className="w-full mt-3 text-center sm:mt-0 sm:text-left">
-                                <h3 className="text-lg font-medium leading-6 text-gray-900">
-                                Members
-                                </h3>
-                                <div className={`${membersLoading ? 'spinner' : ''}`}>
-                                { renderTableHeader() }
-                                { rendeMembers() }
-                                </div>
-
-                                
-                                <div className="mt-2">
-                                    <InviteeSection key={inviteSectionKey} onInviteesChange={(curr) => {setCurrentInvitees(curr)}}></InviteeSection>
-                               
-                                </div>
-                            </div>
-                            </div>
-                            <div className="mt-3 sm:flex sm:flex-row-reverse">
-                                <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                                    { renderSendInvitesButton() }
-                                </span>
-                            </div>
-                        </div>
-                    </Transition>
-                </Transition>    
+                    
+                    <div className="mt-2">
+                        <InviteeSection key={inviteSectionKey} onInviteesChange={(curr) => {setCurrentInvitees(curr)}}></InviteeSection>
+                    
+                    </div>
+                </div>
+                </div>
+                <div className="mt-3 sm:flex sm:flex-row-reverse">
+                    <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                        { renderSendInvitesButton() }
+                    </span>
+                </div>
             </div>
-        </Transition>
+        </Modal>
     )
 }
 

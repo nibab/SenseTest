@@ -6,12 +6,13 @@ import { DataLayerClient } from '../../clients/DataLayerClient'
 import { addPost } from '../../store/post/actions'
 import uuid, { v4 as uuidv4 } from "uuid"
 import CreatePostViewSimulator from '../../components/Simulator/CreatePostViewSimulator'
-import NewPostForm from '../../components/NewPostForm'
+import NewPostForm from '../../components/NewPostModal'
 import { Post, postTagToGraphQLType, AppBuild } from '../../types'
 import { AssetStorageClient } from '../../clients/AssetStorageClient'
 import Log from '../../utils/Log'
 import { AppBuildClient } from '../../clients/AppBuildClient'
 import { AnalyticsClient } from '../../utils/PRAnalytics'
+import NewPostModal from '../../components/NewPostModal'
 
 type Mode = 'CREATE_ISSUE' | 'BROWSE'
 
@@ -182,9 +183,10 @@ const CreatePostView = (props: CreatePostViewProps) => {
     }
     
     const renderCreateIssue = () => {
-        if (currentMode === 'CREATE_ISSUE' && imageToAnnotate !== undefined && currentAppBuild !== undefined) {
+        if (imageToAnnotate !== undefined && currentAppBuild !== undefined) {
             return (
-                <NewPostForm 
+                <NewPostModal
+                    show={currentMode === 'CREATE_ISSUE'}
                     postId={uuid()}
                     projectId={projectId}
                     imageToAnnotate={imageToAnnotate} 
