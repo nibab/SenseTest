@@ -14,10 +14,12 @@ import { DataLayerClient } from '../../clients/DataLayerClient'
 import VersionTag from '../VersionTag'
 import { addsubComment } from '../../store/subcomment/actions'
 import Container from '../Container'
+import { DeviceType } from '../../types'
 
 
 type PostScreenshotProps = {
 	post: Post
+	deviceType?: DeviceType
 }
 
 const PostScreenshot = (props: PostScreenshotProps) => {
@@ -119,7 +121,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 			} else {
 				return (
 					<AnnotationScreen 
-						deviceType={props.post.deviceType}
+						deviceType={props.deviceType!}
 						annotations={getAnnotations()} 
 						onSubmit={onSubmitAnnotation} 
 						key={post.id} 
