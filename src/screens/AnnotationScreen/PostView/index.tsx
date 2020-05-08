@@ -10,6 +10,8 @@ import { addPost } from '../../../store/post/actions'
 import { DataLayerClient } from '../../../clients/DataLayerClient'
 import ResolvePostModal from './ResolvePostModal'
 import Transition from '../../../utils/Transition'
+import { AnalyticsClient } from '../../../utils/PRAnalytics'
+import { useSelector } from '../../../store'
 
 type PostViewProps = {
 	post: Post
@@ -24,6 +26,7 @@ const PostView = (props: PostViewProps) => {
 	const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
 	const [postStatusButtonLoading, setPostStatusButtonLoading] = useState<boolean>(false)
 	const [displayResolvePostModal, setDisplayResolvePostModal] = useState(false)
+	const authState = useSelector(state => state.auth)
 	const dispatch = useDispatch()
 
     useEffect(() => {
@@ -93,6 +96,9 @@ const PostView = (props: PostViewProps) => {
 			} else {
 				setDisplayState(state)
 			}
+			if (state === 'Simulator') {
+				AnalyticsClient.record('OPENED_SIMULATOR_ON_ISSUE_PAGE', authState)
+			}
 		}
 
 		return (
@@ -123,6 +129,7 @@ const PostView = (props: PostViewProps) => {
 		DataLayerClient.updatePostStatus(props.post, 'RESOLVED').then(() => {
 			dispatch(addPost({...props.post, status: 'RESOLVED'}))
 			setPostStatusButtonLoading(false)
+			AnalyticsClient.record('RESOLVED_ISSUE', authState)
 		})
 	}
 

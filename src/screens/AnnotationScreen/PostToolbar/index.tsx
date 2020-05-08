@@ -3,6 +3,8 @@ import { Post, Project } from '../../../types'
 import { useHistory } from 'react-router-dom'
 import ManageMembersModal from '../../../components/ManageMembersModal'
 import NewRevisionModal from '../../../components/NewRevisionModal'
+import { AnalyticsClient } from '../../../utils/PRAnalytics'
+import { useSelector } from '../../../store'
 
 type PostToolbarProps = {
 	currentPost: Post | undefined
@@ -15,6 +17,7 @@ type PostToolbarProps = {
 export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPost, posts, project}: PostToolbarProps) => {
 	const [displayManageMembers, setDisplayManageMembers] = useState(false)
 	const [displayRevisionModal, setDisplayRevisionModal] = useState(false)
+	const authState = useSelector(state => state.auth)
 
 	const history = useHistory()
 
@@ -102,7 +105,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 					<div className='w-full pt-1 '>
 						<ManageMembersModal project={project} show={displayManageMembers} onCancel={()=>{setDisplayManageMembers(false)}} onResolve={() => {}} />
 
-						<div onClick={() => {setDisplayManageMembers(true) }} className='inline-flex items-center w-full px-5 py-1 my-auto text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'>
+						<div onClick={() => {setDisplayManageMembers(true); AnalyticsClient.record('OPENED_MEMBERS_MODAL', authState) }} className='inline-flex items-center w-full px-5 py-1 my-auto text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50'>
 							
 							<div className='inline-flex mx-auto '>
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-2 w-7 icon-user-group"><path className="primary" d="M12 13a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1 1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3zM7 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm10 0a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/><path className="secondary" d="M12 13a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm-3 1h6a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-3a3 3 0 0 1 3-3z"/></svg>
@@ -187,7 +190,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 		const className = currentPost !== undefined && post.id === currentPost.id ? selectedClassName : notSelectedClassName
 
 		return (
-			<div key={post.id} onClick={() => {setDisplayCreateNewPost(false); setCurrentPost(post);}} className={className}>
+			<div key={post.id} onClick={() => {setDisplayCreateNewPost(false); setCurrentPost(post); AnalyticsClient.record('VIEW_ISSUE', authState)}} className={className}>
 				{/* <span className="top-0 left-0 flex items-center justify-center flex-shrink-0 block w-6 h-4 my-auto mr-1 text-xs font-bold text-white bg-red-400 rounded-full">12</span> */}
 				<div className='w-full my-auto text-sm truncate '>
 					{ post.title }							

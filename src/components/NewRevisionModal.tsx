@@ -11,6 +11,8 @@ import moment from 'moment'
 import DropZone from './DropZone'
 import { AppBuildClient } from '../clients/AppBuildClient'
 import { AssetStorageClient } from '../clients/AssetStorageClient'
+import { AnalyticsClient } from '../utils/PRAnalytics'
+import { useSelector } from '../store'
 
 const AppBuildTable: React.StatelessComponent<{}> = ({children}) => {
     return (
@@ -62,6 +64,8 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
     const [revisions, setRevisions] = useState<AppBuild[]>([])
 
     const [newAppBuildId, setNewAppBuildId] = useState<string>()
+
+    const authState = useSelector(state => state.auth)
 
     useEffect(() => {
         setAppBuildsLoading(true)
@@ -155,7 +159,7 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
          
     }
 
-    const renderSendInvitesButton = () => {
+    const renderConfirmBuildUpload = () => {
         const className = "inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5"
         const inactiveButtonClass = "inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white border border-transparent bg-indigo-300 rounded-md shadow-sm cursor-not-allowed sm:text-sm sm:leading-5"
         const loadingClassName = className + " spinner "
@@ -177,6 +181,7 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
                 setConfirmButtonLoading(false)
                 if (versionRef.current === undefined || versionRef.current === null) return
                 versionRef.current.value = ''
+                AnalyticsClient.record('UPLOAD_NEW_REVISION', authState)
             }).catch(() => {
                 setConfirmButtonLoading(false)
             })
@@ -269,7 +274,7 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
                             </div>
                             <div className="mt-3 sm:flex sm:flex-row-reverse">
                                 <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                                    { renderSendInvitesButton() }
+                                    { renderConfirmBuildUpload() }
                                 </span>
                             </div>
                         </div>

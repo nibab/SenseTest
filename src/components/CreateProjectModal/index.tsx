@@ -8,6 +8,8 @@ import { AppBuildClient } from '../../clients/AppBuildClient'
 import { UsersClient } from '../../clients/UsersClient'
 import InviteeSection, { CurrentInvitee } from '../InviteeSection'
 import DropZone from '../DropZone'
+import { AnalyticsClient } from '../../utils/PRAnalytics'
+import { useSelector } from '../../store'
 
 type CreateProjectModalProps = {
     onCancel: () => void
@@ -35,6 +37,7 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
     
     const [projectId, setProjectId] = useState<string>()
     const [bundleId, setBundleId] = useState<string>()
+    const authState = useSelector(state => state.auth)
 
     useEffect(() => {
         setProjectId(uuid())
@@ -80,10 +83,12 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
                 currentInvitees.forEach(async (invitee) => {
                     const response = UsersClient.createAndInviteUser({userEmail: invitee.email, projectId: projectId!})
                     arrayOfPromises.push(response)
+                    AnalyticsClient.record('INVITED_USER', authState)
                 })
                 Promise.all(arrayOfPromises).then(() => {
                     setConfirmButtonLoading(false)
                     props.onSubmit(projectId!)
+                    AnalyticsClient.record('CREATED_PROJECT', authState)
                     Log.info("Created new project.")
                 }).catch(() => {
                     setConfirmButtonLoading(false)

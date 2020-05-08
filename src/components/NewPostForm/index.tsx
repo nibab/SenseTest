@@ -118,13 +118,13 @@ const NewPostForm = (props: NewPostFormProps) => {
 					<div>
 						<div>
 						<h3 className="flex text-lg font-medium leading-6 text-gray-900">
-							<div className=''>
+							<div className='mr-2'>
 								New Issue
 							</div>
 							<VersionTag version={props.appBuild.version} />
 						</h3>
 						</div>
-						<div className="grid grid-cols-1 row-gap-6 col-gap-4 mt-6 sm:grid-cols-6">
+						<div className="grid grid-cols-1 row-gap-6 col-gap-4 mt-3 sm:grid-cols-6">
 							{renderPageNameInput()}
 				
 							<div className="sm:col-span-6">

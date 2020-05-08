@@ -6,6 +6,8 @@ import { DataLayerClient } from '../clients/DataLayerClient'
 import { UsersClient } from '../clients/UsersClient'
 import uuid from 'uuid'
 import Log from '../utils/Log'
+import { AnalyticsClient } from '../utils/PRAnalytics'
+import { useSelector } from '../store'
 
 type ManageMembersModalProps = {
     onCancel: () => void
@@ -36,7 +38,6 @@ const ManageMembersModal = (props: ManageMembersModalProps) => {
             setMembers(project.members)
             setMembersLoading(false)
         })
-       
     }, [])
 
     useEffect(() => {

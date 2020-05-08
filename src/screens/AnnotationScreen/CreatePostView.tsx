@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { useSelector } from '../../store'
 import { PostStatus, DeviceType } from '../../API'
 import { DataLayerClient } from '../../clients/DataLayerClient'
 import { addPost } from '../../store/post/actions'
@@ -10,6 +11,7 @@ import { Post, postTagToGraphQLType, AppBuild } from '../../types'
 import { AssetStorageClient } from '../../clients/AssetStorageClient'
 import Log from '../../utils/Log'
 import { AppBuildClient } from '../../clients/AppBuildClient'
+import { AnalyticsClient } from '../../utils/PRAnalytics'
 
 type Mode = 'CREATE_ISSUE' | 'BROWSE'
 
@@ -21,6 +23,7 @@ const CreatePostView = (props: CreatePostViewProps) => {
     const [currentMode, setCurrentMode] = useState<Mode>('BROWSE')
     const [imageToAnnotate, setImageToAnnotate] = useState<Blob>()
     const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
+    const authState = useSelector(state => state.auth)
     
     const dispatch = useDispatch()
     // Hardcoded projectId
@@ -47,6 +50,8 @@ const CreatePostView = (props: CreatePostViewProps) => {
             appVersion: post.appVersion,
             deviceType: DeviceType.IPHONE_X      
         })
+
+        AnalyticsClient.record('CREATED_ISSUE', authState)
 
         post.comments?.forEach(async (comment) => {
             await DataLayerClient.createCommentForPost(newPost, comment)

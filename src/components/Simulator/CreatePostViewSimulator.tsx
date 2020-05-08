@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from 'react'
 import { AppBuild } from '../../types'
 import Log from '../../utils/Log'
 import VersionTag from '../VersionTag'
+import { useSelector } from '../../store'
+import { AnalyticsClient } from '../../utils/PRAnalytics'
 
 type CreatePostViewSimulatorProps = {
 	onScreenshot: (imgSrc: string) => void
@@ -12,6 +14,7 @@ const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
 	const iframeRef = useRef<HTMLIFrameElement>(null)
 	const [iframeLoaded, setIframeLoaded] = useState(false)
 	const [iframeActive, setIframeActive] = useState(false)
+	const authState = useSelector(state => state.auth)
 
 	useEffect(() => {
         window.addEventListener("message", receiveMessage, false);
@@ -28,11 +31,13 @@ const CreatePostViewSimulator = (props: CreatePostViewSimulatorProps) => {
         }
     }
 
-    const onScreenshotButtonClick = (event: any) => {        
+    const onScreenshotButtonClick = (event: any) => {    
+		AnalyticsClient.record('TOOK_SIMULATOR_SCREENSHOT', authState)    
         iframeRef.current?.contentWindow?.postMessage('getScreenshot', '*')
 	}
 	
 	const onPlayButtonClick = (event: any) => {
+		AnalyticsClient.record('STARTED_SIMULATOR_ON_CREATE_PAGE', authState)
 		iframeRef.current?.contentWindow?.postMessage('requestSession', '*')
 	}
 
