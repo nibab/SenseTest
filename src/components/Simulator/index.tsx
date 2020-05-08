@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { AppBuild, DeviceType } from '../../types'
+import { AppBuild, DeviceType, deviceTypeAppetize } from '../../types'
+import { getDeviceDimensions } from '../../deviceDimensions'
 import Log from '../../utils/Log'
 import VersionTag from '../VersionTag'
 import { useSelector } from '../../store'
@@ -130,12 +131,13 @@ const Simulator = (props: SimulatorProps) => {
 
 	const renderScreen = () => {
 		return (
-			<div className='flex-col flex-shrink-0 w-64 mx-auto ' style={{height: '583px', width: '281px'}}> 
+			<div className='flex-col flex-shrink-0 w-64 mx-auto bg-red-500' style={getDeviceDimensions(props.deviceType)}> 
 				
 				<div className='relative flex object-contain w-full h-full'>
-					{ !iframeActive ? renderLoadingScreen() : <></> }
+					{/* TEMPORARY */}
+					{ iframeActive ? renderLoadingScreen() : <></> }
 					
-					<iframe onLoad={() => iFrameLoaded()} ref={iframeRef} src={`https://appetize.io/embed/${props.appBuild.appetizeKey}?device=iphonex&scale=69&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true`} width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
+					<iframe onLoad={() => iFrameLoaded()} ref={iframeRef} src={`https://appetize.io/embed/${props.appBuild.appetizeKey}?device=${deviceTypeAppetize(props.deviceType)}&scale=69&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true`} width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
 				</div>							
 			</div>
 		)

@@ -119,6 +119,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 			} else {
 				return (
 					<AnnotationScreen 
+						deviceType={props.post.deviceType}
 						annotations={getAnnotations()} 
 						onSubmit={onSubmitAnnotation} 
 						key={post.id} 

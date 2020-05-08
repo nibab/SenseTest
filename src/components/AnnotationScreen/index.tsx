@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { Geometry, Annotation as AnnotationType } from '../../types'
+import { Geometry, Annotation as AnnotationType, DeviceType } from '../../types'
 import {
 	PointSelector
 } from 'react-image-annotation/lib/selectors'
 import Annotation from 'react-image-annotation'
 import uuid from 'uuid'
+import { getDeviceDimensions } from '../../deviceDimensions'
 
 type AnnotationScreenProps = {
     imageBlob: Blob
     annotations: AnnotationType[]
-    onSubmit: (annotation: AnnotationType) => void
+	onSubmit: (annotation: AnnotationType) => void
+	deviceType: DeviceType
 }
 
 type DotProps = {
@@ -93,7 +95,7 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 	}
 
 	return (
-		<div className='relative flex flex-shrink-0 object-contain w-full bg-gray-300 rounded-lg rounded-r-none' style={{height: '583px', width: '281px'}}>
+		<div className='relative flex flex-shrink-0 object-contain w-full bg-gray-300 rounded-lg rounded-r-none' style={getDeviceDimensions(props.deviceType)}>
 			<div className='absolute z-0 w-full h-full ' >
 				{/* <img className="object-contain w-full h-full" src='../../../../public/iphonexBlack.png'></img> */}
 			</div>	

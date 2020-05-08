@@ -7,13 +7,14 @@ import { addPost } from '../../store/post/actions'
 import uuid, { v4 as uuidv4 } from "uuid"
 import CreatePostViewSimulator from '../../components/Simulator'
 import NewPostForm from '../../components/NewPostModal'
-import { Post, postTagToGraphQLType, AppBuild, Project } from '../../types'
+import { Post, postTagToGraphQLType, AppBuild, Project, DeviceType as LocalDeviceType} from '../../types'
 import { AssetStorageClient } from '../../clients/AssetStorageClient'
 import Log from '../../utils/Log'
 import { AppBuildClient } from '../../clients/AppBuildClient'
 import { AnalyticsClient } from '../../utils/PRAnalytics'
 import NewPostModal from '../../components/NewPostModal'
 import Simulator from '../../components/Simulator'
+import PostScreenshot from '../../components/PostScreenshot'
 
 type Mode = 'CREATE_ISSUE' | 'BROWSE'
 
@@ -26,6 +27,7 @@ const CreatePostView = (props: CreatePostViewProps) => {
     const [imageToAnnotate, setImageToAnnotate] = useState<Blob>()
     const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
     const authState = useSelector(state => state.auth)
+    const deviceType: LocalDeviceType = 'IPHONE_8'
     
     const dispatch = useDispatch()
     // Hardcoded projectId
@@ -187,6 +189,7 @@ const CreatePostView = (props: CreatePostViewProps) => {
         if (imageToAnnotate !== undefined && currentAppBuild !== undefined) {
             return (
                 <NewPostModal
+                    deviceType={deviceType}
                     show={currentMode === 'CREATE_ISSUE'}
                     postId={uuid()}
                     projectId={projectId}
@@ -211,11 +214,13 @@ const CreatePostView = (props: CreatePostViewProps) => {
 					{/* RenderPostToolBar is contained because otherwise it stretches for the whole height. */}
 					
                     <div className='flex flex-row justify-center w-full pt-1 pb-1 pl-2 pr-2 mx-auto overflow-scroll'> 
-                        { currentAppBuild !== undefined && <Simulator deviceType={'IPHONE_X'} mode={'CREATE'} appBuild={currentAppBuild} onScreenshot={(img) => {
+                        { currentAppBuild !== undefined && <Simulator deviceType={deviceType} mode={'CREATE'} appBuild={currentAppBuild} onScreenshot={(img) => {
                             setImageToAnnotate(b64toBlob(img)); 
                             setTimeout(() => {setCurrentMode('CREATE_ISSUE')}, 100)
                         }}/> }
                         { renderCreateIssue() }
+                        <PostScreenshot post={props.project.posts[0]} />
+                        
                     </div>
 					{/* { renderAppetizeScreen() } 					
 					<AnnotationScreenshot src={imageToAnnotate} ref={canvasRef}/>  */}

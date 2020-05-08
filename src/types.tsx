@@ -4,8 +4,7 @@ import { DeviceType as DeviceTypeGraphQL} from './API'
 
 export type PostStatus = 'OPEN' | 'PENDING' | 'RESOLVED'
 export type PostTag = 'BLOCKER' | 'DESIGN'
-export type DeviceType = 'IPHONE_X' | 'IPHONE_11' | 'IPHONE_11_PLUS' | 'IPHONE_8' | 'IPHONE_XR'
-
+export type DeviceType = 'IPHONE_X' | 'IPHONE_11' | 'IPHONE_11_PLUS' | 'IPHONE_8' | 'IPHONE_XR' 
 export const postTagToGraphQLType = (postTag: PostTag): PostTagGraphQL => {
   switch(postTag) {
     case 'BLOCKER':
@@ -64,6 +63,21 @@ export const deviceTypePretty = (deviceType: DeviceType): string => {
       return 'iPhone 11 Plus'
     case 'IPHONE_8':
       return 'iPhone 8'
+    case 'IPHONE_XR':
+      return 'iPhone XR'
+  }
+}
+
+export const deviceTypeAppetize = (deviceType: DeviceType): string => {
+  switch(deviceType) {
+    case 'IPHONE_X':
+      return 'iphonex'
+    case 'IPHONE_11':
+      return 'iPhone 11'
+    case 'IPHONE_11_PLUS':
+      return 'iPhone 11 Plus'
+    case 'IPHONE_8':
+      return 'iphone8'
     case 'IPHONE_XR':
       return 'iPhone XR'
   }

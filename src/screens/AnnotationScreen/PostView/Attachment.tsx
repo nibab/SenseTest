@@ -1,7 +1,13 @@
 import React from 'react'
 import VersionTag from '../../../components/VersionTag'
+import { getDeviceDimensions } from '../../../deviceDimensions'
+import { DeviceType } from '../../../types'
 
-const Attachment = () => {
+type AttachmentProps = {
+	deviceType: DeviceType	
+}
+
+const Attachment = (props: AttachmentProps) => {
 	const renderTag = () => {
 		return (
 			<div className='flex w-full h-8 '>
@@ -30,7 +36,7 @@ const Attachment = () => {
 
 	const renderScreen = () => {
 		return (
-			<div className='flex-col flex-shrink-0 w-64 mb-3 ' style={{height: '583px', width: '281px'}}> 
+			<div className='flex-col flex-shrink-0 w-64 mb-3 ' style={getDeviceDimensions(props.deviceType)}> 
 				<div className='relative flex object-contain w-full h-full'>
 					<div className='absolute z-0 w-full h-full'>
 						<img className="object-contain w-full h-full" src='iphonexBlack.png'></img>

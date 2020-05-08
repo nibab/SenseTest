@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react'
 import uuid from 'uuid'
 import AnnotationScreen from '../AnnotationScreen'
 import { CommentsSection } from '../Comments'
-import { Comment as CommentType, Annotation, Post, PostTag, SubComment, AppBuild } from '../../types'
+import { Comment as CommentType, Annotation, Post, PostTag, SubComment, AppBuild, DeviceType } from '../../types'
 import { useDispatch } from 'react-redux'
 import { addComment } from '../../store/comment/actions'
 import VersionTag from '../VersionTag'
@@ -20,6 +20,7 @@ type NewPostModalProps = {
 	projectId: string
 	onCreatePostClicked: (imageId: string, post: Post) => void
 	onCancel: () => void
+	deviceType: DeviceType
 }
 
 type ValidationState = 'PageNameFailedValidation' | 'None'
@@ -273,6 +274,7 @@ const NewPostModal = (props: NewPostModalProps) => {
 								{renderButtons()}
 
 								<AnnotationScreen 
+									deviceType={props.deviceType}
 									annotations={annotations} 
 									onSubmit={onSubmitAnnotation} 
 									key={props.projectId} 
