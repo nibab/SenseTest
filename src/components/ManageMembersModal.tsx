@@ -175,7 +175,7 @@ const ManageMembersModal = (props: ManageMembersModalProps) => {
                         leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                         leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                        <div className="relative px-4 pt-5 pb-4 overflow-hidden transition-all transform bg-white rounded-lg shadow-xl sm:max-w-lg sm:w-full sm:p-6">
+                        <div className="relative px-4 pt-5 pb-4 overflow-hidden transition-all transform bg-white rounded-lg shadow-xl w-72 sm:max-w-lg sm:w-full sm:p-6">
                             <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
                                 <button onClick={() => {props.onCancel()}} type="button" className="text-gray-400 transition duration-150 ease-in-out hover:text-gray-500 focus:outline-none focus:text-gray-500">
                                     <svg className="w-6 h-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -185,7 +185,7 @@ const ManageMembersModal = (props: ManageMembersModalProps) => {
                             </div>
                             <div className="sm:flex sm:items-start">
                             
-                            <div className="mt-3 text-center w-96 sm:mt-0 sm:text-left">
+                            <div className="w-full mt-3 text-center sm:mt-0 sm:text-left">
                                 <h3 className="text-lg font-medium leading-6 text-gray-900">
                                 Members
                                 </h3>
