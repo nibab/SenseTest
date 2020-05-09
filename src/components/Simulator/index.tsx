@@ -441,7 +441,7 @@ const EmbeddedAnnotation = (props: EmbeddedAnnotationProps) => {
 		const renderForm = () => {
 			return (
 				
-				<div className="z-30 flex-shrink-0 h-full p-3 overflow-scroll w-72">
+				<div className="z-30 flex-shrink-0 h-full p-3 overflow-scroll w-96">
 					<form className='ml-1'>
 						<div>
 							<div>
@@ -469,60 +469,84 @@ const EmbeddedAnnotation = (props: EmbeddedAnnotationProps) => {
 		}
 
 		return (
-			<div className='relative'>
-				<Transition
-					show={props.show}
-					enter="ease-in duration-100"
-					enterFrom="opacity-0"
-					enterTo="opacity-100"
-					leave="ease-in duration-200"
-					leaveFrom=" w-64 opacity-100"
-					leaveTo="w-0 opacity-0"
-				>
-		
-					<div className='absolute z-30 w-full h-full bg-gray-300 '></div>
-				</Transition>
-				<div className='relative flex flex-row'>
-					<Transition
-						show={props.show && props.state === 'Submit'}
-						enter="ease-in duration-100"
-						enterFrom="opacity-0"
-						enterTo="opacity-100"
-						leave="ease-in duration-200"
-						leaveFrom="opacity-100 h-64"
-						leaveTo="opacity-0 h-0"
-					>
-						<div className="absolute w-96">
-							{ renderForm() }
+			<div className="relative bg-gray-300">
+				<Transition show={props.show && props.state === 'Annotate'}>
+					<div className='relative'>
+						<Transition
+							//show={props.show}
+							enter="ease-in duration-100"
+							enterFrom="opacity-0"
+							enterTo="opacity-100"
+							leave="ease-in duration-200"
+							
+						>
+				
+							<div className='absolute w-full h-full bg-gray-300 '></div>
+						</Transition>
+						<div className='relative flex flex-row'>
+							{/* <Transition
+								show={props.show && props.state === 'Submit'}
+								enter="ease-in duration-100"
+								enterFrom="opacity-0"
+								enterTo="opacity-100"
+								leave="ease-in duration-200"
+								leaveFrom="opacity-100 h-64"
+								leaveTo="opacity-0 h-0"
+							>
+								<div className="absolute w-96">
+									{ renderForm() }
+								</div>
+								
+							</Transition> */}
+
+							<Transition
+								//show={props.show && props.state === 'Annotate'}
+								enter="ease-in duration-100"
+								enterFrom="opacity-0"
+								enterTo="opacity-100"
+								leave="ease-in duration-200"
+								leaveFrom="opacity-100"
+								leaveTo="opacity-0"
+							>
+								{ renderScreen() }
+								
+							</Transition>
+
+							<Transition
+								//show={props.show && props.state=== 'Annotate'} 
+								enter="ease-in duration-100"
+								enterFrom="w-0 opacity-0"
+								enterTo=" w-64 opacity-100"
+								leave="ease-in duration-200"
+								leaveFrom=" w-64 opacity-100"
+								leaveTo="w-0 opacity-0"
+							>
+								{renderComments()}
+							</Transition>	
 						</div>
-						
-					</Transition>
-
-					<Transition
-						show={props.show && props.state === 'Annotate'}
-						enter="ease-in duration-100"
-						enterFrom="opacity-0"
-						enterTo="opacity-100"
-						leave="ease-in duration-200"
-						leaveFrom="opacity-100"
-						leaveTo="opacity-0"
-					>
-						{ renderScreen() }
-						
-					</Transition>
-
-					<Transition
-						show={props.show && props.state=== 'Annotate'} 
-						enter="ease-in duration-100"
-						enterFrom="w-0 opacity-0"
-						enterTo=" w-64 opacity-100"
-						leave="ease-in duration-200"
-						leaveFrom=" w-64 opacity-100"
-						leaveTo="w-0 opacity-0"
-					>
-						{renderComments()}
-					</Transition>	
-				</div>
+					</div>
+				</Transition>	
+			<div className=''>
+				<Transition show={props.show && props.state === 'Submit'}>
+					<div className='relative'>
+						<Transition
+							
+							enter="ease-in duration-100"
+							enterFrom="opacity-0"
+							enterTo="opacity-100 bg-green-100"
+							leave="ease-in duration-200"
+							leaveFrom="opacity-100 h-64"
+							leaveTo="opacity-0 h-0"
+						>
+							<div className="">
+								{ renderForm() }
+							</div>
+							
+						</Transition>
+					</div>
+				
+				</Transition>
+			</div>
 			</div>
 		)
 	}
