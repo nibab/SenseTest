@@ -219,7 +219,7 @@ const CreatePostView = (props: CreatePostViewProps) => {
                             setTimeout(() => {setCurrentMode('CREATE_ISSUE')}, 100)
                         }}/> }
                         { renderCreateIssue() }
-                        <PostScreenshot post={props.project.posts[0]} deviceType={deviceType}/>
+                        {/* <PostScreenshot post={props.project.posts[0]} deviceType={deviceType}/> */}
                         
                     </div>
 					{/* { renderAppetizeScreen() } 					

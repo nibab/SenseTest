@@ -1,11 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { AppBuild, DeviceType, deviceTypeAppetize, deviceTypePretty } from '../../types'
+import { AppBuild, DeviceType, deviceTypeAppetize, deviceTypePretty, Annotation } from '../../types'
+import { Comment as CommentType, Post, PostTag, SubComment } from '../../types'
+import { useDispatch } from 'react-redux'
+import { addComment } from '../../store/comment/actions'
+import { addsubComment } from '../../store/subcomment/actions'
+
 import { getDeviceDimensions } from '../../deviceDimensions'
 import Log from '../../utils/Log'
 import VersionTag from '../VersionTag'
 import { useSelector } from '../../store'
 import { AnalyticsClient } from '../../utils/PRAnalytics'
 import Container from '../Container'
+import AnnotationScreen from '../AnnotationScreen'
+import uuid from 'uuid'
+import { CommentsSection } from '../Comments'
 
 type SimulatorMode = 'VIEW' | 'CREATE'
 
@@ -18,28 +26,57 @@ type SimulatorProps = {
 }
 
 const Simulator = (props: SimulatorProps) => {
+	const [comments, setComments] = useState<CommentType[]>([])
 	const iframeRef = useRef<HTMLIFrameElement>(null)
 	const [iframeLoaded, setIframeLoaded] = useState(false)
 	const [iframeActive, setIframeActive] = useState(false)
 	const authState = useSelector(state => state.auth)
+	const [annotationInProgress, setAnnotationInProgress] = useState<boolean>(false)
+
+	const [imageToAnnotate, setImageToAnnotate] = useState<Blob>()
 
 	useEffect(() => {
         window.addEventListener("message", receiveMessage, false);
     })
 
     const receiveMessage = (event: any) => {
+
+
+
         if(event.data && event.data.type === 'screenshot' && props.onScreenshot){
 			Log.info("Received screenshot. " + event.data)
-			props.onScreenshot(event.data.data)
+			onScreenshotCreated(event.data.data)
+
+			//props.onScreenshot(event.data.data)
 		}
 		if(event.data === 'sessionRequested'){
 			Log.info("Received first frame. " + event.data)
 			setTimeout(() => setIframeActive(true), 100)
         }
-    }
+	}
+	
+	const onScreenshotCreated = (data: string) => {
+		function b64toBlob(dataURI: string): Blob {
+
+			var byteString = atob(dataURI.split(',')[1]);
+			var ab = new ArrayBuffer(byteString.length);
+			var ia = new Uint8Array(ab);
+		
+			for (var i = 0; i < byteString.length; i++) {
+				ia[i] = byteString.charCodeAt(i);
+			}
+			return new Blob([ab], { type: 'image/jpeg' });
+		}
+
+		
+		setImageToAnnotate(b64toBlob(data))
+		setNewPostIdForCreation(uuid())
+		setAnnotationInProgress(true)
+
+	}
 
     const onScreenshotButtonClick = (event: any) => {    
-		AnalyticsClient.record('TOOK_SIMULATOR_SCREENSHOT', authState)    
+		AnalyticsClient.record('TOOK_SIMULATOR_SCREENSHOT', authState)		
         iframeRef.current?.contentWindow?.postMessage('getScreenshot', '*')
 	}
 	
@@ -76,10 +113,10 @@ const Simulator = (props: SimulatorProps) => {
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto mr-1 icon-camera"><path className="primary" d="M6.59 6l2.7-2.7A1 1 0 0 1 10 3h4a1 1 0 0 1 .7.3L17.42 6H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h2.59zM19 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-7 8a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/><path className="secondary" d="M12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
 						Screenshot
 					</button>
-					<button disabled={!iframeActive}  className={buttonIFrameInActive}>
+					{/* <button disabled={!iframeActive}  className={buttonIFrameInActive}>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto mr-1 icon-videocam"><path className="secondary" d="M13.59 12l6.7-6.7A1 1 0 0 1 22 6v12a1 1 0 0 1-1.7.7L13.58 12z"/><rect width="14" height="14" x="2" y="5" className="primary" rx="2"/></svg>
 						Record
-					</button>
+					</button> */}
 				</>
 			)
 		}
@@ -153,9 +190,84 @@ const Simulator = (props: SimulatorProps) => {
 
 	}
 
+	const renderComments = () => {
+		const _addsubComment = (childComment: SubComment, parentComment: CommentType) => {
+			dispatch(addsubComment(parentComment, childComment))
+		}
+
+		if (comments.length > 0) {
+			return (
+				<div className='flex flex-col rounded-lg' >
+					{annotations.length === 0 && <div className='flex w-full h-8'>
+						<div className='mx-auto flex flex-row p-0.5'></div>
+					</div> }
+					<div className='relative flex flex-col w-auto py-2 pr-2 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: '583px'}}>
+						<CommentsSection comments={comments} addSubComent={_addsubComment} displayNewCommentBox={false} />
+					</div>
+				</div>
+			)
+		}		
+	}
+
+	const [annotations, setAnnotations] = useState<Annotation[]>([])
+	const [newPostIdForCreation, setNewPostIdForCreation] = useState<string>()
+	const dispatch = useDispatch()
+
+	const onSubmitAnnotation = (annotation: Annotation) => {
+		const commentsCopy = [...comments]
+		const newComment: CommentType = {
+			postId: newPostIdForCreation!,
+			authorAvatarSrc: 'newsScreenshot.png',
+			text: annotation.data.text !== null ? annotation.data.text : "",
+			id: uuid(),
+			date: (new Date()).toISOString(),
+			author: authState.authenticated ? authState.userName! : 'invalid',
+			annotation: annotation,
+			subcomments: []
+		}
+		commentsCopy.push(newComment)
+		setComments(commentsCopy)
+		dispatch(addComment(newComment))
+
+		const annotationsCopy = [...annotations]
+		annotationsCopy.push(annotation)
+		setAnnotations(annotationsCopy)
+	}
+
+	const renderAnnotationScreen = () => {
+		return (
+			<AnnotationScreen 
+				deviceType={props.deviceType}
+				annotations={annotations} 
+				onSubmit={onSubmitAnnotation} 
+				//key={props.projectId} 
+				imageBlob={imageToAnnotate!} 
+			/>
+		)
+	}
+
+	const renderAnnotationInProgress = () => {
+		return (
+			<>
+			<div className='z-30'>
+				{ renderAnnotationScreen() }
+			</div>
+			
+			{ renderComments() }
+			</>
+		)
+	}
+
 	return (
 		<Container header={renderButtons()} tags={renderTag()}>
-			{ renderScreen() }
+			<div className='flex flex-row bg-gray-300 rounded-lg'>
+				<div className='z-30'>
+					{ !annotationInProgress && renderScreen() }
+				</div>
+				{ annotationInProgress &&  renderAnnotationInProgress()}
+				</div>
+
+			{/* { annotationInProgress &&  renderAnnotationInProgress()} */}
 		</Container>
 	)
 }
