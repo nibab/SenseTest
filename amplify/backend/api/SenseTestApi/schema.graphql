@@ -44,11 +44,15 @@ type Post @model(queries: {list: "listPosts"})
 }
 
 enum DeviceType {
-	IPHONE_X
-	IPHONE_11
-	IPHONE_11_PLUS
+	IPHONE_7
+	IPHONE_7_PLUS
 	IPHONE_8
-	IPHONE_XR
+	IPHONE_8_PLUS
+	IPHONE_X
+	IPHONE_XS
+	IPHONE_XS_MAX
+	IPHONE_11_PRO
+	IPHONE_11_PRO_MAX
 }
 
 enum PostStatus {

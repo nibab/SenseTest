@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { AppBuild, DeviceType, deviceTypeAppetize } from '../../types'
+import { AppBuild, DeviceType, deviceTypeAppetize, deviceTypePretty } from '../../types'
 import { getDeviceDimensions } from '../../deviceDimensions'
 import Log from '../../utils/Log'
 import VersionTag from '../VersionTag'
@@ -51,14 +51,17 @@ const Simulator = (props: SimulatorProps) => {
 
 	const renderTag = () => {
 		return (
-			<div className='flex w-full h-8 '>
-				<div className=' pb-1 mx-auto flex flex-row p-0.5'>
-					<span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-extrabold leading-5 bg-cool-gray-100  text-gray-800">
-						Simulator
-					</span>
+			<>
+				{/* <span className="inline-flex items-center text-sm px-2.5 py-0.5 rounded-md text-sm font-extrabold leading-5 bg-gray-200  text-gray-800">
+					Simulator	
+				</span> */}
+				<span className="inline-flex items-center text-sm px-2.5 py-0.5 rounded-md text-sm font-extrabold leading-5 bg-gray-900  text-gray-100">
+					{deviceTypePretty(props.deviceType)}
+				</span>
+				<div className='pl-2'> 
 					<VersionTag appBuild={props.appBuild} />
-				</div> 
-			</div>
+				</div>
+			</>
 		)
 	}
 
@@ -130,21 +133,28 @@ const Simulator = (props: SimulatorProps) => {
 
 
 	const renderScreen = () => {
+		const scale = getDeviceDimensions(props.deviceType).scale ? getDeviceDimensions(props.deviceType).scale : '69'
 		return (
-			<div className='flex-col flex-shrink-0 w-64 mx-auto bg-red-500' style={getDeviceDimensions(props.deviceType)}> 
+			<div className='flex-col flex-shrink-0 w-64 mx-auto' style={getDeviceDimensions(props.deviceType)}> 
 				
 				<div className='relative flex object-contain w-full h-full'>
-					{/* TEMPORARY */}
-					{ iframeActive ? renderLoadingScreen() : <></> }
+					{ !iframeActive ? renderLoadingScreen() : <></> }
 					
-					<iframe onLoad={() => iFrameLoaded()} ref={iframeRef} src={`https://appetize.io/embed/${props.appBuild.appetizeKey}?device=${deviceTypeAppetize(props.deviceType)}&scale=69&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true`} width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
+					<iframe 
+						onLoad={() => iFrameLoaded()} 
+						ref={iframeRef}
+						src={`https://appetize.io/embed/${props.appBuild.appetizeKey}?device=${deviceTypeAppetize(props.deviceType)}&scale=${scale}&autoplay=false&orientation=portrait&deviceColor=black&xdocMsg=true`} width="100%" height="100%" frameBorder="0" scrolling="no"></iframe>
 				</div>							
 			</div>
 		)
 	}
 
+	const renderTags = () => {
+
+	}
+
 	return (
-		<Container header={renderButtons()} tag={'Simulator'}>
+		<Container header={renderButtons()} tags={renderTag()}>
 			{ renderScreen() }
 		</Container>
 	)

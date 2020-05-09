@@ -4,13 +4,14 @@ import React, { useState, useEffect } from 'react'
 import Modal from './Modal'
 import AppBuildTable from './AppBuildTable'
 import AppBuilds from './AppBuilds'
-import { AppBuild, Project, DeviceType, deviceTypePretty } from '../types'
+import { AppBuild, Project, DeviceType as LocalDeviceType, deviceTypePretty, allDeviceTypes } from '../types'
 import { DataLayerClient } from '../clients/DataLayerClient'
+import { DeviceType } from '../API'
 
 type NewSimulatorModalProps = {
     show: boolean
     onCancel: () => void
-    onRun: (deviceType: DeviceType, appBuild: AppBuild) => void
+    onRun: (deviceType: LocalDeviceType, appBuild: AppBuild) => void
     project: Project
 }
 
@@ -50,8 +51,7 @@ const NewSimulatorModal = (props: NewSimulatorModalProps) => {
         )
     }
 
-    const devices: DeviceType[]  = ['IPHONE_X', 'IPHONE_11', 'IPHONE_11_PLUS', 'IPHONE_8', 'IPHONE_XR']
-    const [currentDeviceType, setCurrentDeviceType] = useState<DeviceType>('IPHONE_X')
+    const [currentDeviceType, setCurrentDeviceType] = useState<LocalDeviceType>('IPHONE_X')
 
     const renderDevices = () => {
         const common = "mt-1 bg-gray-100  transition ease-in-out duration-15 align-top whitespace-no-wrap inline-flex items-center mr-1 p-2.5 px-5 text-sm font-medium rounded "
@@ -59,7 +59,7 @@ const NewSimulatorModal = (props: NewSimulatorModalProps) => {
         const selectedClass = common + "text-indigo-700 border border-indigo-600"
 
         const items: JSX.Element[] = []
-        devices.forEach((deviceType) => {
+        allDeviceTypes.forEach((deviceType) => {
             if (currentDeviceType === deviceType) {
                 items.push(
                     <div className={selectedClass}>

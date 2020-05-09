@@ -95,18 +95,25 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 	}
 
 	return (
-		<div className='relative flex flex-shrink-0 object-contain w-full bg-gray-300 rounded-lg rounded-r-none' style={getDeviceDimensions(props.deviceType)}>
+		<div className='relative flex flex-shrink-0 w-full rounded-lg rounded-r-none' style={getDeviceDimensions(props.deviceType)}>
 			<div className='absolute z-0 w-full h-full ' >
 				{/* <img className="object-contain w-full h-full" src='../../../../public/iphonexBlack.png'></img> */}
 			</div>	
-			{/* <div className='z-10 mx-auto my-auto overflow-hidden' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
-				<img className='object-contain w-full h-full mx-auto' src={window.URL.createObjectURL(post.image)}></img>
-			</div> */}
-			<div className='z-30 mx-auto my-auto' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
-				<Annotation src={window.URL.createObjectURL(props.imageBlob)} annotations={annotations} renderSelector={renderSelector} renderHighlight={renderHighlight} onSubmit={onSubmit} onChange={onChange} type={PointSelector.TYPE} value={annotation}>
-					{/* <img className='object-contain w-full h-full mx-auto' src={window.URL.createObjectURL(post.image)}></img> */}
-				</Annotation>
-			</div>
+			
+			
+			<Annotation 
+				className="p-2 pr-3 mx-auto"
+				src={window.URL.createObjectURL(props.imageBlob)} 
+				annotations={annotations} 
+				enderSelector={renderSelector} 
+				renderHighlight={renderHighlight} 
+				onSubmit={onSubmit} 
+				onChange={onChange} 
+				type={PointSelector.TYPE} 
+				value={annotation}
+				style={getDeviceDimensions(props.deviceType)}	
+			/>
+			
 		</div>
 	)
 }

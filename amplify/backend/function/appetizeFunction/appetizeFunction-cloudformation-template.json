@@ -81,7 +81,7 @@
 				"Runtime": "nodejs12.x",
 				"Timeout": "25",
 				"Code": {
-					"S3Bucket": "amplify-prerelease-prod-181722-deployment",
+					"S3Bucket": "amplify-prerelease-staging-212510-deployment",
 					"S3Key": "amplify-builds/appetizeFunction-482b3768686d39665641-build.zip"
 				}
 			}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Post, Annotation, SubComment } from '../../types'
+import { Post, Annotation, SubComment, deviceTypePretty, Project } from '../../types'
 import { useSelector } from '../../store'
 import { Comment as CommentType } from '../../types'
 
@@ -15,6 +15,7 @@ import VersionTag from '../VersionTag'
 import { addsubComment } from '../../store/subcomment/actions'
 import Container from '../Container'
 import { DeviceType } from '../../types'
+import { getDeviceDimensions } from '../../deviceDimensions'
 
 
 type PostScreenshotProps = {
@@ -36,15 +37,19 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 	}, [props])
 
 	const renderTag = () => {
+		// const currentBuildArray = props.project.appBuilds.filter((appBuild) => 
+		// 	appBuild.version === post?.appVersion
+		// )
 		return (
-			<div className='flex w-full h-8 '>
-				<div className=' pb-1 mx-auto flex flex-row p-0.5'>
-					<span className="mr-1 inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-extrabold leading-5 bg-cool-gray-100 text-gray-800">
-						Screenshot
-					</span>
-					{/* <VersionTag version={props.post.} /> */}
-				</div> 
-			</div>
+			<>
+				<span className="inline-flex items-center text-sm px-2.5 py-0.5 rounded-md text-sm font-extrabold leading-5 bg-gray-900  text-gray-100">
+					{'Screenshot'}
+				</span>
+				<div className='pl-2'> 
+					{/* <VersionTag appBuild={props.post.appVersion} /> */}
+				</div>
+				{/* <VersionTag version={props.post.} /> */}
+			</>
 		)	
 	}
 
@@ -70,7 +75,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 			return (
 				<div className='flex flex-col w-full rounded-lg' >
 					
-					<div className='relative flex flex-col w-full pt-1 pr-2 -ml-1 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: '583px'}}>
+					<div className='relative flex flex-col w-full pt-1 pr-2 -ml-1 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: getDeviceDimensions(props.deviceType!).height}}>
 						{ post !== undefined ? <CommentsSection comments={Object.values(commentsSelector)} addSubComent={_addsubComment} displayNewCommentBox={false} /> : <></>}
 					</div>
 				</div>
@@ -113,7 +118,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 			const img = postsSelector.image
 			if (isPostImgDownload(img)) {
 				return (
-					<div className='relative flex flex-shrink-0 object-contain w-full bg-gray-300 rounded-lg rounded-r-none' style={{height: '583px', width: '281px'}}>
+					<div className='relative flex flex-shrink-0 object-contain w-full rounded-lg rounded-r-none' style={getDeviceDimensions(props.deviceType!)}>
 						<div className='z-30 mx-auto my-auto bg-white spinner' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
 						</div>
 					</div>
@@ -135,9 +140,12 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 	}
 
 	return (
-		<Container header={renderButtons()} tag={'Screenshot'}>
-			<div className='flex flex-row'>
-				{ renderAnnotationScreen() }
+		<Container header={renderButtons()} tags={renderTag()}>
+			<div className='flex flex-row bg-gray-300'>
+				<div className='z-30'>
+					{ renderAnnotationScreen() }
+				</div>
+				
 				{ renderComments() }
 			</div>
 		</Container>

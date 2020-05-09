@@ -27,7 +27,7 @@ const CreatePostView = (props: CreatePostViewProps) => {
     const [imageToAnnotate, setImageToAnnotate] = useState<Blob>()
     const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
     const authState = useSelector(state => state.auth)
-    const deviceType: LocalDeviceType = 'IPHONE_8'
+    const deviceType: LocalDeviceType = 'IPHONE_11_PRO_MAX'
     
     const dispatch = useDispatch()
     // Hardcoded projectId

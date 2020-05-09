@@ -10,6 +10,7 @@ import VersionTag from '../VersionTag'
 import { addsubComment } from '../../store/subcomment/actions'
 import { useSelector } from '../../store'
 import Modal from '../Modal'
+import { Container } from 'aws-amplify-react'
 
 type NewPostModalProps = {
 	show: boolean
@@ -247,19 +248,27 @@ const NewPostModal = (props: NewPostModalProps) => {
 	const renderButtons = () => {
 		if (annotations.length === 0) {
 			return (
-				<div className='flex w-full h-8'>
-					<div className='mx-auto flex flex-row p-0.5'>
-						<div className="inline-flex items-center px-5 mr-1 text-sm font-medium text-indigo-800 transition duration-150 ease-in-out bg-white border-gray-300 rounded hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50">
-							<div className='text-indigo-600'>
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-2 fill-current icon-click-target "><path className="" d="M21.97 12.73c-.25-.22-.56-.4-.92-.54L20 11.8a8 8 0 1 0-8.2 8.2l.4 1.06c.12.36.3.67.53.92a10 10 0 1 1 9.25-9.25zm-10.95 5.19a6 6 0 1 1 6.9-6.9l-2.39-.9a4 4 0 1 0-5.41 5.41l.9 2.39z"/><path className="secondary" d="M17.96 16.54l3.75 3.75a1 1 0 0 1-1.42 1.42l-3.75-3.75-.57 2.28a1 1 0 0 1-1.9.11l-3-8a1 1 0 0 1 1.28-1.29l8 3a1 1 0 0 1-.1 1.91l-2.3.57z"/></svg>
-							</div>
-							Click on image to annotate
-						</div>					
+				<div className="inline-flex items-center px-5 mr-1 text-sm font-medium text-gray-600 transition duration-150 ease-in-out border-gray-300 rounded hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50">
+					<div className='text-indigo-600'>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-2 fill-current icon-click-target "><path className="" d="M21.97 12.73c-.25-.22-.56-.4-.92-.54L20 11.8a8 8 0 1 0-8.2 8.2l.4 1.06c.12.36.3.67.53.92a10 10 0 1 1 9.25-9.25zm-10.95 5.19a6 6 0 1 1 6.9-6.9l-2.39-.9a4 4 0 1 0-5.41 5.41l.9 2.39z"/><path className="secondary" d="M17.96 16.54l3.75 3.75a1 1 0 0 1-1.42 1.42l-3.75-3.75-.57 2.28a1 1 0 0 1-1.9.11l-3-8a1 1 0 0 1 1.28-1.29l8 3a1 1 0 0 1-.1 1.91l-2.3.57z"/></svg>
 					</div>
+					Click on image to annotate
 				</div>
 			)
 		}
 		
+	}
+
+	const renderAnnotationScreen = () => {
+		return (
+			<AnnotationScreen 
+				deviceType={props.deviceType}
+				annotations={annotations} 
+				onSubmit={onSubmitAnnotation} 
+				key={props.projectId} 
+				imageBlob={props.imageToAnnotate} 
+			/>
+		)
 	}
 
 	return (
@@ -267,22 +276,17 @@ const NewPostModal = (props: NewPostModalProps) => {
             <div className="my-auto transition-all transform rounded-lg shadow-xl ">
 				<div className='flex flex-col mx-auto bg-white rounded-lg '>
 					{/* padding left is only 4 because form has a margin of 1 so that the field outline shadow shows properly */}
-					<div className='flex flex-row px-8 pt-8 '> 
+					<div className='flex flex-row px-8 pt-8 pb-3 '> 
 						{renderForm()}
-						<div className='flex flex-row my-auto border-dashed rounded-lg '>
-							<div className='relative flex flex-col flex-shrink-0 mb-3' >
-								{renderButtons()}
-
-								<AnnotationScreen 
-									deviceType={props.deviceType}
-									annotations={annotations} 
-									onSubmit={onSubmitAnnotation} 
-									key={props.projectId} 
-									imageBlob={props.imageToAnnotate} 
-								/>
+						<Container header={renderButtons()} tags={renderButtons()}>
+							<div className='flex flex-row bg-gray-300'>
+								<div className='z-30'>
+								{ renderAnnotationScreen() }
+								</div>
+								
+								{ renderComments() }
 							</div>
-							{ renderComments() }
-						</div>
+						</Container>
 					</div>
 					<div className="p-8 pt-5 pb-5 border-t border-gray-200">
 						<div className="flex justify-end">
