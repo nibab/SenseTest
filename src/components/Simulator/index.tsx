@@ -38,7 +38,29 @@ const Simulator = (props: SimulatorProps) => {
 
 	useEffect(() => {
         window.addEventListener("message", receiveMessage, false);
-    })
+	})
+	
+	function loadXHR(url: string): Promise<Blob> {
+
+        return new Promise(function(resolve, reject) {
+            try {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", url);
+                xhr.responseType = "blob";
+                xhr.onerror = function() {reject("Network error.")};
+                xhr.onload = function() {
+                    if (xhr.status === 200) {resolve(xhr.response)}
+                    else {reject("Loading error:" + xhr.statusText)}
+                };
+                xhr.send();
+            }
+            catch(err) {reject(err.message)}
+        });
+	}
+	
+	useEffect(() => {
+		loadXHR(process.env.PUBLIC_URL + '/iphonexBlack.png').then((blob) => {console.log('yo'); setImageToAnnotate(blob)})
+	}, [])
 
     const receiveMessage = (event: any) => {
 
@@ -307,7 +329,7 @@ const Simulator = (props: SimulatorProps) => {
 						{ renderScreen() }
 					</div>
 				</Transition>
-				<EmbeddedAnnotation show={annotationInProgress} deviceType={props.deviceType} state={embeddedAnnotationState} />
+				<EmbeddedAnnotation imageToAnnotate={imageToAnnotate!} show={annotationInProgress} deviceType={props.deviceType} state={embeddedAnnotationState} />
 			</div>
 
 			{/* { annotationInProgress &&  renderAnnotationInProgress()} */}
@@ -322,11 +344,14 @@ type EmbeddedAnnotationProps = {
 	show: boolean
 	deviceType: DeviceType
 	state: EmbeddedAnnotationState
+	imageToAnnotate: Blob
 }
 
 const EmbeddedAnnotation = (props: EmbeddedAnnotationProps) => {
 	const dispatch = useDispatch()
 	const [comments, setComments] = useState<CommentType[]>([])
+
+	const [annotations, setAnnotations] = useState<Annotation[]>([])
 
 	// Page name input
 	const pageNameRef = useRef<HTMLInputElement>(null)
@@ -334,6 +359,8 @@ const EmbeddedAnnotation = (props: EmbeddedAnnotationProps) => {
 	const reproStepsRef = useRef<HTMLTextAreaElement>(null)
 
 	const [validationState, setValidationState] = useState<ValidationState>('None')
+
+	const authState = useSelector(state => state.auth)
 
 	const [isBlocker, setIsBlocker] = useState(false)
 
@@ -371,6 +398,40 @@ const EmbeddedAnnotation = (props: EmbeddedAnnotationProps) => {
 			)
 		}
 	}
+
+	const onSubmitAnnotation = (annotation: Annotation) => {
+		const commentsCopy = [...comments]
+		const newComment: CommentType = {
+			postId: '1',
+			authorAvatarSrc: 'newsScreenshot.png',
+			text: annotation.data.text !== null ? annotation.data.text : "",
+			id: uuid(),
+			date: (new Date()).toISOString(),
+			author: authState.authenticated ? authState.userName! : 'invalid',
+			annotation: annotation,
+			subcomments: []
+		}
+		commentsCopy.push(newComment)
+		setComments(commentsCopy)
+		dispatch(addComment(newComment))
+
+		const annotationsCopy = [...annotations]
+		annotationsCopy.push(annotation)
+		setAnnotations(annotationsCopy)
+	}
+
+	const renderAnnotationScreen = () => {
+		return (
+			<AnnotationScreen 
+				deviceType={props.deviceType}
+				annotations={annotations} 
+				onSubmit={onSubmitAnnotation} 
+				key={'1'} 
+				imageBlob={props.imageToAnnotate} 
+			/>
+		)
+	}
+	
 
 	const renderAnnotate = () => {
 
@@ -501,7 +562,10 @@ const EmbeddedAnnotation = (props: EmbeddedAnnotationProps) => {
 								leaveFrom="opacity-100"
 								leaveTo="opacity-0"
 							>
-								{ renderScreen() }
+								<div style={{width: getDeviceDimensions(props.deviceType!).minWidth}}>
+								{ renderAnnotationScreen() }
+								</div>
+								
 								
 							</Transition>
 
