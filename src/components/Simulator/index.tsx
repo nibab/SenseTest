@@ -100,7 +100,14 @@ const Simulator = (props: SimulatorProps) => {
 					<VersionTag appBuild={props.appBuild} />
 				</div>
 				<span className="flex w-full mt-3 rounded-md shadow-sm sm:mt-0 sm:w-auto">
-						<button onClick={() => setAnnotationInProgress(!annotationInProgress)} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5">
+						<button onClick={() => {
+
+							
+								setAnnotationInProgress(!annotationInProgress); 
+
+
+							
+						}} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5">
 						toggle
 						</button>
 					</span>
@@ -139,13 +146,23 @@ const Simulator = (props: SimulatorProps) => {
 		}
 
 		return (
-			<div className='flex w-full p-2'>
-				<div className='flex mx-auto'>
-					{
-						props.mode === 'CREATE' ? renderCreateModeButtons() : renderViewModeButtons()
-					}					
+			<Transition
+				show={!annotationInProgress}
+				enter="ease-in duration-100"
+				enterFrom="opacity-0 h-0"
+				enterTo="opacity-100 h-full"
+				leave="ease-in duration-200"
+				leaveFrom="h-full opacity-100"
+				leaveTo="h-0 opacity-0"
+			>
+				<div className='flex w-full p-2'>
+					<div className='flex mx-auto'>
+						{
+							props.mode === 'CREATE' ? renderCreateModeButtons() : renderViewModeButtons()
+						}					
+					</div>
 				</div>
-			</div>
+			</Transition>
 		)
 	}
 
@@ -275,11 +292,11 @@ const Simulator = (props: SimulatorProps) => {
 	const [embeddedAnnotationState, setEmbeddedAnnotationState] = useState<EmbeddedAnnotationState>('Annotate')
 
 	return (
-		<Container header={annotationInProgress ? renderScreenshotButtons(): renderButtons() } tags={renderTag()}>
+		<Container header={ annotationInProgress? renderScreenshotButtons() : renderButtons() } tags={renderTag()}>
 			<div className='relative flex flex-row rounded-lg' style={getDeviceDimensions(props.deviceType)} >
 				<Transition
 					show={!annotationInProgress}
-					enter="ease-in duration-0"
+					enter="ease-in duration-200"
 					enterFrom="opacity-0"
 					enterTo="opacity-100"
 					leave="ease-in duration-100"
@@ -291,14 +308,14 @@ const Simulator = (props: SimulatorProps) => {
 					</div>
 				</Transition>
 				<EmbeddedAnnotation show={annotationInProgress} deviceType={props.deviceType} state={embeddedAnnotationState} />
-				</div>
+			</div>
 
 			{/* { annotationInProgress &&  renderAnnotationInProgress()} */}
 		</Container>
 	)
 }
 
-type EmbeddedAnnotationState = 'Annotate' | 'Submit'
+type EmbeddedAnnotationState = 'Annotate' | 'Submit' | 'None'
 type ValidationState = 'PageNameFailedValidation' | 'None'
 
 type EmbeddedAnnotationProps = {
@@ -319,6 +336,8 @@ const EmbeddedAnnotation = (props: EmbeddedAnnotationProps) => {
 	const [validationState, setValidationState] = useState<ValidationState>('None')
 
 	const [isBlocker, setIsBlocker] = useState(false)
+
+	useEffect(() => {debugger}, [props.state])
 
 	const renderComments = () => {
 		const _addsubComment = (childComment: SubComment, parentComment: CommentType) => {
@@ -469,38 +488,12 @@ const EmbeddedAnnotation = (props: EmbeddedAnnotationProps) => {
 		}
 
 		return (
-			<div className="relative bg-gray-300">
-				<Transition show={props.show && props.state === 'Annotate'}>
-					<div className='relative'>
-						<Transition
-							//show={props.show}
-							enter="ease-in duration-100"
-							enterFrom="opacity-0"
-							enterTo="opacity-100"
-							leave="ease-in duration-200"
-							
-						>
-				
-							<div className='absolute w-full h-full bg-gray-300 '></div>
-						</Transition>
+			
+			<div className='bg-gray-300 '>
+				<Transition show={ props.show && props.state === 'Annotate'}>
+					<div className='relative bg-gray-300'>
 						<div className='relative flex flex-row'>
-							{/* <Transition
-								show={props.show && props.state === 'Submit'}
-								enter="ease-in duration-100"
-								enterFrom="opacity-0"
-								enterTo="opacity-100"
-								leave="ease-in duration-200"
-								leaveFrom="opacity-100 h-64"
-								leaveTo="opacity-0 h-0"
-							>
-								<div className="absolute w-96">
-									{ renderForm() }
-								</div>
-								
-							</Transition> */}
-
 							<Transition
-								//show={props.show && props.state === 'Annotate'}
 								enter="ease-in duration-100"
 								enterFrom="opacity-0"
 								enterTo="opacity-100"
@@ -513,7 +506,6 @@ const EmbeddedAnnotation = (props: EmbeddedAnnotationProps) => {
 							</Transition>
 
 							<Transition
-								//show={props.show && props.state=== 'Annotate'} 
 								enter="ease-in duration-100"
 								enterFrom="w-0 opacity-0"
 								enterTo=" w-64 opacity-100"
@@ -525,28 +517,35 @@ const EmbeddedAnnotation = (props: EmbeddedAnnotationProps) => {
 							</Transition>	
 						</div>
 					</div>
-				</Transition>	
-			<div className=''>
-				<Transition show={props.show && props.state === 'Submit'}>
-					<div className='relative'>
-						<Transition
-							
-							enter="ease-in duration-100"
-							enterFrom="opacity-0"
-							enterTo="opacity-100 bg-green-100"
-							leave="ease-in duration-200"
-							leaveFrom="opacity-100 h-64"
-							leaveTo="opacity-0 h-0"
-						>
-							<div className="">
-								{ renderForm() }
-							</div>
-							
-						</Transition>
-					</div>
-				
 				</Transition>
-			</div>
+				<Transition 
+					show={  props.show && props.state === 'Submit' }
+					leave="ease-out duration-300"
+					leaveFrom="opacity-100"
+					leaveTo="opacity-0 w-0"
+				>
+					<div className='relative'>
+						<div className='relative z-50 flex flex-row'>
+							<Transition 
+								enter="ease-in duration-100"
+								enterFrom="opacity-0"
+								enterTo="opacity-100"
+								leave="ease-out duration-300"
+								leaveFrom="opacity-100"
+								leaveTo="opacity-0 w-0"
+							>
+								
+								{ renderForm() }
+							
+							</Transition>
+
+								
+						</div>
+
+
+					</div>
+				</Transition>	
+				
 			</div>
 		)
 	}
