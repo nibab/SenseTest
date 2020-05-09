@@ -31,7 +31,7 @@ export class DataLayerClient {
 					projectId: newPost.projectId,
 					text: newPost.text,
 					dateCreated: newPost.createdAt,
-					appVersion: newPost.appVersion,
+					appBuildId: newPost.appBuildId,
 					deviceType: deviceTypeGraphQLToLocalType(newPost.deviceType)
 				}
 				Log.info("Succeeded in creating post.", "AppetizeScreen")

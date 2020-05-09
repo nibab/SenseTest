@@ -219,7 +219,7 @@ const NewPostModal = (props: NewPostModalProps) => {
 			text: reproSteps ? reproSteps : '',
 			comments: comments,
 			tags: tagArray,
-			appVersion: props.appBuild.version,
+			appBuildId: props.appBuild.id,
 			deviceType: 'IPHONE_X'
 		})
 	}

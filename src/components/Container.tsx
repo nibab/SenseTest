@@ -13,13 +13,10 @@ const Container: React.StatelessComponent<ContainerProps> = ({tags, header, chil
                     { tags }
                 </div>
             </div>
-			<div className='pb-3 pl-3 pr-3 border-2 border-gray-400 border-dashed rounded-lg '>
+			<div className='p-3 border-2 border-gray-400 border-dashed rounded-lg '>
 				<div className='h-full'>
-                    <div className='flex w-full h-8 my-1'>
-                        <div className='mx-auto p-0.5 flex'>
-                            {header}
-                        </div>
-                    </div>  
+
+                    {header}
                     {children}
                 </div>
             </div>

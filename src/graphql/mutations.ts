@@ -19,7 +19,7 @@ export const createProject = /* GraphQL */ `
           text
           deviceType
           osVersion
-          appVersion
+          appBuildId
           createdAt
           updatedAt
           status
@@ -126,7 +126,7 @@ export const createProjectUserEdge = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -266,7 +266,7 @@ export const createPost = /* GraphQL */ `
       text
       deviceType
       osVersion
-      appVersion
+      appBuildId
       createdAt
       updatedAt
       status
@@ -299,7 +299,7 @@ export const createPost = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -342,7 +342,7 @@ export const updatePost = /* GraphQL */ `
       text
       deviceType
       osVersion
-      appVersion
+      appBuildId
       createdAt
       updatedAt
       status
@@ -375,7 +375,7 @@ export const updatePost = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -418,7 +418,7 @@ export const deletePost = /* GraphQL */ `
       text
       deviceType
       osVersion
-      appVersion
+      appBuildId
       createdAt
       updatedAt
       status
@@ -451,7 +451,7 @@ export const deletePost = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -512,7 +512,7 @@ export const createComment = /* GraphQL */ `
         text
         deviceType
         osVersion
-        appVersion
+        appBuildId
         createdAt
         updatedAt
         status
@@ -532,7 +532,7 @@ export const createComment = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -568,7 +568,7 @@ export const createComment = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -622,7 +622,7 @@ export const updateComment = /* GraphQL */ `
         text
         deviceType
         osVersion
-        appVersion
+        appBuildId
         createdAt
         updatedAt
         status
@@ -642,7 +642,7 @@ export const updateComment = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -678,7 +678,7 @@ export const updateComment = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -732,7 +732,7 @@ export const deleteComment = /* GraphQL */ `
         text
         deviceType
         osVersion
-        appVersion
+        appBuildId
         createdAt
         updatedAt
         status
@@ -752,7 +752,7 @@ export const deleteComment = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -788,7 +788,7 @@ export const deleteComment = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -848,7 +848,7 @@ export const createSubComment = /* GraphQL */ `
           text
           deviceType
           osVersion
-          appVersion
+          appBuildId
           createdAt
           updatedAt
           status
@@ -931,7 +931,7 @@ export const updateSubComment = /* GraphQL */ `
           text
           deviceType
           osVersion
-          appVersion
+          appBuildId
           createdAt
           updatedAt
           status
@@ -1014,7 +1014,7 @@ export const deleteSubComment = /* GraphQL */ `
           text
           deviceType
           osVersion
-          appVersion
+          appBuildId
           createdAt
           updatedAt
           status
@@ -1079,7 +1079,7 @@ export const deleteAppBuild = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -1165,7 +1165,7 @@ export const updateProjectUserEdge = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -1354,7 +1354,7 @@ export const createAppBuild = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -1440,7 +1440,7 @@ export const updateAppBuild = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status

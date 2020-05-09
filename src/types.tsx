@@ -143,7 +143,7 @@ export type Post = {
   tags?: PostTag[]
   status?: PostStatus // this indicates whether the issue has been resolved or is still pending
   attachments?: string[] // A list of assetIds or Blobs.
-  appVersion: string,
+  appBuildId: string,
   deviceType: DeviceType
 }
 

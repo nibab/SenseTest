@@ -52,7 +52,7 @@ export const onCreatePost = /* GraphQL */ `
       text
       deviceType
       osVersion
-      appVersion
+      appBuildId
       createdAt
       updatedAt
       status
@@ -85,7 +85,7 @@ export const onCreatePost = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -125,7 +125,7 @@ export const onUpdatePost = /* GraphQL */ `
       text
       deviceType
       osVersion
-      appVersion
+      appBuildId
       createdAt
       updatedAt
       status
@@ -158,7 +158,7 @@ export const onUpdatePost = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -198,7 +198,7 @@ export const onDeletePost = /* GraphQL */ `
       text
       deviceType
       osVersion
-      appVersion
+      appBuildId
       createdAt
       updatedAt
       status
@@ -231,7 +231,7 @@ export const onDeletePost = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -289,7 +289,7 @@ export const onCreateComment = /* GraphQL */ `
         text
         deviceType
         osVersion
-        appVersion
+        appBuildId
         createdAt
         updatedAt
         status
@@ -309,7 +309,7 @@ export const onCreateComment = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -345,7 +345,7 @@ export const onCreateComment = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -396,7 +396,7 @@ export const onUpdateComment = /* GraphQL */ `
         text
         deviceType
         osVersion
-        appVersion
+        appBuildId
         createdAt
         updatedAt
         status
@@ -416,7 +416,7 @@ export const onUpdateComment = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -452,7 +452,7 @@ export const onUpdateComment = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -503,7 +503,7 @@ export const onDeleteComment = /* GraphQL */ `
         text
         deviceType
         osVersion
-        appVersion
+        appBuildId
         createdAt
         updatedAt
         status
@@ -523,7 +523,7 @@ export const onDeleteComment = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -559,7 +559,7 @@ export const onDeleteComment = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -616,7 +616,7 @@ export const onCreateSubComment = /* GraphQL */ `
           text
           deviceType
           osVersion
-          appVersion
+          appBuildId
           createdAt
           updatedAt
           status
@@ -696,7 +696,7 @@ export const onUpdateSubComment = /* GraphQL */ `
           text
           deviceType
           osVersion
-          appVersion
+          appBuildId
           createdAt
           updatedAt
           status
@@ -776,7 +776,7 @@ export const onDeleteSubComment = /* GraphQL */ `
           text
           deviceType
           osVersion
-          appVersion
+          appBuildId
           createdAt
           updatedAt
           status
@@ -838,7 +838,7 @@ export const onDeleteAppBuild = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -921,7 +921,7 @@ export const onUpdateProjectUserEdge = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -1101,7 +1101,7 @@ export const onCreateAppBuild = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -1184,7 +1184,7 @@ export const onUpdateAppBuild = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status

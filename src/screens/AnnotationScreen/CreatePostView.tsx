@@ -51,7 +51,7 @@ const CreatePostView = (props: CreatePostViewProps) => {
             text: post.text.length === 0 ? 'none provided' : post.text,
             status: PostStatus.OPEN,
             tags: post.tags === undefined ? [] : post.tags.map(postTag => postTagToGraphQLType(postTag)),
-            appVersion: post.appVersion,
+            appBuildId: post.appBuildId,
             deviceType: DeviceType.IPHONE_X      
         })
 

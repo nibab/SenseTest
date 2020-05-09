@@ -86,7 +86,7 @@ export const AnnotationScreen = ({ }) => {
                     if (post !== null) {
                         const postImgDownload = new PostImgDownload(post.imageId, (blob) => {})
                         
-                        const newPost = {
+                        const newPost: Post = {
                             id: post.id,
                             image: postImgDownload,
                             projectId: post.projectId,
@@ -94,7 +94,7 @@ export const AnnotationScreen = ({ }) => {
                             title: post.title,
                             dateCreated: post.createdAt,
                             tags: post.tags.filter((tag) => tag !== null).map((tag) => postTagGraphQLToLocalType(tag!) ),
-                            appVersion: post.appVersion,
+                            appBuildId: post.appBuildId,
                             status: post.status,
                             deviceType: deviceTypeGraphQLToLocalType(post.deviceType)
                         }

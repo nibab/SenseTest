@@ -37,7 +37,7 @@ export class TypeConverter {
             if (post !== null) {
                 const postImgDownload = new PostImgDownload(post.imageId, () => {})
                 
-                const newPost = {
+                const newPost: Post = {
                     id: post.id,
                     image: postImgDownload,
                     projectId: post.projectId,
@@ -45,7 +45,7 @@ export class TypeConverter {
                     title: post.title,
                     dateCreated: post.createdAt,
                     tags: post.tags.filter((tag) => tag !== null).map((tag) => postTagGraphQLToLocalType(tag!) ),
-                    appVersion: post.appVersion,
+                    appBuildId: post.appBuildId,
                     deviceType: deviceTypeGraphQLToLocalType(post.deviceType)
                 }
 

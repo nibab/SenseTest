@@ -12,7 +12,7 @@ export const getPost = /* GraphQL */ `
       text
       deviceType
       osVersion
-      appVersion
+      appBuildId
       createdAt
       updatedAt
       status
@@ -45,7 +45,7 @@ export const getPost = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -89,7 +89,7 @@ export const getProject = /* GraphQL */ `
           text
           deviceType
           osVersion
-          appVersion
+          appBuildId
           createdAt
           updatedAt
           status
@@ -196,7 +196,7 @@ export const listProjects = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -347,7 +347,7 @@ export const listPosts = /* GraphQL */ `
         text
         deviceType
         osVersion
-        appVersion
+        appBuildId
         createdAt
         updatedAt
         status
@@ -367,7 +367,7 @@ export const listPosts = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -415,7 +415,7 @@ export const getComment = /* GraphQL */ `
         text
         deviceType
         osVersion
-        appVersion
+        appBuildId
         createdAt
         updatedAt
         status
@@ -435,7 +435,7 @@ export const getComment = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -471,7 +471,7 @@ export const getComment = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -527,7 +527,7 @@ export const listComments = /* GraphQL */ `
           text
           deviceType
           osVersion
-          appVersion
+          appBuildId
           createdAt
           updatedAt
           status
@@ -606,7 +606,7 @@ export const getSubComment = /* GraphQL */ `
           text
           deviceType
           osVersion
-          appVersion
+          appBuildId
           createdAt
           updatedAt
           status
@@ -691,7 +691,7 @@ export const listSubComments = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -739,7 +739,7 @@ export const getAppBuild = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
@@ -827,7 +827,7 @@ export const listAppBuilds = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -897,7 +897,7 @@ export const projectPostsByTime = /* GraphQL */ `
         text
         deviceType
         osVersion
-        appVersion
+        appBuildId
         createdAt
         updatedAt
         status
@@ -917,7 +917,7 @@ export const projectPostsByTime = /* GraphQL */ `
               text
               deviceType
               osVersion
-              appVersion
+              appBuildId
               createdAt
               updatedAt
               status
@@ -986,7 +986,7 @@ export const subCommentByTime = /* GraphQL */ `
             text
             deviceType
             osVersion
-            appVersion
+            appBuildId
             createdAt
             updatedAt
             status
