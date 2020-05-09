@@ -34,7 +34,7 @@ type Post @model(queries: {list: "listPosts"})
   text: String!
   deviceType: DeviceType!
   osVersion: String
-  appVersion: String!
+  appBuildId: String!
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
   status: PostStatus!
