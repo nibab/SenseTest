@@ -251,7 +251,7 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 						No issues found !
 					</p>
 					<p className="mt-1 text-sm font-medium text-gray-700">
-						You can create a new issue by starting the aplication in the simulator and taking a screenshot.
+						You can create a new issue by starting the aplication in the simulator and annotating it.
 					</p>
 				</div>
 			</div>
