@@ -231,7 +231,7 @@ const CreatePostView = (props: CreatePostViewProps) => {
 					{/* RenderPostToolBar is contained because otherwise it stretches for the whole height. */}
 					
                     <div className='flex flex-row justify-center w-full pt-1 pb-1 pl-2 pr-2 mx-auto overflow-scroll'> 
-                        { simulatorParams !== undefined && <Simulator project={props.project} deviceType={simulatorParams.deviceType} mode={'CREATE'} appBuild={simulatorParams.appBuild} onScreenshot={(img) => {
+                        { simulatorParams !== undefined && <Simulator key={simulatorParams.deviceType} project={props.project} deviceType={simulatorParams.deviceType} mode={'CREATE'} appBuild={simulatorParams.appBuild} onScreenshot={(img) => {
                             setImageToAnnotate(b64toBlob(img)); 
                             setTimeout(() => {setCurrentMode('CREATE_ISSUE')}, 100)
                         }}/> }

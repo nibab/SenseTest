@@ -103,6 +103,7 @@ const Simulator = (props: SimulatorProps) => {
 		setComments([])
 		setAnnotations([])
 		setImagePromise(undefined)
+		setIsBlocker(false)
 	}
 
 	const onCreatePostClicked = async (imageId: string, post: Post) => {
@@ -126,6 +127,7 @@ const Simulator = (props: SimulatorProps) => {
             await DataLayerClient.createCommentForPost(newPost, comment)
 		})
 		
+		setAnnotationInProgress(false)
 		onCancel()
     }
 
