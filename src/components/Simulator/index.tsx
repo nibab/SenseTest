@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect, forwardRef, ReactNode } from 'react'
-import { AppBuild, DeviceType, deviceTypeAppetize, deviceTypePretty, Annotation, postTagToGraphQLType, Project } from '../../types'
+import { AppBuild, DeviceType, deviceTypeAppetize, deviceTypePretty, Annotation, postTagToGraphQLType, Project, deviceTypeToGraphQLType } from '../../types'
 import { Comment as CommentType, Post, PostTag, SubComment } from '../../types'
 import { useDispatch } from 'react-redux'
 import { addComment } from '../../store/comment/actions'
 import { addsubComment } from '../../store/subcomment/actions'
 import { getDeviceDimensions } from '../../deviceDimensions'
 import Log from '../../utils/Log'
-import VersionTag from '../VersionTag'
+import VersionTag, { DeviceTag } from '../VersionTag'
 import { useSelector } from '../../store'
 import { AnalyticsClient } from '../../utils/PRAnalytics'
 import Container from '../Container'
@@ -108,7 +108,7 @@ const Simulator = (props: SimulatorProps) => {
             status: PostStatus.OPEN,
             tags: post.tags === undefined ? [] : post.tags.map(postTag => postTagToGraphQLType(postTag)),
             appBuildId: post.appBuildId,
-            deviceType: DeviceTypeGraphQL.IPHONE_X      
+            deviceType: deviceTypeToGraphQLType(props.deviceType)      
         })
 
         AnalyticsClient.record('CREATED_ISSUE', authState)
@@ -133,21 +133,12 @@ const Simulator = (props: SimulatorProps) => {
 
 	const renderTag = () => {
 		return (
-			<>
-				{/* <span className="inline-flex items-center text-sm px-2.5 py-0.5 rounded-md text-sm font-extrabold leading-5 bg-gray-200  text-gray-800">
-					Simulator	
-				</span> */}
-				<span className="inline-flex items-center text-sm px-2.5 py-0.5 rounded-md text-sm font-extrabold leading-5 bg-gray-900  text-gray-100">
-					{deviceTypePretty(props.deviceType)}
-				</span>
+			<>				
+				<DeviceTag deviceType={props.deviceType}/>
 				<div className='pl-2'> 
 					<VersionTag appBuild={props.appBuild} />
 				</div>
-				<span className="flex w-full mt-3 rounded-md shadow-sm sm:mt-0 sm:w-auto">
-					<button onClick={() => {setAnnotationInProgress(!annotationInProgress)}} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5">
-					toggle
-					</button>
-				</span>	
+				
 			</>
 		)
 	}
@@ -208,7 +199,7 @@ const Simulator = (props: SimulatorProps) => {
 				comments: comments,
 				tags: tagArray,
 				appBuildId: props.appBuild.id,
-				deviceType: 'IPHONE_X'
+				deviceType: props.deviceType
 			})
 		}
 
@@ -422,8 +413,8 @@ const Simulator = (props: SimulatorProps) => {
 		
 		return (
 			<>
-				<div className='absolute z-0 w-full h-full bg-red-400'>
-					<img className="object-contain w-full h-full" src={process.env.PUBLIC_URL + '/iphonexBlack.png'}></img>
+				<div className='absolute z-0 w-full h-full '>
+					<img className="w-full h-full " src={process.env.PUBLIC_URL + '/iphonexBlack.png'}></img>
 				</div>
 				<div className='absolute z-10 flex w-full h-full'>
 					<div className='flex flex-col mx-auto my-auto '>

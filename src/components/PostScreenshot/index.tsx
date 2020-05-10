@@ -11,7 +11,7 @@ import { CommentsSection } from '../Comments'
 import AnnotationScreen from '../AnnotationScreen'
 import { PostImgDownload } from '../../utils/PostImgDownload'
 import { DataLayerClient } from '../../clients/DataLayerClient'
-import VersionTag from '../VersionTag'
+import VersionTag, {DeviceTag} from '../VersionTag'
 import { addsubComment } from '../../store/subcomment/actions'
 import Container from '../Container'
 import { DeviceType } from '../../types'
@@ -20,6 +20,7 @@ import { getDeviceDimensions } from '../../deviceDimensions'
 
 type PostScreenshotProps = {
 	post: Post
+	project: Project
 }
 
 const PostScreenshot = (props: PostScreenshotProps) => {
@@ -36,16 +37,20 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 	}, [props])
 
 	const renderTag = () => {
-		// const currentBuildArray = props.project.appBuilds.filter((appBuild) => 
-		// 	appBuild.version === post?.appVersion
-		// )
+		const currentBuildArray = props.project.appBuilds.filter((appBuild) => 
+			appBuild.id === post?.appBuildId
+		)
+		const appBuild = currentBuildArray[0]
 		return (
 			<>
-				<span className="inline-flex items-center text-sm px-2.5 py-0.5 rounded-md text-sm font-extrabold leading-5 bg-gray-900  text-gray-100">
-					{'Screenshot'}
-				</span>
+				{/* <div className='pr-2'>
+					<span className="inline-flex items-center text-xs px-2.5 rounded-md font-bold text-gray-800">
+						Screenshot	
+					</span>
+				</div> */}
+				<DeviceTag deviceType={props.post.deviceType} />
 				<div className='pl-2'> 
-					{/* <VersionTag appBuild={props.post.appVersion} /> */}
+					{appBuild && <VersionTag appBuild={appBuild} />}
 				</div>
 				{/* <VersionTag version={props.post.} /> */}
 			</>
@@ -54,7 +59,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 
 	const renderButtons = () => {
 		return (
-			<div className="inline-flex items-center px-5 mr-1 text-sm font-medium text-gray-600 transition duration-150 ease-in-out border-gray-300 rounded hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50">
+			<div className="inline-flex items-center px-5 mr-1 font-mono text-xs font-semibold text-gray-600 transition duration-150 ease-in-out border-gray-300 rounded hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50">
 				<div className='text-indigo-600'>
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-2 fill-current icon-click-target "><path className="" d="M21.97 12.73c-.25-.22-.56-.4-.92-.54L20 11.8a8 8 0 1 0-8.2 8.2l.4 1.06c.12.36.3.67.53.92a10 10 0 1 1 9.25-9.25zm-10.95 5.19a6 6 0 1 1 6.9-6.9l-2.39-.9a4 4 0 1 0-5.41 5.41l.9 2.39z"/><path className="secondary" d="M17.96 16.54l3.75 3.75a1 1 0 0 1-1.42 1.42l-3.75-3.75-.57 2.28a1 1 0 0 1-1.9.11l-3-8a1 1 0 0 1 1.28-1.29l8 3a1 1 0 0 1-.1 1.91l-2.3.57z"/></svg>
 				</div>

@@ -13,6 +13,7 @@ import { AnalyticsClient } from '../../../utils/PRAnalytics'
 import { useSelector } from '../../../store'
 import NewSimulatorModal from '../../../components/NewSimulatorModal'
 import Simulator from '../../../components/Simulator'
+import VersionTag, { DeviceTag } from '../../../components/VersionTag'
 
 type PostViewProps = {
 	post: Post
@@ -205,6 +206,11 @@ const PostView = (props: PostViewProps) => {
 			)
 		}
 
+		const currentBuildArray = props.project.appBuilds.filter((appBuild) => 
+			appBuild.id === props.post.appBuildId
+		)
+		const appBuild = currentBuildArray[0]
+
 		return (
 			<div className="p-1.5 mx-2 mt-1 border rounded-md bg-gray-100">
 				<div className="flex-shrink-0 block group focus:outline-none ">
@@ -221,9 +227,11 @@ const PostView = (props: PostViewProps) => {
 										{  props.post.dateCreated !== null ? moment(props.post.dateCreated).fromNow(): ''}
 									</p>
 									<div className='flex flex-row mt-1.5'>
-										<span className="my-auto font-bold mr-0.5 bg-cool-gray-200 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 text-gray-800">
-											{ deviceTypePretty(props.post.deviceType)}
-										</span>
+										<DeviceTag deviceType={props.post.deviceType} />
+										<div className='pl-2 pr-2'> 
+											{appBuild && <VersionTag appBuild={appBuild} />}
+										</div>
+										
 										{ renderTags() }
 									</div>
 									
@@ -276,7 +284,7 @@ const PostView = (props: PostViewProps) => {
 				{ displayState === 'Simulator'  && simulatorParams?.appBuild !== undefined ? <div className="ml-3"><Simulator project={props.project} deviceType={'IPHONE_X'} mode={'VIEW'} appBuild={simulatorParams?.appBuild}/></div> : <></> }
 					{ displayState === 'Attachment' ? <div className="ml-3"><Attachment deviceType={props.post.deviceType}/></div> : <></> }
 					<div className='ml-3'>
-						<PostScreenshot post={props.post} />
+						<PostScreenshot project={props.project} post={props.post} />
 					</div>
 				</div>
 			</div>

@@ -89,7 +89,7 @@ const NewSimulatorModal = (props: NewSimulatorModalProps) => {
 
     return (
         <Modal show={props.show}>
-            <div className="relative px-4 pt-5 pb-4 my-auto transition-all transform bg-white rounded-lg shadow-xl sm:p-6">
+            <div className="relative w-2/5 px-4 pt-5 pb-4 my-auto transition-all transform bg-white rounded-lg shadow-xl sm:w-1/2 sm:p-6">
                 <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
                     {renderCloseButton()}
                 </div>
