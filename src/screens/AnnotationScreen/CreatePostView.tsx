@@ -15,8 +15,9 @@ import { AnalyticsClient } from '../../utils/PRAnalytics'
 import NewPostModal from '../../components/NewPostModal'
 import Simulator from '../../components/Simulator'
 import PostScreenshot from '../../components/PostScreenshot'
+import NewSimulatorModal from '../../components/NewSimulatorModal'
 
-type Mode = 'CREATE_ISSUE' | 'BROWSE'
+type Mode = 'CREATE_ISSUE' | 'BROWSE' | 'CHOOSE_SIMULATOR_PARAMS'
 
 type CreatePostViewProps = {
     project: Project
@@ -25,9 +26,12 @@ type CreatePostViewProps = {
 const CreatePostView = (props: CreatePostViewProps) => {
     const [currentMode, setCurrentMode] = useState<Mode>('BROWSE')
     const [imageToAnnotate, setImageToAnnotate] = useState<Blob>()
-    const [currentAppBuild, setCurrentAppBuild] = useState<AppBuild>()
     const authState = useSelector(state => state.auth)
-    const deviceType: LocalDeviceType = 'IPHONE_11_PRO_MAX'
+    const [simulatorParams, setSimulatorParams] = useState<{
+		appBuild: AppBuild
+		deviceType: LocalDeviceType
+    }>()
+    const defaultDeviceType: LocalDeviceType = 'IPHONE_11_PRO'
     
     const dispatch = useDispatch()
     // Hardcoded projectId
@@ -36,7 +40,10 @@ const CreatePostView = (props: CreatePostViewProps) => {
     useEffect(() => {
         // DEBUG
         // loadXHR(process.env.PUBLIC_URL + '/iphonexBlack.png').then((blob) => {console.log('yo'); setImageToAnnotate(blob)})
-        AppBuildClient.getCurrentAppBuildForProjectId(projectId).then((appBuild) => setCurrentAppBuild(appBuild))
+        AppBuildClient.getCurrentAppBuildForProjectId(projectId).then((appBuild) => setSimulatorParams({
+            appBuild: appBuild,
+            deviceType: defaultDeviceType
+        }))
     }, [])
 
     const onCreatePostClicked = async (imageId: string, post: Post) => {
@@ -151,8 +158,8 @@ const CreatePostView = (props: CreatePostViewProps) => {
     // }
 
     const renderPostToolBar = () => {
-		const buttonContainerClassName = 'w-full flex flex-col'
-		const buttonClassName = 'focus:outline-none active:shadow-sm active:bg-gray-300 w-10 h-10 rounded-full mx-auto'
+		const buttonContainerClassName = 'w-full flex h-18 my-1 flex-col'
+		const buttonClassName = 'focus:outline-none active:shadow-sm active:bg-gray-300 w-12 h-12 rounded-full mx-auto'
 		const unSelectedButtonClassName = 'bg-white shadow-lg border-gray-400 ' + ' ' + buttonClassName
 		const selectedButtonClassName = 'bg-gray-200' + ' ' + buttonClassName
 
@@ -162,39 +169,49 @@ const CreatePostView = (props: CreatePostViewProps) => {
 		// 	} else {
 		// 		setDisplayState(state)
 		// 	}
-		// }
+        // }
+        
+        const handleRunSimulator = (deviceType: LocalDeviceType, appBuild: AppBuild) => {
+			setSimulatorParams({
+				deviceType: deviceType,
+				appBuild: appBuild
+			})
+			setCurrentMode('BROWSE')
+		}
 
-		return (
+		return (<>
+            <NewSimulatorModal onRun={(deviceType, appBuild) =>  handleRunSimulator(deviceType, appBuild)} project={props.project} show={currentMode === 'CHOOSE_SIMULATOR_PARAMS'} onCancel={() => setCurrentMode('BROWSE')}/>
+
             <div className='mx-auto'>
                  <div className='flex flex-row w-48 p-2 my-auto mr-3'>
                     <div className={buttonContainerClassName}>
-                        <button className={unSelectedButtonClassName} style={{borderWidth: '1px'}}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+                        <button onClick={() => setCurrentMode('CHOOSE_SIMULATOR_PARAMS')} className={unSelectedButtonClassName} style={{borderWidth: '1px'}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-8 mx-auto icon-device-smartphone"><path className="primary" d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z"/><path className="secondary" d="M12 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
                         </button>
-                        <a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>New Simulator</a>
+                        <a className="mt-0.5 font-bold text-center text-gray-900 text-xs " style={{fontSize: '13px'}}>New Simulator</a>
                     </div>
-                    <div className={buttonContainerClassName}>
+                    {/* <div className={buttonContainerClassName}>
                         <button className={unSelectedButtonClassName} style={{borderWidth: '1px'}}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto icon-user"><path className="primary" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><path className="secondary" d="M21 20v-1a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v1c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2z"/></svg>
                         </button>
                         <a className="text-xs font-semibold text-center text-gray-900 " style={{fontSize: '10px'}}>UI Mocks</a>
-                    </div>
+                    </div> */}
                 </div>
             </div>
            
-		)
+		</>)
     }
     
     const renderCreateIssue = () => {
-        if (imageToAnnotate !== undefined && currentAppBuild !== undefined) {
+        if (imageToAnnotate !== undefined && simulatorParams !== undefined) {
             return (
                 <NewPostModal
-                    deviceType={deviceType}
+                    deviceType={simulatorParams.deviceType}
                     show={currentMode === 'CREATE_ISSUE'}
                     postId={uuid()}
                     projectId={projectId}
                     imageToAnnotate={imageToAnnotate} 
-                    appBuild={currentAppBuild}
+                    appBuild={simulatorParams.appBuild}
                     imagePromise={createImagePromise(imageToAnnotate)}
                     onCreatePostClicked={onCreatePostClicked} 
                     onCancel={() => {setCurrentMode('BROWSE')}} />
@@ -207,14 +224,14 @@ const CreatePostView = (props: CreatePostViewProps) => {
         <div className='flex flex-row flex-auto h-full'>
 			<div className='flex flex-col flex-auto h-full '> 
                 {/* when navbar is hidden this should also include justify-center */}
-                {/* <div className='flex flex-shrink-0 w-full ml-3 overflow-hidden'>
+                <div className='flex flex-shrink-0 w-full ml-3 overflow-hidden'>
                     { renderPostToolBar() }
-                </div> */}
+                </div>
 				<div className='flex flex-row my-auto'> 
 					{/* RenderPostToolBar is contained because otherwise it stretches for the whole height. */}
 					
                     <div className='flex flex-row justify-center w-full pt-1 pb-1 pl-2 pr-2 mx-auto overflow-scroll'> 
-                        { currentAppBuild !== undefined && <Simulator project={props.project} deviceType={deviceType} mode={'CREATE'} appBuild={currentAppBuild} onScreenshot={(img) => {
+                        { simulatorParams !== undefined && <Simulator project={props.project} deviceType={simulatorParams.deviceType} mode={'CREATE'} appBuild={simulatorParams.appBuild} onScreenshot={(img) => {
                             setImageToAnnotate(b64toBlob(img)); 
                             setTimeout(() => {setCurrentMode('CREATE_ISSUE')}, 100)
                         }}/> }
