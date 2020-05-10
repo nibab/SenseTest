@@ -20,7 +20,6 @@ import { getDeviceDimensions } from '../../deviceDimensions'
 
 type PostScreenshotProps = {
 	post: Post
-	deviceType?: DeviceType
 }
 
 const PostScreenshot = (props: PostScreenshotProps) => {
@@ -75,7 +74,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 			return (
 				<div className='flex flex-col w-full rounded-lg' >
 					
-					<div className='relative flex flex-col w-full pt-1 pr-2 -ml-1 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: getDeviceDimensions(props.deviceType!).height}}>
+					<div className='relative flex flex-col w-full pt-1 pr-2 -ml-1 overflow-scroll bg-gray-300 rounded-lg rounded-l-none' style={{height: getDeviceDimensions(props.post.deviceType).height}}>
 						{ post !== undefined ? <CommentsSection comments={Object.values(commentsSelector)} addSubComent={_addsubComment} displayNewCommentBox={false} /> : <></>}
 					</div>
 				</div>
@@ -118,7 +117,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 			const img = postsSelector.image
 			if (isPostImgDownload(img)) {
 				return (
-					<div className='relative flex flex-shrink-0 object-contain w-full rounded-lg rounded-r-none' style={getDeviceDimensions(props.deviceType!)}>
+					<div className='relative flex flex-shrink-0 object-contain w-full rounded-lg rounded-r-none' style={getDeviceDimensions(post.deviceType!)}>
 						<div className='z-30 mx-auto my-auto bg-white spinner' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
 						</div>
 					</div>
@@ -126,7 +125,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 			} else {
 				return (
 					<AnnotationScreen 
-						deviceType={props.deviceType!}
+						deviceType={props.post.deviceType!}
 						annotations={getAnnotations()} 
 						onSubmit={onSubmitAnnotation} 
 						key={post.id} 
