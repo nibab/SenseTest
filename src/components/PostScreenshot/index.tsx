@@ -141,7 +141,7 @@ const PostScreenshot = (props: PostScreenshotProps) => {
 	return (
 		<Container header={renderButtons()} tags={renderTag()}>
 			<div className='flex flex-row bg-gray-300'>
-				<div className='z-30'>
+				<div className='z-30' style={{ width: getDeviceDimensions(props.post.deviceType!).minWidth}}>
 					{ renderAnnotationScreen() }
 				</div>
 				

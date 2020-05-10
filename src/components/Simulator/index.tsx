@@ -504,7 +504,7 @@ const EmbeddedPostCreator = (props: EmbeddedPostCreatorProps) => {
 							leaveFrom="opacity-100"
 							leaveTo="opacity-0"
 						>
-							<div className="z-50" style={{width: getDeviceDimensions(props.deviceType!).minWidth}}>
+							<div className="z-50" style={{ width: getDeviceDimensions(props.deviceType!).minWidth}}>
 								{ props.annotationScreen }
 							</div>	
 						</Transition>

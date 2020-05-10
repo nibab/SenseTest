@@ -1,7 +1,7 @@
 import { DeviceType } from './types'
 
 type DeviceContainerStyle = {
-    minWidth: string
+    minWidth:string
     height: string
     scale?: string
 }
