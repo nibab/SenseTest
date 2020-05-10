@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, forwardRef } from 'react'
+import React, { useRef, useState, useEffect, forwardRef, ReactNode } from 'react'
 import { AppBuild, DeviceType, deviceTypeAppetize, deviceTypePretty, Annotation } from '../../types'
 import { Comment as CommentType, Post, PostTag, SubComment } from '../../types'
 import { useDispatch } from 'react-redux'
@@ -253,7 +253,7 @@ const Simulator = (props: SimulatorProps) => {
 				<div className='absolute z-10' >
 					{ renderScreen() }
 				</div>
-				<EmbeddedAnnotation 
+				<EmbeddedAnnotation2 
 					postId={newPostIdForCreation!}
 					onSetComments={(comments) => setComments(comments)} 
 					imageToAnnotate={imageToAnnotate!} 
@@ -283,7 +283,7 @@ type EmbeddedAnnotationProps = {
 	//onSetIsBlocker: () => void
 }
 
-const EmbeddedAnnotation = forwardRef<HTMLInputElement, EmbeddedAnnotationProps>((props, ref) => {
+const EmbeddedAnnotation2 = forwardRef<HTMLInputElement, EmbeddedAnnotationProps>((props, ref) => {
 	const dispatch = useDispatch()
 
 	const [comments, setComments] = useState<CommentType[]>([])
@@ -480,63 +480,85 @@ const EmbeddedAnnotation = forwardRef<HTMLInputElement, EmbeddedAnnotationProps>
 		}
 
 		return (
-			<div className='z-40 bg-gray-300'>
-				<Transition show={ props.show && props.state === 'Annotate'}>
-					<div className='relative bg-gray-300'>
-						<div className='relative flex flex-row'>
-							<Transition
-								enter="ease-in duration-100"
-								enterFrom="opacity-0"
-								enterTo="opacity-100"
-								leave="ease-in duration-200"
-								leaveFrom="opacity-100"
-								leaveTo="opacity-0"
-							>
-								<div className="z-50" style={{width: getDeviceDimensions(props.deviceType!).minWidth}}>
-									{ renderAnnotationScreen() }
-								</div>	
-							</Transition>
-							<Transition
-								enter="ease-in duration-100"
-								enterFrom="w-0 opacity-0"
-								enterTo=" w-64 opacity-100"
-								leave="ease-in duration-200"
-								leaveFrom=" w-64 opacity-100"
-								leaveTo="w-0 opacity-0"
-							>
-								{renderComments()}
-							</Transition>	
-						</div>
-					</div>
-				</Transition>
-				<Transition 
-					show={  props.show && props.state === 'Submit' }
-					leave="ease-out duration-300"
-					leaveFrom="opacity-100"
-					leaveTo="opacity-0 w-0"
-				>
-					<div className='relative'>
-						<div className='relative flex flex-row'>
-							<Transition 
-								enter="ease-in duration-100"
-								enterFrom="opacity-0"
-								enterTo="opacity-100"
-								leave="ease-out duration-300"
-								leaveFrom="opacity-100"
-								leaveTo="opacity-0 w-0"
-							>
-								{ renderForm() }
-							</Transition>
-						</div>
-					</div>
-				</Transition>	
-			</div>
+			<EmbeddedPostCreator 
+				show={props.show}
+				annotationScreen={renderAnnotationScreen()}
+				postCreationForm={renderForm()}
+				commentsSection={renderComments()}
+				state={props.state}
+				deviceType={props.deviceType}
+			></EmbeddedPostCreator>
 		)
 	}
 
 	return (renderAnnotate())
 	
 })
+
+type EmbeddedPostCreatorProps = {
+	annotationScreen: ReactNode
+	commentsSection: ReactNode
+	postCreationForm: ReactNode
+	show: boolean
+	state: EmbeddedAnnotationState
+	deviceType: DeviceType
+}
+
+const EmbeddedPostCreator = (props: EmbeddedPostCreatorProps) => {
+	return (
+		<div className='z-40 bg-gray-300'>
+			<Transition show={ props.show && props.state === 'Annotate'}>
+				<div className='relative bg-gray-300'>
+					<div className='relative flex flex-row'>
+						<Transition
+							enter="ease-in duration-100"
+							enterFrom="opacity-0"
+							enterTo="opacity-100"
+							leave="ease-in duration-200"
+							leaveFrom="opacity-100"
+							leaveTo="opacity-0"
+						>
+							<div className="z-50" style={{width: getDeviceDimensions(props.deviceType!).minWidth}}>
+								{ props.annotationScreen }
+							</div>	
+						</Transition>
+						<Transition
+							enter="ease-in duration-100"
+							enterFrom="w-0 opacity-0"
+							enterTo=" w-64 opacity-100"
+							leave="ease-in duration-200"
+							leaveFrom=" w-64 opacity-100"
+							leaveTo="w-0 opacity-0"
+						>
+							{ props.commentsSection }
+						</Transition>	
+					</div>
+				</div>
+			</Transition>
+			<Transition 
+				show={  props.show && props.state === 'Submit' }
+				leave="ease-out duration-300"
+				leaveFrom="opacity-100"
+				leaveTo="opacity-0 w-0"
+			>
+				<div className='relative'>
+					<div className='relative flex flex-row'>
+						<Transition 
+							enter="ease-in duration-100"
+							enterFrom="opacity-0"
+							enterTo="opacity-100"
+							leave="ease-out duration-300"
+							leaveFrom="opacity-100"
+							leaveTo="opacity-0 w-0"
+						>
+							{ props.postCreationForm }
+						</Transition>
+					</div>
+				</div>
+			</Transition>	
+		</div>
+	)
+}
 
 // For debugging purposes
 function loadXHR(url: string): Promise<Blob> {
