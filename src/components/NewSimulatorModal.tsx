@@ -23,6 +23,7 @@ const NewSimulatorModal = (props: NewSimulatorModalProps) => {
 
     const [revisions, setRevisions] = useState<AppBuild[]>([])
 
+    const [currentDeviceType, setCurrentDeviceType] = useState<LocalDeviceType>('IPHONE_X')
 
     useEffect(() => {
         setAppBuildsLoading(true)
@@ -51,8 +52,6 @@ const NewSimulatorModal = (props: NewSimulatorModalProps) => {
         )
     }
 
-    const [currentDeviceType, setCurrentDeviceType] = useState<LocalDeviceType>('IPHONE_X')
-
     const renderDevices = () => {
         const common = "mt-1 bg-gray-100  transition ease-in-out duration-15 align-top whitespace-no-wrap inline-flex items-center mr-1 p-2.5 px-5 text-sm font-medium rounded "
         const unselectedClass = common +  " cursor-pointer border text-gray-700 bg-white hover:text-indigo-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue"
@@ -75,7 +74,6 @@ const NewSimulatorModal = (props: NewSimulatorModalProps) => {
             }
             
         })
-        
 
         return (
             <div className='w-full'>
@@ -104,7 +102,7 @@ const NewSimulatorModal = (props: NewSimulatorModalProps) => {
                 { renderDevices() }
                 <div className="mt-8 sm:mt-4 sm:flex sm:flex-row-reverse">
                     <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                        <button onClick={() => props.onRun(currentDeviceType, selectedAppBuild!)} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5">
+                        <button onClick={() => {props.onRun(currentDeviceType, selectedAppBuild!)}} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5">
                             Run
                         </button>
                     </span>
