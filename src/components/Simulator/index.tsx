@@ -156,7 +156,8 @@ const Simulator = (props: SimulatorProps) => {
 			)
 		}
 
-		return (
+		return (<>
+			{ props.mode === 'CREATE' && 
 			<Transition
 				show={!annotationInProgress && iframeActive}
 				enter="ease-in duration-100"
@@ -169,12 +170,13 @@ const Simulator = (props: SimulatorProps) => {
 				<div className='flex w-full p-2'>
 					<div className='flex mx-auto'>
 						{
-							props.mode === 'CREATE' ? renderCreateModeButtons() : <></>
+							renderCreateModeButtons()
 						}					
 					</div>
 				</div>
 			</Transition>
-		)
+			}
+		</>)
 	}
 
 	const renderScreenshotButtons = () => {
