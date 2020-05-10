@@ -59,7 +59,7 @@ const DropZone = (props: DropZoneProps) => {
                     </button>
                     or drag and drop
                 </p>
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 font-mono text-xs text-gray-500">
                     Upload a .zip or .tar.gz file containing your compressed .app bundle.
                 </p>
             </>
@@ -101,11 +101,11 @@ const DropZone = (props: DropZoneProps) => {
     
     return (
         <>
-            { props.title && <label className="block text-sm font-medium leading-5 text-gray-700">
+            { props.title && <label className="block font-mono text-xs font-semibold leading-5 text-gray-700">
                 {props.title}
             </label> }
             <div {...getRootProps()}>
-                <div className={`flex justify-center px-6 pt-5 pb-6 mt-2 border-2 border-gray-300 ${ isDragActive ? 'bg-gray-200' : '' } border-dashed rounded-md`} > 
+                <div className={`flex justify-center px-6 pt-5 pb-6 mt-1 border-2 border-gray-300 ${ isDragActive ? 'bg-gray-200' : '' } border-dashed rounded-md`} > 
                     
                     
                     { visualState === 'WAITING' && <div className="text-center outline-none">

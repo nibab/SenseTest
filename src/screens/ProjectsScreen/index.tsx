@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import CreateProjectModal from '../../components/CreateProjectModal'
 import { useSelector } from '../../store'
 import moment from 'moment'
+import Button from '../../components/Button'
 
 type ReleaseCardProps = {
 	project: Project
@@ -153,11 +154,11 @@ const ProjectsScreen = () => {
 							{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1 icon-user"><path className="primary" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><path className="secondary" d="M21 20v-1a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v1c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2z"/></svg> */}
 							{ auth.email }
 						</div> 
-						<button onClick={onSignOutButtonClick} className="inline-flex items-center px-5 py-2 my-auto mr-2 text-sm font-medium text-gray-700 whitespace-no-wrap transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50">
+						<Button onClick={() => onSignOutButtonClick} buttonClass={'SECONDARY'}>
 							{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 mx-auto mr-1 icon-user"><path className="primary" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><path className="secondary" d="M21 20v-1a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v1c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2z"/></svg> */}
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6  mx-auto mr-1.5 icon-door-exit"><path className="primary" d="M11 4h3a1 1 0 0 1 1 1v3a1 1 0 0 1-2 0V6h-2v12h2v-2a1 1 0 0 1 2 0v3a1 1 0 0 1-1 1h-3v1a1 1 0 0 1-1.27.96l-6.98-2A1 1 0 0 1 2 19V5a1 1 0 0 1 .75-.97l6.98-2A1 1 0 0 1 11 3v1z"/><path className="secondary" d="M18.59 11l-1.3-1.3c-.94-.94.47-2.35 1.42-1.4l3 3a1 1 0 0 1 0 1.4l-3 3c-.95.95-2.36-.46-1.42-1.4l1.3-1.3H14a1 1 0 0 1 0-2h4.59z"/></svg>
 							Sign out
-						</button>
+						</Button>
 					</div>
 				</div>
 				<div className="max-w-2xl pt-6 mx-auto sm:px-6 lg:px-8">
@@ -166,11 +167,11 @@ const ProjectsScreen = () => {
 							Releases
 						</h1>
 						<div className='px-2 pt-6 mx-auto overflow-scroll '>
-							<div onClick={() => {setCreateProjectModalVisible(true)}} className='inline-flex items-center px-4 py-1 my-auto mb-5 mr-5 text-xs font-medium text-gray-700 whitespace-no-wrap transition ease-in-out bg-white border border-gray-200 rounded-md cursor-pointer hover:bg-gray-300 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 duration-15'>
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-10 h-10 mr-1 icon-add"><path className="secondary" fillRule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
-								<h2 className='mr-4 text-lg font-bold text-gray-800 '>Create New</h2>
-							</div>
-							<div className='flex flex-col justify-center pb-10 mt-1'>
+							<Button buttonClass={'SECONDARY'} onClick={() => {setCreateProjectModalVisible(true)}} >
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="mr-1 w-9 icon-add"><path className="secondary" fillRule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
+								<h2 className='mr-4 text-lg font-bold'>Create New</h2>
+							</Button>
+							<div className='flex flex-col justify-center pb-10 mt-6'>
 								<h2 className='mb-3 text-sm font-bold tracking-wider text-gray-500 uppercase'>Under review</h2>
 								{ isLoading && <div className="h-20 spinner-large"></div>}
 								{ !isLoading && renderReleases() } 

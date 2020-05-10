@@ -254,7 +254,7 @@ const PostView = (props: PostViewProps) => {
 						</div>
 						<div className='mt-1'>
 							
-							<p className='h-4 my-auto text-xs font-bold text-gray-600 uppercase'>
+							<p className='h-4 my-auto font-mono text-xs font-semibold text-gray-600'>
 								Repro Steps:
 							</p>
 							<p className='text-sm'>

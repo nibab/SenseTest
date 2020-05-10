@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { useSelector } from '../../store'
 import { type } from 'os'
 import moment from 'moment'
+import { InputFieldButton } from '../Button'
 
 const REPLY_BOX_PLACEHOLDER = 'Write comment'
 
@@ -72,11 +73,11 @@ const Comment = (props: CommentProps) => {
 	const replyBox = () => {
 		return (
 			<div className='relative flex flex-row text-sm leading-tight text-gray-700 bg-white rounded-md font'>
-				<textarea placeholder={REPLY_BOX_PLACEHOLDER } ref={replyBoxRef} contentEditable="true" onChange={() => onFirstReplyBoxTouch()} style={{outline: 'none'}} className='flex w-full h-full p-1 rounded-md'>
+				<textarea placeholder={REPLY_BOX_PLACEHOLDER } ref={replyBoxRef} contentEditable="true" onChange={() => onFirstReplyBoxTouch()} style={{outline: 'none'}} className='flex w-full h-full p-1 rounded-md resize-y'>
 				</textarea>
-				<button onClick={onReplyButtonClick} className='inline-flex items-center h-8 px-2 py-1 m-1 text-xs font-medium leading-4 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded cursor-pointer hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700'>
+				<InputFieldButton onClick={onReplyButtonClick}>
 					Publish
-				</button>
+				</InputFieldButton>
 			</div>
 		)
 	}

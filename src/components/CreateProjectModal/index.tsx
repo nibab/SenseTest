@@ -157,13 +157,13 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
                                 <div>
                                 <div>
                                 <div>
-                                    <h3 className="text-lg font-medium leading-6 text-gray-900">
+                                    <h3 className="font-mono text-lg font-bold leading-6 text-gray-900">
                                         Create Release
                                     </h3>
                                 </div>
                                 <div className="grid grid-cols-1 row-gap-6 col-gap-4 mt-3 sm:grid-cols-6">
                                     <div className="sm:col-span-3">
-                                        <label className="block text-sm font-medium leading-5 text-gray-700">
+                                        <label className="block font-mono text-xs font-semibold leading-5 text-gray-700">
                                             App Name
                                         </label>
                                         <div className="mt-1 rounded-md shadow-sm">
@@ -171,7 +171,7 @@ const CreateProjectModal = (props: CreateProjectModalProps) => {
                                         </div>
                                     </div>
                                     <div className="sm:col-span-3">
-                                        <label  className="block text-sm font-medium leading-5 text-gray-700">
+                                        <label  className="block font-mono text-xs font-semibold leading-5 text-gray-700">
                                             Version
                                         </label>
                                         <div className="mt-1 rounded-md shadow-sm">

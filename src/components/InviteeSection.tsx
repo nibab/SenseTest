@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import {InputFieldButton} from './Button'
 
 export type RecentCollaborator = {
     email: string
@@ -72,9 +73,9 @@ const InviteeSection = (props: InviteeSectionProps) => {
     }
 
     const onAddInviteeButton = () => {
-        if (inviteInputRef.current === undefined || inviteInputRef.current === null || inviteInputRef.current?.value === '') return
+        if (inviteInputRef.current === undefined || inviteInputRef.current === null || inviteInputRef.current?.value === '') return false
         const newEmail = (inviteInputRef.current.value).replace(/\s/g, "") //trim whitespaces
-        if (!emailRegex.test(newEmail)) return
+        if (!emailRegex.test(newEmail)) return false
 
         const currentInviteesCopy = currentInvitees ? {...currentInvitees} : {}
         currentInviteesCopy[newEmail] = {
@@ -130,17 +131,18 @@ const InviteeSection = (props: InviteeSectionProps) => {
     return (
         <div className="mt-6 border-gray-200 ">
             <fieldset className="mt-6">
-                <label className="block text-sm font-medium leading-5 text-gray-700 ">
+                <label className="block font-mono text-xs font-semibold leading-5 text-gray-700 ">
                     Invite 
                 </label>
+                <div className="w-full font-mono text-xs font-medium text-gray-500 text-wrap">(send your team e-mail invites)</div>
 
-                <div className='flex flex-row mt-2 mb-1 text-sm leading-tight text-gray-700 bg-white border rounded-md font'>
+                <div className='flex flex-row mt-1 mb-1 text-sm leading-tight text-gray-700 bg-white border rounded-md font'>
                     <input ref={inviteInputRef} type={'email'} className='flex-wrap  w-full h-full p-2 m-0.5 outline-none focus:outline-none'>
                         
                     </input>
-                    <div onClick={onAddInviteeButton} className='inline-flex items-center h-8 px-2 py-1 my-auto mt-1 mb-1 ml-1 mr-1 text-xs font-medium leading-4 text-indigo-600 transition duration-150 ease-in-out bg-white border border-indigo-500 rounded cursor-pointer hover:text-indigo-800 hover:border-indigo-700 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:text-indigo-500'>
+                    <InputFieldButton onClick={onAddInviteeButton} >
                         Add
-                    </div>
+                    </InputFieldButton>
                 </div>
                 { renderCurrentInvitees() }
                 { renderRecentCollaborators() }
