@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, ReactNode } from 'react'
+import React, { useState, useEffect, useRef, ReactNode, useLayoutEffect } from 'react'
 import Transition from '../utils/Transition'
 import InviteeSection, { CurrentInvitee } from './InviteeSection'
 import { ProjectMember, Project, AppBuild } from '../types'
@@ -41,22 +41,34 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
 
     const authState = useSelector(state => state.auth)
 
+    const firstUpdate = useRef(true);
+    useLayoutEffect(() => {
+        if (firstUpdate.current) {
+            firstUpdate.current = false
+            return
+        } 
+    });
+
     useEffect(() => {
-        setAppBuildsLoading(true)
+        if (!firstUpdate.current && props.show) {
+            setAppBuildsLoading(true)
+            DataLayerClient.getProjectInfo(props.project.id).then( async (project) => {
+                const currentAppBuild = project.currentAppBuild
+                if (currentAppBuild !== undefined) {                
+                    const currentBuildArray = project.appBuilds.filter((appBuild) => 
+                        appBuild.id === currentAppBuild.id
+                    )
+                    setCurrentAppBuild(currentBuildArray[0])
+                }
+                
+                setRevisions(project.appBuilds.filter(build => build.id !== currentAppBuild?.id))
+                setAppBuildsLoading(false)
+            })
+        }
+    }, [props.show])
+
+    useEffect(() => {
         setNewAppBuildId(uuid())
-        DataLayerClient.getProjectInfo(props.project.id).then( async (project) => {
-            const currentAppBuild = project.currentAppBuild
-            if (currentAppBuild !== undefined) {                
-                const currentBuildArray = project.appBuilds.filter((appBuild) => 
-                    appBuild.id === currentAppBuild.id
-                )
-                setCurrentAppBuild(currentBuildArray[0])
-            }
-            
-            setRevisions(project.appBuilds.filter(build => build.id !== currentAppBuild?.id))
-            setAppBuildsLoading(false)
-        })
-       
     }, [])
 
     const onRequiredInputChange = () => {

@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import Modal from './Modal'
 import AppBuildTable from './AppBuildTable'
 import AppBuilds from './AppBuilds'
@@ -25,22 +25,31 @@ const NewSimulatorModal = (props: NewSimulatorModalProps) => {
 
     const [currentDeviceType, setCurrentDeviceType] = useState<LocalDeviceType>('IPHONE_X')
 
+    const firstUpdate = useRef(true);
+    useLayoutEffect(() => {
+        if (firstUpdate.current) {
+            firstUpdate.current = false
+            return
+        } 
+    });
+
     useEffect(() => {
-        setAppBuildsLoading(true)
-        DataLayerClient.getProjectInfo(props.project.id).then( async (project) => {
-            const currentAppBuild = project.currentAppBuild
-            if (currentAppBuild !== undefined) {                
-                const currentBuildArray = project.appBuilds.filter((appBuild) => 
-                    appBuild.id === currentAppBuild.id
-                )
-                setCurrentAppBuild(currentBuildArray[0])
-            }
-            
-            setRevisions(project.appBuilds.filter(build => build.id !== currentAppBuild?.id))
-            setAppBuildsLoading(false)
-        })
-       
-    }, [])
+        if (!firstUpdate.current && props.show) {
+            setAppBuildsLoading(true)
+            DataLayerClient.getProjectInfo(props.project.id).then( async (project) => {
+                const currentAppBuild = project.currentAppBuild
+                if (currentAppBuild !== undefined) {                
+                    const currentBuildArray = project.appBuilds.filter((appBuild) => 
+                        appBuild.id === currentAppBuild.id
+                    )
+                    setCurrentAppBuild(currentBuildArray[0])
+                }
+                
+                setRevisions(project.appBuilds.filter(build => build.id !== currentAppBuild?.id))
+                setAppBuildsLoading(false)
+            })
+        }
+    }, [props.show])
 
     const renderCloseButton = () => {
         return (

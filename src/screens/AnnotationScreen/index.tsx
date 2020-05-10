@@ -72,54 +72,21 @@ export const AnnotationScreen = ({ }) => {
         }
     }
 
-    const getPostsAndStoreInRedux = async (projectId: string) => {
-        const query: ModelPostFilterInput = {
-            projectId: {
-                eq: projectId
-            }
-        }
-        try {
-            const response = await API.graphql(graphqlOperation(projectPostsByTime, {projectId: projectId, limit: 100})) as { data: ProjectPostsByTimeQuery }
-            if (response.data.projectPostsByTime?.items !== null) {
-                const posts = response.data.projectPostsByTime?.items
-                posts?.forEach(async (post) => {
-                    if (post !== null) {
-                        const postImgDownload = new PostImgDownload(post.imageId, (blob) => {})
-                        
-                        const newPost: Post = {
-                            id: post.id,
-                            image: postImgDownload,
-                            projectId: post.projectId,
-                            text: post.text,
-                            title: post.title,
-                            dateCreated: post.createdAt,
-                            tags: post.tags.filter((tag) => tag !== null).map((tag) => postTagGraphQLToLocalType(tag!) ),
-                            appBuildId: post.appBuildId,
-                            status: post.status,
-                            deviceType: deviceTypeGraphQLToLocalType(post.deviceType)
-                        }
-                        postImgDownload.imagePromise.then((blob) => {
-                            dispatch(updateImageForPost(newPost, blob))
-                            Log.info("Downloaded post with title " + post.title)
-                        })
-                        //const newPost = await postImgDownload.imagePromise
-                        dispatch(addPost(newPost))
-                        getAllCommentsForPost(post.id)
-                    }
-                })
-            }            
-        } catch {
-            Log.error("There was an issue getting all posts.", "AnnotationScreen")
-        }
-    }
-
     useEffect(() => {  
         const pathName = location.pathname
         const projectId = pathName.split("/")[2]
         setIsLoading(true)
         DataLayerClient.getProjectInfo(projectId).then( async (project) => {
             setCurrentProject(project); 
-            await getPostsAndStoreInRedux(projectId) // TODO: This call should not be made again. We already have all the information.
+            project.posts.forEach((post) => {
+                dispatch(addPost(post))
+                if (typeof post.image !== typeof Blob) {
+                    (post.image as PostImgDownload).imagePromise.then((blob) => dispatch(updateImageForPost(post, blob)))
+                } 
+                
+                getAllCommentsForPost(post.id)
+            })
+
             setIsLoading(false)
         })
     }, [])    

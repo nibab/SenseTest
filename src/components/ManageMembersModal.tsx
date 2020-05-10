@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import Transition from '../utils/Transition'
 import InviteeSection, { CurrentInvitee } from './InviteeSection'
 import { ProjectMember, Project } from '../types'
@@ -32,14 +32,26 @@ const ManageMembersModal = (props: ManageMembersModalProps) => {
         })
 		return items
     }
+
+    const firstUpdate = useRef(true);
+    useLayoutEffect(() => {
+        if (firstUpdate.current) {
+            firstUpdate.current = false
+            return
+        } 
+
+        //console.log("componentDidUpdateFunction");
+    });
     
     useEffect(() => {
-        setMembersLoading(true)
-        DataLayerClient.getProjectInfo(props.project.id).then( async (project) => {
-            setMembers(project.members)
-            setMembersLoading(false)
-        })
-    }, [])
+        if (!firstUpdate.current && props.show) {
+            setMembersLoading(true)
+            DataLayerClient.getProjectInfo(props.project.id).then( async (project) => {
+                setMembers(project.members)
+                setMembersLoading(false)
+            })
+        }
+    }, [props.show])
 
     useEffect(() => {
         if (currentInvitees.length === 0) {

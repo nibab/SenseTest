@@ -25,12 +25,10 @@ const AppBuilds = (props: AppBuildProps) => {
         }
     }
 
-    useEffect(() => {}, [props.revisions, props.isLoading, props.revisions])
-
     useEffect(() => {
         setSelected(props.currentAppBuild)
         if (props.onSelected && props.currentAppBuild) props.onSelected(props.currentAppBuild)
-    }, [])
+    }, [props.revisions, props.isLoading, props.currentAppBuild])
 
     const setSelectedAndPropagate = (appBuild?: AppBuild) => {
         setSelected(appBuild)
