@@ -65,6 +65,7 @@ const Simulator = (props: SimulatorProps) => {
 
 	useEffect(() => {
 		throttledScreenshotCreated.current = annotationInProgress
+		Log.info(`[THROTTLE] Changed the screenshot creation mode to ${throttledScreenshotCreated.current}. `)
 	}, [annotationInProgress])
 
 	useEffect(() => {
@@ -87,10 +88,14 @@ const Simulator = (props: SimulatorProps) => {
 		// Using a throttled value to check since onScreenshotCreated gets called a gazillion times in between renders
 		// which results in annotationInProgress to be continously false when we had set it to true...
 		if (throttledScreenshotCreated.current === false) {
+			setAnnotationInProgress(true)
+			// Making sure that this is set ASAP. Can't rely on the useEffect call to
+			// make sure this is set to true.
+			throttledScreenshotCreated.current = true 
+			Log.info("[THROTTLE] On screenshot created.")
 			const imageBlob = b64toBlob(data)
 			setImageToAnnotate(imageBlob)
 			setNewPostIdForCreation(uuid())
-			setAnnotationInProgress(true)
 			setImagePromise(createImagePromise(imageBlob, props.project.id))
 			setEmbeddedAnnotationState('Annotate')
 		}
