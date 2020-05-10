@@ -94,15 +94,17 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 		)
 	}
 
+	const deviceDimensions = getDeviceDimensions(props.deviceType)
+
 	return (
-		<div className='relative flex flex-shrink-0 w-full rounded-lg rounded-r-none' style={getDeviceDimensions(props.deviceType)}>
+		<div className='relative flex flex-shrink-0 w-full rounded-lg rounded-r-none'>
 			<div className='absolute z-0 w-full h-full ' >
 				{/* <img className="object-contain w-full h-full" src='../../../../public/iphonexBlack.png'></img> */}
 			</div>	
 			
 			
 			<Annotation 
-				className="p-2 pr-3 mx-auto"
+				className="object-contain p-2 pr-3 mx-auto"
 				src={window.URL.createObjectURL(props.imageBlob)} 
 				annotations={annotations} 
 				enderSelector={renderSelector} 
@@ -111,7 +113,6 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 				onChange={onChange} 
 				type={PointSelector.TYPE} 
 				value={annotation}
-				style={getDeviceDimensions(props.deviceType)}	
 			/>
 			
 		</div>
