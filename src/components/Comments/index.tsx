@@ -5,6 +5,7 @@ import { useSelector } from '../../store'
 import { type } from 'os'
 import moment from 'moment'
 import { InputFieldButton } from '../Button'
+import TextareaAutosize from 'react-textarea-autosize'
 
 const REPLY_BOX_PLACEHOLDER = 'Write comment'
 
@@ -73,8 +74,8 @@ const Comment = (props: CommentProps) => {
 	const replyBox = () => {
 		return (
 			<div className='relative flex flex-row text-sm leading-tight text-gray-700 bg-white rounded-md font'>
-				<textarea placeholder={REPLY_BOX_PLACEHOLDER } ref={replyBoxRef} contentEditable="true" onChange={() => onFirstReplyBoxTouch()} style={{outline: 'none'}} className='flex w-full h-full p-1 rounded-md resize-y'>
-				</textarea>
+				<TextareaAutosize placeholder={REPLY_BOX_PLACEHOLDER } inputRef={replyBoxRef} contentEditable="true" onChange={() => onFirstReplyBoxTouch()} style={{outline: 'none'}} className='flex w-full h-full p-1 rounded-md resize-y'>
+				</TextareaAutosize>
 				<InputFieldButton onClick={onReplyButtonClick}>
 					Publish
 				</InputFieldButton>
