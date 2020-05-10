@@ -126,7 +126,7 @@ const Simulator = (props: SimulatorProps) => {
             await DataLayerClient.createCommentForPost(newPost, comment)
 		})
 		
-		setAnnotationInProgress(false)
+		onCancel()
     }
 
 
