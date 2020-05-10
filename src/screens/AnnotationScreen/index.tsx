@@ -17,7 +17,7 @@ import { ReleaseStatusBar } from "./ReleaseStatusBar"
 import { PostToolbar } from "./PostToolbar"
 import { addComment } from "../../store/comment/actions"
 import { AppBuildClient } from "../../clients/AppBuildClient"
-import { useLocation } from "react-router-dom"
+import { useLocation, useHistory } from "react-router-dom"
 import { addsubComment } from "../../store/subcomment/actions"
 
 export const AnnotationScreen = ({ }) => {
@@ -30,6 +30,7 @@ export const AnnotationScreen = ({ }) => {
     const dispatch = useDispatch()
     const [currentProject, setCurrentProject] = useState<Project>()
     const [isLoading, setIsLoading] = useState(false)
+    const history = useHistory()
 
     const getAllCommentsForPost = async (postId: string) => { 
         const query = {
@@ -88,6 +89,8 @@ export const AnnotationScreen = ({ }) => {
             })
 
             setIsLoading(false)
+        }).catch(() => {
+            history.push('/notFound')
         })
     }, [])    
 

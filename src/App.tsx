@@ -23,6 +23,7 @@ import ProjectsScreen from './screens/ProjectsScreen';
 import AppBuildScreen from './screens/AppBuildScreen';
 import { login } from './store/authentication/actions';
 import Log from './utils/Log';
+import NotFound from './screens/ProjectNotFound';
 
 export const currentAuthConfig = Amplify.configure(awsconfig);
 export const SNAPTEST_API_NAME = "SnapTestAPI";
@@ -125,7 +126,13 @@ const Main = () => {
           isLoading={isLoading}
           path='/onboarding'
           component={OnboardingScreen}
-        ></ProtectedRoute>          
+        ></ProtectedRoute>
+        <ProtectedRoute
+          isLoggedIn={isLoggedIn}
+          isLoading={isLoading}
+          path='/notFound'
+          component={NotFound}
+        ></ProtectedRoute>            
         <ProtectedRoute 
           path='/'
           isLoggedIn={isLoggedIn}
