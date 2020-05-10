@@ -95,6 +95,12 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 	}
 
 	const deviceDimensions = getDeviceDimensions(props.deviceType)
+	const edgeCaseDevices: DeviceType[] = ['IPHONE_7', 'IPHONE_7_PLUS', 'IPHONE_8', 'IPHONE_8_PLUS']
+
+	if (edgeCaseDevices.includes(props.deviceType)) {
+		const newHeight = parseFloat(deviceDimensions.minWidth) * 16/9
+		deviceDimensions.height = newHeight.toString()
+	}
 
 	return (
 		<div className='relative flex flex-shrink-0 w-full rounded-lg rounded-r-none'>
@@ -113,6 +119,7 @@ const AnnotationScreen = (props: AnnotationScreenProps) => {
 				onChange={onChange} 
 				type={PointSelector.TYPE} 
 				value={annotation}
+				style={deviceDimensions}	
 			/>
 			
 		</div>
