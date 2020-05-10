@@ -50,8 +50,7 @@ export class TypeConverter {
                 }
 
                 postImgDownload.imagePromise.then((blob) => {
-                    //dispatch(updateImageForPost(newPost, blob))
-                    Log.info("BLEA Downloaded post with title " + post.title)
+                    Log.info("Downloaded post with title " + post.title)
                 })
 
                 postsToReturn.push(newPost)

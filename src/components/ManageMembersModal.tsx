@@ -39,14 +39,12 @@ const ManageMembersModal = (props: ManageMembersModalProps) => {
             firstUpdate.current = false
             return
         } 
-
-        //console.log("componentDidUpdateFunction");
     });
     
     useEffect(() => {
         if (!firstUpdate.current && props.show) {
             setMembersLoading(true)
-            DataLayerClient.getProjectInfo(props.project.id).then( async (project) => {
+            DataLayerClient.getProjectInfo(props.project.id, false).then( async (project) => {
                 setMembers(project.members)
                 setMembersLoading(false)
             })

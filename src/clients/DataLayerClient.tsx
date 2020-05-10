@@ -105,13 +105,12 @@ export class DataLayerClient {
 		
 	}
 
-	static getProjectInfo = async (projectId: string): Promise<Project> => {
+	static getProjectInfo = async (projectId: string, downloadPosts: boolean = true): Promise<Project> => {
 		return new Promise(async (resolve, reject) => {
 			const projectQuery = await API.graphql(graphqlOperation(getProject, {id: projectId})) as {data: GetProjectQuery}
 			const _project = projectQuery.data.getProject
 			
 			if (_project !== undefined && _project !== null) {
-				const posts = TypeConverter.getPostsFromProjectItem(_project)
 				const appBuilds = TypeConverter.getAppBuildsFromProjectItem(_project)
 				const currentAppBuild = TypeConverter.getCurentAppBuildFromProjectItem(_project)
 				const members = TypeConverter.getMembersFromProjectItem(_project)
@@ -119,7 +118,7 @@ export class DataLayerClient {
 					id: _project.id,
 					name: _project.name,
 					appBuilds: appBuilds,
-					posts: posts,
+					posts: downloadPosts ? TypeConverter.getPostsFromProjectItem(_project) : [],
 					currentAppBuild: currentAppBuild,
 					members: members,
 					dateCreated:  _project.createdAt ? _project.createdAt : "unknown"

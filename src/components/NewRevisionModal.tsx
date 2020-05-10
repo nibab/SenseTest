@@ -52,7 +52,7 @@ const NewRevisionModal = (props: NewRevisionsModalProps) => {
     useEffect(() => {
         if (!firstUpdate.current && props.show) {
             setAppBuildsLoading(true)
-            DataLayerClient.getProjectInfo(props.project.id).then( async (project) => {
+            DataLayerClient.getProjectInfo(props.project.id, false).then( async (project) => {
                 const currentAppBuild = project.currentAppBuild
                 if (currentAppBuild !== undefined) {                
                     const currentBuildArray = project.appBuilds.filter((appBuild) => 
