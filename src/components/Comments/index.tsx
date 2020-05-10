@@ -169,7 +169,7 @@ const CommentGroup = (props: CommentGroupProps) => {
 		for (var _i = 0; _i < responses.length; _i++) {
 			let response = responses[_i]
 			items.push(
-				<div className={`pl-6 pt-1  w-full ${responses.length !== _i ? 'border border-t-0 border-r-0 border-l-0' : ''}`}>
+				<div key={response.id} className={`pl-6 pt-1  w-full ${responses.length !== _i ? 'border border-t-0 border-r-0 border-l-0' : ''}`}>
 					<Comment noReply={_i !== responses.length - 1} comment={response} onReply={(text) => addResponse(text)} />												
 				</div>
 			)

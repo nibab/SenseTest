@@ -61,7 +61,7 @@ export const AppBuildRow = (props: AppBuildRowProps) => {
             </td>
            
             { props.selected !== undefined && <td className="py-1 pr-6 text-sm font-medium leading-5 text-right whitespace-no-wrap">
-                <input onClick={() => { props.onSelect && props.onSelect() }} checked={props.selected ? props.selected : false} id="comments" type="checkbox" className="w-4 h-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox" />
+                <input onClick={() => { props.onSelect && props.onSelect() }} readOnly checked={props.selected ? props.selected : false} id="comments" type="checkbox" className="w-4 h-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox" />
 
              </td> }
         </tr>

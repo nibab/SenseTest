@@ -56,6 +56,7 @@ const AppBuilds = (props: AppBuildProps) => {
         props.revisions?.forEach((revision) => {
             items.push(
                 <AppBuildRow 
+                    key={revision.id}
                     onSelect={() => setSelectedAndPropagate(revision)} 
                     selected={props.selectable ? selected?.id === revision.id : undefined} 
                     appBuild={revision} 

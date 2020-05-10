@@ -55,7 +55,7 @@ const NewSimulatorModal = (props: NewSimulatorModalProps) => {
         return (
             <button onClick={() => {props.onCancel()}} type="button" className="text-gray-400 transition duration-150 ease-in-out hover:text-gray-500 focus:outline-none focus:text-gray-500">
                 <svg className="w-6 h-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
         )
@@ -70,13 +70,13 @@ const NewSimulatorModal = (props: NewSimulatorModalProps) => {
         allDeviceTypes.forEach((deviceType) => {
             if (currentDeviceType === deviceType) {
                 items.push(
-                    <div className={selectedClass}>
+                    <div key={deviceType} className={selectedClass}>
                         <h2 className='mr-1'><a>{deviceTypePretty(deviceType)}</a></h2>
                     </div>
                 )
             } else {
                 items.push(
-                    <div onClick={() => setCurrentDeviceType(deviceType)} className={unselectedClass}>
+                    <div key={deviceType} onClick={() => setCurrentDeviceType(deviceType)} className={unselectedClass}>
                         <h2 className='mr-1'><a>{deviceTypePretty(deviceType)}</a></h2>
                     </div>
                 )
