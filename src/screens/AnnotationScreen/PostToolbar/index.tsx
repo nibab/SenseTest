@@ -87,9 +87,9 @@ export const PostToolbar = ({ currentPost, setCurrentPost, setDisplayCreateNewPo
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-1 icon-tag"><path className="primary" d="M2.59 13.41A1.98 1.98 0 0 1 2 12V7a5 5 0 0 1 5-5h4.99c.53 0 1.04.2 1.42.59l8 8a2 2 0 0 1 0 2.82l-8 8a2 2 0 0 1-2.82 0l-8-8zM7 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path className="secondary" d="M12 18l6-6-4-4-6 6.01L12 18z"/></svg>
 							<h2 className='inline-block text-xs text-gray-800 uppercase '><a className='font-bold'>{versions}</a>{` revision${versions > 1 || versions === 0? 's' : ''}`}</h2>
 						</div>
-						<div className='inline-flex items-center justify-end p-1 my-auto text-indigo-700 cursor-pointer hover:text-indigo-800'>
+						<div onClick={() => setDisplayRevisionModal(true)} className='inline-flex items-center justify-end p-1 my-auto text-indigo-700 cursor-pointer hover:text-indigo-800'>
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5 mb-0.5 icon-add"><path className='fill-current' fillRule="evenodd" d="M17 11a1 1 0 0 1 0 2h-4v4a1 1 0 0 1-2 0v-4H7a1 1 0 0 1 0-2h4V7a1 1 0 0 1 2 0v4h4z"/></svg>
-							<a onClick={() => setDisplayRevisionModal(true)} className='text-xs font-bold tracking-tight uppercase '>Upload New</a>
+							<a className='text-xs font-bold tracking-tight uppercase '>Upload New</a>
 						</div>							
 					</div>
 				</div>
