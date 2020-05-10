@@ -18,6 +18,7 @@ import { AssetStorageClient } from '../../clients/AssetStorageClient'
 import { addPost } from '../../store/post/actions'
 import { DataLayerClient } from '../../clients/DataLayerClient'
 import { PostStatus, DeviceType as DeviceTypeGraphQL } from '../../API'
+import Button from '../Button'
 
 type SimulatorMode = 'VIEW' | 'CREATE'
 
@@ -148,9 +149,13 @@ const Simulator = (props: SimulatorProps) => {
 			return (
 				<>
 					<span className="flex w-full -mt-3 rounded-md shadow-sm sm:ml-3 sm:w-auto">
-						<button onClick={() => onScreenshotButtonClick()} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-indigo-800 transition duration-150 ease-in-out bg-indigo-100 border border-transparent rounded-md shadow-sm hover:bg-indigo-100 focus:outline-none focus:border-indigo-100 focus:shadow-outline-indigo sm:text-sm sm:leading-5">
+						<Button onClick={() => {}}>
+							<div className='text-indigo-600'>
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-2 fill-current icon-click-target "><path className="" d="M21.97 12.73c-.25-.22-.56-.4-.92-.54L20 11.8a8 8 0 1 0-8.2 8.2l.4 1.06c.12.36.3.67.53.92a10 10 0 1 1 9.25-9.25zm-10.95 5.19a6 6 0 1 1 6.9-6.9l-2.39-.9a4 4 0 1 0-5.41 5.41l.9 2.39z"/><path className="secondary" d="M17.96 16.54l3.75 3.75a1 1 0 0 1-1.42 1.42l-3.75-3.75-.57 2.28a1 1 0 0 1-1.9.11l-3-8a1 1 0 0 1 1.28-1.29l8 3a1 1 0 0 1-.1 1.91l-2.3.57z"/></svg>
+							</div>
 							Annotate
-						</button>
+						</Button>
+						
 					</span>
 				</>
 			)
