@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, forwardRef, ReactNode } from 'react'
-import { AppBuild, DeviceType, deviceTypeAppetize, deviceTypePretty, Annotation } from '../../types'
+import { AppBuild, DeviceType, deviceTypeAppetize, deviceTypePretty, Annotation, postTagToGraphQLType, Project } from '../../types'
 import { Comment as CommentType, Post, PostTag, SubComment } from '../../types'
 import { useDispatch } from 'react-redux'
 import { addComment } from '../../store/comment/actions'
@@ -14,6 +14,10 @@ import AnnotationScreen from '../AnnotationScreen'
 import uuid from 'uuid'
 import { CommentsSection } from '../Comments'
 import Transition from '../../utils/Transition'
+import { AssetStorageClient } from '../../clients/AssetStorageClient'
+import { addPost } from '../../store/post/actions'
+import { DataLayerClient } from '../../clients/DataLayerClient'
+import { PostStatus, DeviceType as DeviceTypeGraphQL } from '../../API'
 
 type SimulatorMode = 'VIEW' | 'CREATE'
 
@@ -22,20 +26,33 @@ type SimulatorProps = {
 	appBuild: AppBuild
 	mode: SimulatorMode
 	deviceType: DeviceType
+	project: Project
 }
 
 const Simulator = (props: SimulatorProps) => {
+	const dispatch = useDispatch()
+
 	const iframeRef = useRef<HTMLIFrameElement>(null)
 	const [iframeLoaded, setIframeLoaded] = useState(false)
 	const [iframeActive, setIframeActive] = useState(false)
 
+	const [validationState, setValidationState] = useState<ValidationState>('None')
+
 	const [comments, setComments] = useState<CommentType[]>([])
+	const [annotations, setAnnotations] = useState<Annotation[]>([])
+	const [imagePromise, setImagePromise] = useState<Promise<string>>()
+	
+	// Variables to be set before post creation
 	const [newPostIdForCreation, setNewPostIdForCreation] = useState<string>()
 	const [annotationInProgress, setAnnotationInProgress] = useState<boolean>(false)
-
 	const [imageToAnnotate, setImageToAnnotate] = useState<Blob>()
 
+	// FORM INPUTS
+	const [isBlocker, setIsBlocker] = useState(false)
+	// Page name input
 	const pageNameRef = useRef<HTMLInputElement>(null)
+	// Repro steps input
+	const reproStepsRef = useRef<HTMLTextAreaElement>(null)
 	
 	const authState = useSelector(state => state.auth)
 
@@ -61,11 +78,48 @@ const Simulator = (props: SimulatorProps) => {
 	
 	const onScreenshotCreated = (data: string) => {
 		if (annotationInProgress === false) {
-			setImageToAnnotate(b64toBlob(data))
+			const imageBlob = b64toBlob(data)
+			setImageToAnnotate(imageBlob)
 			setNewPostIdForCreation(uuid())
 			setAnnotationInProgress(true)
+			setImagePromise(createImagePromise(imageBlob, props.project.id))
+			setEmbeddedAnnotationState('Annotate')
 		}
 	}
+
+	const onCancel = () => {
+		setEmbeddedAnnotationState('Annotate')
+		setImageToAnnotate(undefined)
+		setAnnotationInProgress(false)
+		setComments([])
+		setAnnotations([])
+		setImagePromise(undefined)
+	}
+
+	const onCreatePostClicked = async (imageId: string, post: Post) => {
+        dispatch(addPost(post))
+
+        const newPost = await DataLayerClient.createNewAnnotationPost(post.image as Blob, {
+            id: post.id,
+            title: post.title,
+            imageId: imageId,
+            projectId: post.projectId,
+            text: post.text.length === 0 ? 'none provided' : post.text,
+            status: PostStatus.OPEN,
+            tags: post.tags === undefined ? [] : post.tags.map(postTag => postTagToGraphQLType(postTag)),
+            appBuildId: post.appBuildId,
+            deviceType: DeviceTypeGraphQL.IPHONE_X      
+        })
+
+        AnalyticsClient.record('CREATED_ISSUE', authState)
+
+        post.comments?.forEach(async (comment) => {
+            await DataLayerClient.createCommentForPost(newPost, comment)
+		})
+		
+		setAnnotationInProgress(false)
+    }
+
 
     const onScreenshotButtonClick = () => {    
 		AnalyticsClient.record('TOOK_SIMULATOR_SCREENSHOT', authState)		
@@ -133,36 +187,29 @@ const Simulator = (props: SimulatorProps) => {
 	}
 
 	const renderScreenshotButtons = () => {
-		const onCancel = () => {
-			setEmbeddedAnnotationState('Annotate')
-			setImageToAnnotate(undefined)
-			setAnnotationInProgress(false)
-			setComments([])
-		}
-
-		const onSubmitClick = () => {
-			// const pageName = pageNameRef.current?.value
-			// //const reproSteps = reproStepsRef.current?.value
-			// if (pageName?.length === 0) {
-			// 	setValidationState('PageNameFailedValidation')
-			// 	return
-			// }
-			// const tagArray: PostTag[] = []
-			// if (isBlocker) tagArray.push('BLOCKER')
-			// const imageId = await props.imagePromise
-			// // If there are any other tags, add them here.
-			// props.onCreatePostClicked(imageId, {
-			// 	id: props.postId,
-			// 	title: pageName!,
-			// 	dateCreated: (new Date()).toISOString(),
-			// 	image: props.imageToAnnotate,
-			// 	projectId: props.projectId,
-			// 	text: reproSteps ? reproSteps : '',
-			// 	comments: comments,
-			// 	tags: tagArray,
-			// 	appBuildId: props.appBuild.id,
-			// 	deviceType: 'IPHONE_X'
-			// })
+		const onCreateButtonClick = async () => {
+			const pageName = pageNameRef.current?.value
+			const reproSteps = reproStepsRef.current?.value
+			if (pageName?.length === 0) {
+				setValidationState('PageNameFailedValidation')
+				return
+			}
+			const tagArray: PostTag[] = []
+			if (isBlocker) tagArray.push('BLOCKER')
+			const imageId = await imagePromise
+			// If there are any other tags, add them here.
+			onCreatePostClicked(imageId!, {
+				id: newPostIdForCreation!,
+				title: pageName!,
+				dateCreated: (new Date()).toISOString(),
+				image: imageToAnnotate!,
+				projectId: props.project.id,
+				text: reproSteps ? reproSteps : '',
+				comments: comments,
+				tags: tagArray,
+				appBuildId: props.appBuild.id,
+				deviceType: 'IPHONE_X'
+			})
 		}
 
 		return (
@@ -189,7 +236,7 @@ const Simulator = (props: SimulatorProps) => {
 							{ embeddedAnnotationState === 'Annotate' && <button onClick={() => setEmbeddedAnnotationState('Submit')} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-indigo-800 transition duration-150 ease-in-out bg-indigo-100 border border-transparent rounded-md shadow-sm hover:bg-indigo-100 focus:outline-none focus:border-indigo-100 focus:shadow-outline-indigo sm:text-sm sm:leading-5">
 								Next
 							</button> }
-							{ embeddedAnnotationState === 'Submit' && <button onClick={() => setEmbeddedAnnotationState('Submit')} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-indigo-800 transition duration-150 ease-in-out bg-indigo-100 border border-transparent rounded-md shadow-sm hover:bg-indigo-100 focus:outline-none focus:border-indigo-100 focus:shadow-outline-indigo sm:text-sm sm:leading-5">
+							{ embeddedAnnotationState === 'Submit' && <button onClick={() => onCreateButtonClick()} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-indigo-800 transition duration-150 ease-in-out bg-indigo-100 border border-transparent rounded-md shadow-sm hover:bg-indigo-100 focus:outline-none focus:border-indigo-100 focus:shadow-outline-indigo sm:text-sm sm:leading-5">
 								Submit
 							</button> }
 						</span>
@@ -203,6 +250,171 @@ const Simulator = (props: SimulatorProps) => {
 
 	const iFrameLoaded = () => {
 		setTimeout(() => setIframeLoaded(true), 300)
+	}
+
+
+	const renderPageNameInput = () => {
+
+		const onInputChange = () => {
+			if (validationState === 'PageNameFailedValidation') {
+				setValidationState('None')
+			}
+		}
+
+		const inputClassName =  validationState === 'PageNameFailedValidation' ?
+			'form-input block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red sm:text-sm sm:leading-5' : 
+			'block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5'
+
+		return (
+			<div className="sm:col-span-5">
+				<label htmlFor="city" className="block text-sm font-medium leading-5 text-gray-700">
+					Page Name
+				</label>
+				<div className="relative mt-1 rounded-md shadow-sm">
+					<input onChange={onInputChange} ref={pageNameRef} id="pageName" className={inputClassName} />
+					{  validationState === 'PageNameFailedValidation' && <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+						<svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+						</svg>
+					</div>}
+				
+				</div>
+				{ validationState === 'PageNameFailedValidation' && <p className="mt-2 text-sm text-red-600" id="email-error">Page name cannot be empty.</p>}
+			</div>
+		)
+	}
+
+	const renderBlockerSelection = () => {
+	
+
+		const renderBlockerTag = () => {
+			if (isBlocker) {
+				return (
+					<span className="bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
+						Blocker
+					</span>
+				)
+			} else {
+				return (
+					<div className=''>
+						<span onClick={() => setIsBlocker(true)} className="cursor-pointer border border-gray-300 border-dashed rounded inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4  text-gray-600">
+							<svg className="w-3 mx-auto mr-1 icon-camera" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path fillRule="evenodd" clipRule="evenodd" d="M10 3C10.5523 3 11 3.44772 11 4V9H16C16.5523 9 17 9.44772 17 10C17 10.5523 16.5523 11 16 11H11V16C11 16.5523 10.5523 17 10 17C9.44772 17 9 16.5523 9 16V11H4C3.44772 11 3 10.5523 3 10C3 9.44771 3.44772 9 4 9L9 9V4C9 3.44772 9.44772 3 10 3Z" fill="#4A5568"/>
+							</svg>
+							Blocker
+						</span>
+					</div>
+				)
+			}
+			
+		}
+
+		return (
+			<fieldset className="">
+				<legend className="text-sm font-medium leading-5 text-gray-700 ">
+				Tags
+				</legend>
+				{/* <p className="text-sm leading-5 text-gray-500">Does this issue block the release ?</p> */}
+				<div className="mt-2">
+					<div className='flex'>
+
+						{renderBlockerTag()}
+					</div>
+				</div>
+			</fieldset>			
+		)
+	}
+
+
+	const renderComments = () => {
+		const _addsubComment = (childComment: SubComment, parentComment: CommentType) => {
+			dispatch(addsubComment(parentComment, childComment))
+		}
+
+		if (comments.length === 0) {
+			return (
+				<div className='flex-col rounded-lg ' >
+					<div className='relative flex-col py-2 pr-2 overflow-scroll rounded-lg rounded-l-none' style={{height: getDeviceDimensions(props.deviceType!).height}}>
+						<div className='w-64 p-3 my-auto text-center border border-dashed rounded-lg bg-gray-50'>
+							<div className='font-bold text-gray-400'>Your annotations will show up here. Click anywhere on the image to create a new annotation.</div> 
+						</div>
+					</div>
+				</div>
+			)
+		} else {
+			return (
+				<div className='flex flex-col rounded-lg' >
+					<div className='relative flex flex-col w-auto py-2 pr-2 overflow-scroll rounded-lg rounded-l-none' style={{height: getDeviceDimensions(props.deviceType!).height}}>
+						<CommentsSection comments={comments} addSubComent={_addsubComment} displayNewCommentBox={false} />
+					</div>
+				</div>
+			)
+		}
+	}
+
+	const renderForm = () => {
+		return (
+			
+			<div className="flex-shrink-0 h-full p-3 overflow-scroll w-96">
+				<form className='ml-1'>
+					<div>
+						<div>
+							<div className="grid grid-cols-1 row-gap-6 col-gap-4 sm:grid-cols-6">
+								{renderPageNameInput()}
+					
+								<div className="sm:col-span-6">
+									<label htmlFor="repro" className="block text-sm font-medium leading-5 text-gray-700">
+									Repro Steps
+									</label>
+									<div className="mt-1 rounded-md shadow-sm">
+										<textarea id="repro" ref={reproStepsRef} rows={10} className="block w-full transition duration-150 ease-in-out form-textarea sm:text-sm sm:leading-5"></textarea>
+									</div>
+									<p className="mt-2 text-sm text-gray-500">Help others reproduce the issue.</p>
+								</div>	
+							</div>
+						</div>
+						<div className="mt-6 border-gray-200">
+							{ renderBlockerSelection()}
+						</div>
+					</div>
+				</form>
+			</div>
+		)
+	}
+
+	const onSubmitAnnotation = (annotation: Annotation) => {
+		const commentsCopy = [...comments]
+		const newComment: CommentType = {
+			postId: newPostIdForCreation!,
+			authorAvatarSrc: 'newsScreenshot.png',
+			text: annotation.data.text !== null ? annotation.data.text : "",
+			id: uuid(),
+			date: (new Date()).toISOString(),
+			author: authState.authenticated ? authState.userName! : 'invalid',
+			annotation: annotation,
+			subcomments: []
+		}
+		commentsCopy.push(newComment)
+		setComments(commentsCopy)
+		dispatch(addComment(newComment))
+
+		const annotationsCopy = [...annotations]
+		annotationsCopy.push(annotation)
+		setAnnotations(annotationsCopy)
+	}
+
+	const renderAnnotationScreen = () => {
+		return (
+			<>
+				{ imageToAnnotate &&  <AnnotationScreen 
+					deviceType={props.deviceType}
+					annotations={annotations} 
+					onSubmit={onSubmitAnnotation} 
+					key={'1'} 
+					imageBlob={imageToAnnotate} 
+				/>}
+			</>
+		)
 	}
 	
 	const renderLoadingScreen = () => {
@@ -253,17 +465,14 @@ const Simulator = (props: SimulatorProps) => {
 				<div className='absolute z-10' >
 					{ renderScreen() }
 				</div>
-				<EmbeddedAnnotation2 
-					postId={newPostIdForCreation!}
-					onSetComments={(comments) => setComments(comments)} 
-					imageToAnnotate={imageToAnnotate!} 
-					show={annotationInProgress} 
-					deviceType={props.deviceType} 
-					state={embeddedAnnotationState} 
-					comments={comments}
-					ref={pageNameRef}
-					//onSetIsBlocker={setIsBlocker(true)}
-				/>
+				<EmbeddedPostCreator 
+					show={annotationInProgress}
+					annotationScreen={renderAnnotationScreen()}
+					postCreationForm={renderForm()}
+					commentsSection={renderComments()}
+					state={embeddedAnnotationState}
+					deviceType={props.deviceType}
+				></EmbeddedPostCreator>
 			</div>
 		</Container>
 	)
@@ -271,229 +480,6 @@ const Simulator = (props: SimulatorProps) => {
 
 type EmbeddedAnnotationState = 'Annotate' | 'Submit' | 'None'
 type ValidationState = 'PageNameFailedValidation' | 'None'
-
-type EmbeddedAnnotationProps = {
-	show: boolean
-	deviceType: DeviceType
-	state: EmbeddedAnnotationState
-	imageToAnnotate?: Blob
-	onSetComments: (comments: CommentType[]) => void
-	comments: CommentType[]
-	postId: string
-	//onSetIsBlocker: () => void
-}
-
-const EmbeddedAnnotation2 = forwardRef<HTMLInputElement, EmbeddedAnnotationProps>((props, ref) => {
-	const dispatch = useDispatch()
-
-	const [comments, setComments] = useState<CommentType[]>([])
-	const [annotations, setAnnotations] = useState<Annotation[]>([])
-
-	// Repro steps input
-	const reproStepsRef = useRef<HTMLTextAreaElement>(null)
-
-	const [validationState, setValidationState] = useState<ValidationState>('None')
-
-	const authState = useSelector(state => state.auth)
-
-	const [isBlocker, setIsBlocker] = useState(false)
-
-	useEffect(() => {}, [props.state, props.imageToAnnotate, props.postId])
-
-	useEffect(() => {setComments(props.comments); setAnnotations([])}, [props.comments])
-
-	const renderComments = () => {
-		const _addsubComment = (childComment: SubComment, parentComment: CommentType) => {
-			dispatch(addsubComment(parentComment, childComment))
-		}
-
-		if (comments.length === 0) {
-			return (
-				<div className='flex-col rounded-lg ' >
-					<div className='relative flex-col py-2 pr-2 overflow-scroll rounded-lg rounded-l-none' style={{height: getDeviceDimensions(props.deviceType!).height}}>
-						<div className='w-64 p-3 my-auto text-center border border-dashed rounded-lg bg-gray-50'>
-							<div className='font-bold text-gray-400'>Your annotations will show up here. Click anywhere on the image to create a new annotation.</div> 
-						</div>
-					</div>
-				</div>
-			)
-		} else {
-			return (
-				<div className='flex flex-col rounded-lg' >
-					<div className='relative flex flex-col w-auto py-2 pr-2 overflow-scroll rounded-lg rounded-l-none' style={{height: getDeviceDimensions(props.deviceType!).height}}>
-						<CommentsSection comments={comments} addSubComent={_addsubComment} displayNewCommentBox={false} />
-					</div>
-				</div>
-			)
-		}
-	}
-
-	const onSubmitAnnotation = (annotation: Annotation) => {
-		const commentsCopy = [...comments]
-		const newComment: CommentType = {
-			postId: props.postId,
-			authorAvatarSrc: 'newsScreenshot.png',
-			text: annotation.data.text !== null ? annotation.data.text : "",
-			id: uuid(),
-			date: (new Date()).toISOString(),
-			author: authState.authenticated ? authState.userName! : 'invalid',
-			annotation: annotation,
-			subcomments: []
-		}
-		commentsCopy.push(newComment)
-		setComments(commentsCopy)
-		dispatch(addComment(newComment))
-		props.onSetComments(commentsCopy)
-
-		const annotationsCopy = [...annotations]
-		annotationsCopy.push(annotation)
-		setAnnotations(annotationsCopy)
-	}
-
-	const renderAnnotationScreen = () => {
-		return (
-			<>
-				{ props.imageToAnnotate &&  <AnnotationScreen 
-					deviceType={props.deviceType}
-					annotations={annotations} 
-					onSubmit={onSubmitAnnotation} 
-					key={'1'} 
-					imageBlob={props.imageToAnnotate} 
-				/>}
-			</>
-		)
-	}
-
-	const renderAnnotate = () => {
-
-		// const renderScreen = () => {
-		// 	return (
-		// 		<div className='z-30'>
-		// 			<div className='relative flex flex-shrink-0 object-contain w-full rounded-lg rounded-r-none' style={getDeviceDimensions(props.deviceType!)}>
-		// 				<div className='z-30 mx-auto my-auto bg-orange-300 spinner' style={{width: '92.1%', height: '96.5%', borderRadius: '2.2rem'}}>
-		// 				</div>
-		// 			</div>
-		// 		</div>
-		// 	)
-		// }
-
-		const renderPageNameInput = () => {
-
-			const onInputChange = () => {
-				if (validationState === 'PageNameFailedValidation') {
-					setValidationState('None')
-				}
-			}
-	
-			const inputClassName =  validationState === 'PageNameFailedValidation' ?
-				'form-input block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red sm:text-sm sm:leading-5' : 
-				'block w-full transition duration-150 ease-in-out form-input sm:text-sm sm:leading-5'
-	
-			return (
-				<div className="sm:col-span-5">
-					<label htmlFor="city" className="block text-sm font-medium leading-5 text-gray-700">
-						Page Name
-					</label>
-					<div className="relative mt-1 rounded-md shadow-sm">
-						<input onChange={onInputChange} ref={ref} id="pageName" className={inputClassName} />
-						{  validationState === 'PageNameFailedValidation' && <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-							<svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-								<path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-							</svg>
-						</div>}
-					
-					</div>
-					{ validationState === 'PageNameFailedValidation' && <p className="mt-2 text-sm text-red-600" id="email-error">Page name cannot be empty.</p>}
-				</div>
-			)
-		}
-
-		const renderBlockerSelection = () => {
-		
-
-			const renderBlockerTag = () => {
-				if (isBlocker) {
-					return (
-						<span className="bg-red-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-red-100 text-red-800">
-							Blocker
-						</span>
-					)
-				} else {
-					return (
-						<div className=''>
-							<span onClick={() => setIsBlocker(true)} className="cursor-pointer border border-gray-300 border-dashed rounded inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4  text-gray-600">
-								<svg className="w-3 mx-auto mr-1 icon-camera" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<path fillRule="evenodd" clipRule="evenodd" d="M10 3C10.5523 3 11 3.44772 11 4V9H16C16.5523 9 17 9.44772 17 10C17 10.5523 16.5523 11 16 11H11V16C11 16.5523 10.5523 17 10 17C9.44772 17 9 16.5523 9 16V11H4C3.44772 11 3 10.5523 3 10C3 9.44771 3.44772 9 4 9L9 9V4C9 3.44772 9.44772 3 10 3Z" fill="#4A5568"/>
-								</svg>
-								Blocker
-							</span>
-						</div>
-					)
-				}
-				
-			}
-	
-			return (
-				<fieldset className="">
-					<legend className="text-sm font-medium leading-5 text-gray-700 ">
-					Tags
-					</legend>
-					{/* <p className="text-sm leading-5 text-gray-500">Does this issue block the release ?</p> */}
-					<div className="mt-2">
-						<div className='flex'>
-	
-							{renderBlockerTag()}
-						</div>
-					</div>
-				</fieldset>			
-			)
-		}
-
-		const renderForm = () => {
-			return (
-				
-				<div className="flex-shrink-0 h-full p-3 overflow-scroll w-96">
-					<form className='ml-1'>
-						<div>
-							<div>
-								<div className="grid grid-cols-1 row-gap-6 col-gap-4 sm:grid-cols-6">
-									{renderPageNameInput()}
-						
-									<div className="sm:col-span-6">
-										<label htmlFor="repro" className="block text-sm font-medium leading-5 text-gray-700">
-										Repro Steps
-										</label>
-										<div className="mt-1 rounded-md shadow-sm">
-											<textarea id="repro" ref={reproStepsRef} rows={10} className="block w-full transition duration-150 ease-in-out form-textarea sm:text-sm sm:leading-5"></textarea>
-										</div>
-										<p className="mt-2 text-sm text-gray-500">Help others reproduce the issue.</p>
-									</div>	
-								</div>
-							</div>
-							<div className="mt-6 border-gray-200">
-								{ renderBlockerSelection()}
-							</div>
-						</div>
-					</form>
-				</div>
-			)
-		}
-
-		return (
-			<EmbeddedPostCreator 
-				show={props.show}
-				annotationScreen={renderAnnotationScreen()}
-				postCreationForm={renderForm()}
-				commentsSection={renderComments()}
-				state={props.state}
-				deviceType={props.deviceType}
-			></EmbeddedPostCreator>
-		)
-	}
-
-	return (renderAnnotate())
-	
-})
 
 type EmbeddedPostCreatorProps = {
 	annotationScreen: ReactNode
@@ -558,6 +544,21 @@ const EmbeddedPostCreator = (props: EmbeddedPostCreatorProps) => {
 			</Transition>	
 		</div>
 	)
+}
+
+const createImagePromise = (image: Blob, projectId: string): Promise<string> => {
+	return new Promise((resolve, reject) => {
+		const imageId = uuid()
+		AssetStorageClient.createUploadUrl(imageId, projectId).then((presignedUrlFields) => {
+			Log.info("Presigned url for get " + presignedUrlFields)
+			return AssetStorageClient.uploadDataToUrl(image, presignedUrlFields)
+		}).then(() => {
+			resolve(imageId)
+		}).catch(() => {
+			Log.error("Something happened during image upload.", "CreatePostView")
+		})
+	})
+	
 }
 
 // For debugging purposes

@@ -273,7 +273,7 @@ const PostView = (props: PostViewProps) => {
 				{ renderPostTitle() }
 				<div className='flex flex-row pt-2 pb-1 pl-2 pr-2 overflow-scroll'> 				
 					{ renderToolbar() }	
-				{ displayState === 'Simulator'  && simulatorParams?.appBuild !== undefined ? <div className="ml-3"><Simulator deviceType={'IPHONE_X'} mode={'VIEW'} appBuild={simulatorParams?.appBuild}/></div> : <></> }
+				{ displayState === 'Simulator'  && simulatorParams?.appBuild !== undefined ? <div className="ml-3"><Simulator project={props.project} deviceType={'IPHONE_X'} mode={'VIEW'} appBuild={simulatorParams?.appBuild}/></div> : <></> }
 					{ displayState === 'Attachment' ? <div className="ml-3"><Attachment deviceType={props.post.deviceType}/></div> : <></> }
 					<div className='ml-3'>
 						<PostScreenshot post={props.post} />
