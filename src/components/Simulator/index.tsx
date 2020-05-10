@@ -48,6 +48,8 @@ const Simulator = (props: SimulatorProps) => {
 	const [annotationInProgress, setAnnotationInProgress] = useState<boolean>(false)
 	const [imageToAnnotate, setImageToAnnotate] = useState<Blob>()
 
+	const throttledScreenshotCreated = useRef(false)
+
 	// FORM INPUTS
 	const [isBlocker, setIsBlocker] = useState(false)
 	// Page name input
@@ -60,6 +62,10 @@ const Simulator = (props: SimulatorProps) => {
 	useEffect(() => {
         window.addEventListener("message", receiveMessage, false);
 	})
+
+	useEffect(() => {
+		throttledScreenshotCreated.current = annotationInProgress
+	}, [annotationInProgress])
 
 	useEffect(() => {
 		//For debugging purposes only
@@ -78,7 +84,9 @@ const Simulator = (props: SimulatorProps) => {
 	}
 	
 	const onScreenshotCreated = (data: string) => {
-		if (annotationInProgress === false) {
+		// Using a throttled value to check since onScreenshotCreated gets called a gazillion times in between renders
+		// which results in annotationInProgress to be continously false when we had set it to true...
+		if (throttledScreenshotCreated.current === false) {
 			const imageBlob = b64toBlob(data)
 			setImageToAnnotate(imageBlob)
 			setNewPostIdForCreation(uuid())
