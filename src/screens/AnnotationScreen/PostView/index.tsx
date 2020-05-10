@@ -190,7 +190,7 @@ const PostView = (props: PostViewProps) => {
 					<span className="my-auto font-bold uppercase mx-2 bg-green-100 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 text-green-800">
 						Resolved
 					</span>
-					<Button onClick={() => reopenPost()}>
+					<Button buttonClass='SECONDARY' onClick={() => reopenPost()}>
 						{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto mr-1 icon-check"><circle cx="12" cy="12" r="10" className="checkmark"/><path className="secondary" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg> */}
 						{ postStatusButtonLoading ? <div className='spinner'>Reopen</div> : 'Reopen'}
 					</Button>
@@ -198,7 +198,7 @@ const PostView = (props: PostViewProps) => {
 			}
 			
 			return (
-				<Button onClick={() => setDisplayResolvePostModal(true)}>
+				<Button buttonClass='SECONDARY' onClick={() => setDisplayResolvePostModal(true)}>
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mx-auto mr-1 icon-check"><circle cx="12" cy="12" r="10" className="checkmark"/><path className="secondary" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
 					{ postStatusButtonLoading ? <div className='spinner'>Resolve</div> : 'Resolve'}
 				</Button>

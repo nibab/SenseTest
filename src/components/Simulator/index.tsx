@@ -149,7 +149,7 @@ const Simulator = (props: SimulatorProps) => {
 			return (
 				<>
 					<span className="flex w-full -mt-3 rounded-md shadow-sm sm:ml-3 sm:w-auto">
-						<Button onClick={() => {}}>
+						<Button buttonClass='SECONDARY' onClick={() => {onScreenshotButtonClick()}}>
 							<div className='text-indigo-600'>
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 mr-2 fill-current icon-click-target "><path className="" d="M21.97 12.73c-.25-.22-.56-.4-.92-.54L20 11.8a8 8 0 1 0-8.2 8.2l.4 1.06c.12.36.3.67.53.92a10 10 0 1 1 9.25-9.25zm-10.95 5.19a6 6 0 1 1 6.9-6.9l-2.39-.9a4 4 0 1 0-5.41 5.41l.9 2.39z"/><path className="secondary" d="M17.96 16.54l3.75 3.75a1 1 0 0 1-1.42 1.42l-3.75-3.75-.57 2.28a1 1 0 0 1-1.9.11l-3-8a1 1 0 0 1 1.28-1.29l8 3a1 1 0 0 1-.1 1.91l-2.3.57z"/></svg>
 							</div>
@@ -226,17 +226,17 @@ const Simulator = (props: SimulatorProps) => {
 					</div>
 					<div className='flex flex-row'>	
 						<span className="flex w-full mt-3 rounded-md shadow-sm sm:mt-0 sm:w-auto">
-							<button onClick={() => onCancel()} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5">
+							<Button onClick={() => onCancel()} buttonClass={'SECONDARY'}>
 							Cancel
-							</button>
+							</Button>
 						</span>
 						<span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-							{ embeddedAnnotationState === 'Annotate' && <button onClick={() => setEmbeddedAnnotationState('Submit')} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-indigo-800 transition duration-150 ease-in-out bg-indigo-100 border border-transparent rounded-md shadow-sm hover:bg-indigo-100 focus:outline-none focus:border-indigo-100 focus:shadow-outline-indigo sm:text-sm sm:leading-5">
+							{ embeddedAnnotationState === 'Annotate' && <Button onClick={() => setEmbeddedAnnotationState('Submit')} buttonClass={'PRIMARY'}>
 								Next
-							</button> }
-							{ embeddedAnnotationState === 'Submit' && <button onClick={() => onCreateButtonClick()} type="button" className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-indigo-800 transition duration-150 ease-in-out bg-indigo-100 border border-transparent rounded-md shadow-sm hover:bg-indigo-100 focus:outline-none focus:border-indigo-100 focus:shadow-outline-indigo sm:text-sm sm:leading-5">
+							</Button> }
+							{ embeddedAnnotationState === 'Submit' && <Button onClick={() => onCreateButtonClick()} buttonClass={'PRIMARY'}>
 								Submit
-							</button> }
+							</Button> }
 						</span>
 					</div>
 					
@@ -265,7 +265,7 @@ const Simulator = (props: SimulatorProps) => {
 
 		return (
 			<div className="sm:col-span-5">
-				<label htmlFor="city" className="block text-sm font-medium leading-5 text-gray-700">
+				<label htmlFor="city" className="block font-mono text-xs font-medium leading-5 text-gray-700">
 					Page Name
 				</label>
 				<div className="relative mt-1 rounded-md shadow-sm">
@@ -295,7 +295,7 @@ const Simulator = (props: SimulatorProps) => {
 			} else {
 				return (
 					<div className=''>
-						<span onClick={() => setIsBlocker(true)} className="cursor-pointer border border-gray-300 border-dashed rounded inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4  text-gray-600">
+						<span onClick={() => setIsBlocker(true)} className="cursor-pointer border border-gray-400 border-dashed rounded inline-flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4  text-gray-600">
 							<svg className="w-3 mx-auto mr-1 icon-camera" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path fillRule="evenodd" clipRule="evenodd" d="M10 3C10.5523 3 11 3.44772 11 4V9H16C16.5523 9 17 9.44772 17 10C17 10.5523 16.5523 11 16 11H11V16C11 16.5523 10.5523 17 10 17C9.44772 17 9 16.5523 9 16V11H4C3.44772 11 3 10.5523 3 10C3 9.44771 3.44772 9 4 9L9 9V4C9 3.44772 9.44772 3 10 3Z" fill="#4A5568"/>
 							</svg>
@@ -309,7 +309,7 @@ const Simulator = (props: SimulatorProps) => {
 
 		return (
 			<fieldset className="">
-				<legend className="text-sm font-medium leading-5 text-gray-700 ">
+				<legend className="font-mono text-xs font-medium leading-5 text-gray-700 ">
 				Tags
 				</legend>
 				{/* <p className="text-sm leading-5 text-gray-500">Does this issue block the release ?</p> */}
@@ -361,13 +361,13 @@ const Simulator = (props: SimulatorProps) => {
 								{renderPageNameInput()}
 					
 								<div className="sm:col-span-6">
-									<label htmlFor="repro" className="block text-sm font-medium leading-5 text-gray-700">
+									<label htmlFor="repro" className="block font-mono text-xs font-medium leading-5 text-gray-700">
 									Repro Steps
 									</label>
 									<div className="mt-1 rounded-md shadow-sm">
 										<textarea id="repro" ref={reproStepsRef} rows={10} className="block w-full transition duration-150 ease-in-out form-textarea sm:text-sm sm:leading-5"></textarea>
 									</div>
-									<p className="mt-2 text-sm text-gray-500">Help others reproduce the issue.</p>
+									<p className="mt-2 font-mono text-xs text-gray-500">Help others reproduce the issue.</p>
 								</div>	
 							</div>
 						</div>
@@ -490,7 +490,7 @@ type EmbeddedPostCreatorProps = {
 
 const EmbeddedPostCreator = (props: EmbeddedPostCreatorProps) => {
 	return (
-		<div className='z-40 bg-gray-300'>
+		<div className='z-40 overflow-scroll bg-gray-300'>
 			<Transition show={ props.show && props.state === 'Annotate'}>
 				<div className='relative bg-gray-300'>
 					<div className='relative flex flex-row'>
@@ -526,7 +526,7 @@ const EmbeddedPostCreator = (props: EmbeddedPostCreatorProps) => {
 				leaveTo="opacity-0 w-0"
 			>
 				<div className='relative'>
-					<div className='relative flex flex-row'>
+					<div className='relative flex flex-row overflow-scroll'>
 						<Transition 
 							enter="ease-in duration-100"
 							enterFrom="opacity-0"
