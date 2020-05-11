@@ -7,7 +7,7 @@ type ContainerProps = {
 
 const Container: React.StatelessComponent<ContainerProps> = ({tags, header, children}) => {
     return (
-        <div className='flex flex-col '>
+        <div className='flex flex-col pb-3'>
             <div className='flex w-full h-8 font-mono'>
 				<div className=' pb-1 mx-auto flex flex-row p-0.5'>
                     { tags }
