@@ -83,6 +83,9 @@ const SignUp = (props: SignUpProps) => {
 					{renderForm()}
 				</div>
 			</div>
+            <p className="mt-3 text-sm font-semibold leading-5 text-center text-gray-600 max-w">
+				I agree to the <a className="underline" href="https://www.prerelease.io/privacy"> privacy  policy</a> and <a className="underline" href="https://www.prerelease.io/terms-and-conditions"> terms of service</a>.
+            </p>
 		</div>
 	)
 }
