@@ -5,6 +5,7 @@ import InputField from './InputField'
 import ValidationErrorBubble from '../ValidationErrorBubble'
 import { Auth } from 'aws-amplify'
 import Log from '../../utils/Log'
+import { useHistory } from 'react-router-dom'
 
 type SignInProps = {
 	handleStateChange: (authState: AuthState, userObject: any) => void
@@ -15,6 +16,7 @@ const SignIn = ({ handleStateChange }: SignInProps) => {
 	const passwordRef = useRef<HTMLInputElement>(null)
 	const [signingIn, setSigningIn] = useState(false)
 	const [error, setError] = useState<string>()
+	const history = useHistory()
 
 	const signIn = (e: any) => {
 		e.preventDefault()
@@ -60,7 +62,7 @@ const SignIn = ({ handleStateChange }: SignInProps) => {
 					</div>
 
 					<div className="text-sm leading-5">
-						<a href="#" className="text-indigo-600 transition duration-150 ease-in-out hover:text-indigo-500 focus:outline-none focus:underline">
+						<a className="text-indigo-600 transition duration-150 ease-in-out cursor-pointer hover:text-indigo-500 focus:outline-none focus:underline">
 						Forgot your password?
 						</a>
 					</div>
@@ -82,7 +84,7 @@ const SignIn = ({ handleStateChange }: SignInProps) => {
 			<Header text={"Sign in to your account"} />
 			<p className="mt-2 text-sm font-semibold leading-5 text-center text-gray-600 max-w">
 				Or
-				<a href="#" className="ml-1 font-medium text-indigo-600 transition duration-150 ease-in-out hover:text-indigo-500 focus:outline-none focus:underline">
+				<a onClick={() => history.push('/signUp')} className="ml-1 font-medium text-indigo-600 transition duration-150 ease-in-out cursor-pointer hover:text-indigo-500 focus:outline-none focus:underline">
 					sign up here if you're new
 				</a>
 			</p>

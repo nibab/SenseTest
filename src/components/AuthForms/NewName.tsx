@@ -21,8 +21,8 @@ const NewName = ({ handleStateChange }: NewNameProps) => {
 
 		if (name === undefined) {
 			return
-        }
-        
+		}
+		        
 		setIsLoading(true)
 		UsersClient.createUser({userName: name}).then(() => {
 			return Auth.currentAuthenticatedUser()
@@ -42,7 +42,7 @@ const NewName = ({ handleStateChange }: NewNameProps) => {
 	const renderForm = () => {
 		return (
 			<form onSubmit={setName}>
-				<InputField onInputChange={() => setError(undefined)} ref={userName} placeholder={'e.g. John Smith'} type={'name'} />
+				<InputField onInputChange={() => setError(undefined)} ref={userName} placeholder={'e.g. John Smith'} type={'text'} />
 				
 				<ValidationErrorBubble errorText={error} />
 				

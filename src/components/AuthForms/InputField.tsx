@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useState } from 'react'
 
-type InputFieldType = 'email' | 'password' | 'name'
+type InputFieldType = 'email' | 'password' | 'text'
 type InputFieldProps = {
 	name?: string
 	type: InputFieldType

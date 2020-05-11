@@ -3,7 +3,7 @@ import { PostTag as PostTagGraphQL} from './API'
 import { DeviceType as DeviceTypeGraphQL} from './API'
 
 const stringLitArray = <L extends string>(arr: L[]) => arr
-const authStates = stringLitArray(["signedIn", "signedUp", "signUp", "signedUpAfterInvite", "firstSignIn"])
+const authStates = stringLitArray(["signedIn", "signedUp", "signUp", "signUpConfirm", "signedUpAfterInvite", "firstSignIn"])
 export type AuthState = (typeof authStates)[number]
 export const isAuthState = (x: any): x is AuthState => authStates.includes(x);
 

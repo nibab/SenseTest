@@ -24,6 +24,7 @@ import AppBuildScreen from './screens/AppBuildScreen';
 import { login } from './store/authentication/actions';
 import Log from './utils/Log';
 import NotFound from './screens/ProjectNotFound';
+import uuid from 'uuid';
 
 export const currentAuthConfig = Amplify.configure(awsconfig);
 export const SNAPTEST_API_NAME = "SnapTestAPI";
@@ -88,7 +89,13 @@ const Main = () => {
         <Route path='/login'>
           {isLoggedIn || isLoading ?
             (<Redirect to='/projects'/>) :
-            <AuthForm onUserSignIn={async () => {const user = await AmplifyAuth.currentUserInfo(); getUserInfoAndSetLogin(user)}} />
+            <AuthForm key={uuid()} onUserSignIn={async () => {const user = await AmplifyAuth.currentUserInfo(); getUserInfoAndSetLogin(user)}} />
+          }
+        </Route>
+        <Route path='/signUp'>
+          {isLoggedIn || isLoading ?
+            (<Redirect to='/projects'/>) :
+            <AuthForm key={uuid()} initialState={'signUp'} onUserSignIn={async () => {const user = await AmplifyAuth.currentUserInfo(); getUserInfoAndSetLogin(user)}} />
           }
         </Route>
         <ProtectedRoute

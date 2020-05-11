@@ -5,14 +5,19 @@ import SignIn from './AuthForms/SignIn';
 import NewName from './AuthForms/NewName';
 import Attachment from '../screens/AnnotationScreen/PostView/Attachment';
 import Button from './Button';
+import SignUp, {SignUpConfirm} from './AuthForms/SignUp';
 
 type AuthProps = {
-    onUserSignIn: (userObject: any) => void,
+    onUserSignIn: (userObject: any) => void
+    initialState?: AuthState
+
 }
 
 const AuthForm = (props: AuthProps) => {
     const [userObject, setUserObject] = useState()
-    const [currentState, setCurrentState] = useState<AuthState| null>(null)
+    const [currentState, setCurrentState] = useState<AuthState | undefined>(props.initialState)
+    const [userPassword, setUserPassword] = useState<string>()
+    const [userFullName, setUserFullName] = useState<string>()
 
     useEffect(() => {
         if (currentState === 'signedIn') {
@@ -43,7 +48,7 @@ const AuthForm = (props: AuthProps) => {
             <div className=''>
            
 
-                {currentState === null && <SignIn handleStateChange={(authState, userObject) => {
+                {currentState === undefined && <SignIn handleStateChange={(authState, userObject) => {
                     setUserObject(userObject)
                     setCurrentState(authState)
                 }} />}
@@ -54,6 +59,17 @@ const AuthForm = (props: AuthProps) => {
                         setCurrentState(authState)
                     }} />
                 }
+
+                {currentState === 'signUp' && <SignUp handleStateChange={(authState, userObject, userPassword, userFullName) => {
+                    setCurrentState(authState)
+                    setUserObject(userObject)
+                    setUserPassword(userPassword)
+                    setUserFullName(userFullName)
+                }}></SignUp>}
+
+                {currentState === 'signUpConfirm' && userPassword && userFullName && <SignUpConfirm userFullName={userFullName} userPassword={userPassword} userObject={userObject} handleStateChange={(authState, userObject) => {
+                    setCurrentState(authState)
+                }}></SignUpConfirm>}
 
                 {currentState === 'firstSignIn' &&
                     <NewName handleStateChange={(authState) => {
