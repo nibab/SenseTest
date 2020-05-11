@@ -176,8 +176,8 @@ const ProjectsScreen = () => {
 								{ isLoading && <div className="h-20 spinner-large"></div>}
 								{ !isLoading && renderReleases() } 
 								{ !isLoading && currentProjects?.length === 0 && renderNoProjects()}
-								<h2 className='mt-10 mb-3 text-sm font-bold tracking-wide text-gray-500 uppercase text-md'>Approved </h2>
-								{ renderNoApprovedProjects() }
+								{/* <h2 className='mt-10 mb-3 text-sm font-bold tracking-wide text-gray-500 uppercase text-md'>Approved </h2>
+								{ renderNoApprovedProjects() } */}
 							</div>
 						</div>
 					</div>	
