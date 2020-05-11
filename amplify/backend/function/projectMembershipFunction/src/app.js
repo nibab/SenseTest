@@ -338,8 +338,7 @@ app.post('/createAndInviteUser', async function(req, res, next) {
       }
       try {
         const userProjectEdgeMutation = await graphQlQuery(userProjectEdge, createUserProjectMutation, 'createUserProjectEdge')
-      
-        sendUserInvitedToProjectEmail(creatorName, email, `${creatorName} invited you to a project on prerelease.io`, projectId)
+        await sendUserInvitedToProjectEmail(creatorName, email, `${creatorName} invited you to a project on prerelease.io`, projectId)
       } catch(err) {
         let userExistsInTheProjectError = new Error(e);
         userExistsInTheProjectError.statusCode = 409;
