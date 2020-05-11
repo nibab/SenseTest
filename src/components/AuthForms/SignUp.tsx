@@ -128,7 +128,7 @@ export const SignUpConfirm = (props: ConfirmSignUpProps) => {
     const renderForm = () => {
 		return (
 			<form onSubmit={confirmSignUp}>
-				<InputField onInputChange={() => setError(undefined)} name={"Confirmation code"} ref={codeRef} type={'text'} />
+				<InputField onInputChange={() => setError(undefined)} name={"Code"} ref={codeRef} type={'text'} />
 
 				<ValidationErrorBubble errorText={error} />
 				
@@ -146,6 +146,10 @@ export const SignUpConfirm = (props: ConfirmSignUpProps) => {
     return (
 		<div className="flex flex-col justify-center min-h-screen bg-gray-50 sm:px-6 lg:px-8">
 			<Header text={"Confirmation Code"} />
+            <p className="mt-2 text-sm font-semibold leading-5 text-center text-gray-600 max-w">
+				Check your e-mail. We just sent you a confirmation code.
+				
+			</p>
 			
 			<div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
 				<div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
