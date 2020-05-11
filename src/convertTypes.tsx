@@ -46,7 +46,8 @@ export class TypeConverter {
                     dateCreated: post.createdAt,
                     tags: post.tags.filter((tag) => tag !== null).map((tag) => postTagGraphQLToLocalType(tag!) ),
                     appBuildId: post.appBuildId,
-                    deviceType: deviceTypeGraphQLToLocalType(post.deviceType)
+                    deviceType: deviceTypeGraphQLToLocalType(post.deviceType),
+                    status: post.status
                 }
 
                 postImgDownload.imagePromise.then((blob) => {
