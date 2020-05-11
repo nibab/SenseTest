@@ -45,13 +45,13 @@ const SignIn = ({ handleStateChange }: SignInProps) => {
 		return (
 			<form onSubmit={signIn}>
 				<InputField onInputChange={() => setError(undefined)} name={"Email address"} ref={emailRef} type={'email'} />
-				<div className='mt-3'>	
+				<div className='mt-5'>	
 					<InputField onInputChange={() => setError(undefined)} name={"Password"} ref={passwordRef} type={'password'} />
 				</div>
 
 				<ValidationErrorBubble errorText={error} />
 				
-				<div className="flex items-center justify-between mt-6">
+				<div className="flex items-center justify-between mt-6 font-mono">
 					<div className="flex items-center">
 						<input id="remember_me" type="checkbox" className="w-4 h-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox" />
 						<label id="remember_me" className="block ml-2 text-sm leading-5 text-gray-900">
@@ -60,13 +60,13 @@ const SignIn = ({ handleStateChange }: SignInProps) => {
 					</div>
 
 					<div className="text-sm leading-5">
-						<a href="#" className="font-medium text-indigo-600 transition duration-150 ease-in-out hover:text-indigo-500 focus:outline-none focus:underline">
+						<a href="#" className="text-indigo-600 transition duration-150 ease-in-out hover:text-indigo-500 focus:outline-none focus:underline">
 						Forgot your password?
 						</a>
 					</div>
 				</div>
 
-				<div className="mt-3">
+				<div className="mt-5">
 					<span className="block w-full rounded-md shadow-sm">
 						<button type="submit" className={`${signingIn? 'spinner': ''} flex justify-center w-full px-4 py-2 text-sm font-medium text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700`}>
 						Sign in
@@ -80,6 +80,12 @@ const SignIn = ({ handleStateChange }: SignInProps) => {
 	return (
 		<div className="flex flex-col justify-center min-h-screen bg-gray-50 sm:px-6 lg:px-8">
 			<Header text={"Sign in to your account"} />
+			<p className="mt-2 text-sm font-semibold leading-5 text-center text-gray-600 max-w">
+				Or
+				<a href="#" className="ml-1 font-medium text-indigo-600 transition duration-150 ease-in-out hover:text-indigo-500 focus:outline-none focus:underline">
+					sign up here if you're new
+				</a>
+			</p>
 			<div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
 				<div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
 					{renderForm()}

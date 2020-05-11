@@ -4,6 +4,7 @@ import SignInCreateNewPassword from './AuthForms/SignInCreateNewPassword';
 import SignIn from './AuthForms/SignIn';
 import NewName from './AuthForms/NewName';
 import Attachment from '../screens/AnnotationScreen/PostView/Attachment';
+import Button from './Button';
 
 type AuthProps = {
     onUserSignIn: (userObject: any) => void,
@@ -37,7 +38,7 @@ const AuthForm = (props: AuthProps) => {
                 </div>
                 <div className='w-full '>
                 {/* <button onClick={() => onTestButtonClick()} className='bg-red-200'> CLICK ME</button> */}
-                </div>                
+                </div>            
             </div>
             <div className=''>
            

@@ -30,7 +30,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) =>
 
 	return (
 		<div>
-			{ props.name && <label id={props.type} className="block text-sm font-medium leading-5 text-gray-700">
+			{ props.name && <label id={props.type} className="block font-mono text-sm font-medium leading-5 text-gray-700">
 				{props.name}
 			</label>}
 			<div className={`mt-1 relative rounded-md shadow-sm`}>
