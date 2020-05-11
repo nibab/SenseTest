@@ -25,6 +25,7 @@ import { login } from './store/authentication/actions';
 import Log from './utils/Log';
 import NotFound from './screens/ProjectNotFound';
 import uuid from 'uuid';
+import HelpWidget from './components/HelpWidget';
 
 export const currentAuthConfig = Amplify.configure(awsconfig);
 export const SNAPTEST_API_NAME = "SnapTestAPI";
@@ -160,6 +161,7 @@ const Main = () => {
           </div>  
            */}
           { renderContent(isLoggedIn, isLoading) }
+          { isLoggedIn && <HelpWidget></HelpWidget>}
         </div>  
       </Router>
     )
