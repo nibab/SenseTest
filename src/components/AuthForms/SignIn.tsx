@@ -84,8 +84,11 @@ const SignIn = ({ handleStateChange }: SignInProps) => {
 			<Header text={"Sign in to your account"} />
 			<p className="mt-2 text-sm font-semibold leading-5 text-center text-gray-600 max-w">
 				Or
-				<a href="https://czbabin.typeform.com/to/QYe48n" className="ml-1 font-medium text-indigo-600 transition duration-150 ease-in-out cursor-pointer hover:text-indigo-500 focus:outline-none focus:underline">
+				{/* <a href="https://czbabin.typeform.com/to/QYe48n" className="ml-1 font-medium text-indigo-600 transition duration-150 ease-in-out cursor-pointer hover:text-indigo-500 focus:outline-none focus:underline">
 					join our beta here
+				</a> */}
+				<a onClick={() => history.push('/signUp')} className="ml-1 font-medium text-indigo-600 transition duration-150 ease-in-out cursor-pointer hover:text-indigo-500 focus:outline-none focus:underline">
+					sign up here
 				</a>
 			</p>
 			<div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">

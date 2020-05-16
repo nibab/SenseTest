@@ -93,12 +93,12 @@ const Main = () => {
             <AuthForm key={uuid()} onUserSignIn={async () => {const user = await AmplifyAuth.currentUserInfo(); getUserInfoAndSetLogin(user)}} />
           }
         </Route>
-        {/* <Route path='/signUp'>
+        <Route path='/signUp'>
           {isLoggedIn || isLoading ?
             (<Redirect to='/projects'/>) :
             <AuthForm key={uuid()} initialState={'signUp'} onUserSignIn={async () => {const user = await AmplifyAuth.currentUserInfo(); getUserInfoAndSetLogin(user)}} />
           }
-        </Route> */}
+        </Route>
         <ProtectedRoute
           isLoggedIn={isLoggedIn}
           isLoading={isLoading}
